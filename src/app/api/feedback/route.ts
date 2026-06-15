@@ -4,6 +4,7 @@ import prisma from '@/lib/prisma';
 import { sendMail, emailConfig } from '../../../lib/mailer';
 import { feedbackRateLimiter } from '@/lib/rate-limiter';
 import { escapeHtml } from '@/lib/utils';
+import { decryptCaptcha, isTokenUsed, markTokenUsed } from '@/lib/captcha';
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,6 +30,50 @@ export async function POST(request: NextRequest) {
     const rating         = formData.get('rating')          as string;
     const feedback_type  = formData.get('feedback_type')   as string;
     const feedback       = formData.get('feedback')        as string;
+    const captchaInput   = formData.get('captchaInput')    as string;
+    const captchaToken   = formData.get('captchaToken')    as string;
+
+    // Verify CAPTCHA
+    if (!captchaInput || !captchaToken) {
+      return NextResponse.json(
+        { success: false, message: 'Captcha is required.' },
+        { status: 400 }
+      );
+    }
+
+    const sig = captchaToken.split(':').slice(-1)[0];
+    if (sig && isTokenUsed(sig)) {
+      return NextResponse.json(
+        { success: false, message: 'Captcha token has already been used. Please refresh.' },
+        { status: 400 }
+      );
+    }
+
+    const decrypted = decryptCaptcha(captchaToken);
+    if (!decrypted) {
+      return NextResponse.json(
+        { success: false, message: 'Invalid captcha token. Please try again.' },
+        { status: 400 }
+      );
+    }
+
+    if (Date.now() - decrypted.timestamp > 10 * 60 * 1000) {
+      return NextResponse.json(
+        { success: false, message: 'Captcha has expired. Please refresh and try again.' },
+        { status: 400 }
+      );
+    }
+
+    if (decrypted.code !== captchaInput) {
+      return NextResponse.json(
+        { success: false, message: 'Incorrect captcha code. Please try again.' },
+        { status: 400 }
+      );
+    }
+
+    if (sig) {
+      markTokenUsed(sig);
+    }
 
     // ─── Input Validation ────────────────────────────────────────────────────
     if (!name || !email || !here_about || !feedback) {
@@ -45,6 +90,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
 
     // ─── Save to Database ─────────────────────────────────────────────────────
     try {

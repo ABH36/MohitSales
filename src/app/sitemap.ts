@@ -28,7 +28,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/certificates',
     '/achievements',
     '/resources',
-    '/blog',
     '/polycab',
     '/dowells',
     '/cable-terminal',
@@ -70,20 +69,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Error generating sitemap JSON routes:', error);
   }
 
-  // 3. Generate dynamic routes from Database (Products, Categories, and Blogs)
+  // 3. Generate dynamic routes from Database (Products and Categories)
   let dbRoutes: MetadataRoute.Sitemap = [];
   try {
-    const [products, categories, blogs] = await Promise.all([
+    const [products, categories] = await Promise.all([
       prisma.product.findMany({
         where: { isActive: true },
         select: { slug: true, updatedAt: true }
       }),
       prisma.category.findMany({
         where: { isActive: true },
-        select: { slug: true, updatedAt: true }
-      }),
-      prisma.blogPost.findMany({
-        where: { isPublished: true },
         select: { slug: true, updatedAt: true }
       })
     ]);
@@ -102,14 +97,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     }));
 
-    const blogRoutes = blogs.map(b => ({
-      url: `${baseUrl}/blog/${b.slug}`,
-      lastModified: b.updatedAt,
-      changeFrequency: 'weekly' as const,
-      priority: 0.5,
-    }));
-
-    dbRoutes = [...productRoutes, ...categoryRoutes, ...blogRoutes];
+    dbRoutes = [...productRoutes, ...categoryRoutes];
   } catch (error) {
     console.error('Error generating sitemap DB routes:', error);
   }

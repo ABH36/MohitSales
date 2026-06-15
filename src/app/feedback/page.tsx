@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 export default function FeedbackPage() {
   const [formData, setFormData] = useState({
@@ -17,6 +17,35 @@ export default function FeedbackPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
+  // Captcha state variables
+  const [captchaSvg, setCaptchaSvg] = useState('');
+  const [captchaToken, setCaptchaToken] = useState('');
+  const [captchaInput, setCaptchaInput] = useState('');
+  const captchaAbortRef = useRef<AbortController | null>(null);
+
+  const generateCaptcha = async () => {
+    captchaAbortRef.current?.abort();
+    const ctrl = new AbortController();
+    captchaAbortRef.current = ctrl;
+    try {
+      const res = await fetch('/api/captcha', { signal: ctrl.signal });
+      const data = await res.json();
+      if (data.success) {
+        setCaptchaSvg(data.svg);
+        setCaptchaToken(data.token);
+      }
+    } catch (err) {
+      if ((err as Error).name !== 'AbortError') {
+        console.error('Failed to generate captcha', err);
+      }
+    }
+  };
+
+  useEffect(() => {
+    generateCaptcha();
+    return () => captchaAbortRef.current?.abort();
+  }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -28,6 +57,10 @@ export default function FeedbackPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!captchaInput) {
+      setMessage({ type: 'error', text: 'Captcha code is required.' });
+      return;
+    }
     setLoading(true);
     setMessage(null);
 
@@ -40,6 +73,8 @@ export default function FeedbackPage() {
       payload.append('rating', formData.rating);
       payload.append('feedback_type', formData.feedback_type);
       payload.append('feedback', formData.feedback);
+      payload.append('captchaInput', captchaInput);
+      payload.append('captchaToken', captchaToken);
 
       const response = await fetch('/api/feedback', {
         method: 'POST',
@@ -59,11 +94,17 @@ export default function FeedbackPage() {
           feedback_type: '',
           feedback: ''
         });
+        setCaptchaInput('');
+        generateCaptcha();
       } else {
         setMessage({ type: 'error', text: result.message || 'Something went wrong. Please try again.' });
+        setCaptchaInput('');
+        generateCaptcha();
       }
     } catch (error) {
       setMessage({ type: 'error', text: 'Failed to submit feedback. Please check your network connection.' });
+      setCaptchaInput('');
+      generateCaptcha();
     } finally {
       setLoading(false);
     }
@@ -223,6 +264,36 @@ export default function FeedbackPage() {
             text-align: center;
           }
         }
+        .captcha-row {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: 20px;
+        }
+        .captcha-box {
+          display: inline-flex;
+          padding: 0;
+          overflow: hidden;
+          height: 44px;
+          background: #f1f5f9;
+          border-radius: 4px;
+          border: 1px solid #ccc;
+        }
+        .captcha-refresh {
+          color: #28166f;
+          font-weight: 600;
+          cursor: pointer;
+          font-size: 14px;
+          text-decoration: underline;
+        }
+        .captcha-input {
+          flex: 1;
+          padding: 12px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          font-size: 15px;
+          background-color: #f9f9f9;
+        }
       ` }} />
 
       <div className="feedback-form-container">
@@ -370,6 +441,27 @@ export default function FeedbackPage() {
               onChange={handleChange}
               required
             />
+          </div>
+
+          <div className="form-group">
+            <label>Captcha <span>*</span></label>
+            <div className="captcha-row">
+              {captchaSvg && (
+                <div 
+                  className="captcha-box" 
+                  dangerouslySetInnerHTML={{ __html: captchaSvg }} 
+                />
+              )}
+              <span className="captcha-refresh" onClick={generateCaptcha}>Refresh</span>
+              <input 
+                type="text" 
+                className="captcha-input" 
+                placeholder="Type captcha code" 
+                required 
+                value={captchaInput} 
+                onChange={(e) => setCaptchaInput(e.target.value)} 
+              />
+            </div>
           </div>
 
           <button type="submit" className="submit-btn" disabled={loading}>
