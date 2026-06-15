@@ -1,1 +1,0 @@
-const http = require('http'); http.get('http://localhost:3000/industries/cables-by-application/mobility-infrastructure', (res) => { let data = ''; res.on('data', chunk => data += chunk); res.on('end', () => { console.log('Status:', res.statusCode); const fs = require('fs'); fs.writeFileSync('temp-output.html', data); console.log('Wrote to temp-output.html'); }); });
