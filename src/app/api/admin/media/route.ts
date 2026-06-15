@@ -1,0 +1,171 @@
+import { NextResponse } from 'next/server';
+import { extname } from 'path';
+import { v2 as cloudinary } from 'cloudinary';
+import prisma from '@/lib/prisma';
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+export async function POST(request: Request) {
+  try {
+    const userId = request.headers.get('x-user-id');
+    const userRole = request.headers.get('x-user-role');
+
+    if (!userId) {
+      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    }
+
+    // RBAC: Only ADMIN and EDITOR can upload files
+    if (userRole !== 'ADMIN' && userRole !== 'EDITOR') {
+      return NextResponse.json({ success: false, message: 'Forbidden: Insufficient permissions.' }, { status: 403 });
+    }
+
+    // Pre-validate Content-Length to protect memory uploader buffer limits (10MB max)
+    const contentLength = request.headers.get('content-length');
+    if (contentLength) {
+      const parsedLength = parseInt(contentLength, 10);
+      if (!isNaN(parsedLength) && parsedLength > 10 * 1024 * 1024) {
+        return NextResponse.json({ success: false, message: 'File size exceeds 10MB limit.' }, { status: 413 });
+      }
+    }
+
+    const data = await request.formData();
+    const file: File | null = data.get('file') as unknown as File;
+
+    if (!file) {
+      return NextResponse.json({ success: false, message: 'No file uploaded' }, { status: 400 });
+    }
+
+    // Limit to 10MB to prevent memory exhaustion and Cloudinary saturation
+    if (file.size > 10 * 1024 * 1024) {
+      return NextResponse.json({ success: false, message: 'File size exceeds 10MB limit.' }, { status: 413 });
+    }
+
+    const ext = extname(file.name).toLowerCase();
+    const ALLOWED_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.gif', '.webp', '.pdf', '.doc', '.docx']);
+    if (!ALLOWED_EXTENSIONS.has(ext)) {
+      return NextResponse.json({ success: false, message: 'File type not allowed.' }, { status: 415 });
+    }
+
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    // Upload to Cloudinary using upload_stream
+    const uploadResult: any = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: 'mohit_media',
+          resource_type: 'auto', // Auto detects image, video, raw files (PDFs, DOCs)
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      uploadStream.end(buffer);
+    });
+
+    const fileUrl = uploadResult.secure_url;
+    const storedName = uploadResult.public_id || file.name;
+
+    // Save metadata in PostgreSQL database
+    const newMedia = await prisma.media.create({
+      data: {
+        filename: file.name,
+        storedName: storedName,
+        url: fileUrl,
+        mimeType: file.type || 'application/octet-stream',
+        size: buffer.length,
+        width: uploadResult.width || null,
+        height: uploadResult.height || null,
+        uploadedBy: userId,
+      }
+    });
+
+    return NextResponse.json({ success: true, url: fileUrl, data: newMedia });
+  } catch (error) {
+    console.error('Error uploading file to Cloudinary:', error);
+    return NextResponse.json({ success: false, message: 'Internal Server Error' }, { status: 500 });
+  }
+}
+
+export async function GET(request: Request) {
+  try {
+    const userId = request.headers.get('x-user-id');
+    if (!userId) {
+      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    }
+
+    const media = await prisma.media.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 100,
+    });
+    return NextResponse.json({ success: true, data: media });
+  } catch (error) {
+    console.error('[Admin Media GET]', error);
+    return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const userId = request.headers.get('x-user-id');
+    const userRole = request.headers.get('x-user-role');
+
+    if (!userId) {
+      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    }
+
+    // RBAC: Only ADMIN and EDITOR can delete files
+    if (userRole !== 'ADMIN' && userRole !== 'EDITOR') {
+      return NextResponse.json({ success: false, message: 'Forbidden: Insufficient permissions.' }, { status: 403 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+
+    if (!id) {
+      return NextResponse.json({ success: false, message: 'Media ID is required' }, { status: 400 });
+    }
+
+    // Find the media record in DB first
+    const mediaItem = await prisma.media.findUnique({
+      where: { id }
+    });
+
+    if (!mediaItem) {
+      return NextResponse.json({ success: false, message: 'Media not found' }, { status: 404 });
+    }
+
+    // Delete from Cloudinary
+    try {
+      let resourceType = 'image';
+      if (mediaItem.mimeType.startsWith('image/')) {
+        resourceType = 'image';
+      } else if (mediaItem.mimeType.startsWith('video/')) {
+        resourceType = 'video';
+      } else {
+        resourceType = 'raw';
+      }
+      await cloudinary.uploader.destroy(mediaItem.storedName, { resource_type: resourceType });
+    } catch (cloudinaryError) {
+      // Log error but continue to delete from DB to prevent orphaned DB records
+      console.error('[Admin Media DELETE] Cloudinary destruction error:', cloudinaryError);
+    }
+
+    // Delete from database
+    await prisma.media.delete({
+      where: { id }
+    });
+
+    return NextResponse.json({ success: true, message: 'Media deleted successfully' });
+  } catch (error) {
+    console.error('[Admin Media DELETE] Unexpected error:', error);
+    return NextResponse.json({ success: false, message: 'Internal Server Error' }, { status: 500 });
+  }
+}
+

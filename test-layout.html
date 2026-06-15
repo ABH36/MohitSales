@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  .product-content {
+      display: flex !important;
+      flex-direction: column !important;
+      flex-grow: 1 !important;
+  }
+  .product-details {
+      flex-grow: 1 !important;
+      margin-bottom: 18px;
+  }
+</style>
+</head>
+<body class="p-10 bg-gray-100">
+  <div class="col-md-4 mt-4 d-flex align-items-stretch" style="width: 300px; height: 500px; border: 1px solid black; display: flex;">
+    <div class="product-card flex flex-col flex-grow h-full w-full bg-white rounded-lg shadow-lg">
+      <div class="product-img h-40 bg-gray-300">Image</div>
+      <div class="product-content flex flex-col flex-grow p-4">
+        <h3 class="mb-4">Product Title</h3>
+        <div class="product-details">
+          <span>Material:</span> EC Grade Copper<br>
+          <span>Size:</span> 1.5 to 1000
+        </div>
+        <a class="enquiry-btn mt-auto self-center bg-orange-500 text-white px-6 py-2 rounded">Send Enquiry</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,1 @@
+const fs = require('fs'); const cheerio = require('cheerio'); const html = fs.readFileSync('legacy_content/industries/cables-by-application/mobility-infrastructure.php', 'utf-8'); const $ = cheerio.load(html); $(.cables-card).each((i, el) => { console.log($(el).find(.cables-name).text().trim()); });

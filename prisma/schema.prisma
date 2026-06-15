@@ -1,0 +1,209 @@
+// Prisma Schema — Mohit Industries Complete Application
+// =====================================================
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ─── Authentication & Authorization ──────────────────────
+
+model User {
+  id               String   @id @default(uuid())
+  email            String   @unique
+  password         String
+  name             String?
+  roleId           String
+  role             Role     @relation(fields: [roleId], references: [id])
+  isActive         Boolean  @default(true)
+  twoFactorEnabled Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  BlogPost  BlogPost[]
+  otps      AdminOtp[]
+
+  @@map("users")
+}
+
+model Role {
+  id          String       @id @default(uuid())
+  name        String       @unique // ADMIN, EDITOR, VIEWER
+  description String?
+  users       User[]
+  permissions Permission[]
+  createdAt   DateTime     @default(now())
+
+  @@map("roles")
+}
+
+model Permission {
+  id    String @id @default(uuid())
+  name  String @unique // READ_PRODUCTS, WRITE_PRODUCTS, MANAGE_USERS, MANAGE_BLOG, MANAGE_MEDIA, MANAGE_SETTINGS
+  roles Role[]
+
+  @@map("permissions")
+}
+
+// ─── Product Catalog ─────────────────────────────────────
+
+model Category {
+  id          String     @id @default(uuid())
+  slug        String     @unique
+  name        String     // Category name in English
+  description String?
+  image       String?
+  parentId    String?
+  parent      Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryTree")
+  products    Product[]
+  isActive    Boolean    @default(true)
+  sortOrder   Int        @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([parentId])
+  @@index([isActive, sortOrder])
+  @@map("categories")
+}
+
+model Product {
+  id            String    @id @default(uuid())
+  slug          String    @unique // Full URL path: "industries/cables-by-type/lv-power-cable"
+  categoryId    String?
+  category      Category? @relation(fields: [categoryId], references: [id])
+  imageSrc      String?
+  title         String    // Product title in English
+  description   String?   // Product description
+  features      String?   // Features (stored as JSON string)
+  datasheetLink String?
+  isActive      Boolean   @default(true)
+  sortOrder     Int       @default(0)
+  stock         Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([categoryId])
+  @@index([isActive, sortOrder])
+  @@map("products")
+}
+
+// ─── Contact & Inquiries ─────────────────────────────────
+
+model Inquiry {
+  id        String   @id @default(uuid())
+  name      String
+  company   String
+  email     String
+  mobile    String
+  message   String   @db.Text
+  locale    String   @default("en")
+  source    String   @default("website") // website, feedback, admin
+  status    String   @default("new")     // new, read, replied, archived
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([createdAt])
+  @@map("inquiries")
+}
+
+// ─── Blog System ─────────────────────────────────────────
+
+model BlogCategory {
+  id          String     @id @default(uuid())
+  slug        String     @unique
+  name        String
+  description String?
+  sortOrder   Int        @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  posts       BlogPost[]
+
+  @@map("blog_categories")
+}
+
+model BlogPost {
+  id             String       @id @default(uuid())
+  slug           String       @unique
+  title          String
+  excerpt        String?      @db.Text
+  content        String       @db.Text
+  coverImage     String?
+  authorId       String?
+  author         User?        @relation(fields: [authorId], references: [id])
+  categoryId     String?
+  category       BlogCategory? @relation(fields: [categoryId], references: [id])
+  tags           String?      // Comma-separated tags
+  metaTitle      String?
+  metaDesc       String?
+  isPublished    Boolean      @default(false)
+  isFeatured     Boolean      @default(false)
+  publishedAt    DateTime?
+  viewCount      Int          @default(0)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([isPublished, publishedAt])
+  @@map("blog_posts")
+}
+
+// ─── Media Library ───────────────────────────────────────
+
+model Media {
+  id          String   @id @default(uuid())
+  filename    String   // Original filename
+  storedName  String   // Name as stored on disk/CDN
+  url         String   // Public URL
+  mimeType    String   // image/png, image/jpeg, application/pdf, etc.
+  size        Int      // File size in bytes
+  width       Int?     // Image width (if image)
+  height      Int?     // Image height (if image)
+  alt         String?  // Alt text for accessibility
+  caption     String?
+  folder      String?  // Logical grouping folder name
+  uploadedBy  String?  // User ID who uploaded
+  isPublic    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("media")
+}
+
+// ─── Site Settings ────────────────────────────────────────
+
+model Setting {
+  id          String   @id @default(uuid())
+  key         String   @unique // e.g. "site_name", "contact_email", "phone", "address"
+  value       String   @db.Text
+  type        String   @default("string") // string, boolean, json, number
+  group       String   @default("general") // general, contact, social, seo, appearance
+  label       String?  // Human-readable label for admin panel
+  description String?
+  isPublic    Boolean  @default(false) // Can be exposed to frontend
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("settings")
+}
+
+// ─── OTP Two-Factor Authentication ────────────────────────
+model AdminOtp {
+  id        String    @id @default(uuid())
+  userId    String
+  code      String    // Hashed 6-digit OTP
+  tempToken String    // Encrypted session token (10 min expiry)
+  expiresAt DateTime
+  usedAt    DateTime?
+  attempts  Int       @default(0)
+  createdAt DateTime  @default(now())
+  
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("admin_otps")
+}
+
