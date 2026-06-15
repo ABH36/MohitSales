@@ -2703,20 +2703,6 @@ section.pricelist-inner {
   gap: 15px !important;
 }
 
-.rs-footer-widget-address a,
-.rs-footer-widget-address span,
-.rs-footer-widget-email a,
-.rs-footer-widget-email.mobile a {
-  font-size: 18px !important;
-  font-family: "Mukta", sans-serif !important;
-  font-weight: 400 !important;
-  line-height: 1.6 !important;
-  color: #CBCCCD !important;
-  transition: all 0.3s ease !important;
-  display: block;
-  white-space: pre-line !important;
-}
-
 .product-card img,
 .product-card a img {
   width: 100% !important;
