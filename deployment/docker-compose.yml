@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: mohit-industries-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Abhi@369
+      POSTGRES_DB: mohit_industries
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d mohit_industries"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    container_name: mohit-industries-app
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - ../.env
+    environment:
+      - DATABASE_URL=postgresql://postgres:Abhi%40369@db:5432/mohit_industries?schema=public
+      - DIRECT_URL=postgresql://postgres:Abhi%40369@db:5432/mohit_industries?schema=public
+
+volumes:
+  postgres_data:
