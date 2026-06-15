@@ -34,6 +34,7 @@ services:
       - DATABASE_URL=postgresql://postgres:Abhi%40369@db:5432/mohit_industries?schema=public
       - DIRECT_URL=postgresql://postgres:Abhi%40369@db:5432/mohit_industries?schema=public
       - NEXT_PUBLIC_SITE_URL=http://13.204.191.32
+      - DISABLE_RATE_LIMITER=true
 
 volumes:
   postgres_data:
