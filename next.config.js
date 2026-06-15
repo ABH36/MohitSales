@@ -23,9 +23,7 @@ const nextConfig = {
   async headers() {
     const isProd = process.env.NODE_ENV === 'production';
     const cspScriptSrc = isProd ? "'self' 'unsafe-inline'" : "'self' 'unsafe-inline' 'unsafe-eval'";
-    const disableCspUpgrade = process.env.DISABLE_CSP_UPGRADE === 'true';
-    const upgradeDirective = disableCspUpgrade ? '' : 'upgrade-insecure-requests;';
-    const cspValue = `default-src 'self'; script-src ${cspScriptSrc}; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self'; frame-src https://www.google.com; frame-ancestors 'none'; ${upgradeDirective}`;
+    const cspValue = `default-src 'self'; script-src ${cspScriptSrc}; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self'; frame-src https://www.google.com; frame-ancestors 'none';`;
 
     return [
       {
