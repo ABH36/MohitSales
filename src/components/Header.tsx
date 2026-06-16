@@ -229,7 +229,7 @@ export default function Header() {
               </div>
 
               <div className="rs-header-right d-flex align-align-items-center gap-4">
-                <div className="rs-header-hamburger d-lg-none">
+                <div className="rs-header-hamburger">
                   <div className="sidebar-toggle new">
                     <a className="bar-icon" href="#" onClick={(e) => { e.preventDefault(); setIsSidebarOpen(true); }}>
                       <i className="fa-solid fa-bars"></i>
