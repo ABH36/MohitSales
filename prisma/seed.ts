@@ -126,6 +126,20 @@ async function main() {
   });
   console.log(`   ✓ Admin user: admin@mohitscpl.com (Password: Admin@2024!)\n`);
 
+  const personalAdminUser = await prisma.user.upsert({
+    where: { email: 'Amitsoni860279@gmail.com' },
+    update: {},
+    create: {
+      email: 'Amitsoni860279@gmail.com',
+      password: hashedPassword,
+      name: 'abhay soni',
+      roleId: adminRole.id,
+      isActive: true,
+      twoFactorEnabled: true,
+    },
+  });
+  console.log(`   ✓ Personal admin user: Amitsoni860279@gmail.com (Password: Admin@2024!)\n`);
+
   // ─── 4. PRODUCT CATEGORIES ───────────────────────────────
   console.log('📦 Creating product categories...');
 
