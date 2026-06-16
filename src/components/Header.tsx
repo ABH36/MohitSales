@@ -132,7 +132,7 @@ export default function Header() {
         >
           <div className="container-fluid" style={{ paddingLeft: 0 }}>
             <div className="rs-header-inner">
-              <div className="rs-header-left" style={{ paddingLeft: 0, marginLeft: 0 }}>
+              <div className="rs-header-left" style={{ paddingLeft: '12px', marginLeft: 0 }}>
                 <div className="rs-header-logo" style={{ marginLeft: 0, paddingLeft: 0 }}>
                   <a href="/">
                     <Image
@@ -229,7 +229,7 @@ export default function Header() {
               </div>
 
               <div className="rs-header-right d-flex align-align-items-center gap-4">
-                <div className="rs-header-hamburger">
+                <div className="rs-header-hamburger d-lg-none">
                   <div className="sidebar-toggle new">
                     <a className="bar-icon" href="#" onClick={(e) => { e.preventDefault(); setIsSidebarOpen(true); }}>
                       <i className="fa-solid fa-bars"></i>

@@ -54,7 +54,7 @@ export default function BannerSlider() {
                   width: '100%',
                   height: '100%',
                   backgroundSize: 'cover',
-                  backgroundPosition: 'center',
+                  backgroundPosition: 'left center',
                   backgroundRepeat: 'no-repeat',
                   zIndex: index === activeIndex ? 2 : 1,
                   cursor: 'pointer',
