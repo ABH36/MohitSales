@@ -328,6 +328,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
   if (dbProductEarly && !isIndexPage) {
     return (
       <ProductPageWrapper>
+
+
         <SchemaInjector page={`/${slugPath}`} />
         {renderDbProduct(dbProductEarly)}
       </ProductPageWrapper>

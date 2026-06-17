@@ -1194,6 +1194,10 @@ h6,
   border-bottom: none !important;
 }
 
+.rs-header-two .rs-header-inner {
+  padding-left: 0 !important;
+}
+
 /* The curved white background for the logo */
 .rs-header-two .rs-header-left {
   background: #ffffff !important;
@@ -1203,7 +1207,9 @@ h6,
   align-items: center !important;
   padding: 10px 60px 10px 20px !important;
   margin: 0 !important;
+  align-self: stretch !important;
 }
+
 
 .rs-header-logo img,
 .rs-header-left img,
