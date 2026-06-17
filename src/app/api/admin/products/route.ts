@@ -94,6 +94,17 @@ export async function POST(request: NextRequest) {
 
     // Instantly clear ISR cache so new product is live immediately
     revalidatePath(`/${product.slug}`);
+    
+    if (product.categoryId) {
+      const category = await prisma.category.findUnique({
+        where: { id: product.categoryId },
+        select: { slug: true }
+      });
+      if (category && category.slug) {
+        revalidatePath(`/${category.slug}`);
+      }
+    }
+
     revalidatePath('/', 'layout'); // also clear homepage/nav cache
 
     return NextResponse.json({ success: true, data: product }, { status: 201 });

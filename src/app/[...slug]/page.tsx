@@ -46,8 +46,9 @@ async function getProductData(slugPath: string) {
 
     if (!dataList) {
       const jsonPath = path.join(process.cwd(), 'content-export.json');
-      if (!fs.existsSync(jsonPath)) return null;
-      dataList = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+      const jsonExists = await fs.promises.access(jsonPath).then(() => true).catch(() => false);
+      if (!jsonExists) return null;
+      dataList = JSON.parse(await fs.promises.readFile(jsonPath, 'utf-8'));
       contentCache.set(CACHE_KEY, dataList!);
     }
 
@@ -95,17 +96,18 @@ async function getLegacyPHPContent(slugPath: string, productName: string = ''): 
 
     const fullPath = path.join(cloneDir, phpPath);
 
-    if (!fs.existsSync(fullPath)) {
+    const exists = await fs.promises.access(fullPath).then(() => true).catch(() => false);
+    if (!exists) {
       return null;
     }
 
     // Skip zero-byte files — they are placeholders, not real pages
-    const stat = fs.statSync(fullPath);
+    const stat = await fs.promises.stat(fullPath);
     if (stat.size === 0) {
       return null;
     }
 
-    let fileContent = fs.readFileSync(fullPath, 'utf-8');
+    let fileContent = await fs.promises.readFile(fullPath, 'utf-8');
 
     // Extract inside <main> tag
     const mainMatch = fileContent.match(/<main[^>]*>([\s\S]*?)<\/main>/i);
@@ -116,31 +118,42 @@ async function getLegacyPHPContent(slugPath: string, productName: string = ''): 
 
     // Replace sidebar includes with their actual HTML content
     const includeRegex = /<\?php\s+include\s+ROOT_PATH\s*\.\s*'\/common\/([^']+)'\s*;\s*\?>/g;
-    html = html.replace(includeRegex, (match, sidebarName) => {
+    const matches = Array.from(html.matchAll(includeRegex));
+    const sidebarContents = new Map<string, string>();
+    for (const match of matches) {
+      const sidebarName = match[1];
       const sidebarPath = path.join(cloneDir, 'common', sidebarName);
-      if (fs.existsSync(sidebarPath)) {
-        let sidebarHtml = fs.readFileSync(sidebarPath, 'utf-8');
-        // Clean base URLs and PHP code inside sidebar
-        sidebarHtml = sidebarHtml.replace(/<\?php\s+echo\s+BASE_URL\s*;\s*\?>/g, '/');
-        // Replace .php links in sidebar
-        sidebarHtml = sidebarHtml.replace(/href="([^"]+)\.php([^"]*)"/g, (m, p1, p2) => {
-          if (p1.includes('<?php') || p1.startsWith('/') || p1.startsWith('http') || p1.startsWith('mailto:')) {
-            return `href="${p1}${p2}"`;
-          }
-          // Resolve path relative to current page's parent folder
-          const parts = slugPath.split('/');
-          parts.pop(); // remove current filename
-          let target = p1;
-          if (parts.length > 0) {
-            target = '/' + parts.join('/') + '/' + target;
-          } else {
-            target = '/' + target;
-          }
-          return `href="${target.toLowerCase()}${p2}"`;
-        });
-        return sidebarHtml;
+      try {
+        const sidebarExists = await fs.promises.access(sidebarPath).then(() => true).catch(() => false);
+        if (sidebarExists) {
+          let sidebarHtml = await fs.promises.readFile(sidebarPath, 'utf-8');
+          // Clean base URLs and PHP code inside sidebar
+          sidebarHtml = sidebarHtml.replace(/<\?php\s+echo\s+BASE_URL\s*;\s*\?>/g, '/');
+          // Replace .php links in sidebar
+          sidebarHtml = sidebarHtml.replace(/href="([^"]+)\.php([^"]*)"/g, (m, p1, p2) => {
+            if (p1.includes('<?php') || p1.startsWith('/') || p1.startsWith('http') || p1.startsWith('mailto:')) {
+              return `href="${p1}${p2}"`;
+            }
+            // Resolve path relative to current page's parent folder
+            const parts = slugPath.split('/');
+            parts.pop(); // remove current filename
+            let target = p1;
+            if (parts.length > 0) {
+              target = '/' + parts.join('/') + '/' + target;
+            } else {
+              target = '/' + target;
+            }
+            return `href="${target.toLowerCase()}${p2}"`;
+          });
+          sidebarContents.set(sidebarName, sidebarHtml);
+        }
+      } catch (err) {
+        console.error(`Error loading sidebar ${sidebarName}:`, err);
       }
-      return '';
+    }
+
+    html = html.replace(includeRegex, (match, sidebarName) => {
+      return sidebarContents.get(sidebarName) || '';
     });
 
     // Replace general php print echo BASE_URL . 'path/to/asset'
