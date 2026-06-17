@@ -238,6 +238,8 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     prisma.seoMeta.findUnique({ where: { page: `/${slugPath}` } }).catch(() => null),
   ]);
 
+  const pageUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'https://mohitscpl.com'}/${slugPath}`;
+
   // Admin-managed SEO meta takes top priority
   if (seoMeta) {
     return {
@@ -245,8 +247,9 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
       description: seoMeta.description || undefined,
       keywords: seoMeta.keywords ? seoMeta.keywords.split(',').map(k => k.trim()) : undefined,
       robots: { index: !seoMeta.noIndex, follow: !seoMeta.noFollow },
-      alternates: seoMeta.canonicalUrl ? { canonical: seoMeta.canonicalUrl } : undefined,
+      alternates: seoMeta.canonicalUrl ? { canonical: seoMeta.canonicalUrl } : { canonical: pageUrl },
       openGraph: {
+        url: pageUrl,
         title: seoMeta.ogTitle || seoMeta.title || undefined,
         description: seoMeta.description || undefined,
         images: seoMeta.ogImage ? [seoMeta.ogImage] : undefined,
@@ -260,7 +263,9 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     return {
       title,
       description,
+      alternates: { canonical: pageUrl },
       openGraph: {
+        url: pageUrl,
         title,
         description,
         images: product.imageSrc ? [product.imageSrc] : [],

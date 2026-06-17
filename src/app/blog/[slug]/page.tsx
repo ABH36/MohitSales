@@ -1,10 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import prisma from '@/lib/prisma';
 import { sanitizeHtml } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
+
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://mohitscpl.com';
 
 interface BlogDetailsPageProps {
   params: {
@@ -12,27 +15,54 @@ interface BlogDetailsPageProps {
   };
 }
 
-export async function generateMetadata({ params }: BlogDetailsPageProps) {
+export async function generateMetadata({ params }: BlogDetailsPageProps): Promise<Metadata> {
   try {
     const post = await prisma.blogPost.findUnique({
       where: { slug: params.slug },
-      select: { title: true, excerpt: true, metaTitle: true, metaDesc: true }
+      select: {
+        title: true,
+        excerpt: true,
+        metaTitle: true,
+        metaDesc: true,
+        coverImage: true,
+        publishedAt: true,
+        author: { select: { name: true } },
+      },
     });
 
     if (!post) {
-      return {
-        title: 'Blog Post Not Found | Mohit Sales Corporation Pvt. Ltd.',
-      };
+      return { title: 'Blog Post Not Found | Mohit Sales Corporation Pvt. Ltd.' };
     }
 
+    const title = post.metaTitle || `${post.title} - Insights Blog | Mohit Sales Corporation`;
+    const description = post.metaDesc || post.excerpt || 'Read this post on Mohit Sales Corporation Pvt. Ltd. blog.';
+    const canonicalUrl = `${BASE_URL}/blog/${params.slug}`;
+
     return {
-      title: post.metaTitle || `${post.title} - Insights Blog | Mohit Sales Corporation`,
-      description: post.metaDesc || post.excerpt || 'Read this post on Mohit Sales Corporation Pvt. Ltd. blog.',
+      title,
+      description,
+      alternates: { canonical: canonicalUrl },
+      openGraph: {
+        type: 'article',
+        title,
+        description,
+        url: canonicalUrl,
+        siteName: 'Mohit Sales Corporation Pvt. Ltd.',
+        images: post.coverImage
+          ? [{ url: post.coverImage, width: 1200, height: 630, alt: post.title }]
+          : undefined,
+        publishedTime: post.publishedAt?.toISOString(),
+        authors: post.author?.name ? [post.author.name] : undefined,
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+        images: post.coverImage ? [post.coverImage] : undefined,
+      },
     };
   } catch {
-    return {
-      title: 'Blog Insights | Mohit Sales Corporation',
-    };
+    return { title: 'Blog Insights | Mohit Sales Corporation' };
   }
 }
 

@@ -1,4 +1,23 @@
 ﻿import React from 'react';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Conduit & Accessories | Polycab PVC Conduit Pipes | Mohit Sales Corporation',
+  description: 'Authorized distributor of Polycab PVC conduit pipes and accessories in Indore. ISI-marked conduits, bends, junction boxes, and saddles for residential and commercial wiring.',
+  openGraph: {
+    title: 'Conduit & Accessories | Polycab PVC Conduit Pipes | Mohit Sales Corporation',
+    description: 'Authorized distributor of Polycab PVC conduit pipes and accessories in Indore. ISI-marked conduits, bends, junction boxes for residential and commercial wiring.',
+    url: 'https://mohitscpl.com/conduit-accessories',
+    siteName: 'Mohit Sales Corporation Pvt. Ltd.',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Conduit & Accessories | Polycab PVC Conduit Pipes | Mohit Sales Corporation',
+    description: 'Authorized distributor of Polycab PVC conduit pipes and accessories in Indore.',
+  },
+  alternates: { canonical: 'https://mohitscpl.com/conduit-accessories' },
+};
 
 
 

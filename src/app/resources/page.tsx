@@ -1,4 +1,23 @@
 ﻿import React from 'react';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Resources & Downloads | Mohit Sales Corporation Pvt. Ltd.',
+  description: 'Download product brochures, technical specifications, and installation guides for Polycab cables, wires, switchgears, fans, and Dowells cable terminals.',
+  openGraph: {
+    title: 'Resources & Downloads | Mohit Sales Corporation Pvt. Ltd.',
+    description: 'Download product brochures, technical specifications, and installation guides for Polycab cables, wires, switchgears, fans, and Dowells cable terminals.',
+    url: 'https://mohitscpl.com/resources',
+    siteName: 'Mohit Sales Corporation Pvt. Ltd.',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Resources & Downloads | Mohit Sales Corporation Pvt. Ltd.',
+    description: 'Download product brochures, technical specifications, and installation guides for Polycab and Dowells products.',
+  },
+  alternates: { canonical: 'https://mohitscpl.com/resources' },
+};
 
 
 
