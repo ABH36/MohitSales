@@ -15,6 +15,8 @@ export default function ScrollReveal() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    // Skip on admin pages — no scroll animations needed
+    if (pathname.startsWith('/admin')) return;
 
     // ---- inject CSS once ----
     const styleId = 'scroll-reveal-css';

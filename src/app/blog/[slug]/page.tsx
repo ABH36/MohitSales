@@ -41,6 +41,12 @@ export default async function BlogDetailsPage({ params }: BlogDetailsPageProps) 
   let recentPosts: any[] = [];
 
   try {
+    // Increment viewCount atomically for published post
+    await prisma.blogPost.updateMany({
+      where: { slug: params.slug, isPublished: true },
+      data: { viewCount: { increment: 1 } }
+    });
+
     post = await prisma.blogPost.findUnique({
       where: { slug: params.slug },
       include: {

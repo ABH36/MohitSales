@@ -132,7 +132,7 @@ export default function Header() {
         >
           <div className="container-fluid" style={{ paddingLeft: 0 }}>
             <div className="rs-header-inner">
-              <div className="rs-header-left" style={{ paddingLeft: '12px', marginLeft: 0 }}>
+              <div className="rs-header-left" style={{ marginLeft: 0 }}>
                 <div className="rs-header-logo" style={{ marginLeft: 0, paddingLeft: 0 }}>
                   <a href="/">
                     <Image

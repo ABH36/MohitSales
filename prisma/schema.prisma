@@ -104,7 +104,7 @@ model Inquiry {
   message   String   @db.Text
   locale    String   @default("en")
   source    String   @default("website") // website, feedback, admin
-  status    String   @default("new")     // new, read, replied, archived
+  status    String   @default("new")     // new, read, replied, closed
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -189,6 +189,63 @@ model Setting {
   updatedAt   DateTime @updatedAt
 
   @@map("settings")
+}
+
+// ─── SEO Manager ─────────────────────────────────────────
+
+model SeoMeta {
+  id           String   @id @default(uuid())
+  page         String   @unique // e.g. "/", "/about-us", "/contact-us"
+  title        String?
+  description  String?  @db.Text
+  keywords     String?
+  ogImage      String?
+  ogTitle      String?
+  canonicalUrl String?
+  noIndex      Boolean  @default(false)
+  noFollow     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("seo_meta")
+}
+
+model Redirect {
+  id        String   @id @default(uuid())
+  fromPath  String   @unique
+  toPath    String
+  type      Int      @default(301) // 301, 302, 307
+  isActive  Boolean  @default(true)
+  hitCount  Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([fromPath, isActive])
+  @@map("redirects")
+}
+
+model SchemaMarkup {
+  id         String   @id @default(uuid())
+  page       String   @unique
+  schemaType String   // Organization, LocalBusiness, Product, BreadcrumbList, FAQPage
+  jsonLd     String   @db.Text
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("schema_markup")
+}
+
+model SitemapOverride {
+  id         String   @id @default(uuid())
+  urlPath    String   @unique
+  priority   Float    @default(0.5)
+  changeFreq String   @default("monthly")
+  isExcluded Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("sitemap_overrides")
 }
 
 // ─── OTP Two-Factor Authentication ────────────────────────

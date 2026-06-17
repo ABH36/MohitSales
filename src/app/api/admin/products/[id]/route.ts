@@ -20,6 +20,11 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     const body = await request.json();
     const { slug, title, description, features, imageSrc, categoryId, datasheetLink, isActive, sortOrder } = body;
 
+    const oldProduct = await prisma.product.findUnique({
+      where: { id: params.id },
+      select: { slug: true, categoryId: true }
+    });
+
     const product = await prisma.product.update({
       where: { id: params.id },
       data: {
@@ -41,6 +46,32 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       revalidatePath(`/${product.slug}`);
     }
 
+    // Revalidate old slug if changed
+    if (oldProduct && oldProduct.slug !== product.slug) {
+      revalidatePath(`/${oldProduct.slug}`);
+    }
+
+    // Revalidate category pages
+    if (product.categoryId) {
+      const category = await prisma.category.findUnique({
+        where: { id: product.categoryId },
+        select: { slug: true }
+      });
+      if (category && category.slug) {
+        revalidatePath(`/${category.slug}`);
+      }
+    }
+
+    if (oldProduct && oldProduct.categoryId && oldProduct.categoryId !== product.categoryId) {
+      const oldCategory = await prisma.category.findUnique({
+        where: { id: oldProduct.categoryId },
+        select: { slug: true }
+      });
+      if (oldCategory && oldCategory.slug) {
+        revalidatePath(`/${oldCategory.slug}`);
+      }
+    }
+
     return NextResponse.json({ success: true, data: product });
   } catch (error: any) {
     console.error('[Admin Product PUT]', error);
@@ -58,12 +89,23 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
       return NextResponse.json({ success: false, message: 'Forbidden: Insufficient permissions.' }, { status: 403 });
     }
 
-    const product = await prisma.product.findUnique({ where: { id: params.id }, select: { slug: true } });
+    const product = await prisma.product.findUnique({ where: { id: params.id }, select: { slug: true, categoryId: true } });
     await prisma.product.delete({ where: { id: params.id } });
 
     // Revalidate the deleted product's page cache
     if (product?.slug) {
       revalidatePath(`/${product.slug}`);
+    }
+
+    // Revalidate the parent category page
+    if (product?.categoryId) {
+      const category = await prisma.category.findUnique({
+        where: { id: product.categoryId },
+        select: { slug: true }
+      });
+      if (category && category.slug) {
+        revalidatePath(`/${category.slug}`);
+      }
     }
 
     return NextResponse.json({ success: true, message: 'Product deleted.' });

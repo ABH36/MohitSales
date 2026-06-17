@@ -155,6 +155,10 @@ export default function AdminCategoriesPage() {
   // All categories flattened for dropdown use
   const [flatCats, setFlatCats] = useState<{ id: string; slug: string; label: string; depth: number }[]>([]);
 
+  // Cascading dropdown states
+  const [selectedParentBrandId, setSelectedParentBrandId] = useState('');
+  const [selectedParentCategoryId, setSelectedParentCategoryId] = useState('');
+
   const fetchCategories = async () => {
     setLoading(true);
     const res = await fetch('/api/admin/categories');
@@ -191,16 +195,29 @@ export default function AdminCategoriesPage() {
       // When editing, only update name — slug is already set and user may have customised it
       setForm(f => ({ ...f, name }));
     } else {
-      setForm(f => ({ ...f, name, slug: buildAutoSlug(name, f.parentId) }));
+      const deepestParentId = selectedParentCategoryId || selectedParentBrandId;
+      setForm(f => ({ ...f, name, slug: buildAutoSlug(name, deepestParentId) }));
     }
   };
 
-  const handleParentChange = (parentId: string) => {
+  const handleParentBrandChange = (brandId: string) => {
+    setSelectedParentBrandId(brandId);
+    setSelectedParentCategoryId('');
+    const finalParentId = brandId;
     setForm(f => ({
       ...f,
-      parentId,
-      // Re-derive slug from current name + new parent (only for create)
-      slug: editCat ? f.slug : buildAutoSlug(f.name, parentId),
+      parentId: finalParentId,
+      slug: editCat ? f.slug : buildAutoSlug(f.name, finalParentId),
+    }));
+  };
+
+  const handleParentCategoryChange = (catId: string) => {
+    setSelectedParentCategoryId(catId);
+    const finalParentId = catId || selectedParentBrandId;
+    setForm(f => ({
+      ...f,
+      parentId: finalParentId,
+      slug: editCat ? f.slug : buildAutoSlug(f.name, finalParentId),
     }));
   };
 
@@ -208,6 +225,11 @@ export default function AdminCategoriesPage() {
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (file.size > 300 * 1024) {
+      showToast('File size exceeds 300KB limit.', 'error');
+      e.target.value = '';
+      return;
+    }
     showToast('Uploading image...', 'info');
     const formData = new FormData();
     formData.append('file', file);
@@ -225,10 +247,10 @@ export default function AdminCategoriesPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    let finalParentId = form.parentId;
+    let finalParentId = selectedParentCategoryId || selectedParentBrandId;
 
     // On-the-fly parent creation
-    if (form.parentId === 'new' && form.newParentName) {
+    if (selectedParentBrandId === 'new' && form.newParentName) {
       showToast('Creating parent category...', 'info');
       const newParentSlug = slugify(form.newParentName);
       const catRes = await fetch('/api/admin/categories', {
@@ -278,12 +300,44 @@ export default function AdminCategoriesPage() {
 
   const openCreate = () => {
     setEditCat(null);
+    setSelectedParentBrandId('');
+    setSelectedParentCategoryId('');
     setForm({ slug: '', name: '', description: '', image: '', parentId: '', newParentName: '', sortOrder: 0 });
     setShowModal(true);
   };
 
   const openEdit = (cat: Category) => {
     setEditCat(cat);
+    
+    let brandId = '';
+    let catId = '';
+    
+    const findInTree = (list: Category[], id: string): Category | undefined => {
+      for (const c of list) {
+        if (c.id === id) return c;
+        if (c.children?.length) {
+          const found = findInTree(c.children, id);
+          if (found) return found;
+        }
+      }
+      return undefined;
+    };
+
+    if (cat.parentId) {
+      const parent = findInTree(categories, cat.parentId);
+      if (parent) {
+        if (parent.parentId) {
+          brandId = parent.parentId;
+          catId = parent.id;
+        } else {
+          brandId = parent.id;
+        }
+      }
+    }
+    
+    setSelectedParentBrandId(brandId);
+    setSelectedParentCategoryId(catId);
+    
     setForm({
       slug: cat.slug,
       name: cat.name,
@@ -386,24 +440,23 @@ export default function AdminCategoriesPage() {
                   />
                 </div>
 
-                {/* Parent Category — any category in the tree (excluding self & descendants) */}
+                {/* Cascading Parent Category Selectors */}
                 <div className="admin-form-group">
-                  <label className="admin-form-label">Parent Category</label>
+                  <label className="admin-form-label">Parent Brand</label>
                   <select
                     className="admin-form-select"
-                    value={form.parentId}
-                    onChange={e => handleParentChange(e.target.value)}
+                    value={selectedParentBrandId}
+                    onChange={e => handleParentBrandChange(e.target.value)}
                   >
                     <option value="">None (Top Level)</option>
                     <option value="new" style={{ fontWeight: 'bold', color: '#1E2E5E' }}>+ Type New Parent Category</option>
-                    {parentOptions.map(c => (
+                    {categories.filter(c => !c.parentId && !excludedIds.has(c.id)).map(c => (
                       <option key={c.id} value={c.id}>
-                        {'  '.repeat(c.depth)}{c.depth > 0 ? '└ ' : ''}{c.label.split(' > ').pop()}
-                        {c.depth > 0 ? ` (${c.label})` : ''}
+                        {c.name}
                       </option>
                     ))}
                   </select>
-                  {form.parentId === 'new' && (
+                  {selectedParentBrandId === 'new' && (
                     <input
                       type="text"
                       className="admin-form-input mt-2"
@@ -415,6 +468,24 @@ export default function AdminCategoriesPage() {
                     />
                   )}
                 </div>
+
+                {selectedParentBrandId && selectedParentBrandId !== 'new' && categories.filter(c => c.parentId === selectedParentBrandId && !excludedIds.has(c.id)).length > 0 && (
+                  <div className="admin-form-group">
+                    <label className="admin-form-label">Parent Category</label>
+                    <select
+                      className="admin-form-select"
+                      value={selectedParentCategoryId}
+                      onChange={e => handleParentCategoryChange(e.target.value)}
+                    >
+                      <option value="">None (Select Brand Level)</option>
+                      {categories.filter(c => c.parentId === selectedParentBrandId && !excludedIds.has(c.id)).map(c => (
+                        <option key={c.id} value={c.id}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
 
                 {/* Image */}
                 <div className="admin-form-group">

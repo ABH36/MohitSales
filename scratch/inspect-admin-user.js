@@ -2,10 +2,11 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
-  const users = await prisma.user.findMany({
+  const user = await prisma.user.findUnique({
+    where: { email: 'admin@mohitscpl.com' },
     include: { role: true }
   });
-  console.log(JSON.stringify(users, null, 2));
+  console.log('Admin User Details:', JSON.stringify(user, null, 2));
 }
 
 main().catch(console.error).finally(() => prisma.$disconnect());

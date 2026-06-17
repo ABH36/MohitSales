@@ -1,5 +1,5 @@
 import React from 'react';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { Metadata } from 'next';
 import fs from 'fs';
 import path from 'path';
@@ -7,6 +7,7 @@ import { LRUCache } from 'lru-cache';
 import * as cheerio from 'cheerio';
 import prisma from '@/lib/prisma';
 import ProductPageWrapper from '@/components/ProductPageWrapper';
+import SchemaInjector from '@/components/SchemaInjector';
 import { sanitizeHtml } from '@/lib/utils';
 
 export const revalidate = 3600; // ISR: revalidate every 1 hour (admin edits trigger instant revalidation via API)
@@ -45,8 +46,9 @@ async function getProductData(slugPath: string) {
 
     if (!dataList) {
       const jsonPath = path.join(process.cwd(), 'content-export.json');
-      if (!fs.existsSync(jsonPath)) return null;
-      dataList = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+      const jsonExists = await fs.promises.access(jsonPath).then(() => true).catch(() => false);
+      if (!jsonExists) return null;
+      dataList = JSON.parse(await fs.promises.readFile(jsonPath, 'utf-8'));
       contentCache.set(CACHE_KEY, dataList!);
     }
 
@@ -94,17 +96,18 @@ async function getLegacyPHPContent(slugPath: string, productName: string = ''): 
 
     const fullPath = path.join(cloneDir, phpPath);
 
-    if (!fs.existsSync(fullPath)) {
+    const exists = await fs.promises.access(fullPath).then(() => true).catch(() => false);
+    if (!exists) {
       return null;
     }
 
     // Skip zero-byte files — they are placeholders, not real pages
-    const stat = fs.statSync(fullPath);
+    const stat = await fs.promises.stat(fullPath);
     if (stat.size === 0) {
       return null;
     }
 
-    let fileContent = fs.readFileSync(fullPath, 'utf-8');
+    let fileContent = await fs.promises.readFile(fullPath, 'utf-8');
 
     // Extract inside <main> tag
     const mainMatch = fileContent.match(/<main[^>]*>([\s\S]*?)<\/main>/i);
@@ -115,31 +118,42 @@ async function getLegacyPHPContent(slugPath: string, productName: string = ''): 
 
     // Replace sidebar includes with their actual HTML content
     const includeRegex = /<\?php\s+include\s+ROOT_PATH\s*\.\s*'\/common\/([^']+)'\s*;\s*\?>/g;
-    html = html.replace(includeRegex, (match, sidebarName) => {
+    const matches = Array.from(html.matchAll(includeRegex));
+    const sidebarContents = new Map<string, string>();
+    for (const match of matches) {
+      const sidebarName = match[1];
       const sidebarPath = path.join(cloneDir, 'common', sidebarName);
-      if (fs.existsSync(sidebarPath)) {
-        let sidebarHtml = fs.readFileSync(sidebarPath, 'utf-8');
-        // Clean base URLs and PHP code inside sidebar
-        sidebarHtml = sidebarHtml.replace(/<\?php\s+echo\s+BASE_URL\s*;\s*\?>/g, '/');
-        // Replace .php links in sidebar
-        sidebarHtml = sidebarHtml.replace(/href="([^"]+)\.php([^"]*)"/g, (m, p1, p2) => {
-          if (p1.includes('<?php') || p1.startsWith('/') || p1.startsWith('http') || p1.startsWith('mailto:')) {
-            return `href="${p1}${p2}"`;
-          }
-          // Resolve path relative to current page's parent folder
-          const parts = slugPath.split('/');
-          parts.pop(); // remove current filename
-          let target = p1;
-          if (parts.length > 0) {
-            target = '/' + parts.join('/') + '/' + target;
-          } else {
-            target = '/' + target;
-          }
-          return `href="${target.toLowerCase()}${p2}"`;
-        });
-        return sidebarHtml;
+      try {
+        const sidebarExists = await fs.promises.access(sidebarPath).then(() => true).catch(() => false);
+        if (sidebarExists) {
+          let sidebarHtml = await fs.promises.readFile(sidebarPath, 'utf-8');
+          // Clean base URLs and PHP code inside sidebar
+          sidebarHtml = sidebarHtml.replace(/<\?php\s+echo\s+BASE_URL\s*;\s*\?>/g, '/');
+          // Replace .php links in sidebar
+          sidebarHtml = sidebarHtml.replace(/href="([^"]+)\.php([^"]*)"/g, (m, p1, p2) => {
+            if (p1.includes('<?php') || p1.startsWith('/') || p1.startsWith('http') || p1.startsWith('mailto:')) {
+              return `href="${p1}${p2}"`;
+            }
+            // Resolve path relative to current page's parent folder
+            const parts = slugPath.split('/');
+            parts.pop(); // remove current filename
+            let target = p1;
+            if (parts.length > 0) {
+              target = '/' + parts.join('/') + '/' + target;
+            } else {
+              target = '/' + target;
+            }
+            return `href="${target.toLowerCase()}${p2}"`;
+          });
+          sidebarContents.set(sidebarName, sidebarHtml);
+        }
+      } catch (err) {
+        console.error(`Error loading sidebar ${sidebarName}:`, err);
       }
-      return '';
+    }
+
+    html = html.replace(includeRegex, (match, sidebarName) => {
+      return sidebarContents.get(sidebarName) || '';
     });
 
     // Replace general php print echo BASE_URL . 'path/to/asset'
@@ -219,7 +233,26 @@ async function getLegacyPHPContent(slugPath: string, productName: string = ''): 
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const slugPath = params.slug.join('/');
-  const product = await getProductData(slugPath);
+  const [product, seoMeta] = await Promise.all([
+    getProductData(slugPath),
+    prisma.seoMeta.findUnique({ where: { page: `/${slugPath}` } }).catch(() => null),
+  ]);
+
+  // Admin-managed SEO meta takes top priority
+  if (seoMeta) {
+    return {
+      title: seoMeta.title || undefined,
+      description: seoMeta.description || undefined,
+      keywords: seoMeta.keywords ? seoMeta.keywords.split(',').map(k => k.trim()) : undefined,
+      robots: { index: !seoMeta.noIndex, follow: !seoMeta.noFollow },
+      alternates: seoMeta.canonicalUrl ? { canonical: seoMeta.canonicalUrl } : undefined,
+      openGraph: {
+        title: seoMeta.ogTitle || seoMeta.title || undefined,
+        description: seoMeta.description || undefined,
+        images: seoMeta.ogImage ? [seoMeta.ogImage] : undefined,
+      },
+    };
+  }
 
   if (product) {
     const title = `${product.heading || product.title} - Mohit Sales Corporation Pvt. Ltd.`;
@@ -258,6 +291,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const slugPath = params.slug.join('/');
 
   // Fetch DB product early and local state in parallel
+  // Note: redirect check is handled by middleware (/api/public/redirect). This is the fallback.
   const [dbProductEarly, product] = await Promise.all([
     prisma.product.findUnique({
       where: { slug: slugPath },
@@ -281,72 +315,24 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const isIndexPage = (product && product.cards && product.cards.length > 0) || hasLegacyCards;
 
   // ══════════════════════════════════════════════════════════════════════
-  // PRIORITY 1: Admin-managed DB product (explicitly edited OR has image)
-  // These take priority over legacy PHP so admin edits always reflect live.
-  // "Admin-managed" = product has image set OR updatedAt differs from createdAt
-  // (seeded products have updatedAt === createdAt and no image).
-  // We skip Index pages so category pages still use legacy layout.
+  // PRIORITY 1: DB product always takes priority over legacy PHP.
+  // If product exists in DB and this is not a category index page,
+  // always render the DB React template — no more isModified check.
+  // PHP fallback (Priority 2) only runs when DB has NO product for this slug.
   // ══════════════════════════════════════════════════════════════════════
   if (dbProductEarly && !isIndexPage) {
-    let isModified = false;
-
-    if (product) {
-      // Compare DB values with original JSON export values to detect admin edits
-      const jsonTitle = product.heading || product.title || '';
-      const jsonImage = product.imageSrc || '';
-      const jsonDatasheet = product.datasheet || '';
-
-      const dbTitle = dbProductEarly.title || '';
-      const dbImage = dbProductEarly.imageSrc || '';
-      const dbDatasheet = dbProductEarly.datasheetLink || '';
-
-      // Compare description strings by normalizing them to plain text
-      let normalizedJsonDesc = '';
-      if (product.description) {
-        normalizedJsonDesc = Array.isArray(product.description)
-          ? product.description.join('\n\n')
-          : String(product.description);
-      }
-
-      let normalizedDbDesc = '';
-      if (dbProductEarly.description) {
-        try {
-          const parsed = JSON.parse(dbProductEarly.description);
-          normalizedDbDesc = Array.isArray(parsed)
-            ? parsed.join('\n\n')
-            : String(parsed);
-        } catch (e) {
-          normalizedDbDesc = dbProductEarly.description;
-        }
-      }
-
-      if (
-        dbTitle !== jsonTitle ||
-        dbImage !== jsonImage ||
-        dbDatasheet !== jsonDatasheet ||
-        normalizedDbDesc !== normalizedJsonDesc ||
-        dbProductEarly.stock > 0 ||
-        !dbProductEarly.isActive
-      ) {
-        isModified = true;
-      }
-    } else {
-      // If not in content-export.json, it's a new admin-created product
-      isModified = true;
-    }
-
-    if (isModified) {
-      return (
-        <ProductPageWrapper>
-          {renderDbProduct(dbProductEarly)}
-        </ProductPageWrapper>
-      );
-    }
+    return (
+      <ProductPageWrapper>
+        <SchemaInjector page={`/${slugPath}`} />
+        {renderDbProduct(dbProductEarly)}
+      </ProductPageWrapper>
+    );
   }
 
   // ══════════════════════════════════════════════════════════════════════
   // PRIORITY 2: Legacy PHP Content (original site UI for all 2170+ pages)
   // ══════════════════════════════════════════════════════════════════════
+  // Falls through here only when PRIORITY 1 (DB product) did not match.
   if (legacyHtml) {
     let finalHtml = legacyHtml;
 
@@ -398,10 +384,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
         }
       }
 
-      const dbCategory = await prisma.category.findUnique({
+      // Only query DB for category products if the HTML actually has card slots to fill
+      const dbCategory = hasLegacyCards ? await prisma.category.findUnique({
         where: { slug: slugPath },
         include: { products: true }
-      });
+      }) : null;
 
       if (dbCategory && dbCategory.products.length > 0) {
         const $ = cheerio.load(finalHtml, null, false);
@@ -503,6 +490,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
     return (
       <ProductPageWrapper>
+        <SchemaInjector page={`/${slugPath}`} />
         <main>
           <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(finalHtml) }} />
         </main>
@@ -511,7 +499,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   // ══════════════════════════════════════════════════════════════════════
-  // PRIORITY 2: JSON fallback — PHP file missing/unrenderable but JSON has data
+  // PRIORITY 3: JSON fallback — PHP file missing/unrenderable but JSON has data
   // ══════════════════════════════════════════════════════════════════════
   if (product) {
     const hasContent = product.heading || product.title ||
@@ -530,6 +518,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       const isMultiProduct = product.cards && product.cards.length > 0;
       return (
         <ProductPageWrapper>
+          <SchemaInjector page={`/${slugPath}`} />
           <main>
             <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
               <div className="rs-breadcrumb-bg" style={{ backgroundImage: "url('/assets/images/inner-banner/products.png')" }}></div>
@@ -542,9 +531,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
                       </div>
                       <div className="rs-breadcrumb-menu">
                         <nav><ul>
-                          {product.breadcrumbs.map((crumb: string, index: number) => (
-                            <li key={index}><span>{crumb}</span></li>
-                          ))}
+                          {product.breadcrumbs.map((crumb: string, index: number) => {
+                            const isHome = crumb.toLowerCase() === 'home';
+                            const isLast = index === product.breadcrumbs.length - 1;
+                            return (
+                              <li key={index}>
+                                <span>
+                                  {isHome ? <a href="/">Home</a> : isLast ? crumb : crumb}
+                                </span>
+                              </li>
+                            );
+                          })}
                         </ul></nav>
                       </div>
                     </div>
@@ -560,19 +557,20 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   // ══════════════════════════════════════════════════════════════════════
-  // PRIORITY 3: DB Product fallback (seeded products with no PHP page)
+  // PRIORITY 4: DB Product fallback (seeded products with no PHP page)
   // These were auto-seeded; they only show when no PHP/JSON exists for the slug.
   // ══════════════════════════════════════════════════════════════════════
   if (dbProductEarly) {
     return (
       <ProductPageWrapper>
+        <SchemaInjector page={`/${slugPath}`} />
         {renderDbProduct(dbProductEarly)}
       </ProductPageWrapper>
     );
   }
 
   // ══════════════════════════════════════════════════════════════════════
-  // PRIORITY 4: Admin Panel Category (Prisma DB exact slug match)
+  // PRIORITY 5: Admin Panel Category (Prisma DB exact slug match)
   // Renders a full product listing page for admin-created categories.
   // ══════════════════════════════════════════════════════════════════════
   const dbCategory = await prisma.category.findUnique({
@@ -597,13 +595,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
   if (dbCategory) {
     return (
       <ProductPageWrapper>
+        <SchemaInjector page={`/${slugPath}`} />
         {renderDbCategory(dbCategory)}
       </ProductPageWrapper>
     );
   }
 
   // ══════════════════════════════════════════════════════════════════════
-  // PRIORITY 5: 404
+  // PRIORITY 6: 404
   // ══════════════════════════════════════════════════════════════════════
   notFound();
 }

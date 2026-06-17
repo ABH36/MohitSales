@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 /**
  * Loads non-critical CSS files asynchronously after the page has rendered.
@@ -15,7 +16,10 @@ const NON_CRITICAL_CSS = [
 ];
 
 export default function NonCriticalCSS() {
+  const pathname = usePathname();
   useEffect(() => {
+    // Skip on admin pages — these stylesheets conflict with admin panel
+    if (pathname.startsWith('/admin')) return;
     NON_CRITICAL_CSS.forEach((href) => {
       // Skip if already loaded
       if (document.querySelector(`link[href="${href}"]`)) return;

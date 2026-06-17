@@ -52,7 +52,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const jsonPath = path.join(process.cwd(), 'content-export.json');
     if (fs.existsSync(jsonPath)) {
-      const rawData = fs.readFileSync(jsonPath, 'utf-8');
+      const rawData = await fs.promises.readFile(jsonPath, 'utf-8');
       const dataList = JSON.parse(rawData);
 
       jsonRoutes = dataList.map((item: any) => {
@@ -127,6 +127,35 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  sitemapCache.set(CACHE_KEY, uniqueRoutes);
-  return uniqueRoutes;
+  // 5. Apply admin-managed SitemapOverrides (priority, changeFreq, exclusions)
+  let finalRoutes = uniqueRoutes;
+  try {
+    const overrides = await prisma.sitemapOverride.findMany();
+    if (overrides.length > 0) {
+      const overrideMap = new Map(overrides.map(o => [o.urlPath, o]));
+
+      finalRoutes = uniqueRoutes
+        .filter(route => {
+          const urlPath = route.url.replace(baseUrl, '') || '/';
+          const ov = overrideMap.get(urlPath);
+          return !ov?.isExcluded;
+        })
+        .map(route => {
+          const urlPath = route.url.replace(baseUrl, '') || '/';
+          const ov = overrideMap.get(urlPath);
+          if (!ov) return route;
+          return {
+            ...route,
+            priority: ov.priority,
+            changeFrequency: ov.changeFreq as MetadataRoute.Sitemap[number]['changeFrequency'],
+          };
+        });
+    }
+  } catch {
+    // fail open — use uniqueRoutes as-is
+    finalRoutes = uniqueRoutes;
+  }
+
+  sitemapCache.set(CACHE_KEY, finalRoutes);
+  return finalRoutes;
 }

@@ -57,19 +57,11 @@ export default async function AdminDashboardPage() {
   return (
     <AdminShell pageTitle="Dashboard">
       {/* Welcome Banner */}
-      <div style={{
-        background: '#0d2b2b',
-        borderRadius: '24px',
-        padding: '40px 32px',
-        marginBottom: '32px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
+      <div className="admin-welcome-banner">
         <img
           src="/assets/images/logo/msc_logo_without_bg.png"
           alt="Mohit Sales Corporation"
-          style={{ height: '120px', width: 'auto', objectFit: 'contain' }}
+          className="admin-welcome-logo"
         />
       </div>
 

@@ -10,7 +10,37 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
 
-  // Only protect /admin and /api/admin routes
+  // ── Public route redirect check ───────────────────────────────────────
+  // Runs for all public pages (not admin, not api, not static assets).
+  // Checks DB for active redirects; fails open so pages are never blocked.
+  const isPublicPage =
+    !pathname.startsWith('/admin') &&
+    !pathname.startsWith('/api') &&
+    !pathname.startsWith('/_next') &&
+    !pathname.startsWith('/assets') &&
+    pathname !== '/favicon.ico';
+
+  if (isPublicPage) {
+    try {
+      const redirectCheckUrl = new URL('/api/public/redirect', request.url);
+      redirectCheckUrl.searchParams.set('path', pathname);
+      const redirectRes = await fetch(redirectCheckUrl.toString());
+      if (redirectRes.ok) {
+        const data = await redirectRes.json();
+        if (data.redirect) {
+          return NextResponse.redirect(
+            new URL(data.redirect.toPath, request.url),
+            { status: data.redirect.type }
+          );
+        }
+      }
+    } catch {
+      // fail open — never block a public page due to redirect check failure
+    }
+    return NextResponse.next({ request: { headers: requestHeaders } });
+  }
+
+  // ── Admin / API admin authentication ─────────────────────────────────
   if (!pathname.startsWith('/admin') && !pathname.startsWith('/api/admin')) {
     return NextResponse.next({
       request: {
@@ -70,7 +100,6 @@ export async function middleware(request: NextRequest) {
     }
     
     // Pass the user ID or role in headers
-    const requestHeaders = new Headers(request.headers);
     requestHeaders.set('x-user-id', authData.user.id);
     requestHeaders.set('x-user-role', authData.user.role);
 
@@ -94,7 +123,10 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
+    // Admin auth protection
     '/admin/:path*',
-    '/api/admin/:path*'
+    '/api/admin/:path*',
+    // Public pages: DB redirect check (excludes static, _next, api routes)
+    '/((?!_next/static|_next/image|favicon\\.ico|assets|api).*)',
   ],
 };

@@ -39,6 +39,18 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
     const newSlug: string | undefined = body.slug && body.slug !== current.slug ? body.slug : undefined;
 
+    const parentId = body.parentId;
+    if (parentId !== undefined && parentId !== '' && parentId !== 'new' && parentId !== null) {
+      if (parentId === params.id) {
+        return NextResponse.json({ success: false, message: 'A category cannot be its own parent.' }, { status: 400 });
+      }
+      const descendants = await getDescendants(params.id);
+      const descendantIds = descendants.map(d => d.id);
+      if (descendantIds.includes(parentId)) {
+        return NextResponse.json({ success: false, message: 'A category cannot be nested under one of its own subcategories.' }, { status: 400 });
+      }
+    }
+
     // Update the category itself
     const category = await prisma.category.update({
       where: { id: params.id },

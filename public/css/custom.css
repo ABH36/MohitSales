@@ -40,20 +40,49 @@ body {
 
 .rs-header-two.header-new .rs-header-logo {
   width: auto;
+  max-width: max-content;
   padding: 10px 0px;
 }
 
-/* .header-new.rs-header-area.has-theme-orange .main-menu li a {
-  color: #0091b9;
+.rs-header-two.header-new .rs-header-logo img {
+  max-width: 100%;
+  transition: max-width 0.3s ease;
 }
 
-.header-new.rs-header-area.has-theme-orange .main-menu .submenu li a{
-  color: #fff;
-} */
+/* --- Responsive Logo and Header Sizes to Prevent Overlapping --- */
+@media (max-width: 1200px) {
+  /* Shrink logo slightly on laptops to prevent pushing the menu */
+  .rs-header-two.header-new .rs-header-logo {
+    width: auto !important;
+  }
+  .rs-header-two.header-new .rs-header-logo img {
+    max-width: 150px !important;
+  }
+  /* Reduce nav menu spacing slightly on medium screens */
+  .main-menu .multipage-menu > li > a {
+    padding: 30px 10px !important;
+    font-size: 14px !important;
+  }
+}
 
-.rs-header-two.header-new .rs-header-logo img {
-  /* max-width: 100%; */
-  max-width: 80%;
+@media (max-width: 991px) {
+  /* On mobile and tablet where menu is hamburger */
+  .rs-header-two.header-new .rs-header-logo {
+    width: auto !important;
+  }
+  .rs-header-two.header-new .rs-header-logo img {
+    max-width: 140px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Smaller mobile screens */
+  .rs-header-two.header-new .rs-header-logo {
+    width: auto !important;
+  }
+  .rs-header-two.header-new .rs-header-logo img {
+    max-width: 115px !important;
+  }
 }
 
 /* .rs-header-two.header-new .rs-header-left::before {
