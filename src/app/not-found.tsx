@@ -1,23 +1,65 @@
-﻿import React from 'react';
+import React from 'react';
 
 export default function NotFound() {
   return (
-    <main className="min-h-screen d-flex align-items-center justify-content-center bg-slate-50 py-16 px-4">
-      <div className="container max-w-md mx-auto text-center bg-white p-8 rounded-2xl shadow-lg border">
+    <main className="min-h-screen d-flex align-items-center justify-content-center py-16 px-4" style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%)' }}>
+      <div 
+        className="container max-w-lg mx-auto text-center p-8 rounded-2xl shadow-2xl border" 
+        style={{ 
+          background: 'rgba(255, 255, 255, 0.05)', 
+          backdropFilter: 'blur(10px)', 
+          borderColor: 'rgba(255, 255, 255, 0.1)',
+          animation: 'fadeInUp 0.6s ease-out forwards'
+        }}
+      >
+        {/* Warning Alert Icon & Heading */}
         <div className="mb-6">
-          <h1 className="text-8xl font-black text-gray-800 tracking-tight" style={{ color: '#F7931E' }}>404</h1>
-          <h2 className="text-2xl font-bold text-gray-800 mt-4">Page Not Found</h2>
-          <p className="text-gray-500 mt-3 leading-relaxed">
-            Oops! The page you are looking for does not exist or has been moved.
-          </p>
+          <div className="d-flex justify-content-center mb-4">
+            <div 
+              className="rounded-full p-4 d-flex align-items-center justify-content-center"
+              style={{ 
+                background: 'rgba(247, 147, 30, 0.15)',
+                border: '2px dashed #F7931E',
+                width: '80px',
+                height: '80px',
+                animation: 'pulse 2s infinite'
+              }}
+            >
+              <i className="fa-solid fa-triangle-exclamation text-4xl" style={{ color: '#F7931E' }}></i>
+            </div>
+          </div>
+          <h2 className="text-3xl font-black text-white mb-3" style={{ fontFamily: 'Outfit, sans-serif' }}>
+            Alert: Page Not Found
+          </h2>
+          <div 
+            className="p-4 rounded-xl text-left border mb-6"
+            style={{ 
+              background: 'rgba(239, 68, 68, 0.1)', 
+              borderColor: 'rgba(239, 68, 68, 0.2)',
+              color: '#fca5a5'
+            }}
+          >
+            <div className="d-flex gap-3 align-items-center">
+              <i className="fa-solid fa-circle-info text-xl" style={{ color: '#ef4444' }}></i>
+              <p className="m-0 text-sm font-medium">
+                Oops! The path you tried to access does not exist on this server.
+              </p>
+            </div>
+          </div>
         </div>
-        <div className="rs-banner-btn d-flex justify-content-center mt-6">
+
+        {/* Back to Home Button */}
+        <div className="d-flex justify-content-center mt-6">
           <a 
             href="/" 
-            className="rs-btn has-theme-orange has-icon has-bg py-3 px-6 text-white font-bold rounded-lg text-sm transition-all inline-flex items-center gap-2"
-            style={{ background: '#F7931E', textDecoration: 'none' }}
+            className="rs-btn has-theme-orange has-icon has-bg py-3 px-8 text-white font-bold rounded-lg transition-all inline-flex items-center gap-3"
+            style={{ 
+              background: 'linear-gradient(135deg, #F7931E 0%, #d07613 100%)', 
+              textDecoration: 'none',
+              boxShadow: '0 8px 20px rgba(247, 147, 30, 0.3)'
+            }}
           >
-            Back to Home
+            Go to Homepage
             <span className="icon-box">
               <svg className="icon-first w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor">
                 <path d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z"></path>
@@ -26,6 +68,25 @@ export default function NotFound() {
           </a>
         </div>
       </div>
+
+      {/* Animation Styles */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @keyframes pulse {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.05); }
+          100% { transform: scale(1); }
+        }
+      ` }} />
     </main>
   );
 }

@@ -1,38 +1,79 @@
-@media (max-width: 576px){
+/* ============================================================
+   RESPONSIVE CSS — Mobile (300px–576px)
+   ============================================================ */
+@media (min-width: 300px) and (max-width: 576px) {
 
-    body{
+    body {
         overflow-x: hidden;
         overflow-y: auto;
-        /*overflow: hidden;*/
         scroll-behavior: smooth;
-
     }
+
+    /* ── Header ─────────────────────────────────────────── */
 
     .rs-header-two .sidebar-toggle.new .bar-icon svg path {
         color: #0091b9 !important;
-      }
-
-      .rs-header-two.header-new .rs-header-logo {
-        width: 200px;
-        padding: 10px 0px;
     }
 
-      .rs-header-right {
-        margin-left: 0;
+    .rs-header-two.header-new .rs-header-logo {
+        width: 150px;
+        padding: 5px 0;
     }
 
-    /* .contact-btn {
+    .rs-header-two .rs-header-inner {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0 15px;
+    }
+
+    .rs-header-two .rs-header-left {
+        flex: 0 0 auto;
+        padding-inline-end: 0 !important;
+        margin-inline-end: 0 !important;
+    }
+
+    /* Hide desktop nav on mobile — sidebar handles it */
+    .rs-header-two .rs-header-menu {
         display: none;
-    } */
+    }
 
+    .rs-header-two .rs-header-right {
+        flex: 0 0 auto;
+        margin-left: auto;
+        margin-right: 0;     /* BUG FIX: was missing, caused right overflow */
+    }
 
-    .about-inner .about-heading h2 {
-    font-size: 30px;
-}
+    /* Remove the decorative divider line on mobile — overlaps logo */
+    .rs-header-two.header-new .rs-header-left::before {
+        display: none;
+    }
 
+    .rs-header-hamburger i {
+        font-size: 25px;
+        font-weight: 500;
+        color: #ffffff;
+        margin-right: 10px;
+    }
+
+    .rs-header-area.header-new.has-theme-orange.rs-sticky {
+        background: rgba(18, 26, 47, 0.98);
+    }
+
+    .rs-header-two.has-border {
+        background: rgba(18, 26, 47, 0.95);
+    }
+
+    .rs-header-two {
+        padding: 0;
+    }
+
+    /* ── Banner ──────────────────────────────────────────── */
 
     .rs-banner-nine.banner_sec {
-     height: unset;
+        height: unset;
     }
 
     .rs-banner-nine .rs-banner-bg-thumb {
@@ -47,443 +88,347 @@
         z-index: -1;
     }
 
-    .rs-header-two .rs-header-inner {
-        position: relative;
-    }
-
     .rs-banner-nine.banner_sec .rs-banner-item-wrapper {
         height: unset;
     }
 
-    .rs-header-area.header-new.has-theme-orange.rs-sticky {
-        background: rgba(18, 26, 47, 0.98);
+    .banner_sec .banner-swiper .swiper-slide {
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
     }
 
-      .rs-header-two.has-border {
-        background: rgba(18, 26, 47, 0.95);
+    .banner_sec .banner-swiper {
+        width: 100%;
+        height: 40vh !important;
+        position: unset;
+        padding: 68px 0 0 0;
+        overflow: hidden;
+        background-color: unset;
     }
 
-
-.rs-header-hamburger i{
-    font-size:25px;
-    font-weight: 500;
-    color: #ffffff;
-    margin-right:10px;
-}
-
-    .rs-header-two.header-new .rs-header-left::before {
-        position: absolute;
-        content: "";
-        width: 1px;
-        height: 75px;
-        background: rgba(255, 255, 255, 0.2);
-        inset-inline-end: 0;
-        top: -10px;
-        right: -25px;
+    .banner_sec .swiper-pagination {
+        top: 65%;
     }
 
-
-    .rs-footer-two.footer-new .rs-footer-widget-logo img{
-        max-width:100%;
-        text-align: center;
-    }
-
-
-    .rs-footer-two.footer-new .rs-footer-widget-description {
-        text-align: center;
-        margin-top: -15px;
-        margin-bottom: 0px;
-    }
-
-
-    .rs-footer-two .rs-footer-stroke-text {
-        /* font-size: 35px;
-        text-align: center; */
+    .banner_sec.desktop {
         display: none;
     }
 
-
-    .rs-footer-two .rs-footer-widget-title {
-    text-align: center;
-}
-
-
-.rs-footer-widget-links ul {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    /* grid-template-columns: repeat(2, 1fr); */
-    gap: 10px;
-    /* border-right: 1px solid #fff; */
-}
-
-.rs-footer-widget-links ul li{
-    border-right:2px solid #fff;
-    padding-right: 10px;
-    height:20px;
-    /* margin-top: 25px; */
-}
-
-.rs-footer-widget-links ul li:last-child{
-    border-right: none;
-}
-
-.rs-footer-widget-email {
-    text-align: center;
-    margin-top:0px;
-}
-
-.rs-footer-two .rs-footer-widget-address {
-    margin-bottom: 30px;
-    text-align: center;
-}
-
-
-.about-inner .prabhat-about .core-values ul li {
-    display: flex;
-    flex-wrap: wrap;
-}
-    
-    .rs-cta-content-wrapper.update {
-    flex-direction: column;
-}
-
-    .rs-cta-two .rs-cta-title {
-        font-size: 20px !important;
+    .banner_sec.mobile {
+        display: block;
+        margin-top: -20px;
     }
-    
-.rs-cta-five.banner_bottom .rs-cta-wrapper {
-    display: grid;
-    grid-template-columns: auto;
-    
-}
 
-/* .cables-inner {
-    padding: 12%;
-} */
+    .rs-banner-btn {
+        z-index: 999 !important;
+    }
 
+    .rs-banner-btn a {
+        touch-action: manipulation;
+    }
 
-.cables-inner .standard-card {
-    margin: 10px;
-}
+    /* ── About ───────────────────────────────────────────── */
 
-.specifications ul {
-    padding: 5px;
-    margin-top: 20px;
-    column-count: 1;
-    
-}
+    .about-inner .about-heading h2 {
+        font-size: 30px;
+    }
 
-.wires_inner .wire-card { 
-    margin:15px;
-    /* margin-bottom: 20px; */
-}
+    .about-inner .prabhat-about .core-values ul li {
+        display: flex;
+        flex-wrap: wrap;
+    }
 
+    .about_us h4.meet {
+        font-size: 25px;
+    }
+
+    .about_us .company-card {
+        height: 580px;
+        margin-bottom: 20px;
+    }
+
+    .about_us .company-card h2 {
+        font-size: 30px;
+    }
+
+    .about_us .company-card h2.ak {
+        font-size: 30px;
+    }
+
+    /* ── Breadcrumb ──────────────────────────────────────── */
 
     .rs-breadcrumb-one .rs-breadcrumb-title {
         font-size: 25px;
         text-align: center;
     }
 
-
-    .wires-title h3{
-    font-size: 25px;
-    line-height: 40px;
-}
-
-.cables-card {
-    margin: 15px;
-    /* width: 200px */
-}
-
-.cables-card .cables-name h4{
-    height: 100px;
-}
-
-.cables-inner .inner-heading h3 {
-    font-size: 25px;
-}
-
-.features ul {
-    column-count: 1;
-}
-
-.specifications {
-    margin-top: 20px;
-    
-}
-
-.about_us .company-card {
-margin-bottom: 20px;
-}
-
-.colors ul{
-    gap: 10px
-}
-
-
-.banner_sec .banner-swiper .swiper-slide {
-    /* height: 400px; */
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-}
-
-
-    .banner_sec {
-        /* margin-top: 0px; */
-        /* position: unset; */
-        /* padding-top: 65px; */
+    .rs-breadcrumb-one .rs-breadcrumb-menu ul li span {
+        color: #1d2c5f;
+        font-size: 14px;
     }
 
+    .rs-breadcrumb-menu {
+        text-align: center;
+    }
 
-    .banner_sec .banner-swiper {
+    /* ── CTA ─────────────────────────────────────────────── */
+
+    .rs-cta-content-wrapper.update {
+        flex-direction: column;
+    }
+
+    .rs-cta-two .rs-cta-title {
+        font-size: 18px !important;  /* BUG FIX: was duplicated with 20px above — kept lower value */
+    }
+
+    .rs-cta-two .rs-cta-bg-thumb {
+        position: absolute;
         width: 100%;
-        height: 40vh !important;
-        position: unset;
-        padding: 68px 0px 0px 0px;
-        overflow: hidden;
-        background-color: unset;
+        height: 85%;
     }
 
-
-
-
-    .rs-header-two {
-        padding: 0px 0;
+    .rs-cta-five.banner_bottom .rs-cta-wrapper {
+        display: grid;
+        grid-template-columns: auto;
     }
-    
-    
-    .contact_us_sec{
-        overflow: hidden;
-    }
-    
-    
+
     .rs-cta-five.banner_bottom {
-     margin-top: -40px; 
-}
+        margin-top: -40px;
+    }
 
+    /* ── Cables / Wires ──────────────────────────────────── */
 
+    .cables-inner .standard-card {
+        margin: 10px;
+    }
 
-.contact_us_sec iframe {
-    width: 100%;
-    height: 400px;
-}
+    .cables-inner .inner-heading h3 {
+        font-size: 25px;
+    }
 
+    .cables-card {
+        margin: 15px;
+    }
 
-.rs-btn {
-    font-size: 16px;
-    padding: 15px 20px;
-    height: 50px;
-}
+    .cables-card .cables-name h4 {
+        height: 100px;
+    }
 
+    .wires_inner .wire-card {
+        margin: 15px;
+    }
 
-.rs-breadcrumb-one .rs-breadcrumb-menu ul li span {
-    color: #1d2c5f;
-    font-size: 14px;
-}
+    .wires-title h3 {
+        font-size: 25px;
+        line-height: 40px;
+    }
 
+    /* ── Specifications / Features ───────────────────────── */
 
-.rs-breadcrumb-menu {
-    text-align: center;
-}
+    .specifications {
+        margin-top: 20px;
+    }
 
+    .specifications ul {
+        padding: 5px;
+        margin-top: 20px;
+        column-count: 1;
+    }
 
+    .features ul {
+        column-count: 1;
+    }
 
-.pricelist-card {
-    width: unset;
-    margin: 20px;
-}
+    .colors ul {
+        gap: 10px;   /* BUG FIX: was missing semicolon */
+    }
 
-.certificate-inner .certificate-card {
-    margin: 20px;
-}
+    /* ── Buttons ─────────────────────────────────────────── */
 
-.banner_sec.desktop{
-    display: none;
-}
+    .rs-btn {
+        font-size: 16px;
+        padding: 15px 20px;
+        height: 50px;
+    }
 
-.banner_sec.mobile{
-    display: block;
-    margin-top: -20px;
-}
+    .contact-btn .rs-btn {
+        height: 50px;
+        padding: 10px 20px;
+        z-index: 1000 !important;
+        pointer-events: all;
+    }
 
+    /* ── Contact ─────────────────────────────────────────── */
+
+    .contact_us_sec {
+        overflow: hidden;
+    }
+
+    .contact_us_sec iframe {
+        width: 100%;
+        height: 400px;
+    }
+
+    /* ── Pricelist / Certificates ────────────────────────── */
+
+    .pricelist-card {
+        width: unset;
+        margin: 20px;
+    }
+
+    .certificate-inner .certificate-card {
+        margin: 20px;
+    }
+
+    /* ── Footer ──────────────────────────────────────────── */
 
     .rs-footer-two.has-space {
         padding-top: 60px;
     }
 
-
-    .rs-header-left.index{
-  visibility: visible;
-}
-
-
-.banner_sec .swiper-pagination {
-    top: 65%;
-}
-
-
-.rs-cta-two .rs-cta-bg-thumb{
-    position: absolute;
-    width: 100%;
-    height: 85%;
-}
-
-.rs-footer-widget-content .email {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-}
-
-
-.rs-footer-widget-content .mobile-no{
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-}
-
-
-.rs-footer-widget-content .mobile-address{
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-}
-
-
-.rs-footer-widget-email.mobile{
-    margin-top: 5px;
-}
-
-.rs-footer-two.footer-new .rs-footer-widget-title.get-in-touch {
-    margin-bottom: 5px;
-    font-size:18px;
-    /* margin-top: -35px; */
-}
-
-    .rs-footer-two.footer-new  .rs-footer-widget-title.get-in-touch.address{
-    margin-top: -35px;
-}
-
-.rs-footer-widget-content {
-    margin-top: 20px;
-}
-
-
     .rs-footer-two.has-space > .rs-footer-top {
         padding: 0 0 20px;
     }
 
-
-    .footer-new .rs-copyright-one {
-    padding: 5px 0 5px;
-}
-
-.footer-new .rs-footer-copyright.has-theme-orange.text-center p.underline{
-    display: flex;
-    justify-content: space-between;
-    gap: 0px;
-}
-
-.rs-cta-two .rs-cta-title {
-        font-size: 18px !important;
+    .rs-footer-two .rs-footer-stroke-text {
+        display: none;
     }
 
+    .rs-footer-two .rs-footer-widget-title {
+        text-align: center;
+    }
+
+    .rs-footer-two.footer-new .rs-footer-widget-logo img {
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .rs-footer-two.footer-new .rs-footer-widget-description {
+        text-align: center;
+        margin-top: -15px;
+        margin-bottom: 0;
+    }
+
+    .rs-footer-two .rs-footer-widget-address {
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .rs-footer-two .rs-footer-widget-address a {
+        color: var(--rs-text-secondary);
+        font-size: 16px;
+    }
+
+    .rs-footer-two.footer-new .rs-footer-widget-title.get-in-touch {
+        margin-bottom: 5px;
+        font-size: 18px;
+    }
+
+    .rs-footer-two.footer-new .rs-footer-widget-title.get-in-touch.address {
+        margin-top: -35px;
+    }
+
+    .rs-footer-widget-content {
+        margin-top: 20px;
+    }
+
+    .rs-footer-widget-content .email,
+    .rs-footer-widget-content .mobile-no,
+    .rs-footer-widget-content .mobile-address {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .rs-footer-widget-email {
+        text-align: center;
+        margin-top: 0;
+    }
+
+    .rs-footer-widget-email.mobile {
+        margin-top: 5px;
+    }
+
+    .rs-footer-widget-links ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .rs-footer-widget-links ul li {
+        border-right: 2px solid #fff;
+        padding-right: 10px;
+        height: 20px;
+    }
+
+    .rs-footer-widget-links ul li:last-child {
+        border-right: none;
+    }
+
+    .footer-new .rs-copyright-one {
+        padding: 5px 0;
+    }
+
+    .footer-new .rs-footer-copyright.has-theme-orange.text-center p.underline {
+        display: flex;
+        justify-content: space-between;
+        gap: 0;
+    }
+
+    .footer-menu {
+        gap: 15px;
+        flex-direction: column;
+    }
 
     .bdm-footer-logo {
-    width: 80px;
-}
+        width: 80px;
+    }
 
+    /* ── Misc ────────────────────────────────────────────── */
 
-.rs-footer-two .rs-footer-widget-address a {
-    color: var(--rs-text-secondary);
-    font-size: 16px;
-}
+    .rs-header-left.index {
+        visibility: visible;
+    }
 
-.about_us h4.meet {
-    font-size: 25px;
-}
-
-.about_us .company-card {
-    height: 580px;
-}
-
-
-.contact-btn .rs-btn {
-    height: 50px;
-    padding: 10px 20px;
-    z-index:1000 !important;
-    pointer-events: all;
-
-}
-
- .rs-banner-btn{
-    z-index: 999 !important;
-}
-
-.rs-banner-btn a {
-  touch-action: manipulation;
-}
-
-
-.about_us .company-card h2 {
-    font-size: 30px;
-}
-
-
-.about_us .company-card h2.ak {
-    font-size: 30px;
-    
-}
-.footer-menu {
-    gap: 15px;
-    flex-direction: column;
-}
-
-.section-space {
-    padding-top: 0px;
-}
-
+    .section-space {
+        padding-top: 0;
+    }
 
 }
 
 
-@media (min-width: 1600px) and (max-width: 1920px){
-
+/* ============================================================
+   RESPONSIVE CSS — Large Desktop (1600px–1920px)
+   ============================================================ */
+@media (min-width: 1600px) and (max-width: 1920px) {
 
     .rs-why-choose-three .rs-why-choose-shape {
         display: none;
     }
 
-
     .about_us .company-card {
         height: 550px;
     }
-
 
     .contact-btn {
         margin-left: unset;
     }
 
-
     .rs-breadcrumb-one {
         padding-top: 150px;
         padding-bottom: 150px;
-      }
+    }
 
+    .banner_sec.desktop {
+        display: block;
+    }
 
-
-      .banner_sec.desktop{
-    display: block;
-}
-
-.banner_sec.mobile{
-    display: none;
-}
-
+    .banner_sec.mobile {
+        display: none;
+    }
 
 }

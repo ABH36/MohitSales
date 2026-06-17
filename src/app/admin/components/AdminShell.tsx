@@ -35,6 +35,7 @@ const navItems = [
   },
   {
     section: 'Content', items: [
+      { label: 'CMS Pages', href: '/admin/cms', icon: '🖊️' },
       { label: 'Products', href: '/admin/products', icon: '📦' },
       { label: 'Categories', href: '/admin/categories', icon: '📁' },
       { label: 'Inquiries', href: '/admin/inquiries', icon: '📩' },

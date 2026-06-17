@@ -27,28 +27,24 @@ body {
 /* Dark gradient overlay on home-page transparent header — ensures logo
    is always readable regardless of the banner slide content behind it */
 .rs-header-area.rs-header-two.header-transparent {
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.50) 0%, rgba(0, 0, 0, 0) 100%);
+  background: #121a2f;
+}
+
+.rs-header-two .rs-header-left,
+.rs-header-two .rs-header-logo,
+.rs-header-two .rs-header-logo a,
+.rs-header-two .rs-header-logo img {
+  background: transparent !important;
+  background-color: transparent !important;
 }
 
 .rs-header-two.header-new .rs-header-menu {
-  flex: 1 !important;
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  margin-inline-end: 0 !important;   /* override theme default (margin-inline-end: auto) */
+  flex: 1;
+  text-align: center;
 }
 
 .rs-header-two.header-new .rs-header-menu .main-menu {
-  display: flex !important;
-  justify-content: center !important;
-}
-
-/* Reduce logo-side padding so menu isn't pushed right */
-.rs-header-two.header-new .rs-header-left {
-  padding-inline-end: 20px !important;
-  margin-inline-end: 0 !important;
+  display: inline-block !important;
 }
 
 .rs-header-logo img {
@@ -3224,3 +3220,26 @@ section.pricelist-inner {
     font-size: 14px;
   }
 }
+
+/* --- Fix: Prevent header menu overlap on desktop/laptop viewports --- */
+.rs-header-two.header-new .rs-header-logo img {
+  max-width: 180px !important;
+  height: auto !important;
+}
+
+@media (max-width: 1366px) {
+  .rs-header-two.header-new .rs-header-logo img {
+    max-width: 155px !important;
+  }
+  .main-menu .multipage-menu > li > a {
+    padding: 30px 10px !important;
+    font-size: 14px !important;
+  }
+}
+
+/* --- Fix: Hide duplicate hamburger menu on desktop viewports --- */
+@media (min-width: 992px) {
+  .rs-header-hamburger {
+    display: none !important;
+  }
+}

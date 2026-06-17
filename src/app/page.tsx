@@ -29,7 +29,39 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+const FALLBACK_ABOUT = {
+  title: 'About Us',
+  subtitle: 'Mohit Sales Corporation Pvt. Ltd.',
+  paragraphs: [
+    'Established in 1997, Mohit Sales Corporation Pvt. Ltd. has built a strong reputation as a trusted leader in the electrical distribution industry. With over 27+ years of experience, we deliver reliable, high-quality electrical products and customized solutions to diverse sectors.',
+    'We are a proud Authorised Distributor of Polycab and Dowells, ensuring our customers receive only genuine, certified products that meet the highest industry standards.',
+    'Our success is driven by a customer-first approach, technical expertise, timely delivery, and dependable after-sales support. Today, we proudly serve contractors, industries, retailers, and large-scale infrastructure projects, helping power growth and innovation across the region.',
+  ],
+  imageUrl: '/assets/images/about/authorized distributor.png',
+};
+
 export default async function Page() {
+  const cmsAbout = await prisma.cmsSection.findUnique({
+    where: { page_section: { page: 'homepage', section: 'content' } },
+  }).catch(() => null);
+
+  let aboutData = FALLBACK_ABOUT;
+  if (cmsAbout?.content) {
+    try {
+      const parsed = JSON.parse(cmsAbout.content);
+      if (parsed.title || parsed.content || parsed.imageUrl) {
+        aboutData = {
+          title: parsed.title || FALLBACK_ABOUT.title,
+          subtitle: FALLBACK_ABOUT.subtitle,
+          paragraphs: parsed.content
+            ? parsed.content.split('\n').map((p: string) => p.trim()).filter(Boolean)
+            : FALLBACK_ABOUT.paragraphs,
+          imageUrl: parsed.imageUrl || FALLBACK_ABOUT.imageUrl,
+        };
+      }
+    } catch {}
+  }
+
   const polycabProducts = [
     {
       title: 'MV Power Cables',
@@ -80,8 +112,8 @@ export default async function Page() {
           <div className="row align-items-center">
             <div className="col-lg-6 w-full mb-5 mb-lg-0 scroll-reveal" data-direction="left" data-delay="100">
               <div className="image_boxes style_three position-relative">
-                <img 
-                  src="/assets/images/about/authorized distributor.png"
+                <img
+                  src={aboutData.imageUrl}
                   alt="Authorized Distributor of Polycab and Dowells"
                   className="img-fluid rounded shadow"
                 />
@@ -92,18 +124,12 @@ export default async function Page() {
               <div className="title_all_box style_one dark_color">
                 <div className="title_sections">
                   <div className="about-heading mb-2">
-                    <h2>About Us</h2>
+                    <h2>{aboutData.title}</h2>
                   </div>
-                  <h4 className="mb-3">Mohit Sales Corporation Pvt. Ltd.</h4>
-                  <p>
-                    Established in 1997, Mohit Sales Corporation Pvt. Ltd. has built a strong reputation as a trusted leader in the electrical distribution industry. With over 27+ years of experience, we deliver reliable, high-quality electrical products and customized solutions to diverse sectors.
-                  </p>
-                  <p>
-                    We are a proud Authorised Distributor of Polycab and Dowells, ensuring our customers receive only genuine, certified products that meet the highest industry standards.
-                  </p>
-                  <p>
-                    Our success is driven by a customer-first approach, technical expertise, timely delivery, and dependable after-sales support. Today, we proudly serve contractors, industries, retailers, and large-scale infrastructure projects, helping power growth and innovation across the region.
-                  </p>
+                  <h4 className="mb-3">{aboutData.subtitle}</h4>
+                  {aboutData.paragraphs.map((p, i) => (
+                    <p key={i}>{p}</p>
+                  ))}
                 </div>
               </div>
             </div>
