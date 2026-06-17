@@ -1,3 +1,4 @@
+
 import SchemaInjector from '@/components/SchemaInjector';
 
 export const revalidate = 3600;

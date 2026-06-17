@@ -130,7 +130,7 @@ export default function Header() {
           className={`rs-header-area rs-header-two ${isHomePage ? 'header-transparent' : 'bg-[#121a2f] relative'} has-theme-orange has-border header-new ${isSticky ? 'rs-sticky' : ''}`}
           id="header-sticky"
         >
-          <div className="container-fluid" style={{ paddingLeft: 0 }}>
+          <div className="container-fluid" style={{ paddingLeft: 0, paddingRight: 0 }}>
             <div className="rs-header-inner">
               <div className="rs-header-left" style={{ marginLeft: 0 }}>
                 <div className="rs-header-logo" style={{ marginLeft: 0, paddingLeft: 0 }}>
@@ -228,7 +228,7 @@ export default function Header() {
                 </nav>
               </div>
 
-              <div className="rs-header-right d-flex align-align-items-center gap-4">
+              <div className="rs-header-right d-flex align-items-center gap-4">
                 <div className="rs-header-hamburger">
                   <div className="sidebar-toggle new">
                     <a className="bar-icon" href="#" onClick={(e) => { e.preventDefault(); setIsSidebarOpen(true); }}>

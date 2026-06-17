@@ -18,7 +18,7 @@
     }
 
       .rs-header-right {
-        margin-left: -60px;
+        margin-left: 0;
     }
 
     /* .contact-btn {
@@ -56,19 +56,19 @@
     }
 
     .rs-header-area.header-new.has-theme-orange.rs-sticky {
-        background: rgb(0 145 185);
+        background: rgba(18, 26, 47, 0.98);
     }
 
       .rs-header-two.has-border {
-        background: white;
+        background: rgba(18, 26, 47, 0.95);
     }
 
 
 .rs-header-hamburger i{
     font-size:25px;
     font-weight: 500;
-    color: #1d2c5f;
-    margin-right:20px;
+    color: #ffffff;
+    margin-right:10px;
 }
 
     .rs-header-two.header-new .rs-header-left::before {

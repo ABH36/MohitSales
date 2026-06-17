@@ -1,6 +1,23 @@
 ﻿import React from 'react';
+import type { Metadata } from 'next';
 
-
+export const metadata: Metadata = {
+  title: 'Switchgear Catalogue | Polycab MCBs, RCCBs & DBs | Mohit Sales Corporation',
+  description: 'Download the complete Polycab switchgear catalogue — MCBs, RCCBs, MCCBs, distribution boards, and protection devices for residential, commercial, and industrial use.',
+  openGraph: {
+    title: 'Switchgear Catalogue | Polycab MCBs, RCCBs & DBs | Mohit Sales Corporation',
+    description: 'Download the complete Polycab switchgear catalogue — MCBs, RCCBs, MCCBs, distribution boards, and protection devices.',
+    url: 'https://mohitscpl.com/switchgear-catalogue',
+    siteName: 'Mohit Sales Corporation Pvt. Ltd.',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Switchgear Catalogue | Polycab MCBs, RCCBs & DBs | Mohit Sales Corporation',
+    description: 'Download the complete Polycab switchgear catalogue — MCBs, RCCBs, MCCBs and distribution boards.',
+  },
+  alternates: { canonical: 'https://mohitscpl.com/switchgear-catalogue' },
+};
 
 export default async function SwitchgearCataloguePage() {
     

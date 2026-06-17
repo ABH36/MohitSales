@@ -24,8 +24,31 @@ body {
 
 /* Header CSS Start */
 
+/* Dark gradient overlay on home-page transparent header — ensures logo
+   is always readable regardless of the banner slide content behind it */
+.rs-header-area.rs-header-two.header-transparent {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.50) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
 .rs-header-two.header-new .rs-header-menu {
-  margin-left: 30px;
+  flex: 1 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  margin-inline-end: 0 !important;   /* override theme default (margin-inline-end: auto) */
+}
+
+.rs-header-two.header-new .rs-header-menu .main-menu {
+  display: flex !important;
+  justify-content: center !important;
+}
+
+/* Reduce logo-side padding so menu isn't pushed right */
+.rs-header-two.header-new .rs-header-left {
+  padding-inline-end: 20px !important;
+  margin-inline-end: 0 !important;
 }
 
 .rs-header-logo img {
