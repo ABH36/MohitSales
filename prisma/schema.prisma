@@ -248,6 +248,23 @@ model SitemapOverride {
   @@map("sitemap_overrides")
 }
 
+// ─── CMS Content Management ──────────────────────────────
+
+model CmsSection {
+  id        String   @id @default(uuid())
+  page      String   // "homepage", "about-us", "company-profile"
+  section   String   // "banners", "about_teaser", "why_choose_us", "hero", "content"
+  content   String   @db.Text // JSON content for this section
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([page, section])
+  @@index([page, isActive])
+  @@map("cms_sections")
+}
+
 // ─── OTP Two-Factor Authentication ────────────────────────
 model AdminOtp {
   id        String    @id @default(uuid())

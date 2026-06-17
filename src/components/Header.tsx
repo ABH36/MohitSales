@@ -135,12 +135,12 @@ export default function Header() {
               <div className="rs-header-left" style={{ marginLeft: 0 }}>
                 <div className="rs-header-logo" style={{ marginLeft: 0, paddingLeft: 0 }}>
                   <a href="/">
-                    <Image
+                    <img
                       src="/assets/images/logo/msc_logo_without_bg.webp"
                       alt="logo"
                       width={185}
                       height={55}
-                      style={{ maxWidth: '100%', height: 'auto', margin: '0' }}
+                      style={{ maxWidth: '100%', height: 'auto', margin: '0', background: 'transparent' }}
                     />
                   </a>
                 </div>
