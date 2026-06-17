@@ -24,15 +24,12 @@ export class RateLimiter {
    * Returns true if rate-limited (blocked), false otherwise.
    */
   limit(ip: string): boolean {
-    if (process.env.DISABLE_RATE_LIMITER === 'true') {
-      return false;
-    }
     const now = Date.now();
     let timestamps = this.cache.get(ip) || [];
 
     // Filter out timestamps outside the sliding window
     timestamps = timestamps.filter(t => now - t < this.windowMs);
-    
+
     if (timestamps.length >= this.max) {
       this.cache.set(ip, timestamps); // Update with clean list and keep in cache
       return true;

@@ -27,6 +27,7 @@ const nextConfig = {
 
     return [
       {
+
         source: '/assets/:path*',
         headers: [
           {
