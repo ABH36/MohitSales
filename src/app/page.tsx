@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import BannerSlider from '../components/BannerSlider';
 import ProductSlider from '../components/ProductSlider';
 import IndustriesSlider from '../components/IndustriesSlider';
@@ -6,9 +7,27 @@ import HomeContactForm from '../components/HomeContactForm';
 import HomeAchievements from '../components/HomeAchievements';
 import ClienteleSlider from '../components/ClienteleSlider';
 import SplitText from '../components/SplitText';
+import SchemaInjector from '../components/SchemaInjector';
 import prisma from '@/lib/prisma';
 
 export const revalidate = 3600; // ISR: revalidate every 1 hour
+
+export async function generateMetadata(): Promise<Metadata> {
+  const seoMeta = await prisma.seoMeta.findUnique({ where: { page: '/' } }).catch(() => null);
+  if (!seoMeta) return {};
+  return {
+    title: seoMeta.title || undefined,
+    description: seoMeta.description || undefined,
+    keywords: seoMeta.keywords ? seoMeta.keywords.split(',').map(k => k.trim()) : undefined,
+    robots: { index: !seoMeta.noIndex, follow: !seoMeta.noFollow },
+    alternates: seoMeta.canonicalUrl ? { canonical: seoMeta.canonicalUrl } : undefined,
+    openGraph: {
+      title: seoMeta.ogTitle || seoMeta.title || undefined,
+      description: seoMeta.description || undefined,
+      images: seoMeta.ogImage ? [seoMeta.ogImage] : undefined,
+    },
+  };
+}
 
 export default async function Page() {
   const polycabProducts = [
@@ -49,6 +68,8 @@ export default async function Page() {
 
 
   return (
+    <>
+    <SchemaInjector page="/" />
     <main>
       {/* Banner slider area */}
       <BannerSlider />
@@ -282,5 +303,6 @@ export default async function Page() {
       {/* Achievements / Counter Section */}
       <HomeAchievements />
     </main>
+    </>
   );
 }

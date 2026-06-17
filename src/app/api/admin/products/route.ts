@@ -7,13 +7,14 @@
 
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '20');
+    const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 100);
     const search = searchParams.get('search') || '';
     const categoryId = searchParams.get('categoryId') || '';
 
@@ -90,6 +91,10 @@ export async function POST(request: NextRequest) {
         stock: stock || 0,
       },
     });
+
+    // Instantly clear ISR cache so new product is live immediately
+    revalidatePath(`/${product.slug}`);
+    revalidatePath('/', 'layout'); // also clear homepage/nav cache
 
     return NextResponse.json({ success: true, data: product }, { status: 201 });
   } catch (error: any) {

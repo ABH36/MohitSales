@@ -191,6 +191,10 @@ export default function AdminLogin() {
           cursor: pointer;
           transition: background 0.2s, transform 0.15s;
           font-family: 'Inter', sans-serif;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center !important;
         }
         .login-btn:hover:not(:disabled) {
           background: #c96a18;
@@ -214,6 +218,7 @@ export default function AdminLogin() {
           letter-spacing: 0.02em;
           line-height: 1.1;
           margin-bottom: 10px;
+          text-align: center;
         }
         .welcome-sub {
           font-family: 'Inter', sans-serif;
@@ -223,6 +228,7 @@ export default function AdminLogin() {
           text-transform: uppercase;
           color: rgba(255,255,255,0.55);
           margin-bottom: 40px;
+          text-align: center;
         }
         .otp-box {
           width: 48px;

@@ -1,26 +1,29 @@
 const http = require('http');
 
-function checkUrl(url) {
-  return new Promise((resolve) => {
-    http.get(url, (res) => {
-      resolve({
-        statusCode: res.statusCode,
-        headers: res.headers
-      });
-    }).on('error', (err) => {
-      resolve({
-        error: err.message
-      });
-    });
-  });
-}
+const options = {
+  hostname: 'localhost',
+  port: 3000,
+  path: '/admin/products',
+  method: 'GET',
+  timeout: 3000
+};
 
-async function main() {
-  const resultHome = await checkUrl('http://localhost:3000/');
-  console.log('Homepage status:', resultHome);
+console.log('Sending request to http://localhost:3000/admin/products...');
+const req = http.request(options, (res) => {
+  console.log(`STATUS: ${res.statusCode}`);
+  console.log(`HEADERS: ${JSON.stringify(res.headers, null, 2)}`);
+  process.exit(0);
+});
 
-  const resultLogo = await checkUrl('http://localhost:3000/assets/images/logo/polycab-logo.png');
-  console.log('Logo image status:', resultLogo);
-}
+req.on('error', (e) => {
+  console.error(`Problem with request: ${e.message}`);
+  process.exit(1);
+});
 
-main();
+req.on('timeout', () => {
+  console.error('Request timed out');
+  req.destroy();
+  process.exit(1);
+});
+
+req.end();

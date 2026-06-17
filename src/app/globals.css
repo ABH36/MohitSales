@@ -1196,17 +1196,81 @@ h6,
 
 /* The curved white background for the logo */
 .rs-header-two .rs-header-left {
-  background: #ffffff;
-  padding: 10px 60px 10px 0;
-  border-radius: 0 0 100px 0;
-  display: inline-flex;
-  align-items: center;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  background: #ffffff !important;
+  border-radius: 0 0 100px 0 !important;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 10px 60px 10px 20px !important;
+  margin: 0 !important;
 }
 
-.rs-header-two .rs-header-logo img {
-  max-width: 180px;
-  height: auto;
+.rs-header-logo img,
+.rs-header-left img,
+img[alt="logo"] {
+  max-width: 180px !important;
+  width: 100% !important;
+  height: auto !important;
+  transition: max-width 0.3s ease;
+  display: block !important;
+}
+
+/* --- Responsive Logo and Header Sizes to Prevent Overlapping --- */
+@media (max-width: 1200px) {
+  .rs-header-two.header-new .rs-header-logo {
+    width: auto !important;
+  }
+  .rs-header-two .rs-header-left {
+    padding: 8px 50px 8px 15px !important;
+    border-radius: 0 0 80px 0 !important;
+  }
+  .rs-header-logo img,
+  .rs-header-left img,
+  img[alt="logo"] {
+    max-width: 150px !important;
+  }
+}
+
+@media (max-width: 991px) {
+  .rs-header-two.header-new .rs-header-logo {
+    width: auto !important;
+  }
+  .rs-header-two .rs-header-left {
+    padding: 6px 40px 6px 12px !important;
+    border-radius: 0 0 60px 0 !important;
+  }
+  .rs-header-logo img,
+  .rs-header-left img,
+  img[alt="logo"] {
+    max-width: 130px !important;
+  }
+}
+
+@media (max-width: 575px) {
+  /* Keep the header transparent on mobile so the curved logo block stands out */
+  .rs-header-two {
+    padding: 0 !important;
+    background: transparent !important;
+    border-bottom: none !important;
+  }
+  .rs-header-two .rs-header-inner {
+    padding: 0 15px 0 0 !important;
+  }
+  .rs-header-two .rs-header-left {
+    padding: 6px 30px 6px 12px !important;
+    border-radius: 0 0 40px 0 !important;
+    background: #ffffff !important;
+  }
+  .rs-header-two.header-new .rs-header-logo {
+    width: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .rs-header-logo img,
+  .rs-header-left img,
+  img[alt="logo"] {
+    max-width: 105px !important;
+  }
 }
 
 

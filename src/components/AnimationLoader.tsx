@@ -8,6 +8,8 @@ export default function AnimationLoader() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    // Skip ALL public scripts on admin pages — they conflict with admin panel
+    if (pathname.startsWith('/admin')) return;
 
     // Suppress legacy jQuery plugin errors from showing in Next.js dev overlay
     // Next.js uses addEventListener('error') for its overlay, not just window.onerror

@@ -67,7 +67,7 @@ async function main() {
 
   // ─── 2. ROLES ────────────────────────────────────────────
   console.log('👥 Creating roles...');
-  
+
   const adminRole = await prisma.role.upsert({
     where: { name: 'ADMIN' },
     update: {
@@ -112,7 +112,7 @@ async function main() {
   // ─── 3. ADMIN USER ───────────────────────────────────────
   console.log('👤 Creating admin user...');
   const hashedPassword = await bcrypt.hash('Admin@2024!', 12);
-  
+
   const adminUser = await prisma.user.upsert({
     where: { email: 'admin@mohitscpl.com' },
     update: {},
@@ -125,20 +125,6 @@ async function main() {
     },
   });
   console.log(`   ✓ Admin user: admin@mohitscpl.com (Password: Admin@2024!)\n`);
-
-  const personalAdminUser = await prisma.user.upsert({
-    where: { email: 'Amitsoni860279@gmail.com' },
-    update: {},
-    create: {
-      email: 'Amitsoni860279@gmail.com',
-      password: hashedPassword,
-      name: 'abhay soni',
-      roleId: adminRole.id,
-      isActive: true,
-      twoFactorEnabled: true,
-    },
-  });
-  console.log(`   ✓ Personal admin user: Amitsoni860279@gmail.com (Password: Admin@2024!)\n`);
 
   // ─── 4. PRODUCT CATEGORIES ───────────────────────────────
   console.log('📦 Creating product categories...');
@@ -339,33 +325,33 @@ async function main() {
     { key: 'founded_year', value: '1997', type: 'string', group: 'general', label: 'Founded Year', isPublic: true },
     { key: 'experience_years', value: '27+', type: 'string', group: 'general', label: 'Years of Experience', isPublic: true },
     { key: 'gst_number', value: '27AADCM4372Q1Z6', type: 'string', group: 'general', label: 'GST Number', isPublic: false },
-    
+
     // Contact
     { key: 'contact_email', value: 'info@mohitscpl.com', type: 'string', group: 'contact', label: 'Contact Email', isPublic: true },
     { key: 'contact_phone_1', value: '+91-22-2632-1234', type: 'string', group: 'contact', label: 'Phone 1', isPublic: true },
     { key: 'contact_phone_2', value: '+91-98765-43210', type: 'string', group: 'contact', label: 'Phone 2', isPublic: true },
     { key: 'contact_address', value: 'Mumbai, Maharashtra, India', type: 'string', group: 'contact', label: 'Address', isPublic: true },
     { key: 'google_maps_embed', value: '', type: 'string', group: 'contact', label: 'Google Maps Embed URL', isPublic: true },
-    
+
     // Social
     { key: 'social_facebook', value: '', type: 'string', group: 'social', label: 'Facebook URL', isPublic: true },
     { key: 'social_instagram', value: '', type: 'string', group: 'social', label: 'Instagram URL', isPublic: true },
     { key: 'social_linkedin', value: '', type: 'string', group: 'social', label: 'LinkedIn URL', isPublic: true },
     { key: 'social_youtube', value: '', type: 'string', group: 'social', label: 'YouTube URL', isPublic: true },
     { key: 'whatsapp_number', value: '+919876543210', type: 'string', group: 'social', label: 'WhatsApp Number', isPublic: true },
-    
+
     // SEO
     { key: 'seo_title', value: 'Mohit Sales Corporation Pvt. Ltd. | Authorized Polycab & Dowells Distributor', type: 'string', group: 'seo', label: 'Default SEO Title', isPublic: true },
     { key: 'seo_description', value: 'Authorized distributor of Polycab India Ltd. and Dowells. Premium quality cables, switchgears, fans, solar products since 1997.', type: 'string', group: 'seo', label: 'Default Meta Description', isPublic: true },
     { key: 'seo_keywords', value: 'polycab, dowells, cables, switchgear, fans, solar, Mumbai, authorised distributor', type: 'string', group: 'seo', label: 'Meta Keywords', isPublic: true },
     { key: 'google_analytics_id', value: '', type: 'string', group: 'seo', label: 'Google Analytics ID', isPublic: false },
-    
+
     // Appearance
     { key: 'logo_url', value: '/assets/images/logo/logo.png', type: 'string', group: 'appearance', label: 'Logo URL', isPublic: true },
     { key: 'favicon_url', value: '/assets/images/favicon/favicon.png', type: 'string', group: 'appearance', label: 'Favicon URL', isPublic: true },
     { key: 'primary_color', value: '#1E2E5E', type: 'string', group: 'appearance', label: 'Primary Color', isPublic: true },
     { key: 'accent_color', value: '#F7931E', type: 'string', group: 'appearance', label: 'Accent Color', isPublic: true },
-    
+
     // Features
     { key: 'maintenance_mode', value: 'false', type: 'boolean', group: 'general', label: 'Maintenance Mode', isPublic: false },
     { key: 'allow_inquiries', value: 'true', type: 'boolean', group: 'general', label: 'Allow Inquiries', isPublic: false },

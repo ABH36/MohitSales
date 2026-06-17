@@ -142,14 +142,14 @@ export default function AdminMediaPage() {
           <h3 className="admin-table-title">All Media Files</h3>
           {!isReadOnly ? (
             <div>
-              <input 
-                type="file" 
-                ref={fileInputRef} 
-                style={{ display: 'none' }} 
+              <input
+                type="file"
+                ref={fileInputRef}
+                style={{ display: 'none' }}
                 onChange={handleFileUpload}
               />
-              <button 
-                className="admin-btn admin-btn-primary" 
+              <button
+                className="admin-btn admin-btn-primary"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploading}
               >
@@ -160,7 +160,7 @@ export default function AdminMediaPage() {
             <span style={{ fontSize: '13px', color: '#718096', fontStyle: 'italic' }}>Read Only</span>
           )}
         </div>
-        
+
         {loading ? (
           <div style={{ padding: '40px', textAlign: 'center', color: '#718096' }}>Loading...</div>
         ) : (
@@ -201,8 +201,8 @@ export default function AdminMediaPage() {
                     </td>
                     <td>
                       <div style={{ display: 'flex', gap: '8px' }}>
-                        <button 
-                          className="admin-btn admin-btn-outline admin-btn-sm" 
+                        <button
+                          className="admin-btn admin-btn-outline admin-btn-sm"
                           onClick={() => {
                             navigator.clipboard.writeText(m.url);
                             showToast('URL copied!', 'success');
@@ -211,8 +211,8 @@ export default function AdminMediaPage() {
                           Copy URL
                         </button>
                         {!isReadOnly && (
-                          <button 
-                            className="admin-btn admin-btn-danger admin-btn-sm" 
+                          <button
+                            className="admin-btn admin-btn-danger admin-btn-sm"
                             onClick={() => handleDelete(m.id)}
                             disabled={deletingId === m.id}
                           >

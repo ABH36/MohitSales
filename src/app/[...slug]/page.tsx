@@ -1,5 +1,5 @@
 import React from 'react';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { Metadata } from 'next';
 import fs from 'fs';
 import path from 'path';
@@ -7,6 +7,7 @@ import { LRUCache } from 'lru-cache';
 import * as cheerio from 'cheerio';
 import prisma from '@/lib/prisma';
 import ProductPageWrapper from '@/components/ProductPageWrapper';
+import SchemaInjector from '@/components/SchemaInjector';
 import { sanitizeHtml } from '@/lib/utils';
 
 export const revalidate = 3600; // ISR: revalidate every 1 hour (admin edits trigger instant revalidation via API)
@@ -219,7 +220,26 @@ async function getLegacyPHPContent(slugPath: string, productName: string = ''): 
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const slugPath = params.slug.join('/');
-  const product = await getProductData(slugPath);
+  const [product, seoMeta] = await Promise.all([
+    getProductData(slugPath),
+    prisma.seoMeta.findUnique({ where: { page: `/${slugPath}` } }).catch(() => null),
+  ]);
+
+  // Admin-managed SEO meta takes top priority
+  if (seoMeta) {
+    return {
+      title: seoMeta.title || undefined,
+      description: seoMeta.description || undefined,
+      keywords: seoMeta.keywords ? seoMeta.keywords.split(',').map(k => k.trim()) : undefined,
+      robots: { index: !seoMeta.noIndex, follow: !seoMeta.noFollow },
+      alternates: seoMeta.canonicalUrl ? { canonical: seoMeta.canonicalUrl } : undefined,
+      openGraph: {
+        title: seoMeta.ogTitle || seoMeta.title || undefined,
+        description: seoMeta.description || undefined,
+        images: seoMeta.ogImage ? [seoMeta.ogImage] : undefined,
+      },
+    };
+  }
 
   if (product) {
     const title = `${product.heading || product.title} - Mohit Sales Corporation Pvt. Ltd.`;
@@ -258,6 +278,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const slugPath = params.slug.join('/');
 
   // Fetch DB product early and local state in parallel
+  // Note: redirect check is handled by middleware (/api/public/redirect). This is the fallback.
   const [dbProductEarly, product] = await Promise.all([
     prisma.product.findUnique({
       where: { slug: slugPath },
@@ -281,72 +302,24 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const isIndexPage = (product && product.cards && product.cards.length > 0) || hasLegacyCards;
 
   // ══════════════════════════════════════════════════════════════════════
-  // PRIORITY 1: Admin-managed DB product (explicitly edited OR has image)
-  // These take priority over legacy PHP so admin edits always reflect live.
-  // "Admin-managed" = product has image set OR updatedAt differs from createdAt
-  // (seeded products have updatedAt === createdAt and no image).
-  // We skip Index pages so category pages still use legacy layout.
+  // PRIORITY 1: DB product always takes priority over legacy PHP.
+  // If product exists in DB and this is not a category index page,
+  // always render the DB React template — no more isModified check.
+  // PHP fallback (Priority 2) only runs when DB has NO product for this slug.
   // ══════════════════════════════════════════════════════════════════════
   if (dbProductEarly && !isIndexPage) {
-    let isModified = false;
-
-    if (product) {
-      // Compare DB values with original JSON export values to detect admin edits
-      const jsonTitle = product.heading || product.title || '';
-      const jsonImage = product.imageSrc || '';
-      const jsonDatasheet = product.datasheet || '';
-
-      const dbTitle = dbProductEarly.title || '';
-      const dbImage = dbProductEarly.imageSrc || '';
-      const dbDatasheet = dbProductEarly.datasheetLink || '';
-
-      // Compare description strings by normalizing them to plain text
-      let normalizedJsonDesc = '';
-      if (product.description) {
-        normalizedJsonDesc = Array.isArray(product.description)
-          ? product.description.join('\n\n')
-          : String(product.description);
-      }
-
-      let normalizedDbDesc = '';
-      if (dbProductEarly.description) {
-        try {
-          const parsed = JSON.parse(dbProductEarly.description);
-          normalizedDbDesc = Array.isArray(parsed)
-            ? parsed.join('\n\n')
-            : String(parsed);
-        } catch (e) {
-          normalizedDbDesc = dbProductEarly.description;
-        }
-      }
-
-      if (
-        dbTitle !== jsonTitle ||
-        dbImage !== jsonImage ||
-        dbDatasheet !== jsonDatasheet ||
-        normalizedDbDesc !== normalizedJsonDesc ||
-        dbProductEarly.stock > 0 ||
-        !dbProductEarly.isActive
-      ) {
-        isModified = true;
-      }
-    } else {
-      // If not in content-export.json, it's a new admin-created product
-      isModified = true;
-    }
-
-    if (isModified) {
-      return (
-        <ProductPageWrapper>
-          {renderDbProduct(dbProductEarly)}
-        </ProductPageWrapper>
-      );
-    }
+    return (
+      <ProductPageWrapper>
+        <SchemaInjector page={`/${slugPath}`} />
+        {renderDbProduct(dbProductEarly)}
+      </ProductPageWrapper>
+    );
   }
 
   // ══════════════════════════════════════════════════════════════════════
   // PRIORITY 2: Legacy PHP Content (original site UI for all 2170+ pages)
   // ══════════════════════════════════════════════════════════════════════
+  // Falls through here only when PRIORITY 1 (DB product) did not match.
   if (legacyHtml) {
     let finalHtml = legacyHtml;
 
@@ -398,10 +371,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
         }
       }
 
-      const dbCategory = await prisma.category.findUnique({
+      // Only query DB for category products if the HTML actually has card slots to fill
+      const dbCategory = hasLegacyCards ? await prisma.category.findUnique({
         where: { slug: slugPath },
         include: { products: true }
-      });
+      }) : null;
 
       if (dbCategory && dbCategory.products.length > 0) {
         const $ = cheerio.load(finalHtml, null, false);
@@ -503,6 +477,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
     return (
       <ProductPageWrapper>
+        <SchemaInjector page={`/${slugPath}`} />
         <main>
           <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(finalHtml) }} />
         </main>
@@ -511,7 +486,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   // ══════════════════════════════════════════════════════════════════════
-  // PRIORITY 2: JSON fallback — PHP file missing/unrenderable but JSON has data
+  // PRIORITY 3: JSON fallback — PHP file missing/unrenderable but JSON has data
   // ══════════════════════════════════════════════════════════════════════
   if (product) {
     const hasContent = product.heading || product.title ||
@@ -530,6 +505,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       const isMultiProduct = product.cards && product.cards.length > 0;
       return (
         <ProductPageWrapper>
+          <SchemaInjector page={`/${slugPath}`} />
           <main>
             <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
               <div className="rs-breadcrumb-bg" style={{ backgroundImage: "url('/assets/images/inner-banner/products.png')" }}></div>
@@ -542,9 +518,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
                       </div>
                       <div className="rs-breadcrumb-menu">
                         <nav><ul>
-                          {product.breadcrumbs.map((crumb: string, index: number) => (
-                            <li key={index}><span>{crumb}</span></li>
-                          ))}
+                          {product.breadcrumbs.map((crumb: string, index: number) => {
+                            const isHome = crumb.toLowerCase() === 'home';
+                            const isLast = index === product.breadcrumbs.length - 1;
+                            return (
+                              <li key={index}>
+                                <span>
+                                  {isHome ? <a href="/">Home</a> : isLast ? crumb : crumb}
+                                </span>
+                              </li>
+                            );
+                          })}
                         </ul></nav>
                       </div>
                     </div>
@@ -560,19 +544,20 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   // ══════════════════════════════════════════════════════════════════════
-  // PRIORITY 3: DB Product fallback (seeded products with no PHP page)
+  // PRIORITY 4: DB Product fallback (seeded products with no PHP page)
   // These were auto-seeded; they only show when no PHP/JSON exists for the slug.
   // ══════════════════════════════════════════════════════════════════════
   if (dbProductEarly) {
     return (
       <ProductPageWrapper>
+        <SchemaInjector page={`/${slugPath}`} />
         {renderDbProduct(dbProductEarly)}
       </ProductPageWrapper>
     );
   }
 
   // ══════════════════════════════════════════════════════════════════════
-  // PRIORITY 4: Admin Panel Category (Prisma DB exact slug match)
+  // PRIORITY 5: Admin Panel Category (Prisma DB exact slug match)
   // Renders a full product listing page for admin-created categories.
   // ══════════════════════════════════════════════════════════════════════
   const dbCategory = await prisma.category.findUnique({
@@ -597,13 +582,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
   if (dbCategory) {
     return (
       <ProductPageWrapper>
+        <SchemaInjector page={`/${slugPath}`} />
         {renderDbCategory(dbCategory)}
       </ProductPageWrapper>
     );
   }
 
   // ══════════════════════════════════════════════════════════════════════
-  // PRIORITY 5: 404
+  // PRIORITY 6: 404
   // ══════════════════════════════════════════════════════════════════════
   notFound();
 }
