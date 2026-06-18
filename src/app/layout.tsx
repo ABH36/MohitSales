@@ -73,7 +73,7 @@ export default function RootLayout({
         <link rel="stylesheet" href="/assets/css/vendor/spacing.css" />
         <link rel="stylesheet" href="/assets/css/vendor/remixicon.css" />
         <link rel="stylesheet" href="/assets/css/main.css" />
-        <link rel="stylesheet" href="/assets/css/custom.css" />
+        <link rel="stylesheet" href="/assets/css/custom.css?v=1.0.2" />
         <link rel="stylesheet" href="/assets/css/responsive.css" />
 
         {/* ── Google Fonts (preload + async) ── */}

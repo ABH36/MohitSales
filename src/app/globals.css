@@ -181,7 +181,13 @@ h6,
 }
 
 .pricelist-btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: auto;
+  min-width: 140px;
+  align-self: center;
   padding: 10px 24px;
   background: linear-gradient(135deg, #1e2e5e, #2d4080);
   color: #fff;
@@ -191,6 +197,7 @@ h6,
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: "Mukta", sans-serif;
+  line-height: 1;
 }
 
 .product-card:hover .pricelist-btn {
@@ -342,7 +349,13 @@ h6,
 }
 
 .card_box .pricelist-btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: auto;
+  min-width: 140px;
+  align-self: center;
   padding: 12px 28px;
   background: linear-gradient(45deg, #000, #333);
   color: #fff;
@@ -350,6 +363,7 @@ h6,
   text-decoration: none;
   font-weight: 500;
   transition: all 0.3s ease;
+  line-height: 1;
 }
 
 .card_box .pricelist-btn:hover {
@@ -1569,8 +1583,9 @@ img[alt="logo"] {
   .pricelist-btn,
   .enquiry-btn,
   .fan-btn {
-    @apply bg-gradient-to-br from-[#f7931e] to-[#c1272d] rounded-[4px] px-[24px] py-[10px] font-medium text-[15px] border-none flex items-center justify-center transition-all duration-300 w-full h-[45px] box-border mt-auto mb-0 whitespace-nowrap;
+    @apply bg-gradient-to-br from-[#f7931e] to-[#c1272d] rounded-[4px] px-[24px] py-[10px] font-medium text-[15px] border-none inline-flex items-center justify-center transition-all duration-300 w-auto min-w-[140px] h-[45px] box-border mt-auto mb-0 whitespace-nowrap self-center;
     color: white !important;
+    text-align: center;
   }
 
   .pricelist-btn:hover,
@@ -2527,11 +2542,49 @@ img.product-img {
   }
 }
 
-/* Fix: Prevent legacy pricelist-btn / enquiry buttons from stretching to w-full inside centered containers */
-.button_center .pricelist-btn,
-.button_center .enquiry-btn {
+/* Fix: Prevent legacy pricelist-btn / enquiry buttons from stretching to w-full, center their text and fix hover colors */
+.pricelist-btn {
   display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
   width: auto !important;
   min-width: 140px !important;
+  max-width: fit-content !important;
+  align-self: center !important;
+  padding: 8px 20px !important;
+  color: #fff !important;
+  line-height: 1 !important;
+}
+
+.pricelist-btn:hover,
+a.pricelist-btn:hover,
+.product-card a.pricelist-btn:hover,
+.product-content a.pricelist-btn:hover,
+.wires_inner a.pricelist-btn:hover {
+  background: #1e2e5e !important;
+  color: #fff !important;
+}
+
+.enquiry-btn {
+  display: inline-flex !important;
+  align-items: center !important;
   justify-content: center !important;
+  text-align: center !important;
+  width: auto !important;
+  min-width: 140px !important;
+  max-width: fit-content !important;
+  align-self: center !important;
+  padding: 10px 24px !important;
+  color: #fff !important;
+  line-height: 1 !important;
+}
+
+.enquiry-btn:hover,
+a.enquiry-btn:hover,
+.product-card a.enquiry-btn:hover,
+.product-content a.enquiry-btn:hover,
+.wires_inner a.enquiry-btn:hover {
+  background: #1e2e5e !important;
+  color: #fff !important;
 }
