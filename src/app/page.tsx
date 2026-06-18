@@ -8,6 +8,7 @@ import HomeAchievements from '../components/HomeAchievements';
 import ClienteleSlider from '../components/ClienteleSlider';
 import SplitText from '../components/SplitText';
 import SchemaInjector from '../components/SchemaInjector';
+import PromoPopup from '../components/PromoPopup';
 import prisma from '@/lib/prisma';
 
 export const revalidate = 3600; // ISR: revalidate every 1 hour
@@ -328,6 +329,7 @@ export default async function Page() {
 
       {/* Achievements / Counter Section */}
       <HomeAchievements />
+      <PromoPopup />
     </main>
     </>
   );

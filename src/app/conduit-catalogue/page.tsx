@@ -1,6 +1,23 @@
 ﻿import React from 'react';
+import type { Metadata } from 'next';
 
-
+export const metadata: Metadata = {
+  title: 'Conduit Catalogue | Polycab UPVC Conduit Pipes | Mohit Sales Corporation',
+  description: 'Browse the complete Polycab conduit catalogue — UPVC conduit pipes, fittings, and accessories. Download product specifications and datasheets.',
+  openGraph: {
+    title: 'Conduit Catalogue | Polycab UPVC Conduit Pipes | Mohit Sales Corporation',
+    description: 'Browse the complete Polycab conduit catalogue — UPVC conduit pipes, fittings, and accessories.',
+    url: 'https://mohitscpl.com/conduit-catalogue',
+    siteName: 'Mohit Sales Corporation Pvt. Ltd.',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Conduit Catalogue | Polycab UPVC Conduit Pipes | Mohit Sales Corporation',
+    description: 'Browse the complete Polycab conduit catalogue.',
+  },
+  alternates: { canonical: 'https://mohitscpl.com/conduit-catalogue' },
+};
 
 export default async function ConduitCataloguePage() {
     

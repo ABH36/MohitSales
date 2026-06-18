@@ -1,8 +1,13 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const userRole = request.headers.get('x-user-role');
+    if (!userRole || !['ADMIN', 'EDITOR'].includes(userRole)) {
+      return NextResponse.json({ success: false, message: 'Forbidden.' }, { status: 403 });
+    }
+
     const inquiries = await prisma.inquiry.findMany({
       orderBy: { createdAt: 'desc' },
       take: 500,

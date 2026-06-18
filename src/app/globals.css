@@ -2526,3 +2526,12 @@ img.product-img {
     @apply flex items-start gap-3 mb-3;
   }
 }
+
+/* Fix: Prevent legacy pricelist-btn / enquiry buttons from stretching to w-full inside centered containers */
+.button_center .pricelist-btn,
+.button_center .enquiry-btn {
+  display: inline-flex !important;
+  width: auto !important;
+  min-width: 140px !important;
+  justify-content: center !important;
+}

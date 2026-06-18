@@ -15,9 +15,9 @@ export async function POST(request: NextRequest) {
   try {
     // 1. Rate Limiting Check
     const forwarded = request.headers.get('x-forwarded-for');
-    const ip = (forwarded ? forwarded.split(',').at(-1)?.trim() : null)
-      || request.ip 
-      || request.headers.get('x-real-ip') 
+    const ip = (forwarded ? forwarded.split(',')[0]?.trim() : null)
+      || request.ip
+      || request.headers.get('x-real-ip')
       || '127.0.0.1';
 
     if (loginRateLimiter.limit(ip)) {
@@ -74,7 +74,8 @@ export async function POST(request: NextRequest) {
     // Two Factor Authentication Step
     if (user.twoFactorEnabled) {
       // 1. Generate 6-digit OTP
-      const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+      const { randomInt } = await import('crypto');
+      const otpCode = randomInt(100000, 1000000).toString();
       const hashedOtp = await bcrypt.hash(otpCode, 10);
 
       // 2. Generate encrypted tempToken valid for 10 minutes

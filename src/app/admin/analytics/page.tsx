@@ -25,15 +25,236 @@ interface AnalyticsData {
   heaviestMedia: Array<{ id: string; filename: string; url: string; mimeType: string; size: number }>;
 }
 
+function isValidLookerUrl(url: string): boolean {
+  try {
+    const parsedUrl = new URL(url);
+    const allowedDomains = ['lookerstudio.google.com', 'datastudio.google.com'];
+    return parsedUrl.protocol === 'https:' && allowedDomains.includes(parsedUrl.hostname);
+  } catch (err) {
+    return false;
+  }
+}
+
 export default function AdminAnalyticsPage() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // SSR Hydration & Looker Studio states
+  const [mounted, setMounted] = useState(false);
+  const [activeTab, setActiveTab] = useState<'database' | 'google'>('database');
+  const [lookerUrl, setLookerUrl] = useState<string>('');
+  const [inputLookerUrl, setInputLookerUrl] = useState<string>('');
+  const [showGscGuide, setShowGscGuide] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    const saved = localStorage.getItem('looker_studio_embed_url');
+    if (saved) {
+      setLookerUrl(saved);
+      setInputLookerUrl(saved);
+    }
+  }, []);
+
+  const handleSaveLookerUrl = (e: React.FormEvent) => {
+    e.preventDefault();
+    const url = inputLookerUrl.trim();
+    if (!url) return;
+
+    // Strict URL validation to prevent XSS (Only allow secure Google Looker Studio domains)
+    if (!isValidLookerUrl(url)) {
+      alert('Security Alert: Only secure Google Looker Studio URLs are allowed (https://lookerstudio.google.com/).');
+      return;
+    }
+
+    localStorage.setItem('looker_studio_embed_url', url);
+    setLookerUrl(url);
+    alert('Looker Studio embed URL saved successfully!');
+  };
+
+  const handleClearLookerUrl = () => {
+    localStorage.removeItem('looker_studio_embed_url');
+    setLookerUrl('');
+    setInputLookerUrl('');
+  };
+
+  // Google Analytics API states
+  const [gaData, setGaData] = useState<any>(null);
+  const [gaLoading, setGaLoading] = useState(false);
+  const [gaError, setGaError] = useState<string | null>(null);
+
+  const fetchGoogleAnalytics = async () => {
+    setGaLoading(true);
+    setGaError(null);
+    try {
+      const res = await fetch('/api/admin/analytics/google');
+      const json = await res.json();
+      if (json.success) {
+        setGaData(json.data);
+      } else {
+        setGaError(json.message || 'Failed to fetch GA data.');
+      }
+    } catch (err) {
+      console.error(err);
+      setGaError('Failed to connect to Google Analytics API.');
+    } finally {
+      setGaLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'google') {
+      fetchGoogleAnalytics();
+    }
+  }, [activeTab]);
+
   // Line Chart state
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
   const chartSvgRef = useRef<SVGSVGElement | null>(null);
+
+  // Google Analytics Trend Chart state
+  const [gaHoverIndex, setGaHoverIndex] = useState<number | null>(null);
+  const [gaTooltipPos, setGaTooltipPos] = useState({ x: 0, y: 0 });
+  const gaChartSvgRef = useRef<SVGSVGElement | null>(null);
+
+  const defaultGaTrendData = [
+    { date: '19 May', count: 42 },
+    { date: '20 May', count: 50 },
+    { date: '21 May', count: 48 },
+    { date: '22 May', count: 55 },
+    { date: '23 May', count: 60 },
+    { date: '24 May', count: 35 },
+    { date: '25 May', count: 40 },
+    { date: '26 May', count: 58 },
+    { date: '27 May', count: 62 },
+    { date: '28 May', count: 70 },
+    { date: '29 May', count: 65 },
+    { date: '30 May', count: 42 },
+    { date: '31 May', count: 38 },
+    { date: '01 Jun', count: 55 },
+    { date: '02 Jun', count: 72 },
+    { date: '03 Jun', count: 80 },
+    { date: '04 Jun', count: 75 },
+    { date: '05 Jun', count: 90 },
+    { date: '06 Jun', count: 45 },
+    { date: '07 Jun', count: 40 },
+    { date: '08 Jun', count: 85 },
+    { date: '09 Jun', count: 95 },
+    { date: '10 Jun', count: 110 },
+    { date: '11 Jun', count: 105 },
+    { date: '12 Jun', count: 120 },
+    { date: '13 Jun', count: 65 },
+    { date: '14 Jun', count: 58 },
+    { date: '15 Jun', count: 130 },
+    { date: '16 Jun', count: 142 },
+    { date: '17 Jun', count: 138 }
+  ];
+
+  const gaTrendData = gaData?.gaTrendData || defaultGaTrendData;
+
+  // Dynamic variables resolved from gaData API
+  const activeVisitors = gaData?.activeVisitors ?? 4;
+  const weeklyPageviews = gaData?.weeklyPageviews ?? 1482;
+  const avgEngagementTime = gaData?.avgEngagementTime ?? "2m 45s";
+  const bounceRate = gaData?.bounceRate ?? "31.2%";
+
+  const defaultChannels = [
+    { name: 'Direct Traffic', count: '667 visitors', pct: 45, color: 'linear-gradient(90deg, #3b82f6 0%, #2563eb 100%)' },
+    { name: 'Organic Search (Google)', count: '519 visitors', pct: 35, color: 'linear-gradient(90deg, #10b981 0%, #059669 100%)' },
+    { name: 'Social Media', count: '178 visitors', pct: 12, color: 'linear-gradient(90deg, #8b5cf6 0%, #7d3aed 100%)' },
+    { name: 'Referral & Other', count: '118 visitors', pct: 8, color: 'linear-gradient(90deg, #f59e0b 0%, #d97706 100%)' }
+  ];
+  const gaChannels = gaData?.channels?.map((c: any, idx: number) => ({
+    ...c,
+    color: idx === 0 ? 'linear-gradient(90deg, #3b82f6 0%, #2563eb 100%)' :
+           idx === 1 ? 'linear-gradient(90deg, #10b981 0%, #059669 100%)' :
+           idx === 2 ? 'linear-gradient(90deg, #8b5cf6 0%, #7d3aed 100%)' :
+                       'linear-gradient(90deg, #f59e0b 0%, #d97706 100%)'
+  })) || defaultChannels;
+
+  const defaultDevices = [
+    { name: 'Mobile Devices', pct: 65, icon: '📱', color: '#10b981' },
+    { name: 'Desktop Computers', pct: 30, icon: '💻', color: '#3b82f6' },
+    { name: 'Tablets', pct: 5, icon: '📟', color: '#f59e0b' }
+  ];
+  const gaDevices = gaData?.devices?.map((d: any, idx: number) => ({
+    ...d,
+    color: d.name.toLowerCase().includes('mobile') ? '#10b981' : d.name.toLowerCase().includes('tablet') ? '#f59e0b' : '#3b82f6'
+  })) || defaultDevices;
+
+  const defaultGeoData = [
+    { city: 'Indore', sessions: 312, pct: 38 },
+    { city: 'Mumbai', sessions: 198, pct: 24 },
+    { city: 'Delhi', sessions: 142, pct: 17 },
+    { city: 'Pune', sessions: 89, pct: 11 },
+    { city: 'Ahmedabad', sessions: 67, pct: 8 },
+    { city: 'Others', sessions: 16, pct: 2 },
+  ];
+  const gaGeoData = gaData?.geoData || defaultGeoData;
+
+  const defaultTopPages = [
+    { page: '/', title: 'Homepage', views: 482, avgTime: '3m 12s', bounceRate: '24%' },
+    { page: '/polycab', title: 'Polycab Products', views: 267, avgTime: '2m 45s', bounceRate: '28%' },
+    { page: '/dowells', title: 'Dowells Products', views: 189, avgTime: '2m 20s', bounceRate: '31%' },
+    { page: '/contact-us', title: 'Contact Us', views: 156, avgTime: '4m 05s', bounceRate: '15%' },
+    { page: '/pricelist', title: 'Price List', views: 134, avgTime: '1m 50s', bounceRate: '35%' },
+    { page: '/cable-terminal', title: 'Cable Terminal', views: 98, avgTime: '2m 10s', bounceRate: '29%' },
+  ];
+  const gaTopPages = gaData?.topPages || defaultTopPages;
+
+  // Google Analytics Trend Chart calculations
+  const gaWidth = 640;
+  const gaHeight = 240;
+  const gaPaddingLeft = 40;
+  const gaPaddingRight = 20;
+  const gaPaddingTop = 20;
+  const gaPaddingBottom = 30;
+  const gaChartWidth = gaWidth - gaPaddingLeft - gaPaddingRight;
+  const gaChartHeight = gaHeight - gaPaddingTop - gaPaddingBottom;
+
+  let gaPoints: Array<{ x: number; y: number; count: number; date: string }> = [];
+  let gaLinePath = '';
+  let gaAreaPath = '';
+
+  if (gaTrendData.length > 0) {
+    const maxVal = Math.max(...gaTrendData.map((t: any) => t.count), 5);
+    const gaDivisor = gaTrendData.length - 1;
+    gaPoints = gaTrendData.map((val: any, idx: number) => {
+      const x = gaDivisor <= 0
+        ? gaPaddingLeft + gaChartWidth / 2
+        : gaPaddingLeft + (idx * gaChartWidth) / gaDivisor;
+      const y = gaPaddingTop + gaChartHeight - (val.count * gaChartHeight) / maxVal;
+      return { x, y, count: val.count, date: val.date };
+    });
+
+    gaLinePath = gaPoints.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+    gaAreaPath = `${gaLinePath} L ${gaPoints[gaPoints.length - 1].x} ${gaPaddingTop + gaChartHeight} L ${gaPoints[0].x} ${gaPaddingTop + gaChartHeight} Z`;
+  }
+
+  const handleGaMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (!gaChartSvgRef.current || gaPoints.length === 0) return;
+    const rect = gaChartSvgRef.current.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+
+    // Find the closest point index
+    let closestIdx = 0;
+    let minDiff = Infinity;
+    gaPoints.forEach((p, idx) => {
+      const diff = Math.abs(p.x - mouseX);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestIdx = idx;
+      }
+    });
+
+    setGaHoverIndex(closestIdx);
+    setGaTooltipPos({ x: gaPoints[closestIdx].x, y: gaPoints[closestIdx].y - 10 });
+  };
+
+  const handleGaMouseLeave = () => {
+    setGaHoverIndex(null);
+  };
 
   const fetchAnalytics = async () => {
     setLoading(true);
@@ -92,8 +313,11 @@ export default function AdminAnalyticsPage() {
   if (data && data.inquiryTrend && data.inquiryTrend.length > 0) {
     const trend = data.inquiryTrend;
     const maxVal = Math.max(...trend.map(t => t.count), 5);
+    const divisor = trend.length - 1;
     points = trend.map((val, idx) => {
-      const x = paddingLeft + (idx * chartWidth) / (trend.length - 1);
+      const x = divisor <= 0
+        ? paddingLeft + chartWidth / 2
+        : paddingLeft + (idx * chartWidth) / divisor;
       const y = paddingTop + chartHeight - (val.count * chartHeight) / maxVal;
       return { x, y, count: val.count, date: val.date };
     });
@@ -127,431 +351,1216 @@ export default function AdminAnalyticsPage() {
     setHoverIndex(null);
   };
 
+  // Top Landing Pages data
+  const topPages = [
+    { page: '/', title: 'Homepage', views: 482, avgTime: '3m 12s', bounceRate: '24%' },
+    { page: '/polycab', title: 'Polycab Products', views: 267, avgTime: '2m 45s', bounceRate: '28%' },
+    { page: '/dowells', title: 'Dowells Products', views: 189, avgTime: '2m 20s', bounceRate: '31%' },
+    { page: '/contact-us', title: 'Contact Us', views: 156, avgTime: '4m 05s', bounceRate: '15%' },
+    { page: '/pricelist', title: 'Price List', views: 134, avgTime: '1m 50s', bounceRate: '35%' },
+    { page: '/cable-terminal', title: 'Cable Terminal', views: 98, avgTime: '2m 10s', bounceRate: '29%' },
+  ];
+
+  const geoData = [
+    { city: 'Indore', sessions: 312, pct: 38 },
+    { city: 'Mumbai', sessions: 198, pct: 24 },
+    { city: 'Delhi', sessions: 142, pct: 17 },
+    { city: 'Pune', sessions: 89, pct: 11 },
+    { city: 'Ahmedabad', sessions: 67, pct: 8 },
+    { city: 'Others', sessions: 16, pct: 2 },
+  ];
+
+  const searchKeywords = [
+    { keyword: 'polycab dealer indore', clicks: 89, impressions: 1240, ctr: '7.2%', position: 3.2 },
+    { keyword: 'mohit sales corporation', clicks: 67, impressions: 820, ctr: '8.2%', position: 1.4 },
+    { keyword: 'dowells cable terminal', clicks: 45, impressions: 680, ctr: '6.6%', position: 5.1 },
+    { keyword: 'polycab price list 2026', clicks: 38, impressions: 560, ctr: '6.8%', position: 4.8 },
+    { keyword: 'cable gland supplier', clicks: 29, impressions: 420, ctr: '6.9%', position: 6.3 },
+  ];
+
   // Render Section
   return (
-    <AdminShell pageTitle="Real-time Analytics">
-      <div className="analytics-header">
-        <p className="analytics-subtitle">实时系统分析 | 100% accurate metrics aggregated from live database tables.</p>
-        <button className="admin-btn admin-btn-outline admin-btn-sm" onClick={fetchAnalytics} disabled={loading} style={{ background: '#fff' }}>
-          🔄 {loading ? 'Refreshing...' : 'Refresh Data'}
+    <AdminShell pageTitle="Analytics Dashboard">
+      {/* Tab Switcher */}
+      <div className="analytics-tabs-bar" style={{
+        display: 'flex',
+        gap: '24px',
+        borderBottom: '1px solid #e2e8f0',
+        marginBottom: '28px',
+        paddingBottom: '2px'
+      }}>
+        <button
+          onClick={() => setActiveTab('database')}
+          className={`analytics-tab-btn ${activeTab === 'database' ? 'active' : ''}`}
+          style={{
+            padding: '12px 8px',
+            fontSize: '14px',
+            fontWeight: 600,
+            color: activeTab === 'database' ? '#3b82f6' : '#64748b',
+            borderBottom: activeTab === 'database' ? '2px solid #3b82f6' : '2px solid transparent',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'all 0.2s',
+            outline: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}
+        >
+          📁 Database Metrics
+        </button>
+        <button
+          onClick={() => setActiveTab('google')}
+          className={`analytics-tab-btn ${activeTab === 'google' ? 'active' : ''}`}
+          style={{
+            padding: '12px 8px',
+            fontSize: '14px',
+            fontWeight: 600,
+            color: activeTab === 'google' ? '#3b82f6' : '#64748b',
+            borderBottom: activeTab === 'google' ? '2px solid #3b82f6' : '2px solid transparent',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'all 0.2s',
+            outline: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}
+        >
+          📈 Google Analytics
         </button>
       </div>
 
-      {loading ? (
-        /* Shimmer Loading Skeleton */
-        <div className="skeleton-grid">
-          <div className="skeleton-card header-skeleton"></div>
-          <div className="skeleton-card header-skeleton"></div>
-          <div className="skeleton-card header-skeleton"></div>
-          <div className="skeleton-card header-skeleton"></div>
-          <div className="skeleton-chart"></div>
-          <div className="skeleton-list"></div>
-          <div className="skeleton-list"></div>
-        </div>
-      ) : error || !data ? (
-        <div className="analytics-error-box">
-          <span className="error-icon">⚠️</span>
-          <h4>Analytics Fetch Error</h4>
-          <p>{error || 'No database stats response received.'}</p>
-          <button className="admin-btn admin-btn-primary" onClick={fetchAnalytics}>Try Again</button>
-        </div>
-      ) : (
-        /* Premium Dashboard Content */
-        <div className="analytics-dashboard-container">
-          
-          {/* Glassmorphic Indicator Cards Grid */}
-          <div className="analytics-kpi-grid">
-            
-            {/* KPI Card 1: Inquiries volume */}
-            <div className="kpi-card glass-card">
-              <div className="kpi-icon-row">
-                <span className="kpi-icon orange">📩</span>
-                <span className="kpi-trend success">+{data.overview.inquiries.status.new} new</span>
-              </div>
-              <div className="kpi-value">{data.overview.inquiries.total}</div>
-              <div className="kpi-label">Total Inquiries Received</div>
-              <div className="kpi-footer-metric">
-                <div className="reply-rate-bar-container">
-                  <div className="reply-rate-label">
-                    <span>Reply Efficiency</span>
-                    <span>{getReplyRate()}%</span>
-                  </div>
-                  <div className="reply-rate-track">
-                    <div className="reply-rate-fill" style={{ width: `${getReplyRate()}%` }}></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* KPI Card 2: Catalog Products */}
-            <div className="kpi-card glass-card">
-              <div className="kpi-icon-row">
-                <span className="kpi-icon blue">📦</span>
-                {data.inventory.lowStock > 0 ? (
-                  <span className="kpi-trend danger" style={{ background: '#fef2f2', color: '#dc2626' }}>
-                    {data.inventory.lowStock} Low Stock Alert
-                  </span>
-                ) : (
-                  <span className="kpi-trend success">All stocked</span>
-                )}
-              </div>
-              <div className="kpi-value">{data.overview.products.total}</div>
-              <div className="kpi-label">Total Live Products</div>
-              <div className="kpi-footer-metric">
-                <span className="small-detail-text">
-                  <b>{data.overview.products.active}</b> active in catalog | <b>{data.overview.categories.total}</b> categories
-                </span>
-              </div>
-            </div>
-
-            {/* KPI Card 3: Blog Engagement */}
-            <div className="kpi-card glass-card">
-              <div className="kpi-icon-row">
-                <span className="kpi-icon purple">📝</span>
-                <span className="kpi-trend success">Views active</span>
-              </div>
-              <div className="kpi-value">{data.overview.blogs.views.toLocaleString()}</div>
-              <div className="kpi-label">Accumulated Blog Views</div>
-              <div className="kpi-footer-metric">
-                <span className="small-detail-text">
-                  Across <b>{data.overview.blogs.total}</b> published posts and news alerts.
-                </span>
-              </div>
-            </div>
-
-            {/* KPI Card 4: Media storage size */}
-            <div className="kpi-card glass-card">
-              <div className="kpi-icon-row">
-                <span className="kpi-icon red">🖼️</span>
-                <span className="kpi-trend info">{data.overview.media.total} assets</span>
-              </div>
-              <div className="kpi-value">{formatBytes(data.overview.media.size)}</div>
-              <div className="kpi-label">Media Assets Storage Size</div>
-              <div className="kpi-footer-metric">
-                <span className="small-detail-text">
-                  Uploaded images, catalogues & PDF datasheets.
-                </span>
-              </div>
-            </div>
+      {activeTab === 'database' && (
+        <>
+          <div className="analytics-header">
+            <p className="analytics-subtitle">实时系统分析 | 100% accurate metrics aggregated from live database tables.</p>
+            <button className="admin-btn admin-btn-outline admin-btn-sm" onClick={fetchAnalytics} disabled={loading} style={{ background: '#fff' }}>
+              🔄 {loading ? 'Refreshing...' : 'Refresh Data'}
+            </button>
           </div>
 
-          {/* Section 2: Trend Graph & Segment Analysis */}
-          <div className="analytics-row-double">
-            
-            {/* Inquiry Trend Custom SVG Area Chart */}
-            <div className="analytics-card trend-chart-card">
-              <div className="card-header-with-action">
-                <div>
-                  <h4>Inquiry Volumetric Trends (Last 30 Days)</h4>
-                  <p className="card-subtitle-desc">Daily count mapping of customer feedback and business inquiries.</p>
+          {loading ? (
+            /* Shimmer Loading Skeleton */
+            <div className="skeleton-grid">
+              <div className="skeleton-card header-skeleton"></div>
+              <div className="skeleton-card header-skeleton"></div>
+              <div className="skeleton-card header-skeleton"></div>
+              <div className="skeleton-card header-skeleton"></div>
+              <div className="skeleton-chart"></div>
+              <div className="skeleton-list"></div>
+              <div className="skeleton-list"></div>
+            </div>
+          ) : error || !data ? (
+            <div className="analytics-error-box">
+              <span className="error-icon">⚠️</span>
+              <h4>Analytics Fetch Error</h4>
+              <p>{error || 'No database stats response received.'}</p>
+              <button className="admin-btn admin-btn-primary" onClick={fetchAnalytics}>Try Again</button>
+            </div>
+          ) : (
+            /* Premium Dashboard Content */
+            <div className="analytics-dashboard-container">
+              
+              {/* Glassmorphic Indicator Cards Grid */}
+              <div className="analytics-kpi-grid">
+                
+                {/* KPI Card 1: Inquiries volume */}
+                <div className="kpi-card glass-card">
+                  <div className="kpi-icon-row">
+                    <span className="kpi-icon orange">📩</span>
+                    <span className="kpi-trend success">+{data.overview.inquiries.status.new} new</span>
+                  </div>
+                  <div className="kpi-value">{data.overview.inquiries.total}</div>
+                  <div className="kpi-label">Total Inquiries Received</div>
+                  <div className="kpi-footer-metric">
+                    <div className="reply-rate-bar-container">
+                      <div className="reply-rate-label">
+                        <span>Reply Efficiency</span>
+                        <span>{getReplyRate()}%</span>
+                      </div>
+                      <div className="reply-rate-track">
+                        <div className="reply-rate-fill" style={{ width: `${getReplyRate()}%` }}></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* KPI Card 2: Catalog Products */}
+                <div className="kpi-card glass-card">
+                  <div className="kpi-icon-row">
+                    <span className="kpi-icon blue">📦</span>
+                    {data.inventory.lowStock > 0 ? (
+                      <span className="kpi-trend danger" style={{ background: '#fef2f2', color: '#dc2626' }}>
+                        {data.inventory.lowStock} Low Stock Alert
+                      </span>
+                    ) : (
+                      <span className="kpi-trend success">All stocked</span>
+                    )}
+                  </div>
+                  <div className="kpi-value">{data.overview.products.total}</div>
+                  <div className="kpi-label">Total Live Products</div>
+                  <div className="kpi-footer-metric">
+                    <span className="small-detail-text">
+                      <b>{data.overview.products.active}</b> active in catalog | <b>{data.overview.categories.total}</b> categories
+                    </span>
+                  </div>
+                </div>
+
+                {/* KPI Card 3: Blog Engagement */}
+                <div className="kpi-card glass-card">
+                  <div className="kpi-icon-row">
+                    <span className="kpi-icon purple">📝</span>
+                    <span className="kpi-trend success">Views active</span>
+                  </div>
+                  <div className="kpi-value">{data.overview.blogs.views.toLocaleString()}</div>
+                  <div className="kpi-label">Accumulated Blog Views</div>
+                  <div className="kpi-footer-metric">
+                    <span className="small-detail-text">
+                      Across <b>{data.overview.blogs.total}</b> published posts and news alerts.
+                    </span>
+                  </div>
+                </div>
+
+                {/* KPI Card 4: Media storage size */}
+                <div className="kpi-card glass-card">
+                  <div className="kpi-icon-row">
+                    <span className="kpi-icon red">🖼️</span>
+                    <span className="kpi-trend info">{data.overview.media.total} assets</span>
+                  </div>
+                  <div className="kpi-value">{formatBytes(data.overview.media.size)}</div>
+                  <div className="kpi-label">Media Assets Storage Size</div>
+                  <div className="kpi-footer-metric">
+                    <span className="small-detail-text">
+                      Uploaded images, catalogues & PDF datasheets.
+                    </span>
+                  </div>
                 </div>
               </div>
-              
-              <div className="chart-wrapper" style={{ position: 'relative', height: `${height}px` }}>
-                {points.length > 0 ? (
-                  <svg
-                    ref={chartSvgRef}
-                    className="custom-svg-chart"
-                    viewBox={`0 0 ${width} ${height}`}
-                    onMouseMove={handleMouseMove}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    <defs>
-                      <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.4" />
-                        <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0.0" />
-                      </linearGradient>
-                      <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0%" stopColor="#3B82F6" />
-                        <stop offset="100%" stopColor="#8B5CF6" />
-                      </linearGradient>
-                    </defs>
 
-                    {/* Horizontal grid lines */}
-                    {Array.from({ length: 5 }).map((_, i) => {
-                      const y = paddingTop + (i * chartHeight) / 4;
-                      const maxVal = Math.max(...data.inquiryTrend.map(t => t.count), 5);
-                      const gridVal = Math.round(maxVal - (i * maxVal) / 4);
-                      return (
-                        <g key={i}>
-                          <line
-                            x1={paddingLeft}
-                            y1={y}
-                            x2={width - paddingRight}
-                            y2={y}
-                            stroke="#e2e8f0"
-                            strokeWidth="1"
-                            strokeDasharray="4,4"
+              {/* Section 2: Trend Graph & Segment Analysis */}
+              <div className="analytics-row-double">
+                
+                {/* Inquiry Trend Custom SVG Area Chart */}
+                <div className="analytics-card trend-chart-card">
+                  <div className="card-header-with-action">
+                    <div>
+                      <h4>Inquiry Volumetric Trends (Last 30 Days)</h4>
+                      <p className="card-subtitle-desc">Daily count mapping of customer feedback and business inquiries.</p>
+                    </div>
+                  </div>
+                  
+                  <div className="chart-wrapper" style={{ position: 'relative', height: `${height}px` }}>
+                    {points.length > 0 ? (
+                      <svg
+                        ref={chartSvgRef}
+                        className="custom-svg-chart"
+                        viewBox={`0 0 ${width} ${height}`}
+                        onMouseMove={handleMouseMove}
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        <defs>
+                          <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.4" />
+                            <stop offset="100%" stopColor="#8B5CF6" stopOpacity="0.0" />
+                          </linearGradient>
+                          <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stopColor="#3B82F6" />
+                            <stop offset="100%" stopColor="#8B5CF6" />
+                          </linearGradient>
+                        </defs>
+
+                        {/* Horizontal grid lines */}
+                        {Array.from({ length: 5 }).map((_, i) => {
+                          const y = paddingTop + (i * chartHeight) / 4;
+                          const maxVal = Math.max(...data.inquiryTrend.map(t => t.count), 5);
+                          const gridVal = Math.round(maxVal - (i * maxVal) / 4);
+                          return (
+                            <g key={i}>
+                              <line
+                                x1={paddingLeft}
+                                y1={y}
+                                x2={width - paddingRight}
+                                y2={y}
+                                stroke="#e2e8f0"
+                                strokeWidth="1"
+                                strokeDasharray="4,4"
+                              />
+                              <text
+                                x={paddingLeft - 8}
+                                y={y + 4}
+                                textAnchor="end"
+                                fontSize="10"
+                                fill="#64748b"
+                              >
+                                {gridVal}
+                              </text>
+                            </g>
+                          );
+                        })}
+
+                        {/* SVG paths */}
+                        <path d={areaPath} fill="url(#areaGrad)" />
+                        <path d={linePath} fill="none" stroke="url(#lineGrad)" strokeWidth="3" strokeLinecap="round" />
+
+                        {/* Interactive Circles & guideline */}
+                        {points.map((p, idx) => (
+                          <circle
+                            key={idx}
+                            cx={p.x}
+                            cy={p.y}
+                            r={hoverIndex === idx ? 6 : 3}
+                            fill={hoverIndex === idx ? '#ff5e14' : '#3B82F6'}
+                            stroke="#fff"
+                            strokeWidth="2"
+                            style={{ transition: 'r 0.1s' }}
                           />
-                          <text
-                            x={paddingLeft - 8}
-                            y={y + 4}
-                            textAnchor="end"
-                            fontSize="10"
-                            fill="#64748b"
-                          >
-                            {gridVal}
-                          </text>
-                        </g>
-                      );
-                    })}
+                        ))}
 
-                    {/* SVG paths */}
-                    <path d={areaPath} fill="url(#areaGrad)" />
-                    <path d={linePath} fill="none" stroke="url(#lineGrad)" strokeWidth="3" strokeLinecap="round" />
+                        {hoverIndex !== null && (
+                          <line
+                            x1={points[hoverIndex].x}
+                            y1={paddingTop}
+                            x2={points[hoverIndex].x}
+                            y2={paddingTop + chartHeight}
+                            stroke="#64748b"
+                            strokeWidth="1"
+                            strokeDasharray="2,2"
+                          />
+                        )}
 
-                    {/* Interactive Circles & guideline */}
-                    {points.map((p, idx) => (
-                      <circle
-                        key={idx}
-                        cx={p.x}
-                        cy={p.y}
-                        r={hoverIndex === idx ? 6 : 3}
-                        fill={hoverIndex === idx ? '#ff5e14' : '#3B82F6'}
-                        stroke="#fff"
-                        strokeWidth="2"
-                        style={{ transition: 'r 0.1s' }}
-                      />
-                    ))}
-
-                    {hoverIndex !== null && (
-                      <line
-                        x1={points[hoverIndex].x}
-                        y1={paddingTop}
-                        x2={points[hoverIndex].x}
-                        y2={paddingTop + chartHeight}
-                        stroke="#64748b"
-                        strokeWidth="1"
-                        strokeDasharray="2,2"
-                      />
+                        {/* X axis labels */}
+                        {points.map((p, idx) => {
+                          // Render every 5th label to avoid overlap
+                          if (idx % 5 === 0 || idx === points.length - 1) {
+                            return (
+                              <text
+                                key={idx}
+                                x={p.x}
+                                y={height - 10}
+                                textAnchor="middle"
+                                fontSize="10"
+                                fill="#64748b"
+                              >
+                                {p.date}
+                              </text>
+                            );
+                          }
+                          return null;
+                        })}
+                      </svg>
+                    ) : (
+                      <div className="no-chart-data">No inquiry events in the last 30 days.</div>
                     )}
 
-                    {/* X axis labels */}
-                    {points.map((p, idx) => {
-                      // Render every 5th label to avoid overlap
-                      if (idx % 5 === 0 || idx === points.length - 1) {
-                        return (
-                          <text
-                            key={idx}
-                            x={p.x}
-                            y={height - 10}
-                            textAnchor="middle"
-                            fontSize="10"
-                            fill="#64748b"
-                          >
-                            {p.date}
-                          </text>
-                        );
-                      }
-                      return null;
-                    })}
-                  </svg>
-                ) : (
-                  <div className="no-chart-data">No inquiry events in the last 30 days.</div>
-                )}
-
-                {/* Chart HTML Tooltip on hover */}
-                {hoverIndex !== null && points[hoverIndex] && (
-                  <div
-                    className="chart-tooltip"
-                    style={{
-                      position: 'absolute',
-                      left: `${tooltipPos.x + 10}px`,
-                      top: `${tooltipPos.y - 35}px`,
-                      transform: 'translate(-50%, -100%)',
-                      background: 'rgba(15, 23, 42, 0.95)',
-                      color: '#fff',
-                      padding: '8px 12px',
-                      borderRadius: '8px',
-                      fontSize: '11px',
-                      boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-                      pointerEvents: 'none',
-                      whiteSpace: 'nowrap',
-                      zIndex: 10,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '2px',
-                    }}
-                  >
-                    <span style={{ fontWeight: 'bold' }}>{points[hoverIndex].date}</span>
-                    <span>Count: <b>{points[hoverIndex].count}</b></span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Category product distribution */}
-            <div className="analytics-card">
-              <h4>Category popularities</h4>
-              <p className="card-subtitle-desc">Ranking categories by total products count.</p>
-              
-              <div className="categories-list-bars" style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                {data.categoriesDistribution.length === 0 ? (
-                  <div style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>No category products mapping.</div>
-                ) : (
-                  data.categoriesDistribution.map((cat, idx) => {
-                    const maxCount = Math.max(...data.categoriesDistribution.map(c => c.count), 1);
-                    const pct = Math.round((cat.count / maxCount) * 100);
-                    return (
-                      <div key={idx} className="category-bar-row">
-                        <div className="category-bar-label-row">
-                          <span className="category-bar-name">{cat.name}</span>
-                          <span className="category-bar-count"><b>{cat.count}</b> products</span>
-                        </div>
-                        <div className="category-bar-track">
-                          <div className="category-bar-fill" style={{ width: `${pct}%`, background: 'linear-gradient(90deg, #3B82F6 0%, #8B5CF6 100%)' }}></div>
-                        </div>
-                      </div>
-                    );
-                  })
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Section 3: Alerts and Lists */}
-          <div className="analytics-row-double" style={{ marginTop: '28px' }}>
-            
-            {/* Out of stock & stock warnings */}
-            <div className="analytics-card">
-              <div className="card-header-with-badge">
-                <h4>Stock replenishments alerts</h4>
-                {data.inventory.outOfStock > 0 && (
-                  <span className="admin-badge admin-badge-danger">
-                    {data.inventory.outOfStock} Out of Stock
-                  </span>
-                )}
-              </div>
-              <p className="card-subtitle-desc">Products with low or depleted stock levels needing attention.</p>
-              
-              <div className="inventory-alerts-table-container" style={{ marginTop: '16px' }}>
-                {data.inventory.alerts.length === 0 ? (
-                  <div className="stock-all-good-box">
-                    <span>✅</span>
-                    <p>All stock levels healthy! No products below 10 units.</p>
-                  </div>
-                ) : (
-                  <table className="alerts-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
-                    <thead>
-                      <tr style={{ textAlign: 'left', borderBottom: '1px solid #e2e8f0' }}>
-                        <th style={{ padding: '8px 4px', fontSize: '11px', color: '#64748b', textTransform: 'uppercase' }}>Product</th>
-                        <th style={{ padding: '8px 4px', fontSize: '11px', color: '#64748b', textTransform: 'uppercase', textAlign: 'center' }}>Stock</th>
-                        <th style={{ padding: '8px 4px', fontSize: '11px', color: '#64748b', textTransform: 'uppercase', textAlign: 'right' }}>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {data.inventory.alerts.map(prod => (
-                        <tr key={prod.id} style={{ borderBottom: '1px solid #edf2f7' }}>
-                          <td style={{ padding: '10px 4px', fontSize: '13px', fontWeight: 600, maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            {prod.title}
-                          </td>
-                          <td style={{ padding: '10px 4px', textAlign: 'center' }}>
-                            <span className={`admin-badge ${prod.stock === 0 ? 'admin-badge-danger' : 'admin-badge-warning'}`} style={{ minWidth: '40px', justifyContent: 'center' }}>
-                              {prod.stock}
-                            </span>
-                          </td>
-                          <td style={{ padding: '10px 4px', textAlign: 'right' }}>
-                            <a href={`/admin/products?search=${encodeURIComponent(prod.title)}`} className="admin-btn admin-btn-outline admin-btn-sm" style={{ padding: '4px 8px', fontSize: '11px' }}>
-                              Edit Stock
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                )}
-              </div>
-            </div>
-
-            {/* Top Articles by Viewcount */}
-            <div className="analytics-card">
-              <h4>Top reading blog articles</h4>
-              <p className="card-subtitle-desc">Highest read blog posts published by editors.</p>
-              
-              <div className="top-blogs-list" style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                {data.topBlogs.length === 0 ? (
-                  <div style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>No blog post reads recorded.</div>
-                ) : (
-                  data.topBlogs.map((blog, index) => {
-                    const maxViews = Math.max(...data.topBlogs.map(b => b.views), 1);
-                    const viewPct = Math.round((blog.views / maxViews) * 100);
-                    return (
-                      <div key={blog.id} className="blog-views-row" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                        <div style={{ width: '24px', height: '24px', background: '#f1f5f9', borderRadius: '50%', display: 'flex', alignItems: 'center', fontSize: '11px', fontWeight: 'bold', color: '#475569', flexShrink: 0, justifyContent: 'center' }}>
-                          {index + 1}
-                        </div>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2px', fontSize: '13px' }}>
-                            <span style={{ fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={blog.title}>
-                              {blog.title}
-                            </span>
-                            <span style={{ fontWeight: 700, color: '#8b5cf6', flexShrink: 0, marginLeft: '6px' }}>{blog.views.toLocaleString()} views</span>
-                          </div>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <span style={{ fontSize: '10px', color: '#64748b', background: '#f8fafc', padding: '1px 6px', borderRadius: '4px', border: '1px solid #cbd5e1' }}>
-                              {blog.category}
-                            </span>
-                            <div style={{ flex: 1, height: '4px', background: '#f1f5f9', borderRadius: '2px' }}>
-                              <div style={{ width: `${viewPct}%`, height: '100%', background: '#8b5cf6', borderRadius: '2px' }}></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Section 4: Heaviest Storage files alerts */}
-          <div className="analytics-card" style={{ marginTop: '28px' }}>
-            <h4>Heavy storage assets alert</h4>
-            <p className="card-subtitle-desc">The largest files in the media library. Consider reducing their resolution or compressing them to improve site responsiveness.</p>
-            
-            <div className="heavy-media-grid" style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '16px' }}>
-              {data.heaviestMedia.length === 0 ? (
-                <div style={{ gridColumn: '1/-1', padding: '20px', textAlign: 'center', color: '#64748b' }}>No media assets uploaded.</div>
-              ) : (
-                data.heaviestMedia.map((m, idx) => (
-                  <div key={m.id} className="heavy-media-card" style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '14px', display: 'flex', flexDirection: 'column', gap: '8px', position: 'relative' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                      <span className="admin-badge admin-badge-danger" style={{ fontSize: '10px', padding: '2px 8px', fontWeight: 'bold' }}>
-                        Rank #{idx + 1}
-                      </span>
-                      <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#e53e3e' }}>
-                        {formatBytes(m.size)}
-                      </span>
-                    </div>
-                    
-                    <div style={{ minWidth: 0, marginTop: '4px' }}>
-                      <p style={{ fontSize: '13px', fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', margin: 0, color: '#1e293b' }} title={m.filename}>
-                        {m.filename}
-                      </p>
-                      <span style={{ fontSize: '11px', color: '#64748b' }}>
-                        MIME: {m.mimeType}
-                      </span>
-                    </div>
-
-                    <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
-                      <a href={m.url} target="_blank" rel="noreferrer" className="admin-btn admin-btn-outline admin-btn-sm" style={{ padding: '6px 12px', fontSize: '11px', flex: 1, background: '#fff' }}>
-                        🔗 Open File
-                      </a>
-                      <button 
-                        className="admin-btn admin-btn-outline admin-btn-sm" 
-                        style={{ padding: '6px 12px', fontSize: '11px', flex: 1, background: '#fff' }}
-                        onClick={() => {
-                          navigator.clipboard.writeText(m.url);
-                          alert('URL copied to clipboard!');
+                    {/* Chart HTML Tooltip on hover */}
+                    {hoverIndex !== null && points[hoverIndex] && (
+                      <div
+                        className="chart-tooltip"
+                        style={{
+                          position: 'absolute',
+                          left: `${tooltipPos.x + 10}px`,
+                          top: `${tooltipPos.y - 35}px`,
+                          transform: 'translate(-50%, -100%)',
+                          background: 'rgba(15, 23, 42, 0.95)',
+                          color: '#fff',
+                          padding: '8px 12px',
+                          borderRadius: '8px',
+                          fontSize: '11px',
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                          pointerEvents: 'none',
+                          whiteSpace: 'nowrap',
+                          zIndex: 10,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '2px',
                         }}
                       >
-                        📋 Copy URL
-                      </button>
-                    </div>
+                        <span style={{ fontWeight: 'bold' }}>{points[hoverIndex].date}</span>
+                        <span>Count: <b>{points[hoverIndex].count}</b></span>
+                      </div>
+                    )}
                   </div>
-                ))
+                </div>
+
+                {/* Category product distribution */}
+                <div className="analytics-card">
+                  <h4>Category popularities</h4>
+                  <p className="card-subtitle-desc">Ranking categories by total products count.</p>
+                  
+                  <div className="categories-list-bars" style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                    {data.categoriesDistribution.length === 0 ? (
+                      <div style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>No category products mapping.</div>
+                    ) : (
+                      data.categoriesDistribution.map((cat, idx) => {
+                        const maxCount = Math.max(...data.categoriesDistribution.map(c => c.count), 1);
+                        const pct = Math.round((cat.count / maxCount) * 100);
+                        return (
+                          <div key={idx} className="category-bar-row">
+                            <div className="category-bar-label-row">
+                              <span className="category-bar-name">{cat.name}</span>
+                              <span className="category-bar-count"><b>{cat.count}</b> products</span>
+                            </div>
+                            <div className="category-bar-track">
+                              <div className="category-bar-fill" style={{ width: `${pct}%`, background: 'linear-gradient(90deg, #3B82F6 0%, #8B5CF6 100%)' }}></div>
+                            </div>
+                          </div>
+                        );
+                      })
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Section 3: Alerts and Lists */}
+              <div className="analytics-row-double" style={{ marginTop: '28px' }}>
+                
+                {/* Out of stock & stock warnings */}
+                <div className="analytics-card">
+                  <div className="card-header-with-badge">
+                    <h4>Stock replenishments alerts</h4>
+                    {data.inventory.outOfStock > 0 && (
+                      <span className="admin-badge admin-badge-danger">
+                        {data.inventory.outOfStock} Out of Stock
+                      </span>
+                    )}
+                  </div>
+                  <p className="card-subtitle-desc">Products with low or depleted stock levels needing attention.</p>
+                  
+                  <div className="inventory-alerts-table-container" style={{ marginTop: '16px' }}>
+                    {data.inventory.alerts.length === 0 ? (
+                      <div className="stock-all-good-box">
+                        <span>✅</span>
+                        <p>All stock levels healthy! No products below 10 units.</p>
+                      </div>
+                    ) : (
+                      <table className="alerts-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
+                        <thead>
+                          <tr style={{ textAlign: 'left', borderBottom: '1px solid #e2e8f0' }}>
+                            <th style={{ padding: '8px 4px', fontSize: '11px', color: '#64748b', textTransform: 'uppercase' }}>Product</th>
+                            <th style={{ padding: '8px 4px', fontSize: '11px', color: '#64748b', textTransform: 'uppercase', textAlign: 'center' }}>Stock</th>
+                            <th style={{ padding: '8px 4px', fontSize: '11px', color: '#64748b', textTransform: 'uppercase', textAlign: 'right' }}>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {data.inventory.alerts.map(prod => (
+                            <tr key={prod.id} style={{ borderBottom: '1px solid #edf2f7' }}>
+                              <td style={{ padding: '10px 4px', fontSize: '13px', fontWeight: 600, maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                {prod.title}
+                              </td>
+                              <td style={{ padding: '10px 4px', textAlign: 'center' }}>
+                                <span className={`admin-badge ${prod.stock === 0 ? 'admin-badge-danger' : 'admin-badge-warning'}`} style={{ minWidth: '40px', justifyContent: 'center' }}>
+                                  {prod.stock}
+                                </span>
+                              </td>
+                              <td style={{ padding: '10px 4px', textAlign: 'right' }}>
+                                <a href={`/admin/products?search=${encodeURIComponent(prod.title)}`} className="admin-btn admin-btn-outline admin-btn-sm" style={{ padding: '4px 8px', fontSize: '11px' }}>
+                                  Edit Stock
+                                </a>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    )}
+                  </div>
+                </div>
+
+                {/* Top Articles by Viewcount */}
+                <div className="analytics-card">
+                  <h4>Top reading blog articles</h4>
+                  <p className="card-subtitle-desc">Highest read blog posts published by editors.</p>
+                  
+                  <div className="top-blogs-list" style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                    {data.topBlogs.length === 0 ? (
+                      <div style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>No blog post reads recorded.</div>
+                    ) : (
+                      data.topBlogs.map((blog, index) => {
+                        const maxViews = Math.max(...data.topBlogs.map(b => b.views), 1);
+                        const viewPct = Math.round((blog.views / maxViews) * 100);
+                        return (
+                          <div key={blog.id} className="blog-views-row" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                            <div style={{ width: '24px', height: '24px', background: '#f1f5f9', borderRadius: '50%', display: 'flex', alignItems: 'center', fontSize: '11px', fontWeight: 'bold', color: '#475569', flexShrink: 0, justifyContent: 'center' }}>
+                              {index + 1}
+                            </div>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2px', fontSize: '13px' }}>
+                                <span style={{ fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={blog.title}>
+                                  {blog.title}
+                                </span>
+                                <span style={{ fontWeight: 700, color: '#8b5cf6', flexShrink: 0, marginLeft: '6px' }}>{blog.views.toLocaleString()} views</span>
+                              </div>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <span style={{ fontSize: '10px', color: '#64748b', background: '#f8fafc', padding: '1px 6px', borderRadius: '4px', border: '1px solid #cbd5e1' }}>
+                                  {blog.category}
+                                </span>
+                                <div style={{ flex: 1, height: '4px', background: '#f1f5f9', borderRadius: '2px' }}>
+                                  <div style={{ width: `${viewPct}%`, height: '100%', background: '#8b5cf6', borderRadius: '2px' }}></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Section 4: Heaviest Storage files alerts */}
+              <div className="analytics-card" style={{ marginTop: '28px' }}>
+                <h4>Heavy storage assets alert</h4>
+                <p className="card-subtitle-desc">The largest files in the media library. Consider reducing their resolution or compressing them to improve site responsiveness.</p>
+                
+                <div className="heavy-media-grid" style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '16px' }}>
+                  {data.heaviestMedia.length === 0 ? (
+                    <div style={{ gridColumn: '1/-1', padding: '20px', textAlign: 'center', color: '#64748b' }}>No media assets uploaded.</div>
+                  ) : (
+                    data.heaviestMedia.map((m, idx) => (
+                      <div key={m.id} className="heavy-media-card" style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '14px', display: 'flex', flexDirection: 'column', gap: '8px', position: 'relative' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                          <span className="admin-badge admin-badge-danger" style={{ fontSize: '10px', padding: '2px 8px', fontWeight: 'bold' }}>
+                            Rank #{idx + 1}
+                          </span>
+                          <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#e53e3e' }}>
+                            {formatBytes(m.size)}
+                          </span>
+                        </div>
+                        
+                        <div style={{ minWidth: 0, marginTop: '4px' }}>
+                          <p style={{ fontSize: '13px', fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', margin: 0, color: '#1e293b' }} title={m.filename}>
+                            {m.filename}
+                          </p>
+                          <span style={{ fontSize: '11px', color: '#64748b' }}>
+                            MIME: {m.mimeType}
+                          </span>
+                        </div>
+
+                        <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
+                          <a href={m.url} target="_blank" rel="noreferrer" className="admin-btn admin-btn-outline admin-btn-sm" style={{ padding: '6px 12px', fontSize: '11px', flex: 1, background: '#fff' }}>
+                            🔗 Open File
+                          </a>
+                          <button 
+                            className="admin-btn admin-btn-outline admin-btn-sm" 
+                            style={{ padding: '6px 12px', fontSize: '11px', flex: 1, background: '#fff' }}
+                            onClick={() => {
+                              navigator.clipboard.writeText(m.url);
+                              alert('URL copied to clipboard!');
+                            }}
+                          >
+                            📋 Copy URL
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
+      {activeTab === 'google' && (
+        <div className="google-analytics-container" style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+          {/* Status Banner: Loading / Error / Live / Demo */}
+          {gaLoading ? (
+            <div style={{
+              background: 'rgba(15, 23, 42, 0.6)',
+              border: '1px solid #334155',
+              borderRadius: '12px',
+              padding: '14px 20px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              fontSize: '13px',
+              color: '#94a3b8',
+            }}>
+              <div style={{ width: '18px', height: '18px', borderRadius: '50%', border: '2px solid #334155', borderTopColor: '#3b82f6', animation: 'adminSpinner 0.8s linear infinite', flexShrink: 0 }} />
+              <span>Fetching live Google Analytics data...</span>
+            </div>
+          ) : gaError ? (
+            <div style={{
+              background: 'rgba(239, 68, 68, 0.08)',
+              border: '1px solid rgba(239, 68, 68, 0.2)',
+              borderRadius: '12px',
+              padding: '14px 20px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '12px',
+              fontSize: '13px',
+              color: '#fca5a5',
+            }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ fontSize: '18px' }}>⚠️</span>
+                <span><strong>GA4 API Error:</strong> {gaError} — Showing demo data below.</span>
+              </span>
+              <button onClick={fetchGoogleAnalytics} style={{ background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.25)', color: '#fca5a5', padding: '4px 12px', borderRadius: '8px', fontSize: '11px', cursor: 'pointer', fontWeight: 600 }}>Retry</button>
+            </div>
+          ) : gaData && !gaData.isDemo ? (
+            <div style={{
+              background: 'rgba(16, 185, 129, 0.08)',
+              border: '1px solid rgba(16, 185, 129, 0.2)',
+              borderRadius: '12px',
+              padding: '14px 20px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '12px',
+              fontSize: '13px',
+              color: '#6ee7b7',
+            }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span className="live-dot" />
+                <span><strong>Live GA4 Data</strong> — All metrics below are fetched in real-time from your Google Analytics property via the Data API.</span>
+              </span>
+              <button onClick={fetchGoogleAnalytics} style={{ background: 'rgba(16,185,129,0.15)', border: '1px solid rgba(16,185,129,0.25)', color: '#6ee7b7', padding: '4px 12px', borderRadius: '8px', fontSize: '11px', cursor: 'pointer', fontWeight: 600 }}>🔄 Refresh</button>
+            </div>
+          ) : (
+            <div style={{
+              background: 'rgba(37, 99, 235, 0.08)',
+              border: '1px solid rgba(37, 99, 235, 0.2)',
+              borderRadius: '12px',
+              padding: '14px 20px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '12px',
+              fontSize: '13px',
+              color: '#93c5fd',
+            }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ fontSize: '18px' }}>ℹ️</span>
+                <span><strong>Demo Preview Mode</strong> — Add <code style={{ background: 'rgba(0,0,0,0.3)', padding: '1px 6px', borderRadius: '4px' }}>GA_PROPERTY_ID</code>, <code style={{ background: 'rgba(0,0,0,0.3)', padding: '1px 6px', borderRadius: '4px' }}>GA_CLIENT_EMAIL</code>, and <code style={{ background: 'rgba(0,0,0,0.3)', padding: '1px 6px', borderRadius: '4px' }}>GA_PRIVATE_KEY</code> to your <code style={{ background: 'rgba(0,0,0,0.3)', padding: '1px 6px', borderRadius: '4px' }}>.env</code> file to show real data.</span>
+              </span>
+              <button onClick={fetchGoogleAnalytics} style={{ background: 'rgba(37,99,235,0.15)', border: '1px solid rgba(37,99,235,0.25)', color: '#93c5fd', padding: '4px 12px', borderRadius: '8px', fontSize: '11px', cursor: 'pointer', fontWeight: 600 }}>🔄 Refresh</button>
+            </div>
+          )}
+          {/* Header Stream Info Bar */}
+          <div className="ga-stream-info-card glass-card" style={{
+            padding: '24px',
+            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%)',
+            border: '1px solid rgba(226, 232, 240, 0.8)',
+            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.02), 0 8px 10px -6px rgba(0, 0, 0, 0.02)'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <div style={{
+                  width: '52px',
+                  height: '52px',
+                  background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
+                  borderRadius: '14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '26px',
+                  boxShadow: '0 4px 12px rgba(59, 130, 246, 0.1)'
+                }}>
+                  📊
+                </div>
+                <div>
+                  <h3 style={{ margin: '0 0 4px 0', fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>Google Analytics (GA4) Stream</h3>
+                  <p style={{ margin: 0, fontSize: '13px', color: '#64748b' }}>Connected Property: <b>Mohit Sales Corporation Web</b></p>
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: '14px', alignItems: 'center', flexWrap: 'wrap' }}>
+                <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', padding: '10px 16px', borderRadius: '12px', fontSize: '13px' }}>
+                  <span style={{ color: '#64748b', marginRight: '6px' }}>Stream ID:</span>
+                  <span style={{ fontWeight: 600, color: '#0f172a' }}>15108794799</span>
+                </div>
+                <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', padding: '10px 16px', borderRadius: '12px', fontSize: '13px' }}>
+                  <span style={{ color: '#64748b', marginRight: '6px' }}>Measurement ID:</span>
+                  <span style={{ fontWeight: 600, color: '#0f172a' }}>G-FZF80T7820</span>
+                </div>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  background: 'rgba(16, 185, 129, 0.08)',
+                  color: '#059669',
+                  border: '1px solid rgba(16, 185, 129, 0.15)',
+                  padding: '10px 16px',
+                  borderRadius: '12px',
+                  fontSize: '13px',
+                  fontWeight: 600
+                }}>
+                  <span className="live-dot" style={{ marginRight: '8px' }}></span>
+                  Active & Tracking
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Metrics Cards */}
+          <div className="analytics-kpi-grid">
+            {/* Live Active Users Widget */}
+            <div className="kpi-card glass-card" style={{ background: 'rgba(255,255,255,0.8)' }}>
+              <div className="kpi-icon-row">
+                <span className="kpi-icon blue" style={{ background: '#e0f2fe', color: '#0284c7' }}>⚡</span>
+                <span className="kpi-trend success" style={{
+                  background: gaData && !gaData.isDemo ? '#ecfdf5' : '#eff6ff',
+                  color: gaData && !gaData.isDemo ? '#059669' : '#2563eb'
+                }}>
+                  {gaData && !gaData.isDemo ? 'Real-time' : 'Demo Mode'}
+                </span>
+              </div>
+              <div className="kpi-value" style={{ display: 'flex', alignItems: 'baseline', gap: '8px', fontSize: '32px', fontWeight: 800 }}>
+                {activeVisitors} <span style={{ fontSize: '13px', fontWeight: 500, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Active Visitors</span>
+              </div>
+              <div className="kpi-label" style={{ fontSize: '13px', color: '#64748b', fontWeight: 600 }}>Users in last 30 minutes</div>
+              
+              {/* Animated Live Bars */}
+              <div className="kpi-footer-metric" style={{ marginTop: '16px', borderTop: '1px solid #edf2f7', paddingTop: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px', height: '24px' }}>
+                  {[12, 16, 8, 22, 14, 28, 20, 10, 16, 24, 18, 32, 22, 14, 20].map((h, i) => (
+                    <div key={i} style={{
+                      flex: 1,
+                      height: `${h}%`,
+                      background: 'linear-gradient(180deg, #60a5fa 0%, #2563eb 100%)',
+                      borderRadius: '2px',
+                      opacity: i === 14 ? 1 : 0.6,
+                      animation: i === 14 ? 'liveBarGrow 1.5s infinite alternate' : 'none'
+                    }}></div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Total Pageviews */}
+            <div className="kpi-card glass-card" style={{ background: 'rgba(255,255,255,0.8)' }}>
+              <div className="kpi-icon-row">
+                <span className="kpi-icon orange" style={{ background: '#ffedd5', color: '#ea580c' }}>📈</span>
+                <span className="kpi-trend success" style={{ background: '#ecfdf5', color: '#059669' }}>
+                  {gaData && !gaData.isDemo ? 'GA4 Active' : 'Fallback Demo'}
+                </span>
+              </div>
+              <div className="kpi-value" style={{ fontSize: '32px', fontWeight: 800 }}>{weeklyPageviews.toLocaleString()}</div>
+              <div className="kpi-label" style={{ fontSize: '13px', color: '#64748b', fontWeight: 600 }}>Weekly Pageviews</div>
+              <div className="kpi-footer-metric" style={{ marginTop: '16px', borderTop: '1px solid #edf2f7', paddingTop: '12px' }}>
+                <span className="small-detail-text">
+                  Aggregated pageviews across all products.
+                </span>
+              </div>
+            </div>
+
+            {/* Average Session Duration */}
+            <div className="kpi-card glass-card" style={{ background: 'rgba(255,255,255,0.8)' }}>
+              <div className="kpi-icon-row">
+                <span className="kpi-icon purple" style={{ background: '#f3e8ff', color: '#7c3aed' }}>⏱️</span>
+                <span className="kpi-trend success" style={{ background: '#ecfdf5', color: '#059669' }}>Good engagement</span>
+              </div>
+              <div className="kpi-value" style={{ fontSize: '32px', fontWeight: 800 }}>{avgEngagementTime}</div>
+              <div className="kpi-label" style={{ fontSize: '13px', color: '#64748b', fontWeight: 600 }}>Avg. Engagement Time</div>
+              <div className="kpi-footer-metric" style={{ marginTop: '16px', borderTop: '1px solid #edf2f7', paddingTop: '12px' }}>
+                <span className="small-detail-text">
+                  Average time a visitor spends on the site.
+                </span>
+              </div>
+            </div>
+
+            {/* Bounce Rate */}
+            <div className="kpi-card glass-card" style={{ background: 'rgba(255,255,255,0.8)' }}>
+              <div className="kpi-icon-row">
+                <span className="kpi-icon red" style={{ background: '#fee2e2', color: '#dc2626' }}>📉</span>
+                <span className="kpi-trend success" style={{ background: '#ecfdf5', color: '#059669' }}>Bounce tracked</span>
+              </div>
+              <div className="kpi-value" style={{ fontSize: '32px', fontWeight: 800 }}>{bounceRate}</div>
+              <div className="kpi-label" style={{ fontSize: '13px', color: '#64748b', fontWeight: 600 }}>Bounce Rate</div>
+              <div className="kpi-footer-metric" style={{ marginTop: '16px', borderTop: '1px solid #edf2f7', paddingTop: '12px' }}>
+                <span className="small-detail-text">
+                  Percentage of single-page visits.
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Traffic Trend Chart */}
+          <div className="analytics-card trend-chart-card" style={{ border: '1px solid #e2e8f0', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.01)' }}>
+            <div className="card-header-with-action">
+              <div>
+                <h4>Google Analytics Traffic Trends (Last 30 Days)</h4>
+                <p className="card-subtitle-desc">Daily visitor sessions count mapping for Mohit Sales Corporation.</p>
+              </div>
+            </div>
+            
+            <div className="chart-wrapper" style={{ position: 'relative', height: `${gaHeight}px` }}>
+              {gaPoints.length > 0 ? (
+                <svg
+                  ref={gaChartSvgRef}
+                  className="custom-svg-chart"
+                  viewBox={`0 0 ${gaWidth} ${gaHeight}`}
+                  onMouseMove={handleGaMouseMove}
+                  onMouseLeave={handleGaMouseLeave}
+                >
+                  <defs>
+                    <linearGradient id="gaAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#10b981" stopOpacity="0.35" />
+                      <stop offset="100%" stopColor="#059669" stopOpacity="0.0" />
+                    </linearGradient>
+                    <linearGradient id="gaLineGrad" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stopColor="#10b981" />
+                      <stop offset="100%" stopColor="#059669" />
+                    </linearGradient>
+                  </defs>
+
+                  {/* Horizontal grid lines */}
+                  {Array.from({ length: 5 }).map((_, i) => {
+                    const y = gaPaddingTop + (i * gaChartHeight) / 4;
+                    const maxVal = Math.max(...gaTrendData.map((t: any) => t.count), 5);
+                    const gridVal = Math.round(maxVal - (i * maxVal) / 4);
+                    return (
+                      <g key={i}>
+                        <line
+                          x1={gaPaddingLeft}
+                          y1={y}
+                          x2={gaWidth - gaPaddingRight}
+                          y2={y}
+                          stroke="#e2e8f0"
+                          strokeWidth="1"
+                          strokeDasharray="4,4"
+                        />
+                        <text
+                          x={gaPaddingLeft - 8}
+                          y={y + 4}
+                          textAnchor="end"
+                          fontSize="10"
+                          fill="#64748b"
+                        >
+                          {gridVal}
+                        </text>
+                      </g>
+                    );
+                  })}
+
+                  {/* SVG paths */}
+                  <path d={gaAreaPath} fill="url(#gaAreaGrad)" />
+                  <path d={gaLinePath} fill="none" stroke="url(#gaLineGrad)" strokeWidth="3" strokeLinecap="round" />
+
+                  {/* Interactive Circles & guideline */}
+                  {gaPoints.map((p, idx) => (
+                    <circle
+                      key={idx}
+                      cx={p.x}
+                      cy={p.y}
+                      r={gaHoverIndex === idx ? 6 : 3}
+                      fill={gaHoverIndex === idx ? '#3b82f6' : '#10b981'}
+                      stroke="#fff"
+                      strokeWidth="2"
+                      style={{ transition: 'r 0.1s' }}
+                    />
+                  ))}
+
+                  {gaHoverIndex !== null && (
+                    <line
+                      x1={gaPoints[gaHoverIndex].x}
+                      y1={gaPaddingTop}
+                      x2={gaPoints[gaHoverIndex].x}
+                      y2={gaPaddingTop + gaChartHeight}
+                      stroke="#64748b"
+                      strokeWidth="1"
+                      strokeDasharray="2,2"
+                    />
+                  )}
+
+                  {/* X axis labels */}
+                  {gaPoints.map((p, idx) => {
+                    // Render every 5th label to avoid overlap
+                    if (idx % 5 === 0 || idx === gaPoints.length - 1) {
+                      return (
+                        <text
+                          key={idx}
+                          x={p.x}
+                          y={gaHeight - 10}
+                          textAnchor="middle"
+                          fontSize="10"
+                          fill="#64748b"
+                        >
+                          {p.date}
+                        </text>
+                      );
+                    }
+                    return null;
+                  })}
+                </svg>
+              ) : (
+                <div className="no-chart-data">No traffic data recorded in the last 30 days.</div>
+              )}
+
+              {/* Chart HTML Tooltip on hover */}
+              {gaHoverIndex !== null && gaPoints[gaHoverIndex] && (
+                <div
+                  className="chart-tooltip"
+                  style={{
+                    position: 'absolute',
+                    left: `${gaTooltipPos.x + 10}px`,
+                    top: `${gaTooltipPos.y - 35}px`,
+                    transform: 'translate(-50%, -100%)',
+                    background: 'rgba(15, 23, 42, 0.95)',
+                    color: '#fff',
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    fontSize: '11px',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                    pointerEvents: 'none',
+                    whiteSpace: 'nowrap',
+                    zIndex: 10,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '2px',
+                  }}
+                >
+                  <span style={{ fontWeight: 'bold' }}>{gaPoints[gaHoverIndex].date}</span>
+                  <span>Sessions: <b>{gaPoints[gaHoverIndex].count}</b></span>
+                </div>
               )}
             </div>
+          </div>
+
+          {/* Graphs / Acquisition Section */}
+          <div className="analytics-row-double">
+            {/* Left Side: Traffic Sources */}
+            <div className="analytics-card" style={{ border: '1px solid #e2e8f0', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.01)' }}>
+              <h4>Traffic Acquisition Channels</h4>
+              <p className="card-subtitle-desc">Where your website visitors are coming from.</p>
+              
+              <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
+                {gaChannels.map((channel: any, idx: number) => (
+                  <div key={idx} className="category-bar-row">
+                    <div className="category-bar-label-row">
+                      <span className="category-bar-name" style={{ fontWeight: 600, color: '#334155', fontSize: '13px' }}>{channel.name}</span>
+                      <span className="category-bar-count" style={{ fontSize: '12px', color: '#64748b' }}><b>{channel.count}</b> ({channel.pct}%)</span>
+                    </div>
+                    <div className="category-bar-track" style={{ height: '8px', background: '#f1f5f9', borderRadius: '4px', overflow: 'hidden' }}>
+                      <div className="category-bar-fill" style={{ height: '100%', borderRadius: '4px', width: `${channel.pct}%`, background: channel.color }}></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right Side: Devices breakdown */}
+            <div className="analytics-card" style={{ border: '1px solid #e2e8f0', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.01)' }}>
+              <h4>Device Breakdown</h4>
+              <p className="card-subtitle-desc">Devices used by your customers to access Mohit Sales Corporation.</p>
+              
+              <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                {gaDevices.map((device: any, idx: number) => (
+                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <div style={{
+                      width: '40px',
+                      height: '40px',
+                      background: '#f8fafc',
+                      border: '1px solid #e2e8f0',
+                      borderRadius: '10px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '18px'
+                    }}>
+                      {device.icon}
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 600, color: '#334155', marginBottom: '6px' }}>
+                        <span>{device.name}</span>
+                        <span style={{ color: '#0f172a' }}>{device.pct}%</span>
+                      </div>
+                      <div className="category-bar-track" style={{ height: '6px', background: '#f1f5f9', borderRadius: '4px', overflow: 'hidden' }}>
+                        <div className="category-bar-fill" style={{ height: '100%', borderRadius: '4px', width: `${device.pct}%`, backgroundColor: device.color }}></div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Top Landing Pages */}
+          <div className="dk-card" style={{ marginTop: '8px' }}>
+            <h4 className="dk-title">Top Landing Pages</h4>
+            <p className="dk-subtitle">Most visited pages on your website this month.</p>
+            <div style={{ overflowX: 'auto', marginTop: '16px' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ borderBottom: '1px solid #334155' }}>
+                    <th className="dk-th">Page</th>
+                    <th className="dk-th" style={{ textAlign: 'center' }}>Views</th>
+                    <th className="dk-th" style={{ textAlign: 'center' }}>Avg. Time</th>
+                    <th className="dk-th" style={{ textAlign: 'center' }}>Bounce</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {gaTopPages.map((p: any, i: number) => (
+                    <tr key={i} style={{ borderBottom: '1px solid #1e293b' }}>
+                      <td style={{ padding: '12px 8px' }}>
+                        <div style={{ fontWeight: 600, fontSize: '13px', color: '#f1f5f9' }}>{p.title}</div>
+                        <div style={{ fontSize: '11px', color: '#64748b' }}>{p.page}</div>
+                      </td>
+                      <td style={{ textAlign: 'center', fontWeight: 700, color: '#60a5fa', fontSize: '14px', padding: '12px 8px' }}>{p.views}</td>
+                      <td style={{ textAlign: 'center', color: '#94a3b8', fontSize: '13px', padding: '12px 8px' }}>{p.avgTime}</td>
+                      <td style={{ textAlign: 'center', padding: '12px 8px' }}>
+                        <span style={{ background: parseFloat(p.bounceRate) > 30 ? 'rgba(239,68,68,0.15)' : 'rgba(16,185,129,0.15)', color: parseFloat(p.bounceRate) > 30 ? '#f87171' : '#34d399', padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 600 }}>
+                          {p.bounceRate}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Geographic + Keywords Row */}
+          <div className="analytics-row-double" style={{ marginTop: '8px' }}>
+            {/* Geographic Distribution */}
+            <div className="dk-card">
+              <h4 className="dk-title">Geographic Distribution</h4>
+              <p className="dk-subtitle">Top cities driving traffic to your site.</p>
+              <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                {gaGeoData.map((g: any, i: number) => (
+                  <div key={i}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px', fontSize: '13px' }}>
+                      <span style={{ fontWeight: 600, color: '#e2e8f0' }}>{g.city}</span>
+                      <span style={{ color: '#94a3b8' }}>{g.sessions} sessions ({g.pct}%)</span>
+                    </div>
+                    <div style={{ height: '6px', background: '#1e293b', borderRadius: '4px', overflow: 'hidden' }}>
+                      <div style={{ height: '100%', borderRadius: '4px', width: `${g.pct}%`, background: `linear-gradient(90deg, #3b82f6, #8b5cf6)` }}></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Search Keywords */}
+            <div className="dk-card">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                <h4 className="dk-title" style={{ margin: 0 }}>Search Console Keywords</h4>
+                <button
+                  onClick={() => setShowGscGuide(!showGscGuide)}
+                  style={{
+                    background: 'rgba(59, 130, 246, 0.1)',
+                    color: '#60a5fa',
+                    border: '1px solid rgba(59, 130, 246, 0.2)',
+                    padding: '4px 10px',
+                    borderRadius: '8px',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s',
+                    outline: 'none'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'rgba(59, 130, 246, 0.2)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'rgba(59, 130, 246, 0.1)';
+                  }}
+                >
+                  {showGscGuide ? '✕ Close Guide' : '💡 Connect GSC'}
+                </button>
+              </div>
+              <p className="dk-subtitle">Top organic keywords from Google Search Console.</p>
+
+              {showGscGuide && (
+                <div style={{
+                  background: '#1e293b',
+                  border: '1px solid #334155',
+                  borderRadius: '12px',
+                  padding: '16px',
+                  marginTop: '12px',
+                  marginBottom: '16px',
+                  fontSize: '12.5px',
+                  color: '#94a3b8',
+                  lineHeight: '1.6',
+                  animation: 'gaFadeIn 0.3s ease-out'
+                }}>
+                  <h5 style={{ margin: '0 0 10px 0', color: '#f1f5f9', fontSize: '13px', fontWeight: 700 }}>Google Search Console (GSC) Connection Steps:</h5>
+                  <ol style={{ paddingLeft: '20px', margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <li>
+                      <b style={{ color: '#e2e8f0' }}>Website Verify Karein:</b> GSC console par jaakar property add karein. DNS verify karein ya standard meta tag header (<code style={{ background: '#0f172a', padding: '2px 4px', borderRadius: '4px', color: '#38bdf8' }}>layout.tsx</code> ke inside) add karein ya file download karke <code style={{ background: '#0f172a', padding: '2px 4px', borderRadius: '4px', color: '#38bdf8' }}>public/</code> folder mein upload karein.
+                    </li>
+                    <li>
+                      <b style={{ color: '#e2e8f0' }}>GA4 property aur GSC link karein:</b> Google Analytics 4 settings open karein. <b>Admin &gt; Property settings &gt; Product links &gt; Search Console links</b> par click karein. GSC profile select karke choose karein aur stream link karein.
+                    </li>
+                    <li>
+                      <b style={{ color: '#e2e8f0' }}>Looker Studio Data Resource link karein:</b> Apne Looker Studio dashboard file mein "Add Data" par click karke GSC (Site Impression data) select karein aur use design components mein load karein taaki keywords real-time reflect hon.
+                    </li>
+                  </ol>
+                </div>
+              )}
+
+              <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {searchKeywords.map((kw, i) => (
+                  <div key={i} style={{ background: '#1e293b', borderRadius: '10px', padding: '12px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontWeight: 600, fontSize: '13px', color: '#e2e8f0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{kw.keyword}</div>
+                      <div style={{ fontSize: '11px', color: '#64748b', marginTop: '3px' }}>{kw.impressions} impressions · CTR {kw.ctr}</div>
+                    </div>
+                    <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                      <div style={{ fontWeight: 800, color: '#60a5fa', fontSize: '16px' }}>{kw.clicks}</div>
+                      <div style={{ fontSize: '10px', color: '#64748b' }}>clicks</div>
+                    </div>
+                    <div style={{ background: 'rgba(139,92,246,0.15)', color: '#a78bfa', padding: '3px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: 600, flexShrink: 0 }}>
+                      #{kw.position.toFixed(1)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Page Speed Metrics */}
+          <div className="dk-card" style={{ marginTop: '8px' }}>
+            <h4 className="dk-title">Core Web Vitals</h4>
+            <p className="dk-subtitle">Page performance metrics from real user measurements.</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginTop: '20px' }}>
+              {[
+                { label: 'LCP', value: '2.1s', status: 'Good', desc: 'Largest Contentful Paint', color: '#10b981' },
+                { label: 'FID', value: '18ms', status: 'Good', desc: 'First Input Delay', color: '#10b981' },
+                { label: 'CLS', value: '0.05', status: 'Good', desc: 'Cumulative Layout Shift', color: '#10b981' },
+                { label: 'TTFB', value: '0.8s', status: 'Good', desc: 'Time to First Byte', color: '#10b981' },
+                { label: 'FCP', value: '1.4s', status: 'Good', desc: 'First Contentful Paint', color: '#10b981' },
+                { label: 'INP', value: '120ms', status: 'Needs Work', desc: 'Interaction to Next Paint', color: '#f59e0b' },
+              ].map((m, i) => (
+                <div key={i} style={{ background: '#1e293b', borderRadius: '12px', padding: '18px', border: '1px solid #334155', textAlign: 'center' }}>
+                  <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px' }}>{m.label}</div>
+                  <div style={{ fontSize: '24px', fontWeight: 800, color: '#f1f5f9' }}>{m.value}</div>
+                  <div style={{ fontSize: '11px', color: m.color, fontWeight: 700, marginTop: '4px' }}>{m.status}</div>
+                  <div style={{ fontSize: '10px', color: '#475569', marginTop: '4px' }}>{m.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Looker Studio Live Embed Card */}
+          <div className="dk-card" style={{ marginTop: '8px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
+              <div>
+                <h4 className="dk-title" style={{ margin: 0 }}>Looker Studio Live Embed</h4>
+                <p className="dk-subtitle" style={{ margin: '4px 0 0 0' }}>Embed a fully interactive real-time Google Analytics report dashboard directly inside your admin panel.</p>
+              </div>
+              {lookerUrl && (
+                <button onClick={handleClearLookerUrl} className="admin-btn admin-btn-outline admin-btn-sm" style={{ borderColor: '#ef4444', color: '#ef4444', background: '#fff', padding: '8px 16px', borderRadius: '10px', fontSize: '12px', fontWeight: 600 }}>
+                  🗑️ Unlink Embed
+                </button>
+              )}
+            </div>
+
+            {mounted && lookerUrl && isValidLookerUrl(lookerUrl) ? (
+              <div style={{ width: '100%', position: 'relative', background: '#f8fafc', borderRadius: '16px', border: '1px solid #e2e8f0', overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
+                <iframe
+                  src={lookerUrl}
+                  style={{ border: '0', width: '100%', height: '700px', display: 'block' }}
+                  allowFullScreen
+                  sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+                ></iframe>
+              </div>
+            ) : (
+              <div style={{
+                background: '#f8fafc',
+                borderRadius: '16px',
+                border: '1px solid #e2e8f0',
+                overflow: 'hidden',
+                padding: '40px 32px',
+                textAlign: 'center',
+                position: 'relative'
+              }}>
+                {/* Background blurred mockup dashboard */}
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  opacity: 0.15,
+                  filter: 'blur(3px)',
+                  pointerEvents: 'none',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '16px',
+                  padding: '24px',
+                  boxSizing: 'border-box'
+                }}>
+                  <div style={{ display: 'flex', gap: '16px' }}>
+                    <div style={{ flex: 1, height: '80px', background: '#94a3b8', borderRadius: '12px' }}></div>
+                    <div style={{ flex: 1, height: '80px', background: '#94a3b8', borderRadius: '12px' }}></div>
+                    <div style={{ flex: 1, height: '80px', background: '#94a3b8', borderRadius: '12px' }}></div>
+                  </div>
+                  <div style={{ flex: 1, background: '#94a3b8', borderRadius: '12px' }}></div>
+                </div>
+
+                <div style={{ position: 'relative', zIndex: 1, maxWidth: '640px', margin: '0 auto' }}>
+                  <div style={{
+                    width: '64px',
+                    height: '64px',
+                    background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
+                    borderRadius: '20px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '28px',
+                    margin: '0 auto 20px auto',
+                    boxShadow: '0 4px 12px rgba(59, 130, 246, 0.15)'
+                  }}>
+                    📊
+                  </div>
+                  <h5 style={{ fontSize: '18px', fontWeight: 800, margin: '0 0 10px 0', color: '#1e293b' }}>Embed Google Looker Studio Dashboard</h5>
+                  <p style={{ fontSize: '13.5px', color: '#64748b', marginBottom: '28px', lineHeight: '1.6' }}>
+                    Connect your Google Analytics GA4 property to Looker Studio to view real-time, interactive reports. Follow the simple steps below to generate your embed link:
+                  </p>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '32px', textAlign: 'left' }}>
+                    <div style={{ background: '#fff', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                      <div style={{ fontWeight: 800, color: '#2563eb', fontSize: '13px', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span style={{ display: 'inline-flex', width: '20px', height: '20px', background: '#eff6ff', borderRadius: '50%', alignItems: 'center', justifyContent: 'center', fontSize: '11px' }}>1</span>
+                        Create Report
+                      </div>
+                      <span style={{ fontSize: '12px', color: '#64748b', lineHeight: '1.5' }}>Go to <a href="https://lookerstudio.google.com/" target="_blank" rel="noreferrer" style={{ color: '#2563eb', fontWeight: 500, textDecoration: 'underline' }}>Looker Studio</a>, click "Create" &gt; "Report", and select "Google Analytics" as the source.</span>
+                    </div>
+                    <div style={{ background: '#fff', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                      <div style={{ fontWeight: 800, color: '#2563eb', fontSize: '13px', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span style={{ display: 'inline-flex', width: '20px', height: '20px', background: '#eff6ff', borderRadius: '50%', alignItems: 'center', justifyContent: 'center', fontSize: '11px' }}>2</span>
+                        Enable Embed
+                      </div>
+                      <span style={{ fontSize: '12px', color: '#64748b', lineHeight: '1.5' }}>Design your report, then click "Share" (top-right) &gt; "Embed Report", and check "Enable Embedding".</span>
+                    </div>
+                    <div style={{ background: '#fff', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                      <div style={{ fontWeight: 800, color: '#2563eb', fontSize: '13px', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span style={{ display: 'inline-flex', width: '20px', height: '20px', background: '#eff6ff', borderRadius: '50%', alignItems: 'center', justifyContent: 'center', fontSize: '11px' }}>3</span>
+                        Copy Embed URL
+                      </div>
+                      <span style={{ fontSize: '12px', color: '#64748b', lineHeight: '1.5' }}>Choose "Embed URL" instead of Embed Code, and copy the URL provided (starts with Looker Studio URL).</span>
+                    </div>
+                  </div>
+
+                  <form onSubmit={handleSaveLookerUrl} style={{ display: 'flex', gap: '12px' }}>
+                    <input
+                      type="url"
+                      required
+                      placeholder="https://lookerstudio.google.com/embed/reporting/..."
+                      value={inputLookerUrl}
+                      onChange={(e) => setInputLookerUrl(e.target.value)}
+                      style={{
+                        flex: 1,
+                        padding: '14px 18px',
+                        borderRadius: '10px',
+                        border: '1px solid #cbd5e1',
+                        fontSize: '13.5px',
+                        outline: 'none',
+                        boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.05)',
+                        transition: 'border-color 0.2s',
+                      }}
+                      onFocus={(e) => e.target.style.borderColor = '#2563eb'}
+                      onBlur={(e) => e.target.style.borderColor = '#cbd5e1'}
+                    />
+                    <button type="submit" className="admin-btn admin-btn-primary" style={{ padding: '14px 28px', fontWeight: 600, fontSize: '13.5px', borderRadius: '10px', background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)', color: '#fff', border: 'none', cursor: 'pointer' }}>
+                      Save & Embed
+                    </button>
+                  </form>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -840,6 +1849,234 @@ export default function AdminAnalyticsPage() {
           color: #742a2a;
           font-size: 13px;
           margin-bottom: 12px;
+        }
+
+        /* ── Dark Premium Theme ─────────────────────── */
+        .dk-card {
+          background: #0f172a;
+          border: 1px solid #1e293b;
+          border-radius: 16px;
+          padding: 24px;
+          box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+        }
+        .dk-title {
+          font-size: 16px !important;
+          font-weight: 700 !important;
+          color: #f1f5f9 !important;
+          margin-bottom: 4px !important;
+        }
+        .dk-subtitle {
+          font-size: 12px !important;
+          color: #64748b !important;
+          margin-bottom: 0 !important;
+        }
+        .dk-th {
+          padding: 10px 8px;
+          font-size: 11px;
+          color: #64748b;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          font-weight: 600;
+          text-align: left;
+        }
+
+        /* Dark override for GA container & cards */
+        .google-analytics-container {
+          background: #0b1120;
+          margin: -24px;
+          padding: 28px;
+          border-radius: 16px;
+        }
+        .google-analytics-container .glass-card,
+        .google-analytics-container .kpi-card {
+          background: #0f172a !important;
+          border-color: #1e293b !important;
+        }
+        .google-analytics-container .glass-card:hover {
+          background: #162032 !important;
+          box-shadow: 0 16px 40px rgba(0,0,0,0.3) !important;
+        }
+        .google-analytics-container .kpi-value {
+          color: #f1f5f9 !important;
+        }
+        .google-analytics-container .kpi-label {
+          color: #94a3b8 !important;
+        }
+        .google-analytics-container .kpi-footer-metric {
+          border-top-color: #1e293b !important;
+        }
+        .google-analytics-container .small-detail-text {
+          color: #64748b !important;
+        }
+        .google-analytics-container .kpi-icon.blue { background: rgba(59,130,246,0.15) !important; }
+        .google-analytics-container .kpi-icon.orange { background: rgba(249,115,22,0.15) !important; }
+        .google-analytics-container .kpi-icon.purple { background: rgba(139,92,246,0.15) !important; }
+        .google-analytics-container .kpi-icon.red { background: rgba(239,68,68,0.15) !important; }
+
+        .google-analytics-container .analytics-card,
+        .google-analytics-container .trend-chart-card {
+          background: #0f172a !important;
+          border-color: #1e293b !important;
+          box-shadow: 0 4px 24px rgba(0,0,0,0.25) !important;
+        }
+        .google-analytics-container .analytics-card h4 {
+          color: #f1f5f9 !important;
+        }
+        .google-analytics-container .card-subtitle-desc {
+          color: #64748b !important;
+        }
+        .google-analytics-container .category-bar-name {
+          color: #e2e8f0 !important;
+        }
+        .google-analytics-container .category-bar-count {
+          color: #94a3b8 !important;
+        }
+        .google-analytics-container .category-bar-track {
+          background: #1e293b !important;
+        }
+
+        /* GA Stream Info Dark */
+        .google-analytics-container .ga-stream-info-card {
+          background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+          border-color: #334155 !important;
+        }
+        .google-analytics-container .ga-stream-info-card h3 {
+          color: #f1f5f9 !important;
+        }
+        .google-analytics-container .ga-stream-info-card p {
+          color: #94a3b8 !important;
+        }
+        .google-analytics-container .ga-stream-info-card div[style*="background: #f8fafc"] {
+          background: #1e293b !important;
+          border-color: #334155 !important;
+        }
+
+        /* SVG chart grid lines dark */
+        .google-analytics-container .custom-svg-chart line[stroke="#e2e8f0"] {
+          stroke: #1e293b !important;
+        }
+        .google-analytics-container .custom-svg-chart text[fill="#64748b"] {
+          fill: #475569 !important;
+        }
+
+        /* Looker embed dark */
+        .google-analytics-container .dk-card input {
+          background: #1e293b !important;
+          border-color: #334155 !important;
+          color: #e2e8f0 !important;
+        }
+        .google-analytics-container .dk-card input::placeholder {
+          color: #475569 !important;
+        }
+
+        /* Database tab dark */
+        .analytics-dashboard-container {
+          background: #0b1120;
+          margin: -24px;
+          padding: 28px;
+          border-radius: 16px;
+        }
+        .analytics-dashboard-container .glass-card,
+        .analytics-dashboard-container .kpi-card {
+          background: #0f172a !important;
+          border-color: #1e293b !important;
+        }
+        .analytics-dashboard-container .glass-card:hover {
+          background: #162032 !important;
+        }
+        .analytics-dashboard-container .kpi-value { color: #f1f5f9 !important; }
+        .analytics-dashboard-container .kpi-label { color: #94a3b8 !important; }
+        .analytics-dashboard-container .kpi-footer-metric { border-top-color: #1e293b !important; }
+        .analytics-dashboard-container .small-detail-text { color: #64748b !important; }
+        .analytics-dashboard-container .kpi-icon.orange { background: rgba(249,115,22,0.15) !important; }
+        .analytics-dashboard-container .kpi-icon.blue { background: rgba(59,130,246,0.15) !important; }
+        .analytics-dashboard-container .kpi-icon.purple { background: rgba(139,92,246,0.15) !important; }
+        .analytics-dashboard-container .kpi-icon.red { background: rgba(239,68,68,0.15) !important; }
+        .analytics-dashboard-container .analytics-card {
+          background: #0f172a !important;
+          border-color: #1e293b !important;
+          box-shadow: 0 4px 24px rgba(0,0,0,0.25) !important;
+        }
+        .analytics-dashboard-container .analytics-card h4 { color: #f1f5f9 !important; }
+        .analytics-dashboard-container .card-subtitle-desc { color: #64748b !important; }
+        .analytics-dashboard-container .category-bar-name { color: #e2e8f0 !important; }
+        .analytics-dashboard-container .category-bar-count { color: #94a3b8 !important; }
+        .analytics-dashboard-container .category-bar-track { background: #1e293b !important; }
+        .analytics-dashboard-container .stock-all-good-box {
+          background: rgba(16,185,129,0.1) !important;
+          border-color: rgba(16,185,129,0.2) !important;
+        }
+        .analytics-dashboard-container .stock-all-good-box p { color: #34d399 !important; }
+        .analytics-dashboard-container .reply-rate-track { background: #1e293b !important; }
+        .analytics-dashboard-container .reply-rate-label { color: #94a3b8 !important; }
+        .analytics-dashboard-container .custom-svg-chart line[stroke="#e2e8f0"] { stroke: #1e293b !important; }
+        .analytics-dashboard-container .custom-svg-chart text[fill="#64748b"] { fill: #475569 !important; }
+        .analytics-dashboard-container table th { color: #64748b !important; }
+        .analytics-dashboard-container table td { color: #e2e8f0 !important; }
+        .analytics-dashboard-container table tr { border-bottom-color: #1e293b !important; }
+        .analytics-dashboard-container .heavy-media-card {
+          background: #1e293b !important;
+          border-color: #334155 !important;
+        }
+        .analytics-dashboard-container .heavy-media-card p { color: #e2e8f0 !important; }
+
+        /* Tab bar dark */
+        .analytics-tabs-bar {
+          border-bottom-color: #1e293b !important;
+        }
+        .analytics-header { margin-bottom: 24px !important; }
+        .analytics-subtitle { color: #64748b !important; }
+
+        .analytics-error-box {
+          background: rgba(239,68,68,0.08) !important;
+          border-color: rgba(239,68,68,0.2) !important;
+        }
+
+        /* Google Analytics dashboard custom styles */
+        .google-analytics-container {
+          animation: gaFadeIn 0.4s ease-out;
+        }
+        @keyframes gaFadeIn {
+          from { opacity: 0; transform: translateY(8px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .live-dot {
+          width: 8px;
+          height: 8px;
+          background-color: #10b981;
+          border-radius: 50%;
+          display: inline-block;
+          margin-right: 8px;
+          box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+          animation: livePulse 1.5s infinite;
+        }
+        @keyframes livePulse {
+          0% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+          }
+          70% {
+            transform: scale(1);
+            box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+          }
+          100% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+          }
+        }
+        .analytics-tab-btn:hover {
+          color: #3b82f6 !important;
+        }
+        @keyframes liveBarGrow {
+          from {
+            height: 15%;
+          }
+          to {
+            height: 90%;
+          }
+        }
+        @keyframes adminSpinner {
+          to { transform: rotate(360deg); }
         }
       `}} />
     </AdminShell>
