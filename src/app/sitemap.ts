@@ -37,7 +37,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/solar',
     '/switchgears',
     '/home-appliances',
-    '/conduit-accessories'
+    '/conduit-accessories',
+    '/pricelist',
+    '/crimping-tool',
+    '/conduit-catalogue',
+    '/cables-catalogue',
+    '/fans-catalogue',
+    '/home-appliances-catalogue',
+    '/solar-catalogue',
+    '/switchgear-catalogue'
   ];
 
   const staticRoutes = staticPaths.map((route) => ({

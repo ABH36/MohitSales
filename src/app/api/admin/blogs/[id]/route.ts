@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import prisma from '@/lib/prisma';
+import { revalidatePath } from 'next/cache';
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -46,6 +47,8 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       },
     });
 
+    revalidatePath(`/blog/${blog.slug}`);
+    revalidatePath('/blog');
     return NextResponse.json({ success: true, data: blog });
   } catch (error: any) {
     console.error('[Admin Blogs PUT]', error);
@@ -62,7 +65,10 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
       return NextResponse.json({ success: false, message: 'Forbidden: Insufficient permissions.' }, { status: 403 });
     }
 
+    const blog = await prisma.blogPost.findUnique({ where: { id: params.id }, select: { slug: true } });
     await prisma.blogPost.delete({ where: { id: params.id } });
+    if (blog?.slug) revalidatePath(`/blog/${blog.slug}`);
+    revalidatePath('/blog');
     return NextResponse.json({ success: true, message: 'Blog deleted.' });
   } catch (error: any) {
     if (error.code === 'P2025') return NextResponse.json({ success: false, message: 'Not found.' }, { status: 404 });

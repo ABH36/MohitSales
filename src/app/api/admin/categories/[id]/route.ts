@@ -8,7 +8,8 @@ import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/prisma';
 
 // Recursively collects all descendant categories (children, grandchildren, …)
-async function getDescendants(categoryId: string): Promise<{ id: string; slug: string }[]> {
+async function getDescendants(categoryId: string, depth = 0): Promise<{ id: string; slug: string }[]> {
+  if (depth > 10) return [];
   const children = await prisma.category.findMany({
     where: { parentId: categoryId },
     select: { id: true, slug: true },
@@ -16,7 +17,7 @@ async function getDescendants(categoryId: string): Promise<{ id: string; slug: s
 
   const result: { id: string; slug: string }[] = [...children];
   for (const child of children) {
-    const grandchildren = await getDescendants(child.id);
+    const grandchildren = await getDescendants(child.id, depth + 1);
     result.push(...grandchildren);
   }
   return result;

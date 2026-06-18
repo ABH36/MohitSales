@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import AnimationLoader from '../components/AnimationLoader';
@@ -50,6 +51,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      {/* Google Analytics (gtag.js) */}
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-FZF80T7820"
+        strategy="afterInteractive"
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-FZF80T7820');
+        `}
+      </Script>
       <head>
         <link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicon/favicon.png" />
         {/* ── Critical CSS (render-blocking — layout depends on these) ── */}

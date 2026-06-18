@@ -41,10 +41,56 @@ body {
 .rs-header-two.header-new .rs-header-menu {
   flex: 1;
   text-align: center;
+  margin-left: 100px;
 }
 
 .rs-header-two.header-new .rs-header-menu .main-menu {
   display: inline-block !important;
+}
+
+/* Tablet (577px–991px): desktop nav hidden, clean logo + hamburger layout */
+@media (min-width: 577px) and (max-width: 991px) {
+  .rs-header-two .rs-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+  .rs-header-two .rs-header-left {
+    flex: 0 0 auto;
+    padding-inline-end: 0 !important;
+    margin-inline-end: 0 !important;
+  }
+  .rs-header-two .rs-header-menu {
+    display: none;
+  }
+  .rs-header-two .rs-header-right {
+    flex: 0 0 auto;
+    margin-left: auto;
+  }
+  .rs-header-two.header-new .rs-header-logo {
+    width: auto !important;
+  }
+  .rs-header-two.header-new .rs-header-logo img {
+    max-width: 160px !important;
+  }
+  .rs-header-hamburger i {
+    font-size: 26px;
+    color: #ffffff;
+  }
+  .rs-header-two.has-border {
+    background: rgba(18, 26, 47, 0.95);
+  }
+  .rs-header-two.header-new .rs-header-left::before {
+    display: none;
+  }
+}
+
+/* Desktop ≤1200px: push menu right so "Home" clears logo area */
+@media (min-width: 992px) and (max-width: 1200px) {
+  .rs-header-two.header-new .rs-header-menu {
+    margin-left: 60px;
+  }
 }
 
 .rs-header-logo img {
@@ -3242,4 +3288,13 @@ section.pricelist-inner {
   .rs-header-hamburger {
     display: none !important;
   }
+}
+
+/* Fix: Prevent legacy pricelist-btn / enquiry buttons from stretching to w-full inside centered containers */
+.button_center .pricelist-btn,
+.button_center .enquiry-btn {
+  display: inline-flex !important;
+  width: auto !important;
+  min-width: 140px !important;
+  justify-content: center !important;
 }

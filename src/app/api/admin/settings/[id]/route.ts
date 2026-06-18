@@ -6,6 +6,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import prisma from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
+import { revalidatePath } from 'next/cache';
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -42,7 +43,9 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       where: { id: params.id },
       data: { value },
     });
-    
+
+    if (setting.isPublic) revalidatePath('/');
+
     return NextResponse.json({ success: true, data: setting });
   } catch (error: any) {
     if (error.code === 'P2025') return NextResponse.json({ success: false, message: 'Not found.' }, { status: 404 });
