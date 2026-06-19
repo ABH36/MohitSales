@@ -42865,5 +42865,83 @@
     "features": [],
     "datasheet": "",
     "cards": []
+  },
+  {
+    "path": "dowells/crimping-tool/hand-manual-crimping-tool",
+    "title": "12 Type Different Tool",
+    "breadcrumbs": [
+      "Home",
+      "Dowells",
+      "Crimping Tool",
+      "12 Type Different Tool"
+    ],
+    "heading": "Hand Manual Crimping Tool",
+    "imageSrc": "/assets/images/our_products/dowells/crimping_tool/hand-manual-crimping-tool.jpg",
+    "description": [],
+    "features": [],
+    "datasheet": "",
+    "cards": [
+      {
+        "image": "/assets/images/our_products/dowells/crimping_tool/hand-manual-crimping-tool.jpg",
+        "title": "12 Type Different Tool",
+        "details": [
+          "Material: --",
+          "Finishing: --",
+          "Size: CAP:0.5 to 400 sq.mm"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "dowells/crimping-tool/hand-hydrolic-crimping-tool",
+    "title": "5 Type Different Jack",
+    "breadcrumbs": [
+      "Home",
+      "Dowells",
+      "Crimping Tool",
+      "5 Type Different Jack"
+    ],
+    "heading": "Hand Hydroulic Crimping Tool",
+    "imageSrc": "/assets/images/our_products/dowells/crimping_tool/hand-hydrolic-crimping-tool.jpg",
+    "description": [],
+    "features": [],
+    "datasheet": "",
+    "cards": [
+      {
+        "image": "/assets/images/our_products/dowells/crimping_tool/hand-hydrolic-crimping-tool.jpg",
+        "title": "5 Type Different Jack",
+        "details": [
+          "Material: --",
+          "Finishing: --",
+          "Size: CAP:10 to 1000 sq.mm"
+        ]
+      }
+    ]
+  },
+  {
+    "path": "dowells/crimping-tool/foot-hydrolic-crimping-tool",
+    "title": "Foot Hydroulic Crimping Tool",
+    "breadcrumbs": [
+      "Home",
+      "Dowells",
+      "Crimping Tool",
+      "Foot Hydroulic Crimping Tool"
+    ],
+    "heading": "Foot Hydroulic Crimping Tool",
+    "imageSrc": "/assets/images/our_products/dowells/crimping_tool/foot-hydrolic-crimping-tool.jpg",
+    "description": [],
+    "features": [],
+    "datasheet": "",
+    "cards": [
+      {
+        "image": "/assets/images/our_products/dowells/crimping_tool/foot-hydrolic-crimping-tool.jpg",
+        "title": "Foot Hydroulic Crimping Tool",
+        "details": [
+          "Material: --",
+          "Finishing: --",
+          "Size: CAP:50 to 630 sq.mm"
+        ]
+      }
+    ]
   }
 ]
