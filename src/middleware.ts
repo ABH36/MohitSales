@@ -22,7 +22,8 @@ export async function middleware(request: NextRequest) {
 
   if (isPublicPage) {
     try {
-      const redirectCheckUrl = new URL('/api/public/redirect', request.url);
+      // Use internal localhost to prevent SSL loopback / hairpin NAT issues
+      const redirectCheckUrl = new URL('/api/public/redirect', 'http://127.0.0.1:3000');
       redirectCheckUrl.searchParams.set('path', pathname);
       const redirectRes = await fetch(redirectCheckUrl.toString());
       if (redirectRes.ok) {
@@ -77,8 +78,8 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    // Call /api/admin/auth/me to verify user state (isActive === true), token signature, and role in one DB query
-    const authMeUrl = new URL('/api/admin/auth/me', request.url);
+    // Call /api/admin/auth/me using internal localhost
+    const authMeUrl = new URL('/api/admin/auth/me', 'http://127.0.0.1:3000');
     const authResponse = await fetch(authMeUrl.toString(), {
       headers: {
         cookie: `${COOKIE_NAME}=${token}`,
