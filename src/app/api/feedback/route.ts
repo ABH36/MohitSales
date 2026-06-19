@@ -14,12 +14,14 @@ export async function POST(request: NextRequest) {
       || request.headers.get('x-real-ip') 
       || '127.0.0.1';
 
+    /*
     if (feedbackRateLimiter.limit(ip)) {
       return NextResponse.json(
         { success: false, message: 'Too many submissions. Please try again in a minute.' },
         { status: 429 }
       );
     }
+    */
 
     const formData       = await request.formData();
     const name           = formData.get('name')            as string;
