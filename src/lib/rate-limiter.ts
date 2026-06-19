@@ -24,6 +24,10 @@ export class RateLimiter {
    * Returns true if rate-limited (blocked), false otherwise.
    */
   limit(ip: string): boolean {
+    if (process.env.DISABLE_RATE_LIMITER === 'true') {
+      return false; // Bypass rate limiting
+    }
+
     const now = Date.now();
     let timestamps = this.cache.get(ip) || [];
 
