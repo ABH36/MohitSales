@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Price List | Polycab & Dowells Products | Mohit Sales Corporation',
     description: 'Download the latest Polycab and Dowells price lists — wires, cables, fans, switchgear, and cable terminals. Authorized dealer in Indore.',
-    url: 'https://mohitscpl.com/pricelist',
+    url: 'https://mohit.bdm.co.in/pricelist',
     siteName: 'Mohit Sales Corporation Pvt. Ltd.',
     type: 'website',
   },
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     title: 'Price List | Polycab & Dowells Products | Mohit Sales Corporation',
     description: 'Download the latest Polycab and Dowells price lists from authorized dealer Mohit Sales Corporation, Indore.',
   },
-  alternates: { canonical: 'https://mohitscpl.com/pricelist' },
+  alternates: { canonical: 'https://mohit.bdm.co.in/pricelist' },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

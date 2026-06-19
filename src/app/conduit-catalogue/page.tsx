@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Conduit Catalogue | Polycab UPVC Conduit Pipes | Mohit Sales Corporation',
     description: 'Browse the complete Polycab conduit catalogue — UPVC conduit pipes, fittings, and accessories.',
-    url: 'https://mohitscpl.com/conduit-catalogue',
+    url: 'https://mohit.bdm.co.in/conduit-catalogue',
     siteName: 'Mohit Sales Corporation Pvt. Ltd.',
     type: 'website',
   },
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     title: 'Conduit Catalogue | Polycab UPVC Conduit Pipes | Mohit Sales Corporation',
     description: 'Browse the complete Polycab conduit catalogue.',
   },
-  alternates: { canonical: 'https://mohitscpl.com/conduit-catalogue' },
+  alternates: { canonical: 'https://mohit.bdm.co.in/conduit-catalogue' },
 };
 
 export default async function ConduitCataloguePage() {

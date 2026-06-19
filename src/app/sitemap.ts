@@ -16,7 +16,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return cachedSitemap;
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://mohitscpl.com';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://mohit.bdm.co.in';
 
   // 1. Static routes (All core navigation routes)
   const staticPaths = [

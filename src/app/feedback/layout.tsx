@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Feedback | Share Your Experience | Mohit Sales Corporation Pvt. Ltd.',
     description: 'Share your feedback and experience with Mohit Sales Corporation Pvt. Ltd. — authorized Polycab and Dowells distributor in Indore.',
-    url: 'https://mohitscpl.com/feedback',
+    url: 'https://mohit.bdm.co.in/feedback',
     siteName: 'Mohit Sales Corporation Pvt. Ltd.',
     type: 'website',
   },
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     title: 'Feedback | Share Your Experience | Mohit Sales Corporation Pvt. Ltd.',
     description: 'Share your feedback with Mohit Sales Corporation Pvt. Ltd. — authorized Polycab and Dowells distributor in Indore.',
   },
-  alternates: { canonical: 'https://mohitscpl.com/feedback' },
+  alternates: { canonical: 'https://mohit.bdm.co.in/feedback' },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

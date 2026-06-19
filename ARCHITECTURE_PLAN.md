@@ -55,11 +55,11 @@ src/
 Next.js Middleware handles domain/subdomain language routing to ensure SEO indexing and visual language routing.
 
 1. **Subdomain Identification**:
-   - Middleware extracts the host header (e.g. `hi.mohitscpl.com` or `hi.localhost:3000`).
+   - Middleware extracts the host header (e.g. `hi.mohit.bdm.co.in` or `hi.localhost:3000`).
    - Split by dot `.` to check for valid subdomains (`en`, `hi`, `ar`, `fr`).
 2. **Rewrite Logic**:
    - If path starts with `/api`, `/assets`, `/_next` or static files (matched by file extensions), request flows directly (`NextResponse.next()`).
-   - If host has a valid subdomain segment, rewrite path internally to `/[locale]/[path]`. E.g., `hi.mohitscpl.com/about-us` rewrites to `/hi/about-us`.
+   - If host has a valid subdomain segment, rewrite path internally to `/[locale]/[path]`. E.g., `hi.mohit.bdm.co.in/about-us` rewrites to `/hi/about-us`.
    - If no valid subdomain segment exists, it routes to English `/en/[path]`.
 
 ---
@@ -195,4 +195,4 @@ For production systems, we orchestrate deployment containers and proxy setups as
 2. **PM2 Execution**:
    - PM2 cluster mode instances configuration to utilize multi-core threads and handle traffic spikes.
 3. **Nginx Reverse Proxy**:
-   - Proxy redirects traffic from port 80/443 on host subdomains (e.g. `hi.mohitscpl.com`, `ar.mohitscpl.com`) down to the Next.js process port (3000). Passes headers: `X-Forwarded-Host`, `X-Forwarded-Proto`, and `Host`.
+   - Proxy redirects traffic from port 80/443 on host subdomains (e.g. `hi.mohit.bdm.co.in`, `ar.mohit.bdm.co.in`) down to the Next.js process port (3000). Passes headers: `X-Forwarded-Host`, `X-Forwarded-Proto`, and `Host`.

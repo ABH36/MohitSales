@@ -722,7 +722,7 @@ export default function SeoPage() {
             </div>
             <div style={{ gridColumn: '1 / -1' }}>
               <label style={labelStyle}>Canonical URL</label>
-              <input value={metaForm.canonicalUrl || ''} onChange={e => setMetaForm({ ...metaForm, canonicalUrl: e.target.value })} style={inputStyle} placeholder="https://mohitscpl.com/..." />
+              <input value={metaForm.canonicalUrl || ''} onChange={e => setMetaForm({ ...metaForm, canonicalUrl: e.target.value })} style={inputStyle} placeholder="https://mohit.bdm.co.in/..." />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <input type="checkbox" id="noIndex" checked={metaForm.noIndex} onChange={e => setMetaForm({ ...metaForm, noIndex: e.target.checked })} />

@@ -429,7 +429,7 @@ export default function AdminCategoriesPage() {
                   <label className="admin-form-label">
                     Slug *{' '}
                     <span style={{ fontWeight: 400, color: '#a0aec0', fontSize: 12 }}>
-                      (URL: mohitscpl.com/<strong>{form.slug || '…'}</strong>)
+                      (URL: mohit.bdm.co.in/<strong>{form.slug || '…'}</strong>)
                     </span>
                   </label>
                   <input

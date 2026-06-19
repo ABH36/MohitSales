@@ -238,7 +238,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     prisma.seoMeta.findUnique({ where: { page: `/${slugPath}` } }).catch(() => null),
   ]);
 
-  const pageUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'https://mohitscpl.com'}/${slugPath}`;
+  const pageUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'https://mohit.bdm.co.in'}/${slugPath}`;
 
   // Admin-managed SEO meta takes top priority
   if (seoMeta) {

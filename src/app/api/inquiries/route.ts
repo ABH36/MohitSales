@@ -216,7 +216,7 @@ export async function POST(request: NextRequest) {
                   <tr>
                     <td style="background:#f4f5fa; padding:16px 30px; text-align:center; font-size:12px; color:#888;">
                       This email was sent automatically from the website contact form.<br>
-                      <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://mohitscpl.com'}" style="color:#1E2E5E;">mohitscpl.com</a>
+                      <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://mohit.bdm.co.in'}" style="color:#1E2E5E;">mohit.bdm.co.in</a>
                     </td>
                   </tr>
                   

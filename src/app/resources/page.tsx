@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Resources & Downloads | Mohit Sales Corporation Pvt. Ltd.',
     description: 'Download product brochures, technical specifications, and installation guides for Polycab cables, wires, switchgears, fans, and Dowells cable terminals.',
-    url: 'https://mohitscpl.com/resources',
+    url: 'https://mohit.bdm.co.in/resources',
     siteName: 'Mohit Sales Corporation Pvt. Ltd.',
     type: 'website',
   },
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     title: 'Resources & Downloads | Mohit Sales Corporation Pvt. Ltd.',
     description: 'Download product brochures, technical specifications, and installation guides for Polycab and Dowells products.',
   },
-  alternates: { canonical: 'https://mohitscpl.com/resources' },
+  alternates: { canonical: 'https://mohit.bdm.co.in/resources' },
 };
 
 

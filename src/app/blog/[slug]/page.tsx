@@ -7,7 +7,7 @@ import { sanitizeHtml } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://mohitscpl.com';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://mohit.bdm.co.in';
 
 interface BlogDetailsPageProps {
   params: {

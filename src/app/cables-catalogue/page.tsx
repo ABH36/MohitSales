@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Cables Catalogue | Polycab Power & Control Cables | Mohit Sales Corporation',
     description: 'Browse the complete Polycab cables catalogue — power cables, armoured cables, XLPE cables, control cables, and flexible cables.',
-    url: 'https://mohitscpl.com/cables-catalogue',
+    url: 'https://mohit.bdm.co.in/cables-catalogue',
     siteName: 'Mohit Sales Corporation Pvt. Ltd.',
     type: 'website',
   },
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     title: 'Cables Catalogue | Polycab Power & Control Cables | Mohit Sales Corporation',
     description: 'Browse the complete Polycab cables catalogue — power, armoured, XLPE, and control cables.',
   },
-  alternates: { canonical: 'https://mohitscpl.com/cables-catalogue' },
+  alternates: { canonical: 'https://mohit.bdm.co.in/cables-catalogue' },
 };
 
 export default async function CablesCataloguePage() {

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Contact Us | Mohit Sales Corporation Pvt. Ltd. — Indore',
     description: 'Get in touch with Mohit Sales Corporation Pvt. Ltd. in Indore for Polycab and Dowells product inquiries, pricing, and bulk orders.',
-    url: 'https://mohitscpl.com/contact-us',
+    url: 'https://mohit.bdm.co.in/contact-us',
     siteName: 'Mohit Sales Corporation Pvt. Ltd.',
     type: 'website',
   },
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     title: 'Contact Us | Mohit Sales Corporation Pvt. Ltd. — Indore',
     description: 'Contact Mohit Sales Corporation Pvt. Ltd. in Indore for Polycab and Dowells product inquiries.',
   },
-  alternates: { canonical: 'https://mohitscpl.com/contact-us' },
+  alternates: { canonical: 'https://mohit.bdm.co.in/contact-us' },
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

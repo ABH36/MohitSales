@@ -16,14 +16,14 @@ export function generateViewport(): Viewport {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://mohitscpl.com'),
+  metadataBase: new URL('https://mohit.bdm.co.in'),
   title: 'Mohit Sales Corporation Pvt. Ltd. | Authorized Polycab & Dowells Distributor',
   description: 'Authorized distributor of Polycab India Ltd. and Dowells. Delivering premium quality wires, cables, terminals, switchgears, and solar products since 1997.',
   keywords: ['Polycab', 'Dowells', 'Cables', 'Wires', 'Terminals', 'Switchgears', 'Solar', 'Distributor', 'India'],
   openGraph: {
     title: 'Mohit Sales Corporation Pvt. Ltd.',
     description: 'Authorized distributor of Polycab India Ltd. and Dowells. Delivering premium quality wires, cables, terminals, switchgears, and solar products since 1997.',
-    url: 'https://mohitscpl.com',
+    url: 'https://mohit.bdm.co.in',
     siteName: 'Mohit Sales Corporation Pvt. Ltd.',
     images: [
       {

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Cable Terminals | Dowells Cable Lugs & Connectors | Mohit Sales Corporation',
     description: 'Authorized dealer of Dowells cable terminals, lugs, and connectors in Indore. Premium copper and aluminium cable terminals for industrial and commercial applications.',
-    url: 'https://mohitscpl.com/cable-terminal',
+    url: 'https://mohit.bdm.co.in/cable-terminal',
     siteName: 'Mohit Sales Corporation Pvt. Ltd.',
     type: 'website',
   },
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     title: 'Cable Terminals | Dowells Cable Lugs & Connectors | Mohit Sales Corporation',
     description: 'Authorized dealer of Dowells cable terminals, lugs, and connectors in Indore.',
   },
-  alternates: { canonical: 'https://mohitscpl.com/cable-terminal' },
+  alternates: { canonical: 'https://mohit.bdm.co.in/cable-terminal' },
 };
 
 
