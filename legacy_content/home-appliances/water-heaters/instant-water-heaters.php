@@ -15,6 +15,36 @@
 
 </head>
 
+<style>
+    /* Premium visual layout for Instant Water Heaters cards */
+    .feature-card {
+        background: #ffffff !important;
+        border-radius: 16px !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+        padding: 35px !important;
+        margin-bottom: 30px !important;
+        border: 1px solid #eaeaea !important;
+        max-width: 1200px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        display: block !important;
+    }
+
+    .feature-image {
+        width: 100% !important;
+        max-width: 100% !important;
+        text-align: center !important;
+    }
+
+    .feature-image img {
+        max-width: 100% !important;
+        height: auto !important;
+        border: none !important; /* Remove the border to blend with card white background */
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
+</style>
+
 
 
 <body class="rs-smoother-yes rtl">

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 
 
@@ -10,37 +10,37 @@ export default async function FansPage() {
     {
       title: 'Ceiling Fans',
       image: '/assets/images/our_products/fans/ceiling_fan.png',
-      link: l('/fans/ceiling-fans')
+      link: l('/polycab/fans/ceiling-fans')
     },
     {
       title: 'Table Fans',
       image: '/assets/images/our_products/fans/table-fan.png',
-      link: l('/fans/table-fans')
+      link: l('/polycab/fans/table-fans')
     },
     {
       title: 'Pedestal Fans',
       image: '/assets/images/our_products/fans/pedestal-fan.png',
-      link: l('/fans/pedestal-fans')
+      link: l('/polycab/fans/pedestal-fans')
     },
     {
       title: 'Wall Fans',
       image: '/assets/images/our_products/fans/Wall-Fan.png',
-      link: l('/fans/wall-fans')
+      link: l('/polycab/fans/wall-fans')
     },
     {
       title: 'Exhaust Fans',
       image: '/assets/images/our_products/fans/EXHAUST-FAN.png',
-      link: l('/fans/exhaust-fans')
+      link: l('/polycab/fans/exhaust-fans')
     },
     {
       title: 'Farrata Fans',
       image: '/assets/images/our_products/fans/Farrata-Fan.png',
-      link: l('/fans/farrata-fans')
+      link: l('/polycab/fans/farrata-fans')
     },
     {
       title: 'Air Circulator Fans',
       image: '/assets/images/our_products/fans/Air-Circulator.png',
-      link: l('/fans/air-circulator')
+      link: l('/polycab/fans/air-circulator-fans')
     }
   ];
 

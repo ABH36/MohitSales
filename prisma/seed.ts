@@ -266,6 +266,79 @@ async function main() {
 
   console.log('   ✓ Product categories seeded (Polycab + Dowells hierarchy)\n');
 
+  // ─── 4b. CATEGORY CLEANUP — remove junk/duplicate/typo categories ───
+  console.log('🧹 Cleaning up junk categories...');
+
+  const validTopSlugs = ['polycab', 'dowells'];
+  const allTopLevel = await prisma.category.findMany({
+    where: { parentId: null },
+    select: { id: true, slug: true, name: true },
+  });
+
+  let deactivated = 0;
+  for (const cat of allTopLevel) {
+    if (!validTopSlugs.includes(cat.slug)) {
+      await prisma.category.update({
+        where: { id: cat.id },
+        data: { isActive: false },
+      });
+      deactivated++;
+      console.log(`   ✗ Deactivated top-level junk: "${cat.name}" (${cat.slug})`);
+    }
+  }
+
+  const duplicatePatterns = [
+    '%infrasturcture%',
+    '%infrasture%',
+    '%exporation%',
+  ];
+  for (const pattern of duplicatePatterns) {
+    const dupes = await prisma.category.findMany({
+      where: { name: { contains: pattern.replace(/%/g, ''), mode: 'insensitive' } },
+    });
+    for (const d of dupes) {
+      await prisma.category.update({
+        where: { id: d.id },
+        data: { isActive: false },
+      });
+      deactivated++;
+      console.log(`   ✗ Deactivated typo category: "${d.name}"`);
+    }
+  }
+
+  // Deactivate children of "direct-link" categories (Fans, Solar, Switchgears, etc.)
+  // These categories link directly to their page — their sub-items are page cards, NOT nav children
+  const directLinkSlugs = [
+    'polycab-switchgears', 'polycab/switchgears',
+    'polycab-fans', 'polycab/fans',
+    'polycab-solar', 'polycab/solar',
+    'polycab-conduits', 'polycab/conduit-and-accessories',
+    'polycab-home-appliances', 'polycab/home-appliances',
+    'dowells-cable-terminal', 'dowells/cable-terminal',
+    'dowells-gland', 'dowells/gland',
+    'dowells-crimping-tool', 'dowells/crimping-tool',
+  ];
+
+  for (const slug of directLinkSlugs) {
+    const parent = await prisma.category.findUnique({ where: { slug }, select: { id: true, name: true } });
+    if (parent) {
+      const children = await prisma.category.findMany({
+        where: { parentId: parent.id, isActive: true },
+        select: { id: true, name: true },
+      });
+      for (const child of children) {
+        await prisma.category.update({
+          where: { id: child.id },
+          data: { isActive: false },
+        });
+        deactivated++;
+        console.log(`   ✗ Deactivated nav-child of "${parent.name}": "${child.name}"`);
+      }
+    }
+  }
+
+  console.log(`   ✓ Cleanup done — ${deactivated} junk categories deactivated\n`);
+
   // ─── 5. BLOG CATEGORIES ──────────────────────────────────
   console.log('📝 Creating blog categories...');
 

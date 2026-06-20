@@ -55,6 +55,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: route === '' ? 1.0 : 0.8,
   }));
 
+  // Load excluded slugs (inactive or out of stock products in DB)
+  const excludedSlugs = new Set<string>();
+  try {
+    const inactiveOrOutOfStock = await prisma.product.findMany({
+      where: {
+        OR: [
+          { isActive: false },
+          { stock: { lte: 0 } }
+        ]
+      },
+      select: { slug: true }
+    });
+    inactiveOrOutOfStock.forEach(p => excludedSlugs.add(p.slug.toLowerCase().trim()));
+  } catch (error) {
+    console.error('Error fetching inactive/out of stock products for exclusion:', error);
+  }
+
   // 2. Generate dynamic routes from JSON file (legacy content)
   let jsonRoutes: MetadataRoute.Sitemap = [];
   try {
@@ -63,16 +80,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const rawData = await fs.promises.readFile(jsonPath, 'utf-8');
       const dataList = JSON.parse(rawData);
 
-      jsonRoutes = dataList.map((item: any) => {
-        // Clean path: "cable-terminal/aluminium.php" -> "/cable-terminal/aluminium"
-        const cleanPath = item.path.replace(/\.php$/i, '');
-        return {
-          url: `${baseUrl}/${cleanPath}`,
-          lastModified: new Date(),
-          changeFrequency: 'monthly' as const,
-          priority: 0.6,
-        };
-      });
+      jsonRoutes = dataList
+        .map((item: any) => {
+          // Clean path: "cable-terminal/aluminium.php" -> "/cable-terminal/aluminium"
+          const cleanPath = item.path.replace(/\.php$/i, '').trim();
+          return {
+            url: `${baseUrl}/${cleanPath}`,
+            pathKey: cleanPath.toLowerCase(),
+            lastModified: new Date(),
+            changeFrequency: 'monthly' as const,
+            priority: 0.6,
+          };
+        })
+        .filter((route: any) => !excludedSlugs.has(route.pathKey))
+        .map((route: any) => {
+          const { pathKey, ...rest } = route;
+          return rest;
+        });
     }
   } catch (error) {
     console.error('Error generating sitemap JSON routes:', error);
@@ -83,7 +107,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const [products, categories, blogs] = await Promise.all([
       prisma.product.findMany({
-        where: { isActive: true },
+        where: { isActive: true, stock: { gt: 0 } },
         select: { slug: true, updatedAt: true }
       }),
       prisma.category.findMany({

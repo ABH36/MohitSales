@@ -100,21 +100,71 @@ export default function AdminProductsPage() {
   const [rawCategories, setRawCategories] = useState<NestedCategory[]>([]);
   const [editProduct, setEditProduct] = useState<Product | null>(null);
   const [toast, setToast] = useState<{ msg: string; type: string } | null>(null);
+  const [statusFilter, setStatusFilter] = useState('all'); // 'all' | 'active' | 'inactive'
+  const [stockFilter, setStockFilter] = useState('');      // '' | 'outofstock'
 
-  // Cascading dropdown states
-  const [selectedBrandId, setSelectedBrandId] = useState('');
-  const [selectedCategoryId, setSelectedCategoryId] = useState('');
-  const [selectedSubCategoryId, setSelectedSubCategoryId] = useState('');
   const [activeFeatureTab, setActiveFeatureTab] = useState<'Cables' | 'Switchgears' | 'Fans' | 'Lugs & Glands'>('Cables');
 
   // Form state
   const [form, setForm] = useState({ slug: '', title: '', description: '', features: '', imageSrc: '', categoryId: '', newCategoryName: '', datasheetLink: '', isActive: true, sortOrder: 0, stock: 0 });
 
+  const [pdfFiles, setPdfFiles] = useState<{ id: string; filename: string; url: string }[]>([]);
+
+  const fetchPdfFiles = async () => {
+    try {
+      const res = await fetch('/api/admin/media');
+      const data = await res.json();
+      if (data.success && Array.isArray(data.data)) {
+        const filtered = data.data.filter((m: any) => m.mimeType === 'application/pdf');
+        setPdfFiles(filtered);
+      }
+    } catch (err) {
+      console.error('Failed to fetch PDF files', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchPdfFiles();
+  }, []);
+
+  const handleDatasheetUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 10 * 1024 * 1024) {
+      showToast('File size exceeds 10MB limit.', 'error');
+      e.target.value = '';
+      return;
+    }
+
+    showToast('Uploading datasheet PDF...', 'info');
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await fetch('/api/admin/media', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.success) {
+        setForm(f => ({ ...f, datasheetLink: data.url }));
+        showToast('Datasheet uploaded successfully', 'success');
+        fetchPdfFiles();
+      } else {
+        showToast(data.message || 'Upload failed', 'error');
+      }
+    } catch (err) {
+      console.error('Upload error', err);
+      showToast('Upload failed', 'error');
+    }
+  };
+
   const fetchProducts = useCallback(async () => {
     setLoading(true);
     try {
       const [prodRes, catRes] = await Promise.all([
-        fetch(`/api/admin/products?page=${page}&search=${search}&limit=15`),
+        fetch(`/api/admin/products?page=${page}&search=${search}&limit=15&status=${statusFilter}&stock=${stockFilter}`),
         fetch(`/api/admin/categories`)
       ]);
       const data = await prodRes.json();
@@ -134,7 +184,7 @@ export default function AdminProductsPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, search]);
+  }, [page, search, statusFilter, stockFilter]);
 
   // Debounce search: wait 350ms after last keystroke before fetching
   useEffect(() => {
@@ -175,9 +225,8 @@ export default function AdminProductsPage() {
 
   const handleTitleChange = (title: string) => {
     setForm(f => {
-      const deepestCatId = selectedSubCategoryId || selectedCategoryId || selectedBrandId;
       const cleanTitle = slugify(title);
-      const category = rawCategories.find(c => c.id === deepestCatId);
+      const category = categories.find(c => c.id === f.categoryId);
       const catSlug = category ? category.slug : '';
       return {
         ...f,
@@ -187,90 +236,15 @@ export default function AdminProductsPage() {
     });
   };
 
-  const handleBrandChange = (brandId: string) => {
-    setSelectedBrandId(brandId);
-    setSelectedCategoryId('');
-    setSelectedSubCategoryId('');
-    setForm(f => {
-      const deepestCatId = brandId;
-      const cleanTitle = slugify(f.title);
-      const category = rawCategories.find(c => c.id === deepestCatId);
-      const catSlug = category ? category.slug : '';
-      return {
-        ...f,
-        categoryId: deepestCatId,
-        slug: catSlug ? `${catSlug}/${cleanTitle}` : cleanTitle
-      };
-    });
-  };
-
-  const handleCategoryChange = (catId: string) => {
-    setSelectedCategoryId(catId);
-    setSelectedSubCategoryId('');
-    setForm(f => {
-      const deepestCatId = catId || selectedBrandId;
-      const cleanTitle = slugify(f.title);
-      const category = rawCategories.find(c => c.id === deepestCatId);
-      const catSlug = category ? category.slug : '';
-      return {
-        ...f,
-        categoryId: deepestCatId,
-        slug: catSlug ? `${catSlug}/${cleanTitle}` : cleanTitle
-      };
-    });
-  };
-
-  const handleSubCategoryChange = (subId: string) => {
-    setSelectedSubCategoryId(subId);
-    setForm(f => {
-      const deepestCatId = subId || selectedCategoryId || selectedBrandId;
-      const cleanTitle = slugify(f.title);
-      const category = rawCategories.find(c => c.id === deepestCatId);
-      const catSlug = category ? category.slug : '';
-      return {
-        ...f,
-        categoryId: deepestCatId,
-        slug: catSlug ? `${catSlug}/${cleanTitle}` : cleanTitle
-      };
-    });
-  };
-
   const handleOpenCreate = () => {
     setEditProduct(null);
-    setSelectedBrandId('');
-    setSelectedCategoryId('');
-    setSelectedSubCategoryId('');
     setForm({ slug: '', title: '', description: '', features: '', imageSrc: '', categoryId: '', newCategoryName: '', datasheetLink: '', isActive: true, sortOrder: 0, stock: 0 });
     setShowModal(true);
   };
 
   const handleOpenEdit = (p: Product) => {
     setEditProduct(p);
-    
-    let brandId = '';
-    let catId = '';
-    let subCatId = '';
-    
-    if (p.category) {
-      const chain = findCategoryChain(rawCategories, p.category.id);
-      if (chain) {
-        if (chain.length === 3) {
-          brandId = chain[0].id;
-          catId = chain[1].id;
-          subCatId = chain[2].id;
-        } else if (chain.length === 2) {
-          brandId = chain[0].id;
-          catId = chain[1].id;
-        } else if (chain.length === 1) {
-          brandId = chain[0].id;
-        }
-      }
-    }
-    
-    setSelectedBrandId(brandId);
-    setSelectedCategoryId(catId);
-    setSelectedSubCategoryId(subCatId);
-    
+
     setForm({
       slug: p.slug, title: p.title,
       description: p.description || '',
@@ -289,13 +263,12 @@ export default function AdminProductsPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const finalCategoryId = selectedSubCategoryId || selectedCategoryId || selectedBrandId;
-    if (!finalCategoryId) {
-      showToast('Please select at least a Brand.', 'error');
+    if (!form.categoryId) {
+      showToast('Please select a Category.', 'error');
       return;
     }
 
-    const payload = { ...form, categoryId: finalCategoryId };
+    const payload = { ...form };
 
     const method = editProduct ? 'PUT' : 'POST';
     const url = editProduct ? `/api/admin/products/${editProduct.id}` : '/api/admin/products';
@@ -378,7 +351,7 @@ export default function AdminProductsPage() {
       <div className="admin-table-wrapper">
         <div className="admin-table-header">
           <h3 className="admin-table-title">All Products ({products.length})</h3>
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
             <div className="admin-search-box">
               <span>🔍</span>
               <input
@@ -387,6 +360,25 @@ export default function AdminProductsPage() {
                 onChange={(e) => { setSearch(e.target.value); setPage(1); }}
               />
             </div>
+            <select
+              className="admin-form-select"
+              style={{ minWidth: 130, fontSize: 13 }}
+              value={statusFilter}
+              onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
+            >
+              <option value="all">All Status</option>
+              <option value="active">✅ Active</option>
+              <option value="inactive">❌ Inactive</option>
+            </select>
+            <select
+              className="admin-form-select"
+              style={{ minWidth: 150, fontSize: 13 }}
+              value={stockFilter}
+              onChange={(e) => { setStockFilter(e.target.value); setPage(1); }}
+            >
+              <option value="">All Stock</option>
+              <option value="outofstock">🔴 Out of Stock</option>
+            </select>
             {canWrite && (
               <button className="admin-btn admin-btn-primary" onClick={handleOpenCreate}>+ Add Product</button>
             )}
@@ -424,9 +416,11 @@ export default function AdminProductsPage() {
                   </td>
                   <td>{p.category?.name || '—'}</td>
                   <td>
-                    <span style={{ fontWeight: 'bold', color: p.stock > 0 ? '#38a169' : '#e53e3e' }}>
-                      {p.stock}
-                    </span>
+                    {p.stock > 0 ? (
+                      <span style={{ fontWeight: 'bold', color: '#38a169', fontSize: 13 }}>✅ {p.stock}</span>
+                    ) : (
+                      <span style={{ fontWeight: 'bold', color: '#e53e3e', fontSize: 12, background: '#fff5f5', border: '1px solid #fed7d7', padding: '2px 8px', borderRadius: 12 }}>🔴 Out of Stock</span>
+                    )}
                   </td>
                   <td>
                     <span className={`admin-badge ${p.isActive ? 'admin-badge-success' : 'admin-badge-danger'}`}>
@@ -472,7 +466,7 @@ export default function AdminProductsPage() {
             </div>
             <form onSubmit={handleSubmit}>
               <div className="admin-modal-body" style={{ display: 'flex', flexDirection: 'column', gap: '20px', maxHeight: '70vh', overflowY: 'auto' }}>
-                
+
                 {/* SECTION 1: बुनियादी जानकारी (Basic Info) */}
                 <div className="form-section-card">
                   <div className="form-section-header">
@@ -486,63 +480,33 @@ export default function AdminProductsPage() {
                       <span className="admin-form-help">यह वेबसाइट पर सबसे ऊपर मुख्य हेडिंग (Heading) के रूप में दिखाई देगा।</span>
                     </div>
 
-                    {/* Cascading Category Dropdowns */}
-                    <div className="category-cascade-box">
-                      <div className="category-cascade-title">कैटेगरी का रास्ता (Category Path):</div>
-                      
-                      <div className="admin-form-group" style={{ marginBottom: '10px' }}>
-                        <label className="admin-form-label" style={{ fontSize: '12px', color: '#4a5568' }}>ब्रांड / Brand *</label>
-                        <select
-                          className="admin-form-select"
-                          value={selectedBrandId}
-                          onChange={(e) => handleBrandChange(e.target.value)}
-                          required
-                        >
-                          <option value="">-- Select Brand --</option>
-                          {rawCategories.filter(c => !c.parentId).map((b) => (
-                            <option key={b.id} value={b.id}>
-                              {b.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      {selectedBrandId && rawCategories.filter(c => c.parentId === selectedBrandId).length > 0 && (
-                        <div className="admin-form-group" style={{ marginBottom: '10px' }}>
-                          <label className="admin-form-label" style={{ fontSize: '12px', color: '#4a5568' }}>श्रेणी / Category *</label>
-                          <select
-                            className="admin-form-select"
-                            value={selectedCategoryId}
-                            onChange={(e) => handleCategoryChange(e.target.value)}
-                            required
-                          >
-                            <option value="">-- Select Category --</option>
-                            {rawCategories.filter(c => c.parentId === selectedBrandId).map((c) => (
-                              <option key={c.id} value={c.id}>
-                                {c.name}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      )}
-
-                      {selectedCategoryId && rawCategories.filter(c => c.parentId === selectedCategoryId).length > 0 && (
-                        <div className="admin-form-group" style={{ marginBottom: 0 }}>
-                          <label className="admin-form-label" style={{ fontSize: '12px', color: '#4a5568' }}>उप-श्रेणी / Sub-Category</label>
-                          <select
-                            className="admin-form-select"
-                            value={selectedSubCategoryId}
-                            onChange={(e) => handleSubCategoryChange(e.target.value)}
-                          >
-                            <option value="">-- Select Sub-Category (Optional) --</option>
-                            {rawCategories.filter(c => c.parentId === selectedCategoryId).map((s) => (
-                              <option key={s.id} value={s.id}>
-                                {s.name}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      )}
+                    <div className="admin-form-group">
+                      <label className="admin-form-label">श्रेणी / Category *</label>
+                      <select
+                        className="admin-form-select"
+                        value={form.categoryId}
+                        onChange={(e) => {
+                          const catId = e.target.value;
+                          setForm(f => {
+                            const category = categories.find(c => c.id === catId);
+                            const catSlug = category ? category.slug : '';
+                            const cleanTitle = slugify(f.title);
+                            return {
+                              ...f,
+                              categoryId: catId,
+                              slug: catSlug ? `${catSlug}/${cleanTitle}` : cleanTitle
+                            };
+                          });
+                        }}
+                        required
+                      >
+                        <option value="">-- Select Category --</option>
+                        {categories.map((c) => (
+                          <option key={c.id} value={c.id}>
+                            {'\u00A0'.repeat(c.depth * 3)}{c.depth > 0 ? '↳ ' : ''}{c.label.split(' > ').pop()}
+                          </option>
+                        ))}
+                      </select>
                     </div>
 
                     <div className="admin-form-group" style={{ marginTop: '12px' }}>
@@ -576,8 +540,43 @@ export default function AdminProductsPage() {
 
                     <div className="admin-form-group">
                       <label className="admin-form-label">डाटाशीट लिंक / Datasheet PDF Link</label>
-                      <input className="admin-form-input" type="text" value={form.datasheetLink} onChange={(e) => setForm({ ...form, datasheetLink: e.target.value })} placeholder="e.g. /assets/pdf/datasheet.pdf" />
-                      <span className="admin-form-help">उत्पाद के पीडीएफ ब्रोशर या टेक्निकल डाटाशीट का लिंक।</span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                          <input 
+                            className="admin-form-input" 
+                            type="text" 
+                            value={form.datasheetLink} 
+                            onChange={(e) => setForm({ ...form, datasheetLink: e.target.value })} 
+                            placeholder="URL or Choose File ->" 
+                            style={{ flex: 1 }} 
+                          />
+                          <input
+                            type="file"
+                            accept=".pdf"
+                            onChange={handleDatasheetUpload}
+                            className="text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+                          />
+                        </div>
+                        {pdfFiles.length > 0 && (
+                          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                            <span style={{ fontSize: '11px', fontWeight: 600, color: '#718096', whiteSpace: 'nowrap' }}>Select Existing PDF:</span>
+                            <select
+                              className="admin-form-select"
+                              style={{ flex: 1, fontSize: '12px', padding: '6px' }}
+                              value={pdfFiles.some(p => p.url === form.datasheetLink) ? form.datasheetLink : ''}
+                              onChange={(e) => setForm({ ...form, datasheetLink: e.target.value })}
+                            >
+                              <option value="">-- Choose from Media Library --</option>
+                              {pdfFiles.map((pdf) => (
+                                <option key={pdf.id} value={pdf.url}>
+                                  {pdf.filename}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        )}
+                      </div>
+                      <span className="admin-form-help">उत्पाद के पीडीएफ ब्रोशर या टेक्निकल डाटाशीट का लिंक। आप यहाँ से फाइल अपलोड भी कर सकते हैं या मीडिया लाइब्रेरी से पहले से अपलोड की हुई कोई फाइल चुन सकते हैं।</span>
                     </div>
                   </div>
                 </div>
@@ -599,7 +598,7 @@ export default function AdminProductsPage() {
                       <label className="admin-form-label">विशेषताएं / Features (Bullet Points)</label>
                       <textarea className="admin-form-textarea" value={form.features} onChange={(e) => setForm({ ...form, features: e.target.value })} placeholder="Enter features separated by newlines..." style={{ minHeight: '100px' }} />
                       <span className="admin-form-help">यहाँ प्रत्येक मुख्य विशेषता को नई लाइन (Enter दबाकर) पर लिखें। आप नीचे दिए गए टेम्पलेट बटनों का उपयोग करके भी इन्हें जोड़ सकते हैं।</span>
-                      
+
                       {/* Predefined Features Templates Section */}
                       <div className="feature-templates-container">
                         <div className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">Quick Features Templates (Click to Add/Remove):</div>
@@ -662,7 +661,7 @@ export default function AdminProductsPage() {
                   </div>
                 </div>
               </div>
-              
+
               <div className="admin-modal-footer">
                 <button type="button" className="admin-btn admin-btn-outline" onClick={() => setShowModal(false)}>Cancel</button>
                 <button type="submit" className="admin-btn admin-btn-primary">{editProduct ? 'Update' : 'Create'}</button>
@@ -673,7 +672,8 @@ export default function AdminProductsPage() {
       )}
 
       {/* Dynamic CSS Styles for form layout & features templates */}
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .form-section-card {
           background: #ffffff;
           border: 1px solid #e2e8f0;

@@ -27,7 +27,7 @@ interface ProductPageProps {
 // Function to read and cache JSON content
 function getLegacyPath(slugPath: string): string {
   let clean = slugPath.toLowerCase();
-  
+
   if (clean.startsWith('polycab/cables-by-')) {
     clean = clean.replace('polycab/cables-by-', 'industries/cables-by-');
   } else if (clean.startsWith('polycab/')) {
@@ -35,7 +35,20 @@ function getLegacyPath(slugPath: string): string {
   } else if (clean.startsWith('dowells/')) {
     clean = clean.substring('dowells/'.length);
   }
-  
+
+  // Handle nested cables-by-application segment removals
+  clean = clean.replace('cables-by-application/building-infrastructure/', 'cables-by-application/');
+  clean = clean.replace('cables-by-application/energy-and-power-grid/', 'cables-by-application/');
+  clean = clean.replace('cables-by-application/exploration-industries/', 'cables-by-application/');
+  clean = clean.replace('cables-by-application/manufacturing-industries/', 'cables-by-application/');
+  clean = clean.replace('cables-by-application/mobility-infrastructure/', 'cables-by-application/');
+
+  // Handle conduit-and-accessories mapping
+  clean = clean.replace('conduit-and-accessories', 'conduit-accessories');
+
+  // Handle air-circulator-fans mapping
+  clean = clean.replace('fans/air-circulator-fans', 'fans/air-circulator');
+
   return clean;
 }
 
@@ -63,14 +76,20 @@ async function getProductData(slugPath: string) {
     found = dataList!.find((item: any) => item.path.toLowerCase() === matchLegacyPath.toLowerCase());
     if (found) return found;
 
-    // Try 3: Match by final filename suffix (product pages)
+    // Try 3: Match by final filename + parent directory (prevents cross-category false matches)
     const slugParts = slugPath.split('/');
     const lastPart = slugParts[slugParts.length - 1].toLowerCase();
-    
+    const parentPart = slugParts.length >= 2 ? slugParts[slugParts.length - 2].toLowerCase() : '';
+
     found = dataList!.find((item: any) => {
       const itemParts = item.path.replace(/\.php$/, '').split('/');
       const itemLastPart = itemParts[itemParts.length - 1].toLowerCase();
-      return itemLastPart === lastPart;
+      if (itemLastPart !== lastPart) return false;
+      if (parentPart && itemParts.length >= 2) {
+        const itemParent = itemParts[itemParts.length - 2].toLowerCase();
+        return itemParent === parentPart;
+      }
+      return true;
     });
 
     return found || null;
@@ -78,6 +97,111 @@ async function getProductData(slugPath: string) {
     console.error('Error reading product data:', error);
     return null;
   }
+}
+
+// Function to scope CSS selectors to a specific container prefix to prevent style leaking
+function scopeCss(css: string, prefix: string): string {
+  // Remove CSS comments first
+  css = css.replace(/\/\*[\s\S]*?\*\//g, '');
+  
+  let result = '';
+  let i = 0;
+  
+  while (i < css.length) {
+    // Skip white spaces
+    if (/\s/.test(css[i])) {
+      result += css[i];
+      i++;
+      continue;
+    }
+    
+    // Handle at-rules (@media, @supports, etc.)
+    if (css[i] === '@') {
+      // Check for keyframes
+      if (css.substring(i, i + 10).toLowerCase() === '@keyframes') {
+        const startBrace = css.indexOf('{', i);
+        if (startBrace === -1) {
+          result += css.substring(i);
+          break;
+        }
+        let braceCount = 1;
+        let j = startBrace + 1;
+        while (j < css.length && braceCount > 0) {
+          if (css[j] === '{') braceCount++;
+          else if (css[j] === '}') braceCount--;
+          j++;
+        }
+        result += css.substring(i, j);
+        i = j;
+        continue;
+      }
+      
+      const startBrace = css.indexOf('{', i);
+      if (startBrace === -1) {
+        result += css.substring(i);
+        break;
+      }
+      
+      result += css.substring(i, startBrace + 1);
+      i = startBrace + 1;
+      
+      let braceCount = 1;
+      let innerCss = '';
+      while (i < css.length && braceCount > 0) {
+        const char = css[i];
+        if (char === '{') braceCount++;
+        else if (char === '}') braceCount--;
+        
+        if (braceCount > 0) {
+          innerCss += char;
+          i++;
+        }
+      }
+      
+      result += scopeCss(innerCss, prefix);
+      if (i < css.length && css[i] === '}') {
+        result += '}';
+        i++;
+      }
+      continue;
+    }
+    
+    const nextBrace = css.indexOf('{', i);
+    if (nextBrace === -1) {
+      result += css.substring(i).trim();
+      break;
+    }
+    
+    const selectorsPart = css.substring(i, nextBrace);
+    let braceCount = 1;
+    let j = nextBrace + 1;
+    while (j < css.length && braceCount > 0) {
+      if (css[j] === '{') braceCount++;
+      else if (css[j] === '}') braceCount--;
+      j++;
+    }
+    
+    const declarationsPart = css.substring(nextBrace, j);
+    
+    const scopedSelectors = selectorsPart
+      .split(',')
+      .map(sel => {
+        const trimmed = sel.trim();
+        if (!trimmed) return '';
+        if (trimmed.match(/^(from|to|\d+%)/i)) return trimmed;
+        if (trimmed === 'body' || trimmed === 'html') {
+          return prefix;
+        }
+        return `${prefix} ${trimmed}`;
+      })
+      .filter(Boolean)
+      .join(', ');
+      
+    result += scopedSelectors + ' ' + declarationsPart;
+    i = j;
+  }
+  
+  return result;
 }
 
 // Function to read and parse legacy PHP content for high visual fidelity
@@ -91,7 +215,8 @@ async function getLegacyPHPContent(slugPath: string, productName: string = ''): 
     if (product && product.path) {
       phpPath = product.path;
     } else {
-      phpPath = phpPath.endsWith('.php') ? phpPath : `${phpPath}.php`;
+      const legacyPath = getLegacyPath(slugPath);
+      phpPath = legacyPath.endsWith('.php') ? legacyPath : `${legacyPath}.php`;
     }
 
     const fullPath = path.join(cloneDir, phpPath);
@@ -109,12 +234,34 @@ async function getLegacyPHPContent(slugPath: string, productName: string = ''): 
 
     let fileContent = await fs.promises.readFile(fullPath, 'utf-8');
 
+    // Extract all style blocks from the entire file content
+    const styleMatches = Array.from(fileContent.matchAll(/<style([^>]*)>([\s\S]*?)<\/style>/gi));
+    const scopedStyles = styleMatches.map(m => {
+      const attrs = m[1];
+      const cssContent = m[2];
+      try {
+        const scoped = scopeCss(cssContent, '.legacy-php-content');
+        return `<style${attrs}>${scoped}</style>`;
+      } catch (e) {
+        console.error('Error scoping legacy CSS:', e);
+        return m[0];
+      }
+    }).join('\n');
+
     // Extract inside <main> tag
     const mainMatch = fileContent.match(/<main[^>]*>([\s\S]*?)<\/main>/i);
     if (!mainMatch) {
       return null;
     }
     let html = mainMatch[1];
+
+    // Strip any style tags that might have been matched inside main to avoid duplication
+    html = html.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
+
+    // Add scoped styles to html content
+    if (scopedStyles) {
+      html = scopedStyles + '\n' + html;
+    }
 
     // Replace sidebar includes with their actual HTML content
     const includeRegex = /<\?php\s+include\s+ROOT_PATH\s*\.\s*'\/common\/([^']+)'\s*;\s*\?>/g;
@@ -199,12 +346,49 @@ async function getLegacyPHPContent(slugPath: string, productName: string = ''): 
     // Convert data-background attributes into inline styles
     html = html.replace(/data-background="([^"]+)"/g, 'data-background="$1" style="background-image: url(\'$1\')"');
 
-    // Fix enquiry button: replace legacy double-wrapped btn with clean styled button
+    // Fix enquiry buttons: replace legacy double-wrapped btns with clean styled buttons using Cheerio
     const contextUrl = productName ? `/contact-us?product=${encodeURIComponent(productName)}` : '/contact-us';
-    html = html.replace(
-      /<div class="enquiry-btn">\s*<div class="rs-banner-btn">\s*<a class="rs-btn[^"]*"[^>]*href="([^"]+)"[^>]*>[\s\S]*?<\/a>\s*<\/div>\s*<\/div>/gi,
-      `<div class="product-actions mt-4 w-full flex justify-center"><a class="bg-gradient-to-br from-[#f7931e] to-[#c1272d] text-white rounded-[4px] px-6 py-2.5 font-medium text-[15px] inline-flex items-center justify-center transition-all duration-300 w-auto min-w-[140px] h-[45px] whitespace-nowrap hover:bg-none hover:bg-[#1e2e5e] hover:-translate-y-[2px] hover:shadow-[0_4px_12px_rgba(30,46,94,0.25)]" href="${contextUrl}">Send Enquiry &rarr;</a></div>`
-    );
+    try {
+      const $ = cheerio.load(html, null, false);
+      $('.enquiry-btn').each((_, elem) => {
+        const container = $(elem);
+        const links = container.find('.rs-banner-btn a');
+        if (links.length > 0) {
+          const wrapper = $('<div class="enquiry-btn-container mt-4" style="display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;gap:16px"></div>');
+          links.each((_, linkElem) => {
+            const link = $(linkElem);
+            const href = link.attr('href') || '#';
+            const text = link.text().trim();
+
+            const isDatasheet = text.toLowerCase().includes('datasheet') || href.toLowerCase().includes('.pdf');
+            const cleanHref = isDatasheet ? href : contextUrl;
+            const cleanText = isDatasheet ? 'Download Datasheet' : 'Send Enquiry';
+            const targetBlank = isDatasheet ? 'target="_blank" rel="noopener noreferrer"' : '';
+
+            const btnWrapper = $(`
+              <div class="rs-banner-btn">
+                <a class="rs-btn has-theme-orange has-icon has-bg" href="${cleanHref}" ${targetBlank}>
+                  ${cleanText}
+                  <span class="icon-box">
+                    <svg class="icon-first" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                      <path d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z"></path>
+                    </svg>
+                    <svg class="icon-second" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                      <path d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z"></path>
+                    </svg>
+                  </span>
+                </a>
+              </div>
+            `);
+            wrapper.append(btnWrapper);
+          });
+          container.replaceWith(wrapper);
+        }
+      });
+      html = $.html();
+    } catch (e) {
+      console.error('Error parsing enquiry-btn with Cheerio:', e);
+    }
 
     // Replace standalone contact links
     html = html.replace(/href="\/contact-us"/gi, `href="${contextUrl}"`);
@@ -220,9 +404,6 @@ async function getLegacyPHPContent(slugPath: string, productName: string = ''): 
 
     // Inject mt-auto into legacy enquiry-btn for bottom alignment
     html = html.replace(/class="enquiry-btn"/g, 'class="enquiry-btn mt-auto"');
-
-    // Strip legacy hardcoded CSS blocks
-    html = html.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
 
     return html;
   } catch (error) {
@@ -292,12 +473,32 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   };
 }
 
+// ── DB lookup for page content (replaces PHP file reading) ──────────
+async function getPageContentHtml(slugPath: string): Promise<string | null> {
+  try {
+    let pageContent = await prisma.pageContent.findUnique({
+      where: { slug: slugPath }
+    });
+    if (!pageContent) {
+      const legacyPath = getLegacyPath(slugPath);
+      pageContent = await prisma.pageContent.findFirst({
+        where: { legacyPath: legacyPath }
+      });
+    }
+    if (!pageContent || !pageContent.isActive) return null;
+    return pageContent.htmlContent;
+  } catch (e) {
+    console.error('[getPageContentHtml] Error:', e);
+    return null;
+  }
+}
+
 export default async function ProductPage({ params }: ProductPageProps) {
   const slugPath = params.slug.join('/');
 
   // Fetch DB product early and local state in parallel
   // Note: redirect check is handled by middleware (/api/public/redirect). This is the fallback.
-  const [dbProductEarly, product] = await Promise.all([
+  const [dbProductEarlyRaw, product, dbCategoryEarly] = await Promise.all([
     prisma.product.findUnique({
       where: { slug: slugPath },
       include: { category: { include: { parent: { include: { parent: { include: { parent: true } } } } } } }
@@ -305,9 +506,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
       console.error('[slug:dbProductEarly] Error fetching product early:', e);
       return null;
     }),
-    getProductData(slugPath)
+    getProductData(slugPath),
+    prisma.category.findUnique({
+      where: { slug: slugPath }
+    }).catch((e) => {
+      console.error('[slug:dbCategoryEarly] Error fetching category early:', e);
+      return null;
+    })
   ]);
-  const legacyHtml = await getLegacyPHPContent(slugPath, product?.heading || product?.title || '');
+
+  const dbProductEarly = (dbCategoryEarly || (dbProductEarlyRaw && (!dbProductEarlyRaw.isActive || dbProductEarlyRaw.stock <= 0))) ? null : dbProductEarlyRaw;
+  const legacyHtml = await getPageContentHtml(slugPath);
 
   const hasLegacyCards = legacyHtml && (
     legacyHtml.includes('class="cables-card"') ||
@@ -346,6 +555,20 @@ export default async function ProductPage({ params }: ProductPageProps) {
     try {
       // ── Dynamic Breadcrumbs Clickable Link Fix ──────────────────────────
       const $ = cheerio.load(finalHtml, null, false);
+
+      // Fix legacy features title nesting inside ul
+      $('ul.product-features h3, ul.product-features h4, ul.product-features .product-title').each((i, el) => {
+        const titleEl = $(el);
+        const text = titleEl.text().trim().toUpperCase();
+        if (text === 'FEATURES') {
+          const ul = titleEl.closest('ul.product-features');
+          if (ul.length > 0) {
+            titleEl.removeClass('product-title').addClass('features-title');
+            ul.before(titleEl);
+          }
+        }
+      });
+
       const breadcrumbLis = $('.rs-breadcrumb-menu nav ul li');
       if (breadcrumbLis.length > 0) {
         const length = breadcrumbLis.length;
@@ -387,9 +610,20 @@ export default async function ProductPage({ params }: ProductPageProps) {
               }
             }
           }
-          finalHtml = $.html();
         }
       }
+
+      // Convert legacy inline tab switch triggers to data-tab-target
+      $('button[onclick*="openTab"]').each((_, elem) => {
+        const btn = $(elem);
+        const onclick = btn.attr('onclick') || '';
+        const match = onclick.match(/openTab\s*\(\s*event\s*,\s*['"]([^'"]+)['"]\)/);
+        if (match) {
+          btn.attr('data-tab-target', match[1]);
+        }
+      });
+
+      finalHtml = $.html();
 
       // Only query DB for category products if the HTML actually has card slots to fill
       const dbCategory = hasLegacyCards ? await prisma.category.findUnique({
@@ -408,19 +642,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
         for (const prod of dbCategory.products) {
           let existingCard: any = null;
-          
+
           // Try to match by checking if any card contains the product title exactly or contains a link matching the product slug suffix
           $('.cables-card, .card_box, .fan_card_box, .product-card').each((i, el) => {
             const cardHtml = $(el).html() || '';
             const cardText = $(el).text();
-            
+
             const cleanTitle = prod.title.trim().toLowerCase();
             const slugParts = prod.slug.split('/');
             const lastPart = slugParts[slugParts.length - 1].toLowerCase();
-            
+
             const matchesTitle = cardText.toLowerCase().includes(cleanTitle);
             const matchesSlug = cardHtml.toLowerCase().includes(lastPart);
-            
+
             if (matchesTitle || matchesSlug) {
               existingCard = $(el);
               return false; // break loop
@@ -428,8 +662,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
           });
 
           if (existingCard) {
-            if (!prod.isActive) {
-              // Remove the product card if it is deactivated
+            if (!prod.isActive || prod.stock <= 0) {
+              // Remove the product card if it is deactivated or out of stock
               const wrapper = existingCard.closest('[class*="col-"]');
               if (wrapper.length > 0) {
                 wrapper.remove();
@@ -453,7 +687,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 htmlModified = true;
               }
             }
-          } else if (prod.isActive) {
+          } else if (prod.isActive && prod.stock > 0) {
             // New product: Clone the template card and append it to the grid container
             if (gridContainer && colWrapper) {
               const newCol = colWrapper.clone();
@@ -498,8 +732,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
     return (
       <ProductPageWrapper>
         <SchemaInjector page={`/${slugPath}`} />
-        <main>
-          <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(finalHtml) }} />
+        <main className="legacy-php-content">
+          <div className="legacy-php-content" dangerouslySetInnerHTML={{ __html: sanitizeHtml(finalHtml) }} />
         </main>
       </ProductPageWrapper>
     );
@@ -588,18 +822,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
         where: { isActive: true },
         orderBy: { sortOrder: 'asc' },
         include: {
-          products: { where: { isActive: true }, orderBy: { sortOrder: 'asc' }, take: 4 },
+          products: { where: { isActive: true, stock: { gt: 0 } }, orderBy: { sortOrder: 'asc' }, take: 4 },
           _count: { select: { products: true } }
         }
       },
       products: {
-        where: { isActive: true },
+        where: { isActive: true, stock: { gt: 0 } },
         orderBy: { sortOrder: 'asc' }
       }
     }
   });
 
-  if (dbCategory) {
+  if (dbCategory && dbCategory.isActive) {
     return (
       <ProductPageWrapper>
         <SchemaInjector page={`/${slugPath}`} />
@@ -729,12 +963,14 @@ function renderDbProduct(dbProduct: any) {
                               {card.title && <h3 className="product-title mt-4">{card.title}</h3>}
                             </div>
                             <div className="col-md-6">
-                              <ul className="product-features">
-                                <h3 className="product-title mb-4">FEATURES</h3>
-                                {card.features.map((feat: string, fIdx: number) => (
-                                  <li key={fIdx}>{feat}</li>
-                                ))}
-                              </ul>
+                              <div className="features-container">
+                                <h3 className="features-title mb-4">FEATURES</h3>
+                                <ul className="product-features">
+                                  {card.features.map((feat: string, fIdx: number) => (
+                                    <li key={fIdx}>{feat}</li>
+                                  ))}
+                                </ul>
+                              </div>
                               <a
                                 href={card.link ? cleanLink(card.link) : `/contact-us?product=${encodeURIComponent(card.title || dbProduct.title)}`}
                                 className="enquiry-btn"
@@ -820,12 +1056,23 @@ function renderDbProduct(dbProduct: any) {
           <div className="row">
             <div className="col-lg-5">
               <div className="product-img">
-                {dbProduct.imageSrc ? (
-                  <img src={dbProduct.imageSrc} alt={dbProduct.title} className="img-fluid w-full h-auto object-contain" />
-                ) : (
-                  <div className="d-flex align-items-center justify-content-center bg-light rounded" style={{ minHeight: 260, color: '#aaa' }}>No Image Available</div>
-                )}
+                {(() => {
+                  const imgSrc = dbProduct.imageSrc || dbProduct.category?.image || null;
+                  return imgSrc ? (
+                    <img src={imgSrc} alt={dbProduct.title} className="img-fluid w-full h-auto object-contain" />
+                  ) : (
+                    <div className="d-flex align-items-center justify-content-center bg-light rounded" style={{ minHeight: 260, color: '#aaa' }}>
+                      <div style={{ textAlign: 'center' }}>
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ddd" strokeWidth="1.5" style={{ marginBottom: 8 }}>
+                          <rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
+                        </svg>
+                        <div>No Image</div>
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
+
             </div>
 
             <div className="col-lg-7">
@@ -834,19 +1081,7 @@ function renderDbProduct(dbProduct: any) {
                 <div className="separator1"></div>
               </div>
 
-              {dbProduct.stock !== undefined && (
-                <div className="mb-4">
-                  {dbProduct.stock > 0 ? (
-                    <span className="badge" style={{ background: '#38a169', color: '#fff', padding: '6px 14px', borderRadius: 20, fontSize: 13 }}>
-                      In Stock ({dbProduct.stock} units)
-                    </span>
-                  ) : (
-                    <span className="badge" style={{ background: '#e53e3e', color: '#fff', padding: '6px 14px', borderRadius: 20, fontSize: 13 }}>
-                      Out of Stock
-                    </span>
-                  )}
-                </div>
-              )}
+
 
               <div className="wires-desc">
                 {parsedDescription.length > 0 ? (
@@ -877,23 +1112,42 @@ function renderDbProduct(dbProduct: any) {
                 </div>
               )}
 
-              <div className="product-actions mt-4 d-flex flex-wrap gap-3">
-                <a
-                  className="rs-btn has-theme-orange has-bg"
-                  href={`/contact-us?product=${encodeURIComponent(dbProduct.title)}`}
-                  style={{ background: 'linear-gradient(135deg,#f7931e,#c1272d)', color: '#fff', padding: '12px 32px', borderRadius: 6, fontWeight: 600, display: 'inline-block', textDecoration: 'none' }}
-                >
-                  Send Enquiry
-                </a>
-                {dbProduct.datasheetLink && (
+              <div className="enquiry-btn-container mt-4" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: '16px' }}>
+                <div className="rs-banner-btn">
                   <a
-                    href={dbProduct.datasheetLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ border: '2px solid #1e2e5e', color: '#1e2e5e', padding: '11px 28px', borderRadius: 6, fontWeight: 600, display: 'inline-block', textDecoration: 'none' }}
+                    className="rs-btn has-theme-orange has-icon has-bg"
+                    href={`/contact-us?product=${encodeURIComponent(dbProduct.title)}`}
                   >
-                    Download Datasheet
+                    Send Enquiry
+                    <span className="icon-box">
+                      <svg className="icon-first" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                        <path d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z"></path>
+                      </svg>
+                      <svg className="icon-second" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                        <path d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z"></path>
+                      </svg>
+                    </span>
                   </a>
+                </div>
+                {dbProduct.datasheetLink && (
+                  <div className="rs-banner-btn">
+                    <a
+                      className="rs-btn has-theme-orange has-icon has-bg"
+                      href={dbProduct.datasheetLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Download Datasheet
+                      <span className="icon-box">
+                        <svg className="icon-first" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                          <path d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z"></path>
+                        </svg>
+                        <svg className="icon-second" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                          <path d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z"></path>
+                        </svg>
+                      </span>
+                    </a>
+                  </div>
                 )}
               </div>
             </div>
@@ -1107,12 +1361,14 @@ function renderProductLayout(isMultiProduct: boolean, product: any, cleanLink: (
                             {card.title && <h3 className="product-title mt-4">{card.title}</h3>}
                           </div>
                           <div className="col-md-6">
-                            <ul className="product-features">
-                              <h3 className="product-title mb-4">FEATURES</h3>
-                              {card.features.map((feat: string, fIdx: number) => (
-                                <li key={fIdx}>{feat}</li>
-                              ))}
-                            </ul>
+                            <div className="features-container">
+                              <h3 className="features-title mb-4">FEATURES</h3>
+                              <ul className="product-features">
+                                {card.features.map((feat: string, fIdx: number) => (
+                                  <li key={fIdx}>{feat}</li>
+                                ))}
+                              </ul>
+                            </div>
                             <a
                               href={card.link ? cleanLink(card.link) : `/contact-us?product=${encodeURIComponent(card.title || product.heading || product.title)}`}
                               className="enquiry-btn"

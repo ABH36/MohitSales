@@ -265,6 +265,23 @@ model CmsSection {
   @@map("cms_sections")
 }
 
+// ─── Legacy Page Content (migrated from PHP files) ──────────
+
+model PageContent {
+  id          String   @id @default(uuid())
+  slug        String   @unique // Full URL path: "polycab/fans", "dowells/cable-terminal/aluminium"
+  legacyPath  String?  // PHP file path without extension: "fans", "cable-terminal/aluminium"
+  htmlContent String   @db.Text // Processed HTML (replaces legacy PHP file reading)
+  title       String?
+  heading     String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([legacyPath])
+  @@map("page_contents")
+}
+
 // ─── OTP Two-Factor Authentication ────────────────────────
 model AdminOtp {
   id        String    @id @default(uuid())

@@ -25,6 +25,24 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       select: { slug: true, categoryId: true }
     });
 
+    if (!oldProduct) {
+      return NextResponse.json({ success: false, message: 'Product not found.' }, { status: 404 });
+    }
+
+    if (slug && slug !== oldProduct.slug) {
+      // Check duplicate slug in Products table
+      const existingProduct = await prisma.product.findUnique({ where: { slug } });
+      if (existingProduct) {
+        return NextResponse.json({ success: false, message: 'A product with this slug already exists.' }, { status: 409 });
+      }
+
+      // Check duplicate slug in Categories table
+      const existingCategory = await prisma.category.findUnique({ where: { slug } });
+      if (existingCategory) {
+        return NextResponse.json({ success: false, message: 'This slug is already used by a Category. Please choose a different slug to avoid routing conflicts.' }, { status: 409 });
+      }
+    }
+
     const product = await prisma.product.update({
       where: { id: params.id },
       data: {

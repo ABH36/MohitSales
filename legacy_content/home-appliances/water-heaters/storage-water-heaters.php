@@ -15,6 +15,87 @@
 
 </head>
 
+<style>
+    /* Override feature card layout on storage water heaters page to give specs and features more space */
+    .feature-card {
+        display: flex !important;
+        gap: 40px !important;
+        align-items: flex-start !important;
+        background: #ffffff !important;
+        border-radius: 16px !important;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08) !important;
+        padding: 35px !important;
+        margin-bottom: 30px !important;
+        border: 1px solid #eaeaea !important;
+        max-width: 1200px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    .feature-image {
+        flex: 0 0 350px !important;
+        max-width: 350px !important;
+        text-align: center !important;
+    }
+
+    .feature-image img {
+        width: 100% !important;
+        height: auto !important;
+        border-radius: 12px !important;
+        border: 1px solid #ebebeb !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03) !important;
+    }
+
+    .feature-content {
+        flex: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 20px !important;
+    }
+
+    .feature-content h2 {
+        font-size: 24px !important;
+        font-weight: 700 !important;
+        color: #1a202c !important;
+        margin: 0 !important;
+        position: relative !important;
+        padding-bottom: 10px !important;
+    }
+
+    .feature-content h2::after {
+        content: "" !important;
+        position: absolute !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        width: 40px !important;
+        height: 3px !important;
+        background: #ff6a00 !important;
+        border-radius: 2px !important;
+    }
+
+    .feature-content img {
+        max-width: 100% !important;
+        height: auto !important;
+        border-radius: 8px !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02) !important;
+    }
+
+    /* Responsive for mobile */
+    @media (max-width: 991px) {
+        .feature-card {
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 25px !important;
+            padding: 20px !important;
+        }
+        .feature-image {
+            flex: 0 0 auto !important;
+            max-width: 100% !important;
+            width: 280px !important;
+        }
+    }
+</style>
+
 
 
 <body class="rs-smoother-yes rtl">

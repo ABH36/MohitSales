@@ -51,13 +51,28 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, message: 'Slug and name are required.' }, { status: 400 });
     }
 
+    // Check duplicate slug in Categories table
     const existing = await prisma.category.findUnique({ where: { slug } });
     if (existing) {
       return NextResponse.json({ success: false, message: 'Category slug already exists.' }, { status: 409 });
     }
 
+    // Check duplicate slug in Products table
+    const existingProduct = await prisma.product.findUnique({ where: { slug } });
+    if (existingProduct) {
+      return NextResponse.json({ success: false, message: 'This slug is already used by a Product. Please choose a different slug to avoid routing conflicts.' }, { status: 409 });
+    }
+
     const category = await prisma.category.create({
-      data: { slug, name, description: description || null, image: image || null, parentId: parentId || null, sortOrder: sortOrder || 0 },
+      data: {
+        slug,
+        name,
+        description: description || null,
+        image: image || null,
+        parentId: parentId || null,
+        sortOrder: sortOrder || 0,
+        isActive: body.isActive !== undefined ? body.isActive : true
+      },
     });
 
     return NextResponse.json({ success: true, data: category }, { status: 201 });

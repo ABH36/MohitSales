@@ -105,6 +105,11 @@ function CategoryRow({ cat, depth, isReadOnly, onEdit, onDelete }: RowProps) {
         <td>{cat._count?.products ?? 0}</td>
         <td>{cat.children?.length ?? 0}</td>
         <td>
+          <span className={`admin-badge ${cat.isActive ? 'admin-badge-success' : 'admin-badge-danger'}`}>
+            {cat.isActive ? 'ACTIVE' : 'INACTIVE'}
+          </span>
+        </td>
+        <td>
           <div className="admin-table-actions">
             {isReadOnly ? (
               <span style={{ fontSize: '12px', color: '#718096', fontStyle: 'italic' }}>Read Only</span>
@@ -150,14 +155,10 @@ export default function AdminCategoriesPage() {
     parentId: '',
     newParentName: '',
     sortOrder: 0,
+    isActive: true,
   });
 
-  // All categories flattened for dropdown use
   const [flatCats, setFlatCats] = useState<{ id: string; slug: string; label: string; depth: number }[]>([]);
-
-  // Cascading dropdown states
-  const [selectedParentBrandId, setSelectedParentBrandId] = useState('');
-  const [selectedParentCategoryId, setSelectedParentCategoryId] = useState('');
 
   const fetchCategories = async () => {
     setLoading(true);
@@ -195,30 +196,8 @@ export default function AdminCategoriesPage() {
       // When editing, only update name — slug is already set and user may have customised it
       setForm(f => ({ ...f, name }));
     } else {
-      const deepestParentId = selectedParentCategoryId || selectedParentBrandId;
-      setForm(f => ({ ...f, name, slug: buildAutoSlug(name, deepestParentId) }));
+      setForm(f => ({ ...f, name, slug: buildAutoSlug(name, f.parentId) }));
     }
-  };
-
-  const handleParentBrandChange = (brandId: string) => {
-    setSelectedParentBrandId(brandId);
-    setSelectedParentCategoryId('');
-    const finalParentId = brandId;
-    setForm(f => ({
-      ...f,
-      parentId: finalParentId,
-      slug: editCat ? f.slug : buildAutoSlug(f.name, finalParentId),
-    }));
-  };
-
-  const handleParentCategoryChange = (catId: string) => {
-    setSelectedParentCategoryId(catId);
-    const finalParentId = catId || selectedParentBrandId;
-    setForm(f => ({
-      ...f,
-      parentId: finalParentId,
-      slug: editCat ? f.slug : buildAutoSlug(f.name, finalParentId),
-    }));
   };
 
   // ── Image upload ────────────────────────────────────────────────────────
@@ -247,29 +226,11 @@ export default function AdminCategoriesPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    let finalParentId = selectedParentCategoryId || selectedParentBrandId;
-
-    // On-the-fly parent creation
-    if (selectedParentBrandId === 'new' && form.newParentName) {
-      showToast('Creating parent category...', 'info');
-      const newParentSlug = slugify(form.newParentName);
-      const catRes = await fetch('/api/admin/categories', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: form.newParentName, slug: newParentSlug }),
-      });
-      const catData = await catRes.json();
-      if (!catData.success) {
-        showToast(catData.message || 'Failed to create parent category', 'error');
-        return;
-      }
-      finalParentId = catData.data.id;
-    }
-
     const payload = {
       ...form,
       image: form.image || null,
-      parentId: finalParentId === '' ? null : finalParentId,
+      parentId: form.parentId === '' ? null : form.parentId,
+      isActive: form.isActive,
     };
 
     const method = editCat ? 'PUT' : 'POST';
@@ -300,43 +261,12 @@ export default function AdminCategoriesPage() {
 
   const openCreate = () => {
     setEditCat(null);
-    setSelectedParentBrandId('');
-    setSelectedParentCategoryId('');
-    setForm({ slug: '', name: '', description: '', image: '', parentId: '', newParentName: '', sortOrder: 0 });
+    setForm({ slug: '', name: '', description: '', image: '', parentId: '', newParentName: '', sortOrder: 0, isActive: true });
     setShowModal(true);
   };
 
   const openEdit = (cat: Category) => {
     setEditCat(cat);
-    
-    let brandId = '';
-    let catId = '';
-    
-    const findInTree = (list: Category[], id: string): Category | undefined => {
-      for (const c of list) {
-        if (c.id === id) return c;
-        if (c.children?.length) {
-          const found = findInTree(c.children, id);
-          if (found) return found;
-        }
-      }
-      return undefined;
-    };
-
-    if (cat.parentId) {
-      const parent = findInTree(categories, cat.parentId);
-      if (parent) {
-        if (parent.parentId) {
-          brandId = parent.parentId;
-          catId = parent.id;
-        } else {
-          brandId = parent.id;
-        }
-      }
-    }
-    
-    setSelectedParentBrandId(brandId);
-    setSelectedParentCategoryId(catId);
     
     setForm({
       slug: cat.slug,
@@ -346,6 +276,7 @@ export default function AdminCategoriesPage() {
       parentId: cat.parentId || '',
       newParentName: '',
       sortOrder: cat.sortOrder,
+      isActive: cat.isActive,
     });
     setShowModal(true);
   };
@@ -377,14 +308,15 @@ export default function AdminCategoriesPage() {
               <th>Slug / URL</th>
               <th>Products</th>
               <th>Sub-cats</th>
+              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={5} style={{ textAlign: 'center', padding: '40px' }}>Loading...</td></tr>
+              <tr><td colSpan={6} style={{ textAlign: 'center', padding: '40px' }}>Loading...</td></tr>
             ) : topLevel.length === 0 ? (
-              <tr><td colSpan={5} style={{ textAlign: 'center', padding: '40px', color: '#718096' }}>No categories yet. Click "+ Add Category" to create one.</td></tr>
+              <tr><td colSpan={6} style={{ textAlign: 'center', padding: '40px', color: '#718096' }}>No categories yet. Click "+ Add Category" to create one.</td></tr>
             ) : (
               topLevel.map(cat => (
                 <CategoryRow
@@ -440,52 +372,29 @@ export default function AdminCategoriesPage() {
                   />
                 </div>
 
-                {/* Cascading Parent Category Selectors */}
+                {/* Parent Category Dropdown */}
                 <div className="admin-form-group">
-                  <label className="admin-form-label">Parent Brand</label>
+                  <label className="admin-form-label">Parent Category</label>
                   <select
                     className="admin-form-select"
-                    value={selectedParentBrandId}
-                    onChange={e => handleParentBrandChange(e.target.value)}
+                    value={form.parentId}
+                    onChange={e => {
+                      const pId = e.target.value;
+                      setForm(f => ({
+                        ...f,
+                        parentId: pId,
+                        slug: editCat ? f.slug : buildAutoSlug(f.name, pId)
+                      }));
+                    }}
                   >
                     <option value="">None (Top Level)</option>
-                    <option value="new" style={{ fontWeight: 'bold', color: '#1E2E5E' }}>+ Type New Parent Category</option>
-                    {categories.filter(c => !c.parentId && !excludedIds.has(c.id)).map(c => (
+                    {parentOptions.map(c => (
                       <option key={c.id} value={c.id}>
-                        {c.name}
+                        {'\u00A0'.repeat(c.depth * 3)}{c.depth > 0 ? '↳ ' : ''}{c.label.split(' > ').pop()}
                       </option>
                     ))}
                   </select>
-                  {selectedParentBrandId === 'new' && (
-                    <input
-                      type="text"
-                      className="admin-form-input mt-2"
-                      placeholder="Enter new parent category name…"
-                      value={form.newParentName}
-                      onChange={e => setForm(f => ({ ...f, newParentName: e.target.value }))}
-                      required
-                      autoFocus
-                    />
-                  )}
                 </div>
-
-                {selectedParentBrandId && selectedParentBrandId !== 'new' && categories.filter(c => c.parentId === selectedParentBrandId && !excludedIds.has(c.id)).length > 0 && (
-                  <div className="admin-form-group">
-                    <label className="admin-form-label">Parent Category</label>
-                    <select
-                      className="admin-form-select"
-                      value={selectedParentCategoryId}
-                      onChange={e => handleParentCategoryChange(e.target.value)}
-                    >
-                      <option value="">None (Select Brand Level)</option>
-                      {categories.filter(c => c.parentId === selectedParentBrandId && !excludedIds.has(c.id)).map(c => (
-                        <option key={c.id} value={c.id}>
-                          {c.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
 
                 {/* Image */}
                 <div className="admin-form-group">
@@ -521,6 +430,19 @@ export default function AdminCategoriesPage() {
                   />
                 </div>
 
+                {/* Status */}
+                <div className="admin-form-group">
+                  <label className="admin-form-label">Status</label>
+                  <select
+                    className="admin-form-select"
+                    value={form.isActive ? 'true' : 'false'}
+                    onChange={e => setForm(f => ({ ...f, isActive: e.target.value === 'true' }))}
+                  >
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                  </select>
+                </div>
+ 
                 {/* Sort Order */}
                 <div className="admin-form-group">
                   <label className="admin-form-label">Sort Order</label>

@@ -105,7 +105,7 @@ function AdminSettingsPageInner() {
       const res = await fetch(`/api/admin/settings/${confirmSetting.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           value: editValues[confirmSetting.id],
           password: passwordInput
         }),
@@ -191,7 +191,7 @@ function AdminSettingsPageInner() {
       showToast('New passwords do not match.', 'error');
       return;
     }
-    
+
     setPasswordSaving(true);
     try {
       const res = await fetch('/api/admin/auth/change-password', {
@@ -251,14 +251,14 @@ function AdminSettingsPageInner() {
 
       {/* Tabs Menu */}
       <div style={{ display: 'flex', gap: '12px', marginBottom: '28px', borderBottom: '1px solid var(--admin-border)', paddingBottom: '12px' }}>
-        <button 
+        <button
           className={`admin-btn ${activeTab === 'site' ? 'admin-btn-primary' : 'admin-btn-outline'}`}
           onClick={() => setActiveTab('site')}
           style={{ borderRadius: '10px' }}
         >
           ⚙️ Site Config
         </button>
-        <button 
+        <button
           className={`admin-btn ${activeTab === 'account' ? 'admin-btn-primary' : 'admin-btn-outline'}`}
           onClick={() => setActiveTab('account')}
           style={{ borderRadius: '10px' }}
@@ -325,7 +325,7 @@ function AdminSettingsPageInner() {
       ) : (
         /* My Account Tab */
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          
+
           {/* Profile Form */}
           <div className="admin-table-wrapper">
             <div className="admin-table-header">
@@ -392,7 +392,7 @@ function AdminSettingsPageInner() {
                   placeholder="••••••••"
                   required
                 />
-                
+
                 {/* Visual Strength Meter */}
                 {newPassword && (
                   <div style={{ marginTop: '10px' }}>
@@ -401,13 +401,13 @@ function AdminSettingsPageInner() {
                       <span>{Math.round((strength.score / 4) * 100)}%</span>
                     </div>
                     <div style={{ width: '100%', height: '6px', background: 'rgba(0, 0, 0, 0.05)', borderRadius: '3px', overflow: 'hidden' }}>
-                      <div 
-                        style={{ 
-                          width: `${(strength.score / 4) * 100}%`, 
-                          height: '100%', 
-                          background: strength.color, 
-                          transition: 'all 0.3s ease' 
-                        }} 
+                      <div
+                        style={{
+                          width: `${(strength.score / 4) * 100}%`,
+                          height: '100%',
+                          background: strength.color,
+                          transition: 'all 0.3s ease'
+                        }}
                       />
                     </div>
                   </div>
@@ -449,8 +449,8 @@ function AdminSettingsPageInner() {
               </div>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <label style={{ position: 'relative', display: 'inline-block', width: '60px', height: '34px' }}>
-                  <input 
-                    type="checkbox" 
+                  <input
+                    type="checkbox"
                     checked={twoFactorEnabled}
                     onChange={(e) => handleToggle2FA(e.target.checked)}
                     style={{ opacity: 0, width: 0, height: 0 }}
