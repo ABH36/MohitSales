@@ -18,7 +18,14 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get('search') || '';
     const categoryId = searchParams.get('categoryId') || '';
 
+    const statusFilter = searchParams.get('status') || 'all'; // 'all' | 'active' | 'inactive'
+    const stockFilter = searchParams.get('stock') || '';       // '' | 'outofstock'
+
     const where: any = {};
+    // Admin shows ALL products by default (no isActive filter unless explicitly requested)
+    if (statusFilter === 'active') where.isActive = true;
+    if (statusFilter === 'inactive') where.isActive = false;
+
     if (search) {
       where.OR = [
         { title: { contains: search, mode: 'insensitive' } },
@@ -27,6 +34,9 @@ export async function GET(request: NextRequest) {
     }
     if (categoryId) {
       where.categoryId = categoryId;
+    }
+    if (stockFilter === 'outofstock') {
+      where.stock = 0;
     }
 
     const [products, total] = await Promise.all([
@@ -68,11 +78,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check for duplicate slug
+    // Check for duplicate slug in Products table
     const existing = await prisma.product.findUnique({ where: { slug } });
     if (existing) {
       return NextResponse.json(
         { success: false, message: 'A product with this slug already exists.' },
+        { status: 409 }
+      );
+    }
+
+    // Check for duplicate slug in Categories table
+    const existingCategory = await prisma.category.findUnique({ where: { slug } });
+    if (existingCategory) {
+      return NextResponse.json(
+        { success: false, message: 'This slug is already used by a Category. Please choose a different slug to avoid routing conflicts.' },
         { status: 409 }
       );
     }

@@ -3,8 +3,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   const user = await prisma.user.findUnique({
-    where: { email: 'admin@mohitscpl.com' },
-    include: { role: true }
+    where: { email: 'admin@mohitscpl.com' }
   });
   console.log('Admin User Details:', JSON.stringify(user, null, 2));
 }

@@ -57,35 +57,42 @@ body {
 
 /* --- Responsive Logo and Header Sizes to Prevent Overlapping --- */
 @media (max-width: 1200px) {
+
   /* Shrink logo slightly on laptops to prevent pushing the menu */
   .rs-header-two.header-new .rs-header-logo {
     width: auto !important;
   }
+
   .rs-header-two.header-new .rs-header-logo img {
     max-width: 150px !important;
   }
+
   /* Reduce nav menu spacing slightly on medium screens */
-  .main-menu .multipage-menu > li > a {
+  .main-menu .multipage-menu>li>a {
     padding: 30px 10px !important;
     font-size: 14px !important;
   }
 }
 
 @media (max-width: 991px) {
+
   /* On mobile and tablet where menu is hamburger */
   .rs-header-two.header-new .rs-header-logo {
     width: auto !important;
   }
+
   .rs-header-two.header-new .rs-header-logo img {
     max-width: 140px !important;
   }
 }
 
 @media (max-width: 480px) {
+
   /* Smaller mobile screens */
   .rs-header-two.header-new .rs-header-logo {
     width: auto !important;
   }
+
   .rs-header-two.header-new .rs-header-logo img {
     max-width: 115px !important;
   }
@@ -1136,11 +1143,26 @@ border: 1px solid rgba( 255, 255, 255, 0.18 ); */
   color: #1d2d5c;
 }
 
+.wires_inner div.enquiry-btn-container,
 .wires_inner div.enquiry-btn {
   display: flex;
   gap: 20px;
   margin-top: 20px;
   padding: 10px;
+}
+
+.enquiry-btn-container {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 16px !important;
+}
+
+.enquiry-btn-container>.rs-banner-btn {
+  display: inline-block !important;
+  width: auto !important;
+  flex: none !important;
 }
 
 .wires_inner .product-img {
@@ -2283,7 +2305,7 @@ section.pricelist-inner {
   color: #fff !important;
 }
 
-.enquiry-btn {
+a.enquiry-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2300,7 +2322,7 @@ section.pricelist-inner {
   line-height: 1;
 }
 
-.enquiry-btn:hover {
+a.enquiry-btn:hover {
   background: #1e2e5e !important;
   color: #fff !important;
 }
@@ -2722,7 +2744,8 @@ section.pricelist-inner {
   .rs-header-two.header-new .rs-header-logo img {
     max-width: 155px !important;
   }
-  .main-menu .multipage-menu > li > a {
+
+  .main-menu .multipage-menu>li>a {
     padding: 30px 10px !important;
     font-size: 14px !important;
   }
@@ -2742,4 +2765,15 @@ section.pricelist-inner {
   width: auto !important;
   min-width: 140px !important;
   justify-content: center !important;
-}
+}
+
+/* Card Box Product Image Size (matching original PHP) */
+.card_box img.product-img,
+.card_box .product-img {
+  width: 280px !important;
+  height: auto !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin: 0 auto 15px !important;
+}

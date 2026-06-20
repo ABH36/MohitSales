@@ -40,6 +40,13 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
     const newSlug: string | undefined = body.slug && body.slug !== current.slug ? body.slug : undefined;
 
+    if (newSlug) {
+      const existingProduct = await prisma.product.findUnique({ where: { slug: newSlug } });
+      if (existingProduct) {
+        return NextResponse.json({ success: false, message: 'This slug is already used by a Product. Please choose a different slug to avoid routing conflicts.' }, { status: 409 });
+      }
+    }
+
     const parentId = body.parentId;
     if (parentId !== undefined && parentId !== '' && parentId !== 'new' && parentId !== null) {
       if (parentId === params.id) {

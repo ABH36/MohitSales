@@ -56,31 +56,39 @@ body {
     justify-content: space-between;
     padding: 0 20px;
   }
+
   .rs-header-two .rs-header-left {
     flex: 0 0 auto;
     padding-inline-end: 0 !important;
     margin-inline-end: 0 !important;
   }
+
   .rs-header-two .rs-header-menu {
     display: none;
   }
+
   .rs-header-two .rs-header-right {
     flex: 0 0 auto;
     margin-left: auto;
   }
+
   .rs-header-two.header-new .rs-header-logo {
     width: auto !important;
   }
+
   .rs-header-two.header-new .rs-header-logo img {
     max-width: 160px !important;
   }
+
   .rs-header-hamburger i {
     font-size: 26px;
     color: #ffffff;
   }
+
   .rs-header-two.has-border {
     background: rgba(18, 26, 47, 0.95);
   }
+
   .rs-header-two.header-new .rs-header-left::before {
     display: none;
   }
@@ -124,35 +132,42 @@ body {
 
 /* --- Responsive Logo and Header Sizes to Prevent Overlapping --- */
 @media (max-width: 1200px) {
+
   /* Shrink logo slightly on laptops to prevent pushing the menu */
   .rs-header-two.header-new .rs-header-logo {
     width: auto !important;
   }
+
   .rs-header-two.header-new .rs-header-logo img {
     max-width: 150px !important;
   }
+
   /* Reduce nav menu spacing slightly on medium screens */
-  .main-menu .multipage-menu > li > a {
+  .main-menu .multipage-menu>li>a {
     padding: 30px 10px !important;
     font-size: 14px !important;
   }
 }
 
 @media (max-width: 991px) {
+
   /* On mobile and tablet where menu is hamburger */
   .rs-header-two.header-new .rs-header-logo {
     width: auto !important;
   }
+
   .rs-header-two.header-new .rs-header-logo img {
     max-width: 140px !important;
   }
 }
 
 @media (max-width: 480px) {
+
   /* Smaller mobile screens */
   .rs-header-two.header-new .rs-header-logo {
     width: auto !important;
   }
+
   .rs-header-two.header-new .rs-header-logo img {
     max-width: 115px !important;
   }
@@ -1203,6 +1218,7 @@ border: 1px solid rgba( 255, 255, 255, 0.18 ); */
   color: #1d2d5c;
 }
 
+.wires_inner div.enquiry-btn-container,
 .wires_inner div.enquiry-btn {
   display: flex;
   gap: 20px;
@@ -1210,13 +1226,95 @@ border: 1px solid rgba( 255, 255, 255, 0.18 ); */
   padding: 10px;
 }
 
+.enquiry-btn-container {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 16px !important;
+}
+
+.enquiry-btn-container>.rs-banner-btn {
+  display: inline-block !important;
+  width: auto !important;
+  flex: none !important;
+}
+
 .wires_inner .product-img {
   padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
 .wires_inner .product-img img {
   border-radius: 8px;
   box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+/* Technical Specifications Box — legacy product pages */
+.specs-box {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 28px;
+  margin-top: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.specs-box h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1d2d5c;
+}
+
+.specs-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.specs-table thead th {
+  background: #1d2d5c;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 16px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.specs-table thead th:first-child {
+  border-radius: 8px 0 0 0;
+}
+
+.specs-table thead th:last-child {
+  border-radius: 0 8px 0 0;
+}
+
+.specs-table tbody td {
+  padding: 11px 16px;
+  font-size: 14px;
+  color: #334155;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.specs-table tbody tr:nth-child(even) {
+  background: #f8fafc;
+}
+
+.specs-table tbody tr:hover {
+  background: #eef2ff;
+}
+
+.specs-table.bordered {
+  border: 1px solid #e2e8f0;
+}
+
+.specs-table.bordered td,
+.specs-table.bordered th {
+  border: 1px solid #e2e8f0;
 }
 
 .colors ul {
@@ -2347,7 +2445,7 @@ section.pricelist-inner {
   color: #fff !important;
 }
 
-.enquiry-btn {
+a.enquiry-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2364,7 +2462,7 @@ section.pricelist-inner {
   line-height: 1;
 }
 
-.enquiry-btn:hover {
+a.enquiry-btn:hover {
   background: #1e2e5e !important;
   color: #fff !important;
 }
@@ -2780,7 +2878,7 @@ section.pricelist-inner {
 
 .cables-card .cables-img {
   width: 100% !important;
-  height: 180px !important;
+  height: 240px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -2838,7 +2936,7 @@ section.pricelist-inner {
 .product-card img,
 .product-card a img {
   width: 100% !important;
-  height: 200px !important;
+  height: 240px !important;
   object-fit: contain !important;
   border-radius: 10px !important;
   margin-bottom: 5px !important;
@@ -2846,6 +2944,18 @@ section.pricelist-inner {
   display: block !important;
   margin-left: auto !important;
   margin-right: auto !important;
+}
+
+/* Responsive adjustments for premium cards */
+@media (max-width: 767px) {
+  .cables-card .cables-img {
+    height: 180px !important;
+  }
+
+  .product-card img,
+  .product-card a img {
+    height: 180px !important;
+  }
 }
 
 .product-card:hover img,
@@ -3307,7 +3417,8 @@ section.pricelist-inner {
   .rs-header-two.header-new .rs-header-logo img {
     max-width: 155px !important;
   }
-  .main-menu .multipage-menu > li > a {
+
+  .main-menu .multipage-menu>li>a {
     padding: 30px 10px !important;
     font-size: 14px !important;
   }
@@ -3327,4 +3438,160 @@ section.pricelist-inner {
   width: auto !important;
   min-width: 140px !important;
   justify-content: center !important;
-}
+}
+
+/* ==========================================
+   LEGACY DYNAMIC PRODUCT CARD STYLING (MATCHING ORIGINAL SITE)
+   ========================================== */
+
+/* Card Box Container */
+.card_box {
+  background: #ffffff !important;
+  border-radius: 16px !important;
+  border: 1px solid #eef2f6 !important;
+  padding: 30px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.02) !important;
+  margin-bottom: 30px !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.card_box:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.07), 0 4px 12px rgba(0, 0, 0, 0.03) !important;
+}
+
+/* Product Card Row Layout */
+.product-card {
+  min-height: auto !important;
+}
+
+/* Product Image Styling */
+.card_box img.product-img,
+.card_box .product-img {
+  width: 220px !important;
+  height: auto !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin: 0 auto 20px !important;
+  mix-blend-mode: multiply !important;
+}
+
+/* Product Title (Centered blue text below image) */
+.product-card .text-center .product-title {
+  color: #0f4a8a !important; /* Theme Royal Blue */
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+  margin-top: 15px !important;
+  margin-bottom: 0 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  font-family: "Space Grotesk", "Outfit", sans-serif !important;
+}
+
+/* Specs Box Right Column */
+.specs-box {
+  background: #ffffff !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* Specs Box Heading: Technical Specifications */
+.specs-box .product-title {
+  color: #1e293b !important; /* Dark neutral color */
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  margin-bottom: 20px !important;
+  font-family: "Space Grotesk", "Outfit", sans-serif !important;
+  text-transform: none !important;
+}
+
+/* Technical Specification Subheadings (Normal Speed / High Speed) */
+.specs-box h5 {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #1e293b !important;
+  margin-top: 15px !important;
+  margin-bottom: 8px !important;
+  text-align: left !important;
+  font-family: "Space Grotesk", "Outfit", sans-serif !important;
+}
+
+/* Technical Specifications Table */
+.specs-table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  border: 1px solid #e2e8f0 !important;
+  margin-bottom: 20px !important;
+  background: #ffffff !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+}
+
+/* Table Header (th) Styling */
+.specs-table th {
+  background: #eef3f7 !important; /* Soft gray-blue background matching original screenshot */
+  color: #334155 !important;
+  font-weight: 600 !important;
+  font-size: 12px !important;
+  padding: 10px 8px !important;
+  border: 1px solid #e2e8f0 !important;
+  text-align: center !important;
+  font-family: "Space Grotesk", "Outfit", sans-serif !important;
+}
+
+/* Table Data Cells (td) Styling */
+.specs-table td {
+  color: #475569 !important;
+  font-size: 12px !important;
+  padding: 10px 8px !important;
+  border: 1px solid #e2e8f0 !important;
+  text-align: center !important;
+  background: #ffffff !important;
+  font-family: "Mukta", sans-serif !important;
+  font-weight: 400 !important;
+}
+
+.specs-table tbody tr:hover td {
+  background: #f8fafc !important;
+}
+
+/* Send Enquiry Button Wrapper */
+.button_center {
+  margin-top: 20px !important;
+  text-align: center !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+/* Send Enquiry Button (Black Pill Button) */
+.button_center .pricelist-btn,
+.button_center .enquiry-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #111111 !important; /* Dark black background */
+  color: #ffffff !important;
+  font-weight: 500 !important;
+  font-size: 13px !important;
+  padding: 8px 24px !important;
+  border-radius: 50px !important; /* Pill capsule shape */
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+  border: none !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08) !important;
+  cursor: pointer !important;
+  width: auto !important;
+  min-width: 140px !important;
+  font-family: "Mukta", sans-serif !important;
+}
+
+.button_center .pricelist-btn:hover,
+.button_center .enquiry-btn:hover {
+  background: #333333 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12) !important;
+  color: #ffffff !important;
+}

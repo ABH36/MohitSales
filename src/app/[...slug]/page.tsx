@@ -27,7 +27,7 @@ interface ProductPageProps {
 // Function to read and cache JSON content
 function getLegacyPath(slugPath: string): string {
   let clean = slugPath.toLowerCase();
-  
+
   if (clean.startsWith('polycab/cables-by-')) {
     clean = clean.replace('polycab/cables-by-', 'industries/cables-by-');
   } else if (clean.startsWith('polycab/')) {
@@ -35,7 +35,20 @@ function getLegacyPath(slugPath: string): string {
   } else if (clean.startsWith('dowells/')) {
     clean = clean.substring('dowells/'.length);
   }
-  
+
+  // Handle nested cables-by-application segment removals
+  clean = clean.replace('cables-by-application/building-infrastructure/', 'cables-by-application/');
+  clean = clean.replace('cables-by-application/energy-and-power-grid/', 'cables-by-application/');
+  clean = clean.replace('cables-by-application/exploration-industries/', 'cables-by-application/');
+  clean = clean.replace('cables-by-application/manufacturing-industries/', 'cables-by-application/');
+  clean = clean.replace('cables-by-application/mobility-infrastructure/', 'cables-by-application/');
+
+  // Handle conduit-and-accessories mapping
+  clean = clean.replace('conduit-and-accessories', 'conduit-accessories');
+
+  // Handle air-circulator-fans mapping
+  clean = clean.replace('fans/air-circulator-fans', 'fans/air-circulator');
+
   return clean;
 }
 
@@ -63,170 +76,25 @@ async function getProductData(slugPath: string) {
     found = dataList!.find((item: any) => item.path.toLowerCase() === matchLegacyPath.toLowerCase());
     if (found) return found;
 
-    // Try 3: Match by final filename suffix (product pages)
+    // Try 3: Match by final filename + parent directory (prevents cross-category false matches)
     const slugParts = slugPath.split('/');
     const lastPart = slugParts[slugParts.length - 1].toLowerCase();
-    
+    const parentPart = slugParts.length >= 2 ? slugParts[slugParts.length - 2].toLowerCase() : '';
+
     found = dataList!.find((item: any) => {
       const itemParts = item.path.replace(/\.php$/, '').split('/');
       const itemLastPart = itemParts[itemParts.length - 1].toLowerCase();
-      return itemLastPart === lastPart;
+      if (itemLastPart !== lastPart) return false;
+      if (parentPart && itemParts.length >= 2) {
+        const itemParent = itemParts[itemParts.length - 2].toLowerCase();
+        return itemParent === parentPart;
+      }
+      return true;
     });
 
     return found || null;
   } catch (error) {
     console.error('Error reading product data:', error);
-    return null;
-  }
-}
-
-// Function to read and parse legacy PHP content for high visual fidelity
-async function getLegacyPHPContent(slugPath: string, productName: string = ''): Promise<string | null> {
-  try {
-    const cloneDir = process.env.LEGACY_CLONE_DIR || path.join(process.cwd(), 'legacy_content');
-    const product = await getProductData(slugPath);
-
-    // Use exact casing from content-export.json if available for cross-platform compatibility
-    let phpPath = slugPath;
-    if (product && product.path) {
-      phpPath = product.path;
-    } else {
-      phpPath = phpPath.endsWith('.php') ? phpPath : `${phpPath}.php`;
-    }
-
-    const fullPath = path.join(cloneDir, phpPath);
-
-    const exists = await fs.promises.access(fullPath).then(() => true).catch(() => false);
-    if (!exists) {
-      return null;
-    }
-
-    // Skip zero-byte files — they are placeholders, not real pages
-    const stat = await fs.promises.stat(fullPath);
-    if (stat.size === 0) {
-      return null;
-    }
-
-    let fileContent = await fs.promises.readFile(fullPath, 'utf-8');
-
-    // Extract inside <main> tag
-    const mainMatch = fileContent.match(/<main[^>]*>([\s\S]*?)<\/main>/i);
-    if (!mainMatch) {
-      return null;
-    }
-    let html = mainMatch[1];
-
-    // Replace sidebar includes with their actual HTML content
-    const includeRegex = /<\?php\s+include\s+ROOT_PATH\s*\.\s*'\/common\/([^']+)'\s*;\s*\?>/g;
-    const matches = Array.from(html.matchAll(includeRegex));
-    const sidebarContents = new Map<string, string>();
-    for (const match of matches) {
-      const sidebarName = match[1];
-      const sidebarPath = path.join(cloneDir, 'common', sidebarName);
-      try {
-        const sidebarExists = await fs.promises.access(sidebarPath).then(() => true).catch(() => false);
-        if (sidebarExists) {
-          let sidebarHtml = await fs.promises.readFile(sidebarPath, 'utf-8');
-          // Clean base URLs and PHP code inside sidebar
-          sidebarHtml = sidebarHtml.replace(/<\?php\s+echo\s+BASE_URL\s*;\s*\?>/g, '/');
-          // Replace .php links in sidebar
-          sidebarHtml = sidebarHtml.replace(/href="([^"]+)\.php([^"]*)"/g, (m, p1, p2) => {
-            if (p1.includes('<?php') || p1.startsWith('/') || p1.startsWith('http') || p1.startsWith('mailto:')) {
-              return `href="${p1}${p2}"`;
-            }
-            // Resolve path relative to current page's parent folder
-            const parts = slugPath.split('/');
-            parts.pop(); // remove current filename
-            let target = p1;
-            if (parts.length > 0) {
-              target = '/' + parts.join('/') + '/' + target;
-            } else {
-              target = '/' + target;
-            }
-            return `href="${target.toLowerCase()}${p2}"`;
-          });
-          sidebarContents.set(sidebarName, sidebarHtml);
-        }
-      } catch (err) {
-        console.error(`Error loading sidebar ${sidebarName}:`, err);
-      }
-    }
-
-    html = html.replace(includeRegex, (match, sidebarName) => {
-      return sidebarContents.get(sidebarName) || '';
-    });
-
-    // Replace general php print echo BASE_URL . 'path/to/asset'
-    html = html.replace(/<\?php\s+echo\s+BASE_URL\s*\.\s*'([^']*)'\s*;?\s*\?>/g, '/$1');
-    html = html.replace(/<\?php\s+echo\s+BASE_URL\s*;?\s*\?>/g, '/');
-
-    // Remove other PHP tags
-    html = html.replace(/<\?php[\s\S]*?\?>/g, '');
-
-    // Clean links to other pages (e.g. href="switchgears.php" -> href="/switchgears")
-    html = html.replace(/href="([^"]+)\.php([^"]*)"/g, (match, linkPath, query) => {
-      let target = linkPath;
-      if (!target.startsWith('/') && !target.startsWith('http') && !target.startsWith('mailto:')) {
-        // Resolve path relative to current page's parent folder
-        const parts = slugPath.split('/');
-        parts.pop(); // remove current filename
-        if (parts.length > 0) {
-          target = '/' + parts.join('/') + '/' + target;
-        } else {
-          target = '/' + target;
-        }
-      }
-      // Lowercase target to align with Next.js dynamic routing
-      return `href="${target.toLowerCase()}${query || ''}"`;
-    });
-
-    // Fix index routes
-    html = html.replace(/href="(?:[^"]*\/)?index(?:\.php|\.html)?"/gi, 'href="/"');
-
-    // Make relative asset paths absolute
-    html = html.replace(/src="(?:\.\.\/)*assets\/images\/([^"]+)"/g, 'src="/assets/images/$1"');
-    html = html.replace(/data-background="(?:\.\.\/)*assets\/images\/([^"]+)"/g, 'data-background="/assets/images/$1"');
-
-    // Make inline background-image url absolute
-    html = html.replace(/url\('(?:\.\.\/)*assets\/images\/([^']+)'\)/g, "url('/assets/images/$1')");
-    html = html.replace(/url\("(?:\.\.\/)*assets\/images\/([^"]+)"\)/g, "url('/assets/images/$1')");
-
-    // Trim leading/trailing spaces from attributes to avoid %20 404 errors
-    html = html.replace(/src="\s*([^"]*?)\s*"/g, 'src="$1"');
-    html = html.replace(/href="\s*([^"]*?)\s*"/g, 'href="$1"');
-    html = html.replace(/data-background="\s*([^"]*?)\s*"/g, 'data-background="$1"');
-
-    // Convert data-background attributes into inline styles
-    html = html.replace(/data-background="([^"]+)"/g, 'data-background="$1" style="background-image: url(\'$1\')"');
-
-    // Fix enquiry button: replace legacy double-wrapped btn with clean styled button
-    const contextUrl = productName ? `/contact-us?product=${encodeURIComponent(productName)}` : '/contact-us';
-    html = html.replace(
-      /<div class="enquiry-btn">\s*<div class="rs-banner-btn">\s*<a class="rs-btn[^"]*"[^>]*href="([^"]+)"[^>]*>[\s\S]*?<\/a>\s*<\/div>\s*<\/div>/gi,
-      `<div class="product-actions mt-4 w-full flex justify-center"><a class="bg-gradient-to-br from-[#f7931e] to-[#c1272d] text-white rounded-[4px] px-6 py-2.5 font-medium text-[15px] inline-flex items-center justify-center transition-all duration-300 w-auto min-w-[140px] h-[45px] whitespace-nowrap hover:bg-none hover:bg-[#1e2e5e] hover:-translate-y-[2px] hover:shadow-[0_4px_12px_rgba(30,46,94,0.25)]" href="${contextUrl}">Send Enquiry &rarr;</a></div>`
-    );
-
-    // Replace standalone contact links
-    html = html.replace(/href="\/contact-us"/gi, `href="${contextUrl}"`);
-
-    // Fix nested <a> tags
-    html = html.replace(/<a>\s*(<a[^>]*>[\s\S]*?<\/a>)\s*<\/a>/gi, '$1');
-    html = html.replace(/<a>\s*<\/a>/gi, '');
-
-    // Force legacy product cards to use Flexbox for equal height
-    html = html.replace(/class="col-md-4\s*mt-4"/g, 'class="col-md-4 mt-4 d-flex align-items-stretch"');
-    html = html.replace(/class="product-card"/g, 'class="product-card flex flex-col flex-grow h-full w-full"');
-    html = html.replace(/class="product-content"/g, 'class="product-content flex flex-col flex-grow"');
-
-    // Inject mt-auto into legacy enquiry-btn for bottom alignment
-    html = html.replace(/class="enquiry-btn"/g, 'class="enquiry-btn mt-auto"');
-
-    // Strip legacy hardcoded CSS blocks
-    html = html.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
-
-    return html;
-  } catch (error) {
-    console.error('Error parsing legacy PHP page:', error);
     return null;
   }
 }
@@ -292,12 +160,32 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   };
 }
 
+// ── DB lookup for page content (replaces PHP file reading) ──────────
+async function getPageContentHtml(slugPath: string): Promise<string | null> {
+  try {
+    let pageContent = await prisma.pageContent.findUnique({
+      where: { slug: slugPath }
+    });
+    if (!pageContent) {
+      const legacyPath = getLegacyPath(slugPath);
+      pageContent = await prisma.pageContent.findFirst({
+        where: { legacyPath: legacyPath }
+      });
+    }
+    if (!pageContent || !pageContent.isActive) return null;
+    return pageContent.htmlContent;
+  } catch (e) {
+    console.error('[getPageContentHtml] Error:', e);
+    return null;
+  }
+}
+
 export default async function ProductPage({ params }: ProductPageProps) {
   const slugPath = params.slug.join('/');
 
   // Fetch DB product early and local state in parallel
   // Note: redirect check is handled by middleware (/api/public/redirect). This is the fallback.
-  const [dbProductEarly, product] = await Promise.all([
+  const [dbProductEarlyRaw, product, dbCategoryEarly] = await Promise.all([
     prisma.product.findUnique({
       where: { slug: slugPath },
       include: { category: { include: { parent: { include: { parent: { include: { parent: true } } } } } } }
@@ -305,9 +193,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
       console.error('[slug:dbProductEarly] Error fetching product early:', e);
       return null;
     }),
-    getProductData(slugPath)
+    getProductData(slugPath),
+    prisma.category.findUnique({
+      where: { slug: slugPath }
+    }).catch((e) => {
+      console.error('[slug:dbCategoryEarly] Error fetching category early:', e);
+      return null;
+    })
   ]);
-  const legacyHtml = await getLegacyPHPContent(slugPath, product?.heading || product?.title || '');
+
+  const dbProductEarly = (dbCategoryEarly || (dbProductEarlyRaw && (!dbProductEarlyRaw.isActive || dbProductEarlyRaw.stock <= 0))) ? null : dbProductEarlyRaw;
+  const legacyHtml = await getPageContentHtml(slugPath);
 
   const hasLegacyCards = legacyHtml && (
     legacyHtml.includes('class="cables-card"') ||
@@ -346,6 +242,20 @@ export default async function ProductPage({ params }: ProductPageProps) {
     try {
       // ── Dynamic Breadcrumbs Clickable Link Fix ──────────────────────────
       const $ = cheerio.load(finalHtml, null, false);
+
+      // Fix legacy features title nesting inside ul
+      $('ul.product-features h3, ul.product-features h4, ul.product-features .product-title').each((i, el) => {
+        const titleEl = $(el);
+        const text = titleEl.text().trim().toUpperCase();
+        if (text === 'FEATURES') {
+          const ul = titleEl.closest('ul.product-features');
+          if (ul.length > 0) {
+            titleEl.removeClass('product-title').addClass('features-title');
+            ul.before(titleEl);
+          }
+        }
+      });
+
       const breadcrumbLis = $('.rs-breadcrumb-menu nav ul li');
       if (breadcrumbLis.length > 0) {
         const length = breadcrumbLis.length;
@@ -387,9 +297,20 @@ export default async function ProductPage({ params }: ProductPageProps) {
               }
             }
           }
-          finalHtml = $.html();
         }
       }
+
+      // Convert legacy inline tab switch triggers to data-tab-target
+      $('button[onclick*="openTab"]').each((_, elem) => {
+        const btn = $(elem);
+        const onclick = btn.attr('onclick') || '';
+        const match = onclick.match(/openTab\s*\(\s*event\s*,\s*['"]([^'"]+)['"]\)/);
+        if (match) {
+          btn.attr('data-tab-target', match[1]);
+        }
+      });
+
+      finalHtml = $.html();
 
       // Only query DB for category products if the HTML actually has card slots to fill
       const dbCategory = hasLegacyCards ? await prisma.category.findUnique({
@@ -408,19 +329,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
         for (const prod of dbCategory.products) {
           let existingCard: any = null;
-          
+
           // Try to match by checking if any card contains the product title exactly or contains a link matching the product slug suffix
           $('.cables-card, .card_box, .fan_card_box, .product-card').each((i, el) => {
             const cardHtml = $(el).html() || '';
             const cardText = $(el).text();
-            
+
             const cleanTitle = prod.title.trim().toLowerCase();
             const slugParts = prod.slug.split('/');
             const lastPart = slugParts[slugParts.length - 1].toLowerCase();
-            
+
             const matchesTitle = cardText.toLowerCase().includes(cleanTitle);
             const matchesSlug = cardHtml.toLowerCase().includes(lastPart);
-            
+
             if (matchesTitle || matchesSlug) {
               existingCard = $(el);
               return false; // break loop
@@ -428,8 +349,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
           });
 
           if (existingCard) {
-            if (!prod.isActive) {
-              // Remove the product card if it is deactivated
+            if (!prod.isActive || prod.stock <= 0) {
+              // Remove the product card if it is deactivated or out of stock
               const wrapper = existingCard.closest('[class*="col-"]');
               if (wrapper.length > 0) {
                 wrapper.remove();
@@ -453,7 +374,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 htmlModified = true;
               }
             }
-          } else if (prod.isActive) {
+          } else if (prod.isActive && prod.stock > 0) {
             // New product: Clone the template card and append it to the grid container
             if (gridContainer && colWrapper) {
               const newCol = colWrapper.clone();
@@ -498,8 +419,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
     return (
       <ProductPageWrapper>
         <SchemaInjector page={`/${slugPath}`} />
-        <main>
-          <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(finalHtml) }} />
+        <main className="legacy-php-content">
+          <div className="legacy-php-content" dangerouslySetInnerHTML={{ __html: sanitizeHtml(finalHtml) }} />
         </main>
       </ProductPageWrapper>
     );
@@ -588,18 +509,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
         where: { isActive: true },
         orderBy: { sortOrder: 'asc' },
         include: {
-          products: { where: { isActive: true }, orderBy: { sortOrder: 'asc' }, take: 4 },
+          products: { where: { isActive: true, stock: { gt: 0 } }, orderBy: { sortOrder: 'asc' }, take: 4 },
           _count: { select: { products: true } }
         }
       },
       products: {
-        where: { isActive: true },
+        where: { isActive: true, stock: { gt: 0 } },
         orderBy: { sortOrder: 'asc' }
       }
     }
   });
 
-  if (dbCategory) {
+  if (dbCategory && dbCategory.isActive) {
     return (
       <ProductPageWrapper>
         <SchemaInjector page={`/${slugPath}`} />
@@ -729,12 +650,14 @@ function renderDbProduct(dbProduct: any) {
                               {card.title && <h3 className="product-title mt-4">{card.title}</h3>}
                             </div>
                             <div className="col-md-6">
-                              <ul className="product-features">
-                                <h3 className="product-title mb-4">FEATURES</h3>
-                                {card.features.map((feat: string, fIdx: number) => (
-                                  <li key={fIdx}>{feat}</li>
-                                ))}
-                              </ul>
+                              <div className="features-container">
+                                <h3 className="features-title mb-4">FEATURES</h3>
+                                <ul className="product-features">
+                                  {card.features.map((feat: string, fIdx: number) => (
+                                    <li key={fIdx}>{feat}</li>
+                                  ))}
+                                </ul>
+                              </div>
                               <a
                                 href={card.link ? cleanLink(card.link) : `/contact-us?product=${encodeURIComponent(card.title || dbProduct.title)}`}
                                 className="enquiry-btn"
@@ -820,12 +743,23 @@ function renderDbProduct(dbProduct: any) {
           <div className="row">
             <div className="col-lg-5">
               <div className="product-img">
-                {dbProduct.imageSrc ? (
-                  <img src={dbProduct.imageSrc} alt={dbProduct.title} className="img-fluid w-full h-auto object-contain" />
-                ) : (
-                  <div className="d-flex align-items-center justify-content-center bg-light rounded" style={{ minHeight: 260, color: '#aaa' }}>No Image Available</div>
-                )}
+                {(() => {
+                  const imgSrc = dbProduct.imageSrc || dbProduct.category?.image || null;
+                  return imgSrc ? (
+                    <img src={imgSrc} alt={dbProduct.title} className="img-fluid w-full h-auto object-contain" />
+                  ) : (
+                    <div className="d-flex align-items-center justify-content-center bg-light rounded" style={{ minHeight: 260, color: '#aaa' }}>
+                      <div style={{ textAlign: 'center' }}>
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ddd" strokeWidth="1.5" style={{ marginBottom: 8 }}>
+                          <rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
+                        </svg>
+                        <div>No Image</div>
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
+
             </div>
 
             <div className="col-lg-7">
@@ -834,19 +768,7 @@ function renderDbProduct(dbProduct: any) {
                 <div className="separator1"></div>
               </div>
 
-              {dbProduct.stock !== undefined && (
-                <div className="mb-4">
-                  {dbProduct.stock > 0 ? (
-                    <span className="badge" style={{ background: '#38a169', color: '#fff', padding: '6px 14px', borderRadius: 20, fontSize: 13 }}>
-                      In Stock ({dbProduct.stock} units)
-                    </span>
-                  ) : (
-                    <span className="badge" style={{ background: '#e53e3e', color: '#fff', padding: '6px 14px', borderRadius: 20, fontSize: 13 }}>
-                      Out of Stock
-                    </span>
-                  )}
-                </div>
-              )}
+
 
               <div className="wires-desc">
                 {parsedDescription.length > 0 ? (
@@ -877,23 +799,42 @@ function renderDbProduct(dbProduct: any) {
                 </div>
               )}
 
-              <div className="product-actions mt-4 d-flex flex-wrap gap-3">
-                <a
-                  className="rs-btn has-theme-orange has-bg"
-                  href={`/contact-us?product=${encodeURIComponent(dbProduct.title)}`}
-                  style={{ background: 'linear-gradient(135deg,#f7931e,#c1272d)', color: '#fff', padding: '12px 32px', borderRadius: 6, fontWeight: 600, display: 'inline-block', textDecoration: 'none' }}
-                >
-                  Send Enquiry
-                </a>
-                {dbProduct.datasheetLink && (
+              <div className="enquiry-btn-container mt-4" style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: '16px' }}>
+                <div className="rs-banner-btn">
                   <a
-                    href={dbProduct.datasheetLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ border: '2px solid #1e2e5e', color: '#1e2e5e', padding: '11px 28px', borderRadius: 6, fontWeight: 600, display: 'inline-block', textDecoration: 'none' }}
+                    className="rs-btn has-theme-orange has-icon has-bg"
+                    href={`/contact-us?product=${encodeURIComponent(dbProduct.title)}`}
                   >
-                    Download Datasheet
+                    Send Enquiry
+                    <span className="icon-box">
+                      <svg className="icon-first" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                        <path d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z"></path>
+                      </svg>
+                      <svg className="icon-second" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                        <path d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z"></path>
+                      </svg>
+                    </span>
                   </a>
+                </div>
+                {dbProduct.datasheetLink && (
+                  <div className="rs-banner-btn">
+                    <a
+                      className="rs-btn has-theme-orange has-icon has-bg"
+                      href={dbProduct.datasheetLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Download Datasheet
+                      <span className="icon-box">
+                        <svg className="icon-first" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                          <path d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z"></path>
+                        </svg>
+                        <svg className="icon-second" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                          <path d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z"></path>
+                        </svg>
+                      </span>
+                    </a>
+                  </div>
                 )}
               </div>
             </div>
@@ -1107,12 +1048,14 @@ function renderProductLayout(isMultiProduct: boolean, product: any, cleanLink: (
                             {card.title && <h3 className="product-title mt-4">{card.title}</h3>}
                           </div>
                           <div className="col-md-6">
-                            <ul className="product-features">
-                              <h3 className="product-title mb-4">FEATURES</h3>
-                              {card.features.map((feat: string, fIdx: number) => (
-                                <li key={fIdx}>{feat}</li>
-                              ))}
-                            </ul>
+                            <div className="features-container">
+                              <h3 className="features-title mb-4">FEATURES</h3>
+                              <ul className="product-features">
+                                {card.features.map((feat: string, fIdx: number) => (
+                                  <li key={fIdx}>{feat}</li>
+                                ))}
+                              </ul>
+                            </div>
                             <a
                               href={card.link ? cleanLink(card.link) : `/contact-us?product=${encodeURIComponent(card.title || product.heading || product.title)}`}
                               className="enquiry-btn"

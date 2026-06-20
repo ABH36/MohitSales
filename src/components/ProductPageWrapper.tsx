@@ -14,7 +14,35 @@ export default function ProductPageWrapper({ children }: ProductPageWrapperProps
   useEffect(() => {
     const handleInterceptClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      // Traverse up to find the closest anchor link
+
+      // 1. Intercept tab button clicks
+      const tabBtn = target.closest('[data-tab-target]');
+      if (tabBtn) {
+        e.preventDefault();
+        const tabId = tabBtn.getAttribute('data-tab-target');
+        if (tabId) {
+          // Find the container section or default to document
+          const container = tabBtn.closest('.spec-section, .catalogue-section, main') || document;
+          
+          // Deactivate all tab panels and activate target panel
+          container.querySelectorAll('.tab-panel').forEach((panel) => {
+            panel.classList.remove('active');
+          });
+          const targetPanel = container.querySelector(`#${tabId}`);
+          if (targetPanel) {
+            targetPanel.classList.add('active');
+          }
+          
+          // Deactivate all tab buttons and activate target button
+          container.querySelectorAll('[data-tab-target]').forEach((btn) => {
+            btn.classList.remove('active');
+          });
+          tabBtn.classList.add('active');
+        }
+        return;
+      }
+
+      // 2. Intercept anchor link clicks
       const anchor = target.closest('a');
       if (!anchor) return;
 

@@ -102,6 +102,11 @@ h6,
   background: #f8f9fb;
 }
 
+.catalogue-section .container,
+.products-section .container {
+  max-width: 1200px !important;
+}
+
 .catalogue-section .section-title {
   text-align: center;
   margin-bottom: 50px;
@@ -288,15 +293,24 @@ h6,
    ==================================================== */
 
 .card_box {
-  background: linear-gradient(135deg, #ffffff, #f4f4f4);
+  background: linear-gradient(135deg, #ffffff, #f9f9fb);
   border-radius: 18px;
-  padding: 30px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  padding: 40px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
   margin-bottom: 30px;
+  direction: ltr !important;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+@media (max-width: 767px) {
+  .card_box {
+    padding: 24px 20px !important;
+    border-radius: 14px !important;
+  }
 }
 
 .card_box .product-card {
-  min-height: 280px;
+  min-height: 380px !important;
   background: transparent !important;
   box-shadow: none !important;
   padding: 0 !important;
@@ -305,71 +319,202 @@ h6,
   display: flex !important;
   flex-direction: row !important;
   flex-wrap: wrap !important;
+  align-items: center !important;
+}
+
+/* Force equal 50% width columns on desktop/tablet */
+@media (min-width: 768px) {
+  .card_box .product-card>div {
+    width: 50% !important;
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+  }
+  .card_box .product-card>div:first-child {
+    padding-right: 30px !important;
+  }
+  .card_box .product-card>div:last-child {
+    padding-left: 30px !important;
+  }
+}
+
+/* Force full 100% width columns on mobile */
+@media (max-width: 767px) {
+  .card_box .product-card>div {
+    width: 100% !important;
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
 }
 
 .card_box .product-img {
   max-width: 100%;
-  height: auto;
-  margin-bottom: 15px;
-  transition: transform 0.3s ease;
+  height: 300px !important;
+  max-height: 300px !important;
+  object-fit: contain !important;
+  margin-bottom: 20px !important;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) !important;
 }
 
 .card_box .product-img:hover {
-  transform: scale(1.05);
+  transform: scale(1.05) !important;
 }
 
 .card_box .product-title {
-  font-size: 22px;
-  font-weight: 600;
-  color: #222;
+  font-size: 24px !important;
+  font-weight: 800 !important;
+  color: #c1272d !important;
+  margin-top: 12px !important;
+  margin-bottom: 0 !important;
+  min-height: auto !important;
+  text-align: center !important;
+  justify-content: center !important;
+  font-family: "Space Grotesk", "Outfit", sans-serif !important;
+}
+
+.card_box .features-title {
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  color: #1e2e5e !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  margin-bottom: 18px !important;
+  display: block !important;
+  text-align: left !important;
+  font-family: "Space Grotesk", "Outfit", sans-serif !important;
+  min-height: auto !important;
 }
 
 .card_box .product-features {
-  list-style: none;
-  padding-left: 0;
-  margin-bottom: 25px;
+  list-style: none !important;
+  padding-left: 0 !important;
+  margin-bottom: 25px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  gap: 8px 10px !important;
 }
 
 .card_box .product-features li {
-  position: relative;
-  padding-left: 30px;
-  margin-bottom: 10px;
-  font-size: 18px;
-  color: #444;
-  text-align: left;
+  position: relative !important;
+  padding: 6px 14px 6px 28px !important;
+  margin-bottom: 0 !important;
+  font-size: 14px !important;
+  color: #333333 !important;
+  background: #f4f6f9 !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+  text-align: left !important;
+  line-height: 1.4 !important;
+  font-weight: 600 !important;
+  font-family: "Mukta", sans-serif !important;
+  display: inline-flex !important;
+  align-items: center !important;
 }
 
 .card_box .product-features li::before {
-  content: "✔";
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: #0055a9;
-  font-weight: bold;
+  content: "✔" !important;
+  position: absolute !important;
+  left: 10px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  color: #ef3d45 !important;
+  font-weight: 900 !important;
+  font-size: 13px !important;
 }
 
-.card_box .pricelist-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  width: auto;
-  min-width: 140px;
-  align-self: center;
-  padding: 12px 28px;
-  background: linear-gradient(45deg, #000, #333);
-  color: #fff;
-  border-radius: 30px;
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  line-height: 1;
+/* Specs table inside card_box — bordered cells, centered text */
+.card_box table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin-top: 10px !important;
+  margin-bottom: 16px !important;
 }
 
-.card_box .pricelist-btn:hover {
-  background: linear-gradient(45deg, #c1272d, #f7931e);
-  color: #fff;
+.card_box table th {
+  background: #1d2d5c !important;
+  color: #fff !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  padding: 10px 12px !important;
+  text-align: center !important;
+  border: 1px solid #1d2d5c !important;
+  white-space: nowrap !important;
 }
+
+.card_box table td {
+  padding: 10px 12px !important;
+  font-size: 14px !important;
+  color: #334155 !important;
+  text-align: center !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.card_box table tbody tr:nth-child(even) {
+  background: #f8fafc !important;
+}
+
+.card_box .button_center {
+  text-align: center !important;
+  width: 100% !important;
+  margin-top: 12px !important;
+}
+
+.card_box a.pricelist-btn,
+.card_box a.enquiry-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  width: auto !important;
+  min-width: 160px !important;
+  padding: 12px 28px !important;
+  background: linear-gradient(135deg, #1e2e5e, #2d4080) !important;
+  color: #ffffff !important;
+  border-radius: 30px !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
+  line-height: 1 !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(30, 46, 94, 0.15) !important;
+}
+
+.card_box a.pricelist-btn:hover,
+.card_box a.enquiry-btn:hover {
+  background: linear-gradient(135deg, #ef3d45, #c1272d) !important;
+  color: #ffffff !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 20px rgba(193, 39, 45, 0.25) !important;
+}
+
+@media (max-width: 767px) {
+  .card_box .product-card {
+    min-height: auto !important;
+  }
+  .card_box .product-card > div:last-child {
+    text-align: center !important;
+    padding-top: 20px !important;
+  }
+  .card_box .features-title {
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-bottom: 15px !important;
+  }
+  .card_box .product-features {
+    justify-content: center !important;
+    margin: 0 auto 20px !important;
+    max-width: 100% !important;
+    padding-left: 0 !important;
+  }
+  .card_box a.pricelist-btn,
+  .card_box a.enquiry-btn {
+    align-self: center !important;
+    margin: 0 auto !important;
+  }
+}
+
 
 
 /* ====================================================
@@ -1240,10 +1385,12 @@ img[alt="logo"] {
   .rs-header-two.header-new .rs-header-logo {
     width: auto !important;
   }
+
   .rs-header-two .rs-header-left {
     padding: 8px 50px 8px 15px !important;
     border-radius: 0 0 80px 0 !important;
   }
+
   .rs-header-logo img,
   .rs-header-left img,
   img[alt="logo"] {
@@ -1255,10 +1402,12 @@ img[alt="logo"] {
   .rs-header-two.header-new .rs-header-logo {
     width: auto !important;
   }
+
   .rs-header-two .rs-header-left {
     padding: 6px 40px 6px 12px !important;
     border-radius: 0 0 60px 0 !important;
   }
+
   .rs-header-logo img,
   .rs-header-left img,
   img[alt="logo"] {
@@ -1267,25 +1416,30 @@ img[alt="logo"] {
 }
 
 @media (max-width: 575px) {
+
   /* Keep the header transparent on mobile so the curved logo block stands out */
   .rs-header-two {
     padding: 0 !important;
     background: transparent !important;
     border-bottom: none !important;
   }
+
   .rs-header-two .rs-header-inner {
     padding: 0 15px 0 0 !important;
   }
+
   .rs-header-two .rs-header-left {
     padding: 6px 30px 6px 12px !important;
     border-radius: 0 0 40px 0 !important;
     background: #ffffff !important;
   }
+
   .rs-header-two.header-new .rs-header-logo {
     width: auto !important;
     padding: 0 !important;
     margin: 0 !important;
   }
+
   .rs-header-logo img,
   .rs-header-left img,
   img[alt="logo"] {
@@ -1580,17 +1734,17 @@ img[alt="logo"] {
     @apply font-semibold text-[#333];
   }
 
-  .pricelist-btn,
-  .enquiry-btn,
-  .fan-btn {
+  a.pricelist-btn,
+  a.enquiry-btn,
+  a.fan-btn {
     @apply bg-gradient-to-br from-[#f7931e] to-[#c1272d] rounded-[4px] px-[24px] py-[10px] font-medium text-[15px] border-none inline-flex items-center justify-center transition-all duration-300 w-auto min-w-[140px] h-[45px] box-border mt-auto mb-0 whitespace-nowrap self-center;
     color: white !important;
     text-align: center;
   }
 
-  .pricelist-btn:hover,
-  .enquiry-btn:hover,
-  .fan-btn:hover {
+  a.pricelist-btn:hover,
+  a.enquiry-btn:hover,
+  a.fan-btn:hover {
     @apply bg-none bg-[#1e2e5e] -translate-y-[2px];
     box-shadow: 0 4px 12px rgba(30, 46, 94, 0.25);
     color: white !important;
@@ -1779,7 +1933,7 @@ img[alt="logo"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 180px;
+  min-height: 240px;
   overflow: hidden;
 }
 
@@ -1791,7 +1945,7 @@ img[alt="logo"] {
 
 .cables-img img {
   width: 100%;
-  height: 180px;
+  height: 240px;
   object-fit: contain;
   border-radius: 6px;
   transition: transform 0.4s ease;
@@ -1831,11 +1985,11 @@ img[alt="logo"] {
 
 @media (max-width: 767px) {
   .cables-img {
-    min-height: 140px;
+    min-height: 180px;
   }
 
   .cables-img img {
-    height: 140px;
+    height: 180px;
   }
 }
 
@@ -2566,7 +2720,7 @@ a.pricelist-btn:hover,
   color: #fff !important;
 }
 
-.enquiry-btn {
+a.enquiry-btn {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -2580,11 +2734,272 @@ a.pricelist-btn:hover,
   line-height: 1 !important;
 }
 
-.enquiry-btn:hover,
 a.enquiry-btn:hover,
 .product-card a.enquiry-btn:hover,
 .product-content a.enquiry-btn:hover,
 .wires_inner a.enquiry-btn:hover {
   background: #1e2e5e !important;
   color: #fff !important;
+}
+
+/* ====================================================
+   FIXES FOR LEGACY CARDS AND INLINE LAYOUTS
+   ==================================================== */
+
+/* Action Buttons Inline Layout */
+.enquiry-btn-container {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 16px !important;
+  width: 100% !important;
+  margin-top: 15px !important;
+}
+
+.enquiry-btn-container .rs-banner-btn {
+  display: inline-block !important;
+  width: auto !important;
+  margin: 0 !important;
+  flex: none !important;
+}
+
+/* Card Box Product Image Size (matching original PHP) */
+.card_box img.product-img,
+.card_box .product-img {
+  width: 280px !important;
+  height: 300px !important;
+  max-height: 300px !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin: 0 auto 15px !important;
+}
+
+/* ====================================================
+   LEGACY TABLE STYLES
+   Used by: upvc-conduit, fan product pages, about-us
+   ==================================================== */
+
+.table-section {
+  padding: 60px 20px;
+  background: #f4f6f8;
+  font-family: 'Segoe UI', 'Outfit', sans-serif;
+}
+
+.table-section h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 30px;
+  font-weight: 700;
+  color: #222;
+}
+
+.table-wrapper {
+  max-width: 1200px;
+  margin: 0 auto 20px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.table-section table,
+.lms-table-section table,
+.spec-section table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-section thead,
+.lms-table-section thead,
+.spec-section thead {
+  background: linear-gradient(135deg, #1f2933, #374151);
+  color: #ffffff;
+}
+
+.table-section thead th,
+.lms-table-section thead th,
+.spec-section thead th {
+  padding: 14px 10px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  text-align: center;
+}
+
+.table-section tbody td,
+.lms-table-section tbody td,
+.spec-section tbody td {
+  padding: 14px 10px;
+  text-align: center;
+  font-size: 15px;
+  color: #333;
+  border: 1px solid #e5e7eb;
+  vertical-align: middle;
+}
+
+.table-section tbody tr:nth-child(even),
+.lms-table-section tbody tr:nth-child(even),
+.spec-section tbody tr:nth-child(even) {
+  background: #f9fafb;
+}
+
+.table-section tbody tr:hover,
+.lms-table-section tbody tr:hover,
+.spec-section tbody tr:hover {
+  background: #eef2f7;
+}
+
+/* LMS Table Section */
+.lms-table-section {
+  padding: 60px 20px;
+  background: #f4f6f8;
+  font-family: 'Segoe UI', 'Outfit', sans-serif;
+  text-align: center;
+}
+
+.lms-table-section h2 {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #222;
+}
+
+/* Image Cell inside tables */
+.image-cell {
+  background: #fafafa;
+}
+
+.image-cell img {
+  max-width: 180px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 768px) {
+  .image-cell img {
+    max-width: 120px;
+  }
+}
+
+/* Note text below tables */
+.note {
+  max-width: 1000px;
+  margin: 25px auto 0;
+  text-align: center;
+  font-size: 16px;
+  color: #333;
+}
+
+.note span {
+  display: inline-block;
+  margin: 0 8px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: #e5e7eb;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ====================================================
+   LEGACY TAB STYLES
+   Used by: upvc-conduit spec-section tabs
+   ==================================================== */
+
+.spec-section {
+  background: #f4f6f8;
+  font-family: 'Segoe UI', 'Outfit', sans-serif;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.spec-section h2 {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #222;
+}
+
+.tabs {
+  display: inline-flex;
+  background: #e5e7eb;
+  padding: 6px;
+  border-radius: 50px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.tab-btn {
+  border: none;
+  background: transparent;
+  padding: 12px 30px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 40px;
+  transition: background 0.3s, color 0.3s;
+  font-size: 14px;
+  color: #333;
+}
+
+.tab-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.tab-btn.active {
+  background: #111827;
+  color: #fff;
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+.tab-panel h3 {
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #111;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .tabs {
+    flex-direction: column;
+    border-radius: 12px;
+  }
+  .tab-btn {
+    padding: 10px 20px;
+    font-size: 13px;
+    border-radius: 8px;
+  }
+  .table-section,
+  .lms-table-section,
+  .spec-section {
+    padding: 30px 10px;
+  }
+  .table-section h2,
+  .lms-table-section h2,
+  .spec-section h2 {
+    font-size: 22px;
+  }
+}
+
+/* Specs Box (used in some product pages) */
+.specs-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.button_center {
+  margin-top: 10px;
+  text-align: center;
 }
