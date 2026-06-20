@@ -44,15 +44,18 @@ echo "⏳ Waiting for DB to be healthy..."
 sleep 15
 echo "✅ Containers up"
 
-# ── Step 4: Run Prisma DB Push (schema sync) ──────────────
+# ── Step 4: Run Prisma DB Push (schema sync — SAFE, no data loss) ────
+# NOTE: prisma db push WITHOUT --accept-data-loss will REFUSE to run
+# if any change would drop columns/tables that contain real data.
+# It only applies additive changes (new tables, new columns).
 echo ""
-echo "[4/5] Running prisma db push (schema sync)..."
+echo "[4/5] Running prisma db push (safe schema sync — no data loss)..."
 docker exec \
   -e DATABASE_URL="$DOCKER_DB_URL" \
   -e DIRECT_URL="$DOCKER_DB_URL" \
   "$APP_CONTAINER" \
-  npx prisma db push --accept-data-loss
-echo "✅ Schema synced"
+  npx prisma db push
+echo "✅ Schema synced (no existing data was modified)"
 
 # ── Step 5: Verify app is running ─────────────────────────
 echo ""

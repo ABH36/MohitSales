@@ -42,5 +42,7 @@ EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
-# Startup command: sync database schema, run seeding, and start Next.js server
-CMD ["sh", "-c", "npx prisma db push && npx prisma db seed && npm run start"]
+# Startup command: sync schema (additive only, no data loss) then start app
+# NOTE: Seeding is intentionally removed from here — run deploy-seed.sh manually
+#       to seed initial data only once. Never seed on every restart (overwrites real data).
+CMD ["sh", "-c", "npx prisma db push && npm run start"]
