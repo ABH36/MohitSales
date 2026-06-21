@@ -102,13 +102,13 @@ export default function Header() {
         const res = await fetch('/api/public/navigation');
         const data = await res.json();
         if (data.success && Array.isArray(data.data) && data.data.length > 0) {
-          setMenuTree(data.data);
+          // setMenuTree(data.data); // Disabled to show static products
         }
       } catch (err) {
         console.error('Error loading navigation:', err);
       }
     }
-    loadNavigation();
+    // loadNavigation(); // Do not sync with prisma existing data
   }, []);
 
   if (pathname?.startsWith('/admin')) {
