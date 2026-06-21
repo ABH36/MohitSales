@@ -55,16 +55,17 @@ echo "⏳ Waiting 20s for DB to be healthy..."
 sleep 20
 echo "✅ Containers up"
 
-# ── Step 4: Prisma Migrate Deploy ──────────
-# Applies pending migrations to the database.
+# ── Step 4: Prisma DB Push (safe — no data loss) ──────────
+# Applies only additive schema changes (new tables/columns).
+# Will REFUSE if any change would destroy existing data.
 echo ""
-echo "[4/5] Running prisma migrate deploy..."
+echo "[4/5] Running prisma db push (safe schema sync)..."
 docker exec \
   -e DATABASE_URL="$DOCKER_DB_URL" \
   -e DIRECT_URL="$DOCKER_DB_URL" \
   "$APP_CONTAINER" \
-  npx prisma migrate deploy
-echo "✅ Migrations applied successfully"
+  npx prisma db push
+echo "✅ Schema synced (real data untouched)"
 
 # ── Step 5: Verify ────────────────────────────────────────
 echo ""
