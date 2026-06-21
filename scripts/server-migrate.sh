@@ -67,6 +67,19 @@ docker exec \
   npx prisma db push
 echo "✅ Schema synced (real data untouched)"
 
+# ── Step 4b: Seed Data (Safe upsert) ──────────────────────
+echo ""
+echo "[4b/5] Copying legacy data and running seed scripts..."
+# Copy the required JSON and legacy content folder into the running container
+docker cp "$PROJECT_DIR/content-export.json" "$APP_CONTAINER:/app/content-export.json"
+docker cp "$PROJECT_DIR/legacy_content" "$APP_CONTAINER:/app/legacy_content"
+
+# Run the seeding and backfill scripts
+docker exec "$APP_CONTAINER" npx prisma db seed
+docker exec "$APP_CONTAINER" node prisma/seed-products.js
+docker exec "$APP_CONTAINER" node prisma/backfill-legacy-content.js
+echo "✅ Legacy content and products synced to database"
+
 # ── Step 5: Verify ────────────────────────────────────────
 echo ""
 echo "[5/5] Verifying containers..."
