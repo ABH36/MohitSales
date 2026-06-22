@@ -168,9 +168,9 @@ export default function AdminAnalyticsPage() {
   const gaChannels = gaData?.channels?.map((c: any, idx: number) => ({
     ...c,
     color: idx === 0 ? 'linear-gradient(90deg, #3b82f6 0%, #2563eb 100%)' :
-           idx === 1 ? 'linear-gradient(90deg, #10b981 0%, #059669 100%)' :
-           idx === 2 ? 'linear-gradient(90deg, #8b5cf6 0%, #7d3aed 100%)' :
-                       'linear-gradient(90deg, #f59e0b 0%, #d97706 100%)'
+      idx === 1 ? 'linear-gradient(90deg, #10b981 0%, #059669 100%)' :
+        idx === 2 ? 'linear-gradient(90deg, #8b5cf6 0%, #7d3aed 100%)' :
+          'linear-gradient(90deg, #f59e0b 0%, #d97706 100%)'
   })) || defaultChannels;
 
   const defaultDevices = [
@@ -463,10 +463,10 @@ export default function AdminAnalyticsPage() {
           ) : (
             /* Premium Dashboard Content */
             <div className="analytics-dashboard-container">
-              
+
               {/* Glassmorphic Indicator Cards Grid */}
               <div className="analytics-kpi-grid">
-                
+
                 {/* KPI Card 1: Inquiries volume */}
                 <div className="kpi-card glass-card">
                   <div className="kpi-icon-row">
@@ -542,7 +542,7 @@ export default function AdminAnalyticsPage() {
 
               {/* Section 2: Trend Graph & Segment Analysis */}
               <div className="analytics-row-double">
-                
+
                 {/* Inquiry Trend Custom SVG Area Chart */}
                 <div className="analytics-card trend-chart-card">
                   <div className="card-header-with-action">
@@ -551,12 +551,13 @@ export default function AdminAnalyticsPage() {
                       <p className="card-subtitle-desc">Daily count mapping of customer feedback and business inquiries.</p>
                     </div>
                   </div>
-                  
-                  <div className="chart-wrapper" style={{ position: 'relative', height: `${height}px` }}>
+
+                  <div className="chart-wrapper" style={{ position: 'relative', width: '100%', aspectRatio: `${width} / ${height}` }}>
                     {points.length > 0 ? (
                       <svg
                         ref={chartSvgRef}
                         className="custom-svg-chart"
+                        style={{ width: '100%', height: '100%' }}
                         viewBox={`0 0 ${width} ${height}`}
                         onMouseMove={handleMouseMove}
                         onMouseLeave={handleMouseLeave}
@@ -689,7 +690,7 @@ export default function AdminAnalyticsPage() {
                 <div className="analytics-card">
                   <h4>Category popularities</h4>
                   <p className="card-subtitle-desc">Ranking categories by total products count.</p>
-                  
+
                   <div className="categories-list-bars" style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
                     {data.categoriesDistribution.length === 0 ? (
                       <div style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>No category products mapping.</div>
@@ -716,7 +717,7 @@ export default function AdminAnalyticsPage() {
 
               {/* Section 3: Alerts and Lists */}
               <div className="analytics-row-double" style={{ marginTop: '28px' }}>
-                
+
                 {/* Out of stock & stock warnings */}
                 <div className="analytics-card">
                   <div className="card-header-with-badge">
@@ -728,7 +729,7 @@ export default function AdminAnalyticsPage() {
                     )}
                   </div>
                   <p className="card-subtitle-desc">Products with low or depleted stock levels needing attention.</p>
-                  
+
                   <div className="inventory-alerts-table-container" style={{ marginTop: '16px' }}>
                     {data.inventory.alerts.length === 0 ? (
                       <div className="stock-all-good-box">
@@ -772,7 +773,7 @@ export default function AdminAnalyticsPage() {
                 <div className="analytics-card">
                   <h4>Top reading blog articles</h4>
                   <p className="card-subtitle-desc">Highest read blog posts published by editors.</p>
-                  
+
                   <div className="top-blogs-list" style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
                     {data.topBlogs.length === 0 ? (
                       <div style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>No blog post reads recorded.</div>
@@ -813,7 +814,7 @@ export default function AdminAnalyticsPage() {
               <div className="analytics-card" style={{ marginTop: '28px' }}>
                 <h4>Heavy storage assets alert</h4>
                 <p className="card-subtitle-desc">The largest files in the media library. Consider reducing their resolution or compressing them to improve site responsiveness.</p>
-                
+
                 <div className="heavy-media-grid" style={{ marginTop: '20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '16px' }}>
                   {data.heaviestMedia.length === 0 ? (
                     <div style={{ gridColumn: '1/-1', padding: '20px', textAlign: 'center', color: '#64748b' }}>No media assets uploaded.</div>
@@ -828,7 +829,7 @@ export default function AdminAnalyticsPage() {
                             {formatBytes(m.size)}
                           </span>
                         </div>
-                        
+
                         <div style={{ minWidth: 0, marginTop: '4px' }}>
                           <p style={{ fontSize: '13px', fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', margin: 0, color: '#1e293b' }} title={m.filename}>
                             {m.filename}
@@ -842,8 +843,8 @@ export default function AdminAnalyticsPage() {
                           <a href={m.url} target="_blank" rel="noreferrer" className="admin-btn admin-btn-outline admin-btn-sm" style={{ padding: '6px 12px', fontSize: '11px', flex: 1, background: '#fff' }}>
                             🔗 Open File
                           </a>
-                          <button 
-                            className="admin-btn admin-btn-outline admin-btn-sm" 
+                          <button
+                            className="admin-btn admin-btn-outline admin-btn-sm"
                             style={{ padding: '6px 12px', fontSize: '11px', flex: 1, background: '#fff' }}
                             onClick={() => {
                               navigator.clipboard.writeText(m.url);
@@ -1010,7 +1011,7 @@ export default function AdminAnalyticsPage() {
                 {activeVisitors} <span style={{ fontSize: '13px', fontWeight: 500, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Active Visitors</span>
               </div>
               <div className="kpi-label" style={{ fontSize: '13px', color: '#64748b', fontWeight: 600 }}>Users in last 30 minutes</div>
-              
+
               {/* Animated Live Bars */}
               <div className="kpi-footer-metric" style={{ marginTop: '16px', borderTop: '1px solid #edf2f7', paddingTop: '12px' }}>
                 <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px', height: '24px' }}>
@@ -1084,12 +1085,13 @@ export default function AdminAnalyticsPage() {
                 <p className="card-subtitle-desc">Daily visitor sessions count mapping for Mohit Sales Corporation.</p>
               </div>
             </div>
-            
-            <div className="chart-wrapper" style={{ position: 'relative', height: `${gaHeight}px` }}>
+
+            <div className="chart-wrapper" style={{ position: 'relative', width: '100%', aspectRatio: `${gaWidth} / ${gaHeight}` }}>
               {gaPoints.length > 0 ? (
                 <svg
                   ref={gaChartSvgRef}
                   className="custom-svg-chart"
+                  style={{ width: '100%', height: '100%' }}
                   viewBox={`0 0 ${gaWidth} ${gaHeight}`}
                   onMouseMove={handleGaMouseMove}
                   onMouseLeave={handleGaMouseLeave}
@@ -1224,7 +1226,7 @@ export default function AdminAnalyticsPage() {
             <div className="analytics-card" style={{ border: '1px solid #e2e8f0', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.01)' }}>
               <h4>Traffic Acquisition Channels</h4>
               <p className="card-subtitle-desc">Where your website visitors are coming from.</p>
-              
+
               <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
                 {gaChannels.map((channel: any, idx: number) => (
                   <div key={idx} className="category-bar-row">
@@ -1244,7 +1246,7 @@ export default function AdminAnalyticsPage() {
             <div className="analytics-card" style={{ border: '1px solid #e2e8f0', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.01)' }}>
               <h4>Device Breakdown</h4>
               <p className="card-subtitle-desc">Devices used by your customers to access Mohit Sales Corporation.</p>
-              
+
               <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 {gaDevices.map((device: any, idx: number) => (
                   <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
@@ -1566,7 +1568,8 @@ export default function AdminAnalyticsPage() {
       )}
 
       {/* Styled local CSS parameters specifically for premium look */}
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .analytics-header {
           display: flex;
           justify-content: space-between;
