@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { COOKIE_NAME, verifyToken } from './lib/auth';
+import { COOKIE_NAME } from './lib/auth';
 
 export async function middleware(request: NextRequest) {
   // Strip potential spoofed headers from incoming client request
@@ -22,8 +22,8 @@ export async function middleware(request: NextRequest) {
 
   if (isPublicPage) {
     try {
-      // Use request.nextUrl.origin to avoid hardcoded ports which break in deployment
-      const redirectCheckUrl = new URL('/api/public/redirect', request.nextUrl.origin);
+      // Use internal localhost to prevent SSL loopback / hairpin NAT issues
+      const redirectCheckUrl = new URL('/api/public/redirect', 'http://127.0.0.1:3000');
       redirectCheckUrl.searchParams.set('path', pathname);
       const redirectRes = await fetch(redirectCheckUrl.toString());
       if (redirectRes.ok) {
@@ -78,16 +78,31 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    // Directly verify the JWT in the Edge middleware (using jose library)
-    const payload = await verifyToken(token);
-    
-    if (!payload || !payload.userId) {
-      throw new Error('Invalid or expired token');
+    // Call /api/admin/auth/me using internal localhost
+    const authMeUrl = new URL('/api/admin/auth/me', 'http://127.0.0.1:3000');
+    const authResponse = await fetch(authMeUrl.toString(), {
+      headers: {
+        cookie: `${COOKIE_NAME}=${token}`,
+      },
+    });
+
+    if (!authResponse.ok) {
+      if (authResponse.status === 500) {
+        console.error('[Middleware] Database down or internal auth error. Denying access (Fail Closed).');
+      } else {
+        console.warn(`[Middleware] Authentication check failed (status: ${authResponse.status}). Denying access.`);
+      }
+      throw new Error(`Auth API responded with status ${authResponse.status}`);
+    }
+
+    const authData = await authResponse.json();
+    if (!authData || !authData.success || !authData.user) {
+      throw new Error('Invalid authentication response structure');
     }
     
     // Pass the user ID or role in headers
-    requestHeaders.set('x-user-id', payload.userId as string);
-    requestHeaders.set('x-user-role', (payload.role as string) || 'USER');
+    requestHeaders.set('x-user-id', authData.user.id);
+    requestHeaders.set('x-user-role', authData.user.role);
 
     return NextResponse.next({
       request: {
