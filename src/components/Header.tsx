@@ -84,7 +84,7 @@ export default function Header() {
   const [isSticky, setIsSticky] = useState(false);
   const [openSubmenus, setOpenSubmenus] = useState<Record<string, boolean>>({});
 
-  
+
   const [menuTree, setMenuTree] = useState<NavItem[]>(DEFAULT_MENU_TREE);
 
   useEffect(() => {
@@ -320,9 +320,9 @@ export default function Header() {
                                                   <ul className="mobile-submenu mt-1">
                                                     {catNode.children.map(subNode => (
                                                       <li key={subNode.id}>
-                                                        <a 
-                                                          href={`/${subNode.slug}`} 
-                                                          onClick={() => setIsSidebarOpen(false)} 
+                                                        <a
+                                                          href={`/${subNode.slug}`}
+                                                          onClick={() => setIsSidebarOpen(false)}
                                                           className="mobile-leaf-link"
                                                         >
                                                           {subNode.name}
@@ -333,9 +333,9 @@ export default function Header() {
                                                 )}
                                               </>
                                             ) : (
-                                              <a 
-                                                href={`/${catNode.slug}`} 
-                                                onClick={() => setIsSidebarOpen(false)} 
+                                              <a
+                                                href={`/${catNode.slug}`}
+                                                onClick={() => setIsSidebarOpen(false)}
                                                 className="mobile-leaf-link"
                                                 style={{ fontWeight: 500, paddingLeft: 0 }}
                                               >
@@ -349,9 +349,9 @@ export default function Header() {
                                   )}
                                 </>
                               ) : (
-                                <a 
-                                  href={`/${brandNode.slug}`} 
-                                  onClick={() => setIsSidebarOpen(false)} 
+                                <a
+                                  href={`/${brandNode.slug}`}
+                                  onClick={() => setIsSidebarOpen(false)}
                                   className="mobile-leaf-link"
                                   style={{ fontWeight: 600, paddingLeft: 0 }}
                                 >

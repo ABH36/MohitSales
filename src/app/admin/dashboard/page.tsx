@@ -4,7 +4,8 @@ import prisma from '@/lib/prisma';
 async function getDashboardStats() {
   try {
     const [
-      productCount,
+      newProductCount,
+      legacyProductCount,
       categoryCount,
       inquiryCount,
       blogCount,
@@ -14,6 +15,7 @@ async function getDashboardStats() {
       recentInquiries,
     ] = await Promise.all([
       prisma.product.count(),
+      prisma.pageContent.count(),
       prisma.category.count(),
       prisma.inquiry.count(),
       prisma.blogPost.count(),
@@ -25,6 +27,8 @@ async function getDashboardStats() {
         take: 5,
       }),
     ]);
+
+    const productCount = newProductCount + legacyProductCount;
 
     return {
       productCount,
