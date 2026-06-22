@@ -23,7 +23,7 @@ const nextConfig = {
   async headers() {
     const isProd = process.env.NODE_ENV === 'production';
     const cspScriptSrc = isProd ? "'self' 'unsafe-inline'" : "'self' 'unsafe-inline' 'unsafe-eval'";
-    const cspValue = `default-src 'self'; script-src ${cspScriptSrc}; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self'; frame-src https://www.google.com; frame-ancestors 'none'; upgrade-insecure-requests;`;
+    const cspValue = `default-src 'self'; script-src ${cspScriptSrc}; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self'; frame-src https://www.google.com; frame-ancestors 'none'; upgrade-insecure-requests;`;
 
     return [
       {

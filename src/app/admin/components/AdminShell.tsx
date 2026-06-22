@@ -2,6 +2,20 @@
 
 import { useState, useEffect, useRef, createContext, useContext } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import {
+  LayoutDashboard,
+  LineChart,
+  FileEdit,
+  FileText,
+  Package,
+  Folder,
+  Mail,
+  Newspaper,
+  Globe,
+  Image,
+  Settings,
+  Users
+} from 'lucide-react';
 import '../admin.css';
 
 interface UserInfo {
@@ -29,30 +43,30 @@ interface AdminShellProps {
 const navItems = [
   {
     section: 'Main', items: [
-      { label: 'Dashboard', href: '/admin/dashboard', icon: '📊' },
-      { label: 'Analytics', href: '/admin/analytics', icon: '📈' },
+      { label: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
+      { label: 'Analytics', href: '/admin/analytics', icon: LineChart },
     ]
   },
   {
     section: 'Content', items: [
-      { label: 'CMS Pages', href: '/admin/cms', icon: '🖊️' },
-      { label: 'Page Content', href: '/admin/pages', icon: '📄' },
-      { label: 'Products', href: '/admin/products', icon: '📦' },
-      { label: 'Categories', href: '/admin/categories', icon: '📁' },
-      { label: 'Inquiries', href: '/admin/inquiries', icon: '📩' },
-      { label: 'Blog Posts', href: '/admin/blogs', icon: '📝' },
+      { label: 'CMS Pages', href: '/admin/cms', icon: FileEdit },
+      { label: 'Page Content', href: '/admin/pages', icon: FileText },
+      { label: 'Products', href: '/admin/products', icon: Package },
+      { label: 'Categories', href: '/admin/categories', icon: Folder },
+      { label: 'Inquiries', href: '/admin/inquiries', icon: Mail },
+      { label: 'Blog Posts', href: '/admin/blogs', icon: Newspaper },
     ]
   },
   {
     section: 'SEO', items: [
-      { label: 'SEO Manager', href: '/admin/seo', icon: '🔍' },
+      { label: 'SEO Manager', href: '/admin/seo', icon: Globe },
     ]
   },
   {
     section: 'System', items: [
-      { label: 'Media Library', href: '/admin/media', icon: '🖼️' },
-      { label: 'Settings', href: '/admin/settings', icon: '⚙️' },
-      { label: 'Users', href: '/admin/users', icon: '👥' },
+      { label: 'Media Library', href: '/admin/media', icon: Image },
+      { label: 'Settings', href: '/admin/settings', icon: Settings },
+      { label: 'Users', href: '/admin/users', icon: Users },
     ]
   },
 ];
@@ -237,13 +251,24 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                     if (item.href === '/admin/users' && user?.role !== 'ADMIN') {
                       return null;
                     }
+                    const IconComponent = item.icon as any;
                     return (
                       <a
                         key={item.href}
                         href={item.href}
                         className={`admin-nav-link ${pathname === item.href ? 'active' : ''}`}
                       >
-                        <span className="admin-nav-icon">{item.icon}</span>
+                        <span className="admin-nav-icon">
+                          {typeof IconComponent === 'string' ? (
+                            IconComponent.startsWith('la') ? (
+                              <i className={IconComponent} style={{ fontSize: '1.25rem' }}></i>
+                            ) : (
+                              IconComponent
+                            )
+                          ) : (
+                            <IconComponent size={20} strokeWidth={2} />
+                          )}
+                        </span>
                         {item.label}
                       </a>
                     );

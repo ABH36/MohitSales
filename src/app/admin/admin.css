@@ -1,3 +1,5 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css');
+
 /* ═══════════════════════════════════════════════════
    Admin Panel Styles — Mohit Industries
    ═══════════════════════════════════════════════════ */
@@ -278,7 +280,9 @@
 }
 
 .admin-nav-link:hover .admin-nav-icon {
-  transform: scale(1.15);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  transform: scale(1.08);
 }
 
 .admin-nav-link.active {
@@ -293,14 +297,22 @@
 }
 
 .admin-nav-icon {
-  width: 22px;
-  height: 22px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
   flex-shrink: 0;
-  transition: transform 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+.admin-nav-link.active .admin-nav-icon {
+  background: linear-gradient(135deg, #ff5e14 0%, #ff8c42 100%);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(255, 94, 20, 0.3);
 }
 
 .admin-sidebar-footer {
