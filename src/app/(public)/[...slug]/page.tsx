@@ -129,7 +129,7 @@ async function getProductData(slugPath: string) {
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const slugPath = params.slug.join('/');
-  
+
   const cache = loadBuildCache();
   let product = null;
   let seoMeta = null;
@@ -344,7 +344,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 return slug ? { name, slug } : null;
               })
               .filter((x): x is { name: string; slug: string } => x !== null);
-          } else {
             dbCats = await prisma.category.findMany({
               where: {
                 name: {
@@ -353,7 +352,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 }
               },
               select: { name: true, slug: true }
-            });
+            }).catch(() => []);
           }
 
           const catMap = new Map<string, string>();
@@ -396,7 +395,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           dbCategory = await prisma.category.findUnique({
             where: { slug: slugPath },
             include: { products: true }
-          });
+          }).catch(() => null);
         }
       }
 
@@ -604,6 +603,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
           orderBy: { sortOrder: 'asc' }
         }
       }
+    }).catch((e) => {
+      console.error('[slug:dbCategory] Error fetching category:', e);
+      return null;
     });
   }
 
@@ -1285,139 +1287,144 @@ function renderProductLayout(isMultiProduct: boolean, product: any, cleanLink: (
 export async function generateStaticParams() {
   console.log('[generateStaticParams] Fetching database contents for pre-rendering...');
 
-  // 1. Fetch all active products
-  const products = await prisma.product.findMany({
-    where: { isActive: true },
-    include: {
-      category: {
-        include: {
-          parent: {
-            include: {
-              parent: {
-                include: {
-                  parent: true
+  try {
+    // 1. Fetch all active products
+    const products = await prisma.product.findMany({
+      where: { isActive: true },
+      include: {
+        category: {
+          include: {
+            parent: {
+              include: {
+                parent: {
+                  include: {
+                    parent: true
+                  }
                 }
               }
             }
           }
         }
       }
-    }
-  });
+    });
 
-  // 2. Fetch all active categories
-  const categories = await prisma.category.findMany({
-    where: { isActive: true },
-    include: {
-      parent: {
-        include: {
-          parent: {
-            include: {
-              parent: true
+    // 2. Fetch all active categories
+    const categories = await prisma.category.findMany({
+      where: { isActive: true },
+      include: {
+        parent: {
+          include: {
+            parent: {
+              include: {
+                parent: true
+              }
             }
           }
-        }
-      },
-      children: {
-        where: { isActive: true },
-        orderBy: { sortOrder: 'asc' },
-        include: {
-          products: {
-            where: { isActive: true, stock: { gt: 0 } },
-            orderBy: { sortOrder: 'asc' },
-            take: 4
-          },
-          _count: {
-            select: { products: true }
+        },
+        children: {
+          where: { isActive: true },
+          orderBy: { sortOrder: 'asc' },
+          include: {
+            products: {
+              where: { isActive: true, stock: { gt: 0 } },
+              orderBy: { sortOrder: 'asc' },
+              take: 4
+            },
+            _count: {
+              select: { products: true }
+            }
           }
+        },
+        products: {
+          where: { isActive: true, stock: { gt: 0 } },
+          orderBy: { sortOrder: 'asc' }
         }
-      },
-      products: {
-        where: { isActive: true, stock: { gt: 0 } },
-        orderBy: { sortOrder: 'asc' }
+      }
+    });
+
+    // 3. Fetch all active page contents
+    const pageContents = await prisma.pageContent.findMany({
+      where: { isActive: true }
+    });
+
+    // 4. Fetch all seoMeta
+    const seoMetas = await prisma.seoMeta.findMany();
+
+    // Create mappings
+    const productMap: Record<string, any> = {};
+    for (const p of products) {
+      productMap[p.slug] = p;
+    }
+
+    const categoryMap: Record<string, any> = {};
+    for (const c of categories) {
+      categoryMap[c.slug] = c;
+    }
+
+    const pageContentMap: Record<string, any> = {};
+    const legacyPageContentMap: Record<string, any> = {};
+    for (const pc of pageContents) {
+      pageContentMap[pc.slug] = pc;
+      if (pc.legacyPath) {
+        legacyPageContentMap[pc.legacyPath] = pc;
       }
     }
-  });
 
-  // 3. Fetch all active page contents
-  const pageContents = await prisma.pageContent.findMany({
-    where: { isActive: true }
-  });
-
-  // 4. Fetch all seoMeta
-  const seoMetas = await prisma.seoMeta.findMany();
-
-  // Create mappings
-  const productMap: Record<string, any> = {};
-  for (const p of products) {
-    productMap[p.slug] = p;
-  }
-
-  const categoryMap: Record<string, any> = {};
-  for (const c of categories) {
-    categoryMap[c.slug] = c;
-  }
-
-  const pageContentMap: Record<string, any> = {};
-  const legacyPageContentMap: Record<string, any> = {};
-  for (const pc of pageContents) {
-    pageContentMap[pc.slug] = pc;
-    if (pc.legacyPath) {
-      legacyPageContentMap[pc.legacyPath] = pc;
+    const seoMetaMap: Record<string, any> = {};
+    for (const sm of seoMetas) {
+      seoMetaMap[sm.page] = sm;
     }
+
+    // Also build name to slug map for categories (used for breadcrumbs lookup)
+    const categoryNameMap: Record<string, string> = {};
+    for (const c of categories) {
+      categoryNameMap[c.name.trim().toLowerCase()] = c.slug;
+    }
+
+    const cacheData = {
+      products: productMap,
+      categories: categoryMap,
+      pageContents: pageContentMap,
+      legacyPageContents: legacyPageContentMap,
+      seoMetas: seoMetaMap,
+      categoryNames: categoryNameMap
+    };
+
+    // Save cache to disk
+    try {
+      fs.writeFileSync(cachePath, JSON.stringify(cacheData), 'utf-8');
+      console.log(`[generateStaticParams] Saved build cache to ${cachePath}`);
+    } catch (err) {
+      console.error('[generateStaticParams] Failed to write build cache file:', err);
+    }
+
+    // Collect all unique active slugs
+    const allSlugs = new Set<string>();
+
+    // Add PageContent slugs
+    for (const pc of pageContents) {
+      if (pc.slug) allSlugs.add(pc.slug);
+    }
+
+    // Add Product slugs
+    for (const p of products) {
+      if (p.slug) allSlugs.add(p.slug);
+    }
+
+    // Add Category slugs
+    for (const c of categories) {
+      if (c.slug) allSlugs.add(c.slug);
+    }
+
+    // Format as Next.js params: [{ slug: ['polycab', 'fans'] }, ...]
+    const paramsList = Array.from(allSlugs).map(slug => ({
+      slug: slug.split('/').filter(Boolean)
+    }));
+
+    console.log(`[generateStaticParams] Generated ${paramsList.length} slugs for pre-rendering.`);
+    return paramsList;
+  } catch (error) {
+    console.warn('[generateStaticParams] Database unavailable during build. Skipping static generation.', error);
+    return [];
   }
-
-  const seoMetaMap: Record<string, any> = {};
-  for (const sm of seoMetas) {
-    seoMetaMap[sm.page] = sm;
-  }
-
-  // Also build name to slug map for categories (used for breadcrumbs lookup)
-  const categoryNameMap: Record<string, string> = {};
-  for (const c of categories) {
-    categoryNameMap[c.name.trim().toLowerCase()] = c.slug;
-  }
-
-  const cacheData = {
-    products: productMap,
-    categories: categoryMap,
-    pageContents: pageContentMap,
-    legacyPageContents: legacyPageContentMap,
-    seoMetas: seoMetaMap,
-    categoryNames: categoryNameMap
-  };
-
-  // Save cache to disk
-  try {
-    fs.writeFileSync(cachePath, JSON.stringify(cacheData), 'utf-8');
-    console.log(`[generateStaticParams] Saved build cache to ${cachePath}`);
-  } catch (err) {
-    console.error('[generateStaticParams] Failed to write build cache file:', err);
-  }
-
-  // Collect all unique active slugs
-  const allSlugs = new Set<string>();
-
-  // Add PageContent slugs
-  for (const pc of pageContents) {
-    if (pc.slug) allSlugs.add(pc.slug);
-  }
-
-  // Add Product slugs
-  for (const p of products) {
-    if (p.slug) allSlugs.add(p.slug);
-  }
-
-  // Add Category slugs
-  for (const c of categories) {
-    if (c.slug) allSlugs.add(c.slug);
-  }
-
-  // Format as Next.js params: [{ slug: ['polycab', 'fans'] }, ...]
-  const paramsList = Array.from(allSlugs).map(slug => ({
-    slug: slug.split('/').filter(Boolean)
-  }));
-
-  console.log(`[generateStaticParams] Generated ${paramsList.length} slugs for pre-rendering.`);
-  return paramsList;
 }

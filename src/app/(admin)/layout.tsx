@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
+import './tailwind.css';
 import './admin/admin.css';
-
 export const metadata: Metadata = {
   title: 'Admin Panel — Mohit Sales Corporation',
   description: 'Mohit Industries Admin Dashboard',
