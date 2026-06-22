@@ -58,10 +58,11 @@ export default function ProductPageWrapper({ children }: ProductPageWrapperProps
             const prod = url.searchParams.get('product') || '';
             if (modalOpen) {
               setModalOpen(false);
+              // Small frame tick to allow React to unmount before remounting
               setTimeout(() => {
                 setProductName(prod);
                 setModalOpen(true);
-              }, 300);
+              }, 10);
             } else {
               setProductName(prod);
               setModalOpen(true);

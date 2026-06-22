@@ -147,13 +147,13 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
 
   return (
     <div 
-      className={`fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-6 transition-opacity duration-300 ease-out ${
+      className={`fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-6 transition-opacity duration-150 ease-out ${
         isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}
     >
       {/* Backdrop overlay */}
       <div 
-        className="absolute inset-0 bg-[#0f172a]/70 backdrop-blur-sm transition-all duration-300"
+        className="absolute inset-0 bg-[#0f172a]/80 transition-all duration-150"
         onClick={handleClose}
       />
 
@@ -164,8 +164,8 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
         aria-modal="true"
         aria-labelledby="enquiry-modal-title"
         onKeyDown={handleModalKeyDown}
-        className={`bg-white rounded-2xl shadow-2xl w-full max-w-[640px] max-h-[90vh] overflow-y-auto z-10 relative border border-slate-100 transition-all duration-300 ease-out transform ${
-          isOpen ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'
+        className={`bg-white rounded-2xl shadow-2xl w-full max-w-[640px] max-h-[90vh] overflow-y-auto z-10 relative border border-slate-100 transition-all duration-150 ease-out transform ${
+          isOpen ? 'scale-100 translate-y-0' : 'scale-95 translate-y-2'
         }`}
         style={{ fontFamily: 'Outfit, sans-serif' }}
       >
