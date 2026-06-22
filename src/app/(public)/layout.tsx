@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import AnimationLoader from '../components/AnimationLoader';
-import ScrollReveal from '../components/ScrollReveal';
-import NonCriticalCSS from '../components/NonCriticalCSS';
-import PublicSettingsProvider from '../components/PublicSettingsContext';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import AnimationLoader from '../../components/AnimationLoader';
+import ScrollReveal from '../../components/ScrollReveal';
+import NonCriticalCSS from '../../components/NonCriticalCSS';
+import PublicSettingsProvider from '../../components/PublicSettingsContext';
 import './globals.css';
 
 export function generateViewport(): Viewport {

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, createContext, useContext } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import '../admin.css';
 
 interface UserInfo {
@@ -238,14 +239,14 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                       return null;
                     }
                     return (
-                      <a
+                      <Link
                         key={item.href}
                         href={item.href}
                         className={`admin-nav-link ${pathname === item.href ? 'active' : ''}`}
                       >
                         <span className="admin-nav-icon">{item.icon}</span>
                         {item.label}
-                      </a>
+                      </Link>
                     );
                   })}
                 </div>
@@ -322,14 +323,14 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                   </button>
                 </div>
 
-                <a
+                <Link
                   href="/"
                   target="_blank"
                   className="admin-btn admin-btn-outline admin-btn-sm admin-view-site-btn"
                   style={{ pointerEvents: 'auto' }}
                 >
                   🌐 View Site
-                </a>
+                </Link>
                 <button
                   type="button"
                   onClick={handleLogout}

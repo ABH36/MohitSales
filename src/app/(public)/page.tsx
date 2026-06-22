@@ -1,14 +1,14 @@
 import React from 'react';
 import type { Metadata } from 'next';
-import BannerSlider from '../components/BannerSlider';
-import ProductSlider from '../components/ProductSlider';
-import IndustriesSlider from '../components/IndustriesSlider';
-import HomeContactForm from '../components/HomeContactForm';
-import HomeAchievements from '../components/HomeAchievements';
-import ClienteleSlider from '../components/ClienteleSlider';
-import SplitText from '../components/SplitText';
-import SchemaInjector from '../components/SchemaInjector';
-import PromoPopup from '../components/PromoPopup';
+import BannerSlider from '../../components/BannerSlider';
+import ProductSlider from '../../components/ProductSlider';
+import IndustriesSlider from '../../components/IndustriesSlider';
+import HomeContactForm from '../../components/HomeContactForm';
+import HomeAchievements from '../../components/HomeAchievements';
+import ClienteleSlider from '../../components/ClienteleSlider';
+import SplitText from '../../components/SplitText';
+import SchemaInjector from '../../components/SchemaInjector';
+import PromoPopup from '../../components/PromoPopup';
 import prisma from '@/lib/prisma';
 
 export const revalidate = 3600; // ISR: revalidate every 1 hour
