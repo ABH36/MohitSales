@@ -17,11 +17,11 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
     captchaInput: ''
   });
 
-  const [captcha, setCaptcha] = useState('1234');
+  const [captcha, setCaptcha] = useState(() => Math.floor(1000 + Math.random() * 9000).toString());
   const [file, setFile] = useState<File | null>(null);
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isOpen, setIsOpen] = useState(false); // Used for animation state
+  const [isClosing, setIsClosing] = useState(false); // Used for exit animation state
 
   const firstInputRef = useRef<HTMLInputElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -32,27 +32,22 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
   };
 
   const handleClose = () => {
-    setIsOpen(false);
+    setIsClosing(true);
     // Restore body scroll during close animation
     document.body.style.overflow = '';
     // Wait for fade-out animation before calling onClose
-    setTimeout(onClose, 250);
+    setTimeout(onClose, 300);
   };
 
   const handleCloseRef = useRef(handleClose);
   handleCloseRef.current = handleClose;
 
   useEffect(() => {
-    generateCaptcha();
-    
     // Lock body scroll on mount
     document.body.style.overflow = 'hidden';
 
-    // Trigger transition fade-in and focus first input
-    const timer = setTimeout(() => {
-      setIsOpen(true);
-      firstInputRef.current?.focus();
-    }, 10);
+    // Focus first input on mount
+    firstInputRef.current?.focus();
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -64,7 +59,6 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
     return () => {
       // Restore body scroll on unmount
       document.body.style.overflow = '';
-      clearTimeout(timer);
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
@@ -147,13 +141,13 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
 
   return (
     <div 
-      className={`fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-6 transition-opacity duration-300 ease-out ${
-        isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+      className={`fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-6 duration-300 ease-out fill-mode-forwards ${
+        isClosing ? 'animate-out fade-out pointer-events-none' : 'animate-in fade-in'
       }`}
     >
       {/* Backdrop overlay */}
       <div 
-        className="absolute inset-0 bg-[#0f172a]/70 backdrop-blur-sm transition-all duration-300"
+        className="absolute inset-0 bg-[#0f172a]/70 backdrop-blur-sm"
         onClick={handleClose}
       />
 
@@ -164,8 +158,10 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
         aria-modal="true"
         aria-labelledby="enquiry-modal-title"
         onKeyDown={handleModalKeyDown}
-        className={`bg-white rounded-2xl shadow-2xl w-full max-w-[640px] max-h-[90vh] overflow-y-auto z-10 relative border border-slate-100 transition-all duration-300 ease-out transform ${
-          isOpen ? 'scale-100 translate-y-0' : 'scale-95 translate-y-4'
+        className={`bg-white rounded-2xl shadow-2xl w-full max-w-[640px] max-h-[90vh] overflow-y-auto z-10 relative border border-slate-100 duration-300 ease-out fill-mode-forwards ${
+          isClosing 
+            ? 'animate-out fade-out zoom-out-95 slide-out-to-bottom-4' 
+            : 'animate-in fade-in zoom-in-95 slide-in-from-bottom-4'
         }`}
         style={{ fontFamily: 'Outfit, sans-serif' }}
       >
