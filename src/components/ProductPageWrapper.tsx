@@ -52,7 +52,6 @@ export default function ProductPageWrapper({ children }: ProductPageWrapperProps
         const isProductContact = href.includes('contact-us') && href.includes('product=');
         if (isProductContact) {
           e.preventDefault();
-          e.stopPropagation();
           try {
             // Extract the product query parameter
             const url = new URL(href, window.location.origin);
@@ -75,8 +74,8 @@ export default function ProductPageWrapper({ children }: ProductPageWrapperProps
       }
     };
 
-    document.addEventListener('click', handleInterceptClick, { capture: true });
-    return () => document.removeEventListener('click', handleInterceptClick, { capture: true });
+    document.addEventListener('click', handleInterceptClick);
+    return () => document.removeEventListener('click', handleInterceptClick);
   }, [modalOpen]);
 
   return (
