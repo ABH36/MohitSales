@@ -11,6 +11,34 @@ import SchemaInjector from '@/components/SchemaInjector';
 import { sanitizeHtml } from '@/lib/utils';
 
 export const revalidate = 3600; // ISR: revalidate every 1 hour (admin edits trigger instant revalidation via API)
+export const dynamicParams = true; // Allow on-demand generation for pages not generated at build time
+
+// Build-time cache loader interface
+interface BuildCacheData {
+  products: Record<string, any>;
+  categories: Record<string, any>;
+  pageContents: Record<string, any>;
+  legacyPageContents: Record<string, any>;
+  seoMetas: Record<string, any>;
+  categoryNames: Record<string, string>;
+}
+
+let buildCache: BuildCacheData | null = null;
+const cachePath = path.join(process.cwd(), 'build-cache.json');
+
+function loadBuildCache(): BuildCacheData | null {
+  if (buildCache) return buildCache;
+  try {
+    if (fs.existsSync(cachePath)) {
+      const content = fs.readFileSync(cachePath, 'utf-8');
+      buildCache = JSON.parse(content);
+      return buildCache;
+    }
+  } catch (e) {
+    // Fail silently during runtime, as cache is only required during build time
+  }
+  return null;
+}
 
 // Module-level LRU cache: holds parsed content-export.json for 1 hour
 const contentCache = new LRUCache<string, any[]>({
@@ -101,10 +129,22 @@ async function getProductData(slugPath: string) {
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const slugPath = params.slug.join('/');
-  const [product, seoMeta] = await Promise.all([
-    getProductData(slugPath),
-    prisma.seoMeta.findUnique({ where: { page: `/${slugPath}` } }).catch(() => null),
-  ]);
+  
+  const cache = loadBuildCache();
+  let product = null;
+  let seoMeta = null;
+
+  if (cache) {
+    product = await getProductData(slugPath);
+    seoMeta = cache.seoMetas[`/${slugPath}`] || null;
+  } else {
+    const [p, s] = await Promise.all([
+      getProductData(slugPath),
+      prisma.seoMeta.findUnique({ where: { page: `/${slugPath}` } }).catch(() => null),
+    ]);
+    product = p;
+    seoMeta = s;
+  }
 
   const pageUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'https://mohit.bdm.co.in'}/${slugPath}`;
 
@@ -113,7 +153,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     return {
       title: seoMeta.title || undefined,
       description: seoMeta.description || undefined,
-      keywords: seoMeta.keywords ? seoMeta.keywords.split(',').map(k => k.trim()) : undefined,
+      keywords: seoMeta.keywords ? seoMeta.keywords.split(',').map((k: string) => k.trim()) : undefined,
       robots: { index: !seoMeta.noIndex, follow: !seoMeta.noFollow },
       alternates: seoMeta.canonicalUrl ? { canonical: seoMeta.canonicalUrl } : { canonical: pageUrl },
       openGraph: {
@@ -162,6 +202,17 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 
 // ── DB lookup for page content (replaces PHP file reading) ──────────
 async function getPageContentHtml(slugPath: string): Promise<string | null> {
+  const cache = loadBuildCache();
+  if (cache) {
+    let pageContent = cache.pageContents[slugPath];
+    if (!pageContent) {
+      const legacyPath = getLegacyPath(slugPath);
+      pageContent = cache.legacyPageContents[legacyPath];
+    }
+    if (!pageContent || !pageContent.isActive) return null;
+    return pageContent.htmlContent;
+  }
+
   try {
     let pageContent = await prisma.pageContent.findUnique({
       where: { slug: slugPath }
@@ -183,24 +234,38 @@ async function getPageContentHtml(slugPath: string): Promise<string | null> {
 export default async function ProductPage({ params }: ProductPageProps) {
   const slugPath = params.slug.join('/');
 
-  // Fetch DB product early and local state in parallel
-  // Note: redirect check is handled by middleware (/api/public/redirect). This is the fallback.
-  const [dbProductEarlyRaw, product, dbCategoryEarly] = await Promise.all([
-    prisma.product.findUnique({
-      where: { slug: slugPath },
-      include: { category: { include: { parent: { include: { parent: { include: { parent: true } } } } } } }
-    }).catch((e) => {
-      console.error('[slug:dbProductEarly] Error fetching product early:', e);
-      return null;
-    }),
-    getProductData(slugPath),
-    prisma.category.findUnique({
-      where: { slug: slugPath }
-    }).catch((e) => {
-      console.error('[slug:dbCategoryEarly] Error fetching category early:', e);
-      return null;
-    })
-  ]);
+  const cache = loadBuildCache();
+  let dbProductEarlyRaw = null;
+  let product = null;
+  let dbCategoryEarly = null;
+
+  if (cache) {
+    dbProductEarlyRaw = cache.products[slugPath] || null;
+    product = await getProductData(slugPath);
+    dbCategoryEarly = cache.categories[slugPath] || null;
+  } else {
+    // Fetch DB product early and local state in parallel
+    // Note: redirect check is handled by middleware (/api/public/redirect). This is the fallback.
+    const [dbProductRaw, prod, dbCat] = await Promise.all([
+      prisma.product.findUnique({
+        where: { slug: slugPath },
+        include: { category: { include: { parent: { include: { parent: { include: { parent: true } } } } } } }
+      }).catch((e) => {
+        console.error('[slug:dbProductEarly] Error fetching product early:', e);
+        return null;
+      }),
+      getProductData(slugPath),
+      prisma.category.findUnique({
+        where: { slug: slugPath }
+      }).catch((e) => {
+        console.error('[slug:dbCategoryEarly] Error fetching category early:', e);
+        return null;
+      })
+    ]);
+    dbProductEarlyRaw = dbProductRaw;
+    product = prod;
+    dbCategoryEarly = dbCat;
+  }
 
   const dbProductEarly = (dbCategoryEarly || (dbProductEarlyRaw && (!dbProductEarlyRaw.isActive || dbProductEarlyRaw.stock <= 0))) ? null : dbProductEarlyRaw;
   const legacyHtml = await getPageContentHtml(slugPath);
@@ -271,15 +336,25 @@ export default async function ProductPage({ params }: ProductPageProps) {
         }
 
         if (pendingNames.length > 0) {
-          const dbCats = await prisma.category.findMany({
-            where: {
-              name: {
-                in: pendingNames,
-                mode: 'insensitive'
-              }
-            },
-            select: { name: true, slug: true }
-          });
+          let dbCats: { name: string; slug: string }[] = [];
+          if (cache) {
+            dbCats = pendingNames
+              .map(name => {
+                const slug = cache.categoryNames[name.toLowerCase()];
+                return slug ? { name, slug } : null;
+              })
+              .filter((x): x is { name: string; slug: string } => x !== null);
+          } else {
+            dbCats = await prisma.category.findMany({
+              where: {
+                name: {
+                  in: pendingNames,
+                  mode: 'insensitive'
+                }
+              },
+              select: { name: true, slug: true }
+            });
+          }
 
           const catMap = new Map<string, string>();
           dbCats.forEach(c => catMap.set(c.name.toLowerCase(), c.slug));
@@ -313,10 +388,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
       finalHtml = $.html();
 
       // Only query DB for category products if the HTML actually has card slots to fill
-      const dbCategory = hasLegacyCards ? await prisma.category.findUnique({
-        where: { slug: slugPath },
-        include: { products: true }
-      }) : null;
+      let dbCategory = null;
+      if (hasLegacyCards) {
+        if (cache) {
+          dbCategory = cache.categories[slugPath] || null;
+        } else {
+          dbCategory = await prisma.category.findUnique({
+            where: { slug: slugPath },
+            include: { products: true }
+          });
+        }
+      }
 
       if (dbCategory && dbCategory.products.length > 0) {
         const $ = cheerio.load(finalHtml, null, false);
@@ -501,24 +583,29 @@ export default async function ProductPage({ params }: ProductPageProps) {
   // PRIORITY 5: Admin Panel Category (Prisma DB exact slug match)
   // Renders a full product listing page for admin-created categories.
   // ══════════════════════════════════════════════════════════════════════
-  const dbCategory = await prisma.category.findUnique({
-    where: { slug: slugPath },
-    include: {
-      parent: { include: { parent: { include: { parent: true } } } },
-      children: {
-        where: { isActive: true },
-        orderBy: { sortOrder: 'asc' },
-        include: {
-          products: { where: { isActive: true, stock: { gt: 0 } }, orderBy: { sortOrder: 'asc' }, take: 4 },
-          _count: { select: { products: true } }
+  let dbCategory = null;
+  if (cache) {
+    dbCategory = cache.categories[slugPath] || null;
+  } else {
+    dbCategory = await prisma.category.findUnique({
+      where: { slug: slugPath },
+      include: {
+        parent: { include: { parent: { include: { parent: true } } } },
+        children: {
+          where: { isActive: true },
+          orderBy: { sortOrder: 'asc' },
+          include: {
+            products: { where: { isActive: true, stock: { gt: 0 } }, orderBy: { sortOrder: 'asc' }, take: 4 },
+            _count: { select: { products: true } }
+          }
+        },
+        products: {
+          where: { isActive: true, stock: { gt: 0 } },
+          orderBy: { sortOrder: 'asc' }
         }
-      },
-      products: {
-        where: { isActive: true, stock: { gt: 0 } },
-        orderBy: { sortOrder: 'asc' }
       }
-    }
-  });
+    });
+  }
 
   if (dbCategory && dbCategory.isActive) {
     return (
@@ -1192,4 +1279,145 @@ function renderProductLayout(isMultiProduct: boolean, product: any, cleanLink: (
       </section>
     );
   }
+}
+
+// ── Build-time Static Parameter Generation & Caching ──────────────────
+export async function generateStaticParams() {
+  console.log('[generateStaticParams] Fetching database contents for pre-rendering...');
+
+  // 1. Fetch all active products
+  const products = await prisma.product.findMany({
+    where: { isActive: true },
+    include: {
+      category: {
+        include: {
+          parent: {
+            include: {
+              parent: {
+                include: {
+                  parent: true
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  });
+
+  // 2. Fetch all active categories
+  const categories = await prisma.category.findMany({
+    where: { isActive: true },
+    include: {
+      parent: {
+        include: {
+          parent: {
+            include: {
+              parent: true
+            }
+          }
+        }
+      },
+      children: {
+        where: { isActive: true },
+        orderBy: { sortOrder: 'asc' },
+        include: {
+          products: {
+            where: { isActive: true, stock: { gt: 0 } },
+            orderBy: { sortOrder: 'asc' },
+            take: 4
+          },
+          _count: {
+            select: { products: true }
+          }
+        }
+      },
+      products: {
+        where: { isActive: true, stock: { gt: 0 } },
+        orderBy: { sortOrder: 'asc' }
+      }
+    }
+  });
+
+  // 3. Fetch all active page contents
+  const pageContents = await prisma.pageContent.findMany({
+    where: { isActive: true }
+  });
+
+  // 4. Fetch all seoMeta
+  const seoMetas = await prisma.seoMeta.findMany();
+
+  // Create mappings
+  const productMap: Record<string, any> = {};
+  for (const p of products) {
+    productMap[p.slug] = p;
+  }
+
+  const categoryMap: Record<string, any> = {};
+  for (const c of categories) {
+    categoryMap[c.slug] = c;
+  }
+
+  const pageContentMap: Record<string, any> = {};
+  const legacyPageContentMap: Record<string, any> = {};
+  for (const pc of pageContents) {
+    pageContentMap[pc.slug] = pc;
+    if (pc.legacyPath) {
+      legacyPageContentMap[pc.legacyPath] = pc;
+    }
+  }
+
+  const seoMetaMap: Record<string, any> = {};
+  for (const sm of seoMetas) {
+    seoMetaMap[sm.page] = sm;
+  }
+
+  // Also build name to slug map for categories (used for breadcrumbs lookup)
+  const categoryNameMap: Record<string, string> = {};
+  for (const c of categories) {
+    categoryNameMap[c.name.trim().toLowerCase()] = c.slug;
+  }
+
+  const cacheData = {
+    products: productMap,
+    categories: categoryMap,
+    pageContents: pageContentMap,
+    legacyPageContents: legacyPageContentMap,
+    seoMetas: seoMetaMap,
+    categoryNames: categoryNameMap
+  };
+
+  // Save cache to disk
+  try {
+    fs.writeFileSync(cachePath, JSON.stringify(cacheData), 'utf-8');
+    console.log(`[generateStaticParams] Saved build cache to ${cachePath}`);
+  } catch (err) {
+    console.error('[generateStaticParams] Failed to write build cache file:', err);
+  }
+
+  // Collect all unique active slugs
+  const allSlugs = new Set<string>();
+
+  // Add PageContent slugs
+  for (const pc of pageContents) {
+    if (pc.slug) allSlugs.add(pc.slug);
+  }
+
+  // Add Product slugs
+  for (const p of products) {
+    if (p.slug) allSlugs.add(p.slug);
+  }
+
+  // Add Category slugs
+  for (const c of categories) {
+    if (c.slug) allSlugs.add(c.slug);
+  }
+
+  // Format as Next.js params: [{ slug: ['polycab', 'fans'] }, ...]
+  const paramsList = Array.from(allSlugs).map(slug => ({
+    slug: slug.split('/').filter(Boolean)
+  }));
+
+  console.log(`[generateStaticParams] Generated ${paramsList.length} slugs for pre-rendering.`);
+  return paramsList;
 }

@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "npm run clean && next dev",
     "clean": "rimraf .next",
     "build": "next build",
+    "postbuild": "rimraf build-cache.json",
     "start": "next start",
     "lint": "next lint",
     "db:migrate": "prisma migrate dev",
