@@ -436,7 +436,7 @@ export default function AdminAnalyticsPage() {
       {activeTab === 'database' && (
         <>
           <div className="analytics-header">
-            <p className="analytics-subtitle">实时系统分析 | 100% accurate metrics aggregated from live database tables.</p>
+            <p className="analytics-subtitle">Real-time System Analysis | 100% accurate metrics aggregated from live database tables.</p>
             <button className="admin-btn admin-btn-outline admin-btn-sm" onClick={fetchAnalytics} disabled={loading} style={{ background: '#fff' }}>
               🔄 {loading ? 'Refreshing...' : 'Refresh Data'}
             </button>

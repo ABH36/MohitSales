@@ -131,9 +131,7 @@ function AdminProductsPageInner() {
     }
   };
 
-  useEffect(() => {
-    fetchPdfFiles();
-  }, []);
+  const [pdfFetched, setPdfFetched] = useState(false);
 
   const handleDatasheetUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -247,11 +245,13 @@ function AdminProductsPageInner() {
   const handleOpenCreate = () => {
     setEditProduct(null);
     setForm({ slug: '', title: '', description: '', features: '', imageSrc: '', categoryId: '', newCategoryName: '', datasheetLink: '', isActive: true, sortOrder: 0, stock: 0 });
+    if (!pdfFetched) { fetchPdfFiles(); setPdfFetched(true); }
     setShowModal(true);
   };
 
   const handleOpenEdit = (p: Product) => {
     setEditProduct(p);
+    if (!pdfFetched) { fetchPdfFiles(); setPdfFetched(true); }
 
     setForm({
       slug: p.slug, title: p.title,

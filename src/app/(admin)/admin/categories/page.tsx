@@ -303,7 +303,7 @@ function AdminCategoriesPageInner() {
 
       <div className="admin-table-wrapper">
         <div className="admin-table-header">
-          <h3 className="admin-table-title">Product Categories ({categories.length})</h3>
+          <h3 className="admin-table-title">Product Categories ({flatCats.length})</h3>
           {!isReadOnly && (
             <button className="admin-btn admin-btn-primary" onClick={openCreate}>+ Add Category</button>
           )}
