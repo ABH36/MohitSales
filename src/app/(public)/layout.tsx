@@ -66,6 +66,14 @@ export default function RootLayout({
       </Script>
       <head>
         <link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicon/favicon.png" />
+
+        {/* ── Preload LCP image (banner) — browser downloads immediately ── */}
+        <link rel="preload" as="image" href="/assets/images/banner/desktop/cable.webp" type="image/webp" />
+
+        {/* ── DNS prefetch for external domains ── */}
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+
         {/* ── Critical CSS (render-blocking — layout depends on these) ── */}
         <link rel="stylesheet" href="/assets/css/vendor/bootstrap.min.css" />
         <link rel="stylesheet" href="/assets/css/plugins/swiper.min.css" />

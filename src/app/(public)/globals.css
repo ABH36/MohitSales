@@ -2,15 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global heading weight — bold like PHP site */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.rs-section-title,
-.rs-breadcrumb-title {
+/* Global heading weight — bold like PHP site (scoped to public site only) */
+body.rtl h1,
+body.rtl h2,
+body.rtl h3,
+body.rtl h4,
+body.rtl h5,
+body.rtl h6,
+body.rtl .rs-section-title,
+body.rtl .rs-breadcrumb-title {
   font-family: "Space Grotesk", "Outfit", sans-serif !important;
   font-weight: 900 !important;
 }

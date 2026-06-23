@@ -128,7 +128,6 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
 
   // Fetch authenticated user
   useEffect(() => {
-    // 5-min profile cache in sessionStorage to prevent DB query delays
     let hasCache = false;
     try {
       const cached = sessionStorage.getItem('admin_user_cache');
@@ -138,43 +137,50 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
         if (age < 5 * 60 * 1000 && parsed.user) {
           setUser(parsed.user);
           setLoading(false);
-          hasCache = true; // Use cache for immediate render, but run background fetch to revalidate
+          hasCache = true;
         }
       }
     } catch (e) {
       console.error('[AdminShell Cache GET Error]:', e);
     }
 
-    fetch('/api/admin/auth/me')
-      .then(res => res.json())
-      .then(data => {
-        if (data.success && data.user) {
-          setUser(data.user);
-          try {
-            sessionStorage.setItem('admin_user_cache', JSON.stringify({
-              user: data.user,
-              timestamp: Date.now()
-            }));
-          } catch (e) {
-            console.error('[AdminShell Cache SET Error]:', e);
+    const revalidate = () => {
+      fetch('/api/admin/auth/me')
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.user) {
+            setUser(data.user);
+            try {
+              sessionStorage.setItem('admin_user_cache', JSON.stringify({
+                user: data.user,
+                timestamp: Date.now()
+              }));
+            } catch (e) {
+              console.error('[AdminShell Cache SET Error]:', e);
+            }
+          } else {
+            sessionStorage.removeItem('admin_user_cache');
+            router.push('/admin/login');
           }
-        } else {
-          // Auth failed — clear cache and redirect to login
-          sessionStorage.removeItem('admin_user_cache');
-          router.push('/admin/login');
-        }
-      })
-      .catch(err => {
-        console.error('Error fetching current user:', err);
-        // If we have a cache and it was a network failure, we don't immediately evict/redirect (resilient offline behavior)
-        if (!hasCache) {
-          sessionStorage.removeItem('admin_user_cache');
-          router.push('/admin/login');
-        }
-      })
-      .finally(() => {
-        if (!hasCache) setLoading(false);
-      });
+        })
+        .catch(err => {
+          console.error('Error fetching current user:', err);
+          if (!hasCache) {
+            sessionStorage.removeItem('admin_user_cache');
+            router.push('/admin/login');
+          }
+        })
+        .finally(() => {
+          if (!hasCache) setLoading(false);
+        });
+    };
+
+    if (hasCache) {
+      const delay = setTimeout(revalidate, 3000);
+      return () => clearTimeout(delay);
+    } else {
+      revalidate();
+    }
   }, []);
 
   const handleLogout = async () => {

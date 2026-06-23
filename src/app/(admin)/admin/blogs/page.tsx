@@ -62,32 +62,21 @@ function AdminBlogsPageInner() {
   const fetchBlogs = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/admin/blogs');
-      const data = await res.json();
-      if (data.success) {
-        setBlogs(data.data);
-      }
+      const [blogsRes, catsRes] = await Promise.all([
+        fetch('/api/admin/blogs'),
+        fetch('/api/admin/blogs/categories'),
+      ]);
+      const [blogsData, catsData] = await Promise.all([blogsRes.json(), catsRes.json()]);
+      if (blogsData.success) setBlogs(blogsData.data);
+      if (catsData.success) setCategories(catsData.data);
     } catch (err) {
-      console.error('Failed to fetch blogs', err);
+      console.error('Failed to fetch blogs/categories', err);
     }
     setLoading(false);
   };
 
-  const fetchCategories = async () => {
-    try {
-      const res = await fetch('/api/admin/blogs/categories');
-      const data = await res.json();
-      if (data.success) {
-        setCategories(data.data);
-      }
-    } catch (err) {
-      console.error('Failed to fetch categories', err);
-    }
-  };
-
   useEffect(() => {
     fetchBlogs();
-    fetchCategories();
   }, []);
 
   const showToast = (msg: string, type: string) => {
