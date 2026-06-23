@@ -139,6 +139,14 @@ function CategoryRow({ cat, depth, isReadOnly, onEdit, onDelete }: RowProps) {
 // ── Page component ─────────────────────────────────────────────────────────
 
 export default function AdminCategoriesPage() {
+  return (
+    <AdminShell pageTitle="Categories">
+      <AdminCategoriesPageInner />
+    </AdminShell>
+  );
+}
+
+function AdminCategoriesPageInner() {
   const { user } = useAdmin();
   const isReadOnly = user?.role === 'VIEWER';
 
@@ -290,7 +298,7 @@ export default function AdminCategoriesPage() {
   const parentOptions = flatCats.filter(c => !excludedIds.has(c.id));
 
   return (
-    <AdminShell pageTitle="Categories">
+    <>
       {toast && <div className={`admin-toast admin-toast-${toast.type}`}>{toast.msg}</div>}
 
       <div className="admin-table-wrapper">
@@ -464,6 +472,6 @@ export default function AdminCategoriesPage() {
           </div>
         </div>
       )}
-    </AdminShell>
+    </>
   );
 }

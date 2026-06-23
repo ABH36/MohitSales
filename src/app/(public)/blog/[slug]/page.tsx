@@ -12,13 +12,16 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://mohit.bdm.co.in';
 interface BlogDetailsPageProps {
   params: {
     slug: string;
-  };
+  } | Promise<{
+    slug: string;
+  }>;
 }
 
 export async function generateMetadata({ params }: BlogDetailsPageProps): Promise<Metadata> {
   try {
+    const resolvedParams = await params;
     const post = await prisma.blogPost.findUnique({
-      where: { slug: params.slug },
+      where: { slug: resolvedParams.slug },
       select: {
         title: true,
         excerpt: true,
@@ -36,7 +39,7 @@ export async function generateMetadata({ params }: BlogDetailsPageProps): Promis
 
     const title = post.metaTitle || `${post.title} - Insights Blog | Mohit Sales Corporation`;
     const description = post.metaDesc || post.excerpt || 'Read this post on Mohit Sales Corporation Pvt. Ltd. blog.';
-    const canonicalUrl = `${BASE_URL}/blog/${params.slug}`;
+    const canonicalUrl = `${BASE_URL}/blog/${resolvedParams.slug}`;
 
     return {
       title,
@@ -67,18 +70,19 @@ export async function generateMetadata({ params }: BlogDetailsPageProps): Promis
 }
 
 export default async function BlogDetailsPage({ params }: BlogDetailsPageProps) {
+  const resolvedParams = await params;
   let post = null;
   let recentPosts: any[] = [];
 
   try {
     // Increment viewCount atomically for published post
     await prisma.blogPost.updateMany({
-      where: { slug: params.slug, isPublished: true },
+      where: { slug: resolvedParams.slug, isPublished: true },
       data: { viewCount: { increment: 1 } }
     });
 
     post = await prisma.blogPost.findUnique({
-      where: { slug: params.slug },
+      where: { slug: resolvedParams.slug },
       include: {
         author: { select: { name: true, email: true } },
         category: { select: { name: true, slug: true } }

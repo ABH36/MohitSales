@@ -4,6 +4,11 @@ import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
+    const userRole = request.headers.get('x-user-role');
+    if (!userRole) {
+      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    }
+
     const page = request.nextUrl.searchParams.get('page');
     const where = page ? { page } : {};
     const sections = await prisma.cmsSection.findMany({

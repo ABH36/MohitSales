@@ -104,6 +104,7 @@ async function main() {
           datasheetLink: item.datasheet || null,
           categoryId,
           isActive: true,
+          stock: 999,
         },
       });
       successCount++;
