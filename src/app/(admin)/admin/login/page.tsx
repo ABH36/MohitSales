@@ -333,7 +333,7 @@ export default function AdminLogin() {
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 focus:outline-none"
-                    style={{ color: '#6a9a9a', lineHeight: 0 }}
+                    style={{ color: '#6a9a9a', lineHeight: 0, background: 'none', border: 'none', padding: 0, boxShadow: 'none', outline: 'none', cursor: 'pointer' }}
                     aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? (
