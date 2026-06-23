@@ -145,6 +145,7 @@ export default function AdminLogin() {
       <style dangerouslySetInnerHTML={{ __html: `
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap');
         .login-input {
+          box-sizing: border-box;
           background: #ffffff;
           border: 1px solid rgba(255,255,255,0.4);
           color: #0f1f1f;
@@ -178,6 +179,7 @@ export default function AdminLogin() {
           transition: background-color 9999s ease-in-out 0s;
         }
         .login-btn {
+          box-sizing: border-box;
           background: #e07820;
           color: #fff;
           width: 100%;
@@ -296,7 +298,7 @@ export default function AdminLogin() {
           </div>
         )}
 
-        <div className="w-full max-w-sm">
+        <div className="w-full max-w-xs">
           {!otpStep ? (
             <>
               <p className="welcome-heading">Welcome</p>
@@ -309,17 +311,19 @@ export default function AdminLogin() {
               )}
 
               <form onSubmit={handleLogin} className="flex flex-col gap-4">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="login-input"
-                  placeholder="Email Address"
-                  required
-                  style={{ color: '#0f1f1f', background: '#ffffff' }}
-                />
+                <div className="relative w-full">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="login-input"
+                    placeholder="Email Address"
+                    required
+                    style={{ color: '#0f1f1f', background: '#ffffff' }}
+                  />
+                </div>
 
-                <div className="relative">
+                <div className="relative w-full">
                   <input
                     type={showPassword ? 'text' : 'password'}
                     value={password}
