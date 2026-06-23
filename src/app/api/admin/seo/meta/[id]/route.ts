@@ -5,7 +5,8 @@ import prisma from '@/lib/prisma';
 
 export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const meta = await prisma.seoMeta.findUnique({ where: { id: params.id } });
+    const { id } = await (params as any);
+    const meta = await prisma.seoMeta.findUnique({ where: { id } });
     if (!meta) return NextResponse.json({ success: false, error: 'Not found' }, { status: 404 });
     return NextResponse.json({ success: true, data: meta });
   } catch {
@@ -17,13 +18,26 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   try {
     const role = request.headers.get('x-user-role');
     if (role !== 'ADMIN' && role !== 'EDITOR') return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 });
+    const { id } = await (params as any);
     const body = await request.json();
     const { title, description, keywords, ogImage, ogTitle, canonicalUrl, noIndex, noFollow } = body;
+    
     // Fetch page path before update to revalidate the correct ISR cache
-    const existing = await prisma.seoMeta.findUnique({ where: { id: params.id }, select: { page: true } });
+    const existing = await prisma.seoMeta.findUnique({ where: { id }, select: { page: true } });
+    
+    const data: any = {};
+    if (title !== undefined) data.title = title;
+    if (description !== undefined) data.description = description;
+    if (keywords !== undefined) data.keywords = keywords;
+    if (ogImage !== undefined) data.ogImage = ogImage;
+    if (ogTitle !== undefined) data.ogTitle = ogTitle;
+    if (canonicalUrl !== undefined) data.canonicalUrl = canonicalUrl;
+    if (noIndex !== undefined) data.noIndex = !!noIndex;
+    if (noFollow !== undefined) data.noFollow = !!noFollow;
+
     const meta = await prisma.seoMeta.update({
-      where: { id: params.id },
-      data: { title, description, keywords, ogImage, ogTitle, canonicalUrl, noIndex: !!noIndex, noFollow: !!noFollow },
+      where: { id },
+      data,
     });
     if (existing?.page) revalidatePath(existing.page);
     return NextResponse.json({ success: true, data: meta });
@@ -37,8 +51,9 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
   try {
     const role = request.headers.get('x-user-role');
     if (role !== 'ADMIN' && role !== 'EDITOR') return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 });
-    const existing = await prisma.seoMeta.findUnique({ where: { id: params.id }, select: { page: true } });
-    await prisma.seoMeta.delete({ where: { id: params.id } });
+    const { id } = await (params as any);
+    const existing = await prisma.seoMeta.findUnique({ where: { id }, select: { page: true } });
+    await prisma.seoMeta.delete({ where: { id } });
     if (existing?.page) revalidatePath(existing.page);
     return NextResponse.json({ success: true });
   } catch (e: any) {

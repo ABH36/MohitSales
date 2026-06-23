@@ -28,7 +28,7 @@ describe('sanitizeHtml utility', () => {
 
   it('should remove inline event handlers', () => {
     const dirty = '<img src="x" onerror="alert(1)" onload = \'console.log(2)\'>';
-    const clean = '<img src="x"  >';
+    const clean = '<img src="x">';
     expect(sanitizeHtml(dirty).trim()).toBe(clean);
   });
 

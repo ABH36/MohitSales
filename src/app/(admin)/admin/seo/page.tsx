@@ -69,6 +69,14 @@ const SCHEMA_TYPES = ['Organization', 'LocalBusiness', 'Product', 'BreadcrumbLis
 // ── Main page ──────────────────────────────────────────────────────────────
 
 export default function SeoPage() {
+  return (
+    <AdminShell pageTitle="SEO Manager">
+      <SeoPageInner />
+    </AdminShell>
+  );
+}
+
+function SeoPageInner() {
   const { user } = useAdmin();
   const isReadOnly = user?.role === 'VIEWER';
 
@@ -854,7 +862,7 @@ export default function SeoPage() {
           </div>
         </Modal>
       )}
-    </AdminShell>
+    </>
   );
 }
 

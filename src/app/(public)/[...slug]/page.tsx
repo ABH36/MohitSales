@@ -49,7 +49,9 @@ const contentCache = new LRUCache<string, any[]>({
 interface ProductPageProps {
   params: {
     slug: string[];
-  };
+  } | Promise<{
+    slug: string[];
+  }>;
 }
 
 // Function to read and cache JSON content
@@ -128,7 +130,8 @@ async function getProductData(slugPath: string) {
 }
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
-  const slugPath = params.slug.join('/');
+  const resolvedParams = await params;
+  const slugPath = resolvedParams.slug.join('/');
   
   const cache = loadBuildCache();
   let product = null;
@@ -187,7 +190,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     };
   }
 
-  const parts = params.slug;
+  const parts = resolvedParams.slug;
   const lastPart = parts[parts.length - 1];
   const formattedTitle = lastPart
     .replace(/-/g, ' ')
@@ -232,7 +235,8 @@ async function getPageContentHtml(slugPath: string): Promise<string | null> {
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const slugPath = params.slug.join('/');
+  const resolvedParams = await params;
+  const slugPath = resolvedParams.slug.join('/');
 
   const cache = loadBuildCache();
   let dbProductEarlyRaw = null;

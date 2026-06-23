@@ -17,6 +17,50 @@ interface PromoConfig {
   customHtml?: string;
 }
 
+function sanitizeClientHtml(html: string): string {
+  if (typeof window === 'undefined') return '';
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    
+    // 1. Remove dangerous tags
+    const dangerousTags = ['script', 'iframe', 'object', 'embed', 'link', 'meta', 'base', 'style', 'svg', 'math'];
+    dangerousTags.forEach(tag => {
+      const elements = doc.getElementsByTagName(tag);
+      while (elements.length > 0) {
+        elements[0].parentNode?.removeChild(elements[0]);
+      }
+    });
+
+    // 2. Remove all attributes that start with 'on' or contain javascript:/data: URLs
+    const allElements = doc.getElementsByTagName('*');
+    for (let i = 0; i < allElements.length; i++) {
+      const el = allElements[i];
+      const attrs = Array.from(el.attributes);
+      attrs.forEach(attr => {
+        const name = attr.name.toLowerCase();
+        if (name.startsWith('on')) {
+          el.removeAttribute(attr.name);
+        } else if (['href', 'src', 'action', 'formaction'].includes(name)) {
+          const val = attr.value.replace(/[\s\x00-\x1F\x7F-\x9F]/g, '').toLowerCase();
+          if (val.includes('javascript:') || val.includes('data:')) {
+            if (name === 'href') {
+              el.setAttribute(attr.name, '#');
+            } else {
+              el.removeAttribute(attr.name);
+            }
+          }
+        }
+      });
+    }
+
+    return doc.body.innerHTML;
+  } catch (error) {
+    console.error('Client sanitization error:', error);
+    return '';
+  }
+}
+
 export default function PromoPopup() {
   const [mounted, setMounted] = useState(false);
   const [config, setConfig] = useState<PromoConfig | null>(null);
@@ -25,10 +69,12 @@ export default function PromoPopup() {
 
   useEffect(() => {
     setMounted(true);
+    let active = true;
+    let timerId: NodeJS.Timeout | null = null;
 
     // 1. Check if dismissed for 24 hours
     const now = Date.now();
-    const dismissedUntil = localStorage.getItem('dismissed_promo_until');
+    const dismissedUntil = typeof window !== 'undefined' ? localStorage.getItem('dismissed_promo_until') : null;
     if (dismissedUntil && now < parseInt(dismissedUntil, 10)) {
       return;
     }
@@ -37,20 +83,29 @@ export default function PromoPopup() {
     fetch('/api/public/cms/homepage/promo_popup')
       .then((res) => res.json())
       .then((data) => {
+        if (!active) return;
         if (data.success && data.data?.content) {
           const content: PromoConfig = data.data.content;
           if (content.showPopup) {
             setConfig(content);
             // 3. Trigger delay timer
             const delayMs = (content.displayDelay ?? 2) * 1000;
-            const timer = setTimeout(() => {
-              setVisible(true);
+            timerId = setTimeout(() => {
+              if (active) {
+                setVisible(true);
+              }
             }, delayMs);
-            return () => clearTimeout(timer);
           }
         }
       })
       .catch((err) => console.error('[PromoPopup Fetch Error]', err));
+
+    return () => {
+      active = false;
+      if (timerId) {
+        clearTimeout(timerId);
+      }
+    };
   }, []);
 
   if (!mounted || !config || !visible) return null;
@@ -380,7 +435,7 @@ export default function PromoPopup() {
           <div className="promo-modal-card" style={{ maxWidth: '600px', overflow: 'hidden' }}>
             <button className="promo-close-btn" onClick={handleClose}>✕</button>
             {config.customHtml ? (
-              <div dangerouslySetInnerHTML={{ __html: config.customHtml }} />
+              <div dangerouslySetInnerHTML={{ __html: sanitizeClientHtml(config.customHtml) }} />
             ) : (
               <div style={{ padding: '40px', textAlign: 'center', color: '#64748b' }}>
                 No custom HTML code configured.

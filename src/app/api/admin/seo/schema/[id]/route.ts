@@ -7,13 +7,22 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   try {
     const role = request.headers.get('x-user-role');
     if (role !== 'ADMIN' && role !== 'EDITOR') return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 });
+    const { id } = await (params as any);
     const body = await request.json();
     const { page, schemaType, jsonLd, isActive } = body;
     if (jsonLd) { try { JSON.parse(jsonLd); } catch { return NextResponse.json({ success: false, error: 'Invalid JSON-LD' }, { status: 400 }); } }
-    const existing = await prisma.schemaMarkup.findUnique({ where: { id: params.id }, select: { page: true } });
+    
+    const existing = await prisma.schemaMarkup.findUnique({ where: { id }, select: { page: true } });
+    
+    const data: any = {};
+    if (page !== undefined) data.page = page;
+    if (schemaType !== undefined) data.schemaType = schemaType;
+    if (jsonLd !== undefined) data.jsonLd = jsonLd;
+    if (isActive !== undefined) data.isActive = !!isActive;
+
     const schema = await prisma.schemaMarkup.update({
-      where: { id: params.id },
-      data: { ...(page && { page }), schemaType, jsonLd, isActive },
+      where: { id },
+      data,
     });
     const affectedPage = page || existing?.page;
     if (affectedPage) revalidatePath(affectedPage);
@@ -28,8 +37,9 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
   try {
     const role = request.headers.get('x-user-role');
     if (role !== 'ADMIN' && role !== 'EDITOR') return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 });
-    const existing = await prisma.schemaMarkup.findUnique({ where: { id: params.id }, select: { page: true } });
-    await prisma.schemaMarkup.delete({ where: { id: params.id } });
+    const { id } = await (params as any);
+    const existing = await prisma.schemaMarkup.findUnique({ where: { id }, select: { page: true } });
+    await prisma.schemaMarkup.delete({ where: { id } });
     if (existing?.page) revalidatePath(existing.page);
     return NextResponse.json({ success: true });
   } catch (e: any) {

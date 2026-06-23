@@ -13,6 +13,14 @@ interface MediaFile {
 }
 
 export default function AdminMediaPage() {
+  return (
+    <AdminShell pageTitle="Media Library">
+      <AdminMediaPageInner />
+    </AdminShell>
+  );
+}
+
+function AdminMediaPageInner() {
   const { user } = useAdmin();
   const isReadOnly = user?.role === 'VIEWER';
   const [media, setMedia] = useState<MediaFile[]>([]);
@@ -102,7 +110,7 @@ export default function AdminMediaPage() {
   };
 
   return (
-    <AdminShell pageTitle="Media Library">
+    <>
       {toast && (
         <div style={{ position: 'fixed', top: '20px', right: '20px', padding: '15px 25px', background: toast.type === 'error' ? '#f56565' : '#48bb78', color: 'white', borderRadius: '4px', zIndex: 1000, boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
           {toast.msg}
@@ -228,6 +236,6 @@ export default function AdminMediaPage() {
           </table>
         )}
       </div>
-    </AdminShell>
+    </>
   );
 }

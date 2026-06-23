@@ -29,6 +29,14 @@ interface BlogPost {
 }
 
 export default function AdminBlogsPage() {
+  return (
+    <AdminShell pageTitle="Blog Posts">
+      <AdminBlogsPageInner />
+    </AdminShell>
+  );
+}
+
+function AdminBlogsPageInner() {
   const { user } = useAdmin();
   const isReadOnly = user?.role === 'VIEWER';
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
@@ -171,7 +179,7 @@ export default function AdminBlogsPage() {
   };
 
   return (
-    <AdminShell pageTitle="Blog Posts">
+    <>
       {toast && (
         <div style={{ position: 'fixed', top: '20px', right: '20px', padding: '15px 25px', background: toast.type === 'error' ? '#f56565' : '#48bb78', color: 'white', borderRadius: '4px', zIndex: 1000, boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
           {toast.msg}
@@ -390,6 +398,6 @@ export default function AdminBlogsPage() {
           </div>
         </div>
       )}
-    </AdminShell>
+    </>
   );
 }

@@ -14,9 +14,10 @@ export async function generateMetadata() {
 export default async function BlogPage({
   searchParams,
 }: {
-  searchParams: { page?: string };
+  searchParams: { page?: string } | Promise<{ page?: string }>;
 }) {
-  const page = Math.max(1, parseInt(searchParams?.page || '1', 10) || 1);
+  const resolvedSearchParams = await searchParams;
+  const page = Math.max(1, parseInt(resolvedSearchParams?.page || '1', 10) || 1);
   const limit = 12;
   const skip = (page - 1) * limit;
 

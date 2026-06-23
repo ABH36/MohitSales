@@ -86,6 +86,14 @@ interface Product {
 }
 
 export default function AdminProductsPage() {
+  return (
+    <AdminShell pageTitle="Products">
+      <AdminProductsPageInner />
+    </AdminShell>
+  );
+}
+
+function AdminProductsPageInner() {
   const { user } = useAdmin();
   // VIEWER role is read-only; ADMIN and EDITOR can create/edit/delete
   const isReadOnly = user?.role === 'VIEWER';
@@ -787,6 +795,6 @@ export default function AdminProductsPage() {
           color: #fff;
         }
       `}} />
-    </AdminShell>
+    </>
   );
 }

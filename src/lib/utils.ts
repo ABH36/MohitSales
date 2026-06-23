@@ -5,26 +5,54 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+import * as cheerio from 'cheerio';
+
 export function sanitizeHtml(html: string): string {
   if (!html) return '';
-  return html
-    // Remove script tags and content
-    .replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, '')
-    // Remove iframe tags
-    .replace(/<iframe[^>]*>([\s\S]*?)<\/iframe>/gi, '')
-    // Remove object, embed, and base tags
-    .replace(/<object[^>]*>([\s\S]*?)<\/object>/gi, '')
-    .replace(/<embed[^>]*>([\s\S]*?)<\/embed>/gi, '')
-    .replace(/<base[^>]*>/gi, '')
-    // Remove inline event handlers (onload, onerror, etc.) using word boundaries and allowing newlines
-    .replace(/\bon[a-zA-Z]+\s*=\s*(["'])([\s\S]*?)\1/gi, '')
-    .replace(/\bon[a-zA-Z]+\s*=\s*([^>\s]+)/gi, '')
-    // Remove javascript: pseudo-protocol in links (allowing leading spaces and newlines)
-    .replace(/href\s*=\s*(["'])\s*javascript:([\s\S]*?)\1/gi, 'href="#"')
-    .replace(/href\s*=\s*javascript:([^>\s]+)/gi, 'href="#"')
-    // Remove data: URI in links (preventing data-based HTML/script execution)
-    .replace(/href\s*=\s*(["'])\s*data:([\s\S]*?)\1/gi, 'href="#"')
-    .replace(/href\s*=\s*data:([^>\s]+)/gi, 'href="#"');
+  
+  try {
+    const $ = cheerio.load(html, null, false);
+    
+    // 1. Remove all forbidden tags
+    const forbiddenTags = ['script', 'iframe', 'object', 'embed', 'base', 'link', 'meta', 'svg', 'math', 'style'];
+    $(forbiddenTags.join(',')).remove();
+    
+    // 2. Clean attributes on all remaining elements
+    $('*').each((_, el) => {
+      const attribs = el.attribs;
+      if (!attribs) return;
+      
+      const keys = Object.keys(attribs);
+      for (const key of keys) {
+        // Strip event handlers (e.g. onclick, onload, etc.)
+        if (key.toLowerCase().startsWith('on')) {
+          $(el).removeAttr(key);
+          continue;
+        }
+        
+        // Strip javascript: or data: URIs from href, src, action, formaction
+        if (['href', 'src', 'action', 'formaction'].includes(key.toLowerCase())) {
+          const val = attribs[key] || '';
+          // Clean whitespace and control characters from the value
+          const cleanVal = val.replace(/[\s\x00-\x1F\x7F-\x9F]/g, '').toLowerCase();
+          
+          if (cleanVal.includes('javascript:') || cleanVal.includes('data:')) {
+            if (key.toLowerCase() === 'href') {
+              $(el).attr(key, '#');
+            } else {
+              $(el).removeAttr(key);
+            }
+          }
+        }
+      }
+    });
+    
+    return $.html();
+  } catch (error) {
+    console.error('Error sanitizing HTML:', error);
+    // Safe fallback: strip tags using basic regex if cheerio fails
+    return html.replace(/<[^>]*>/g, '');
+  }
 }
 
 export function escapeHtml(str: string): string {

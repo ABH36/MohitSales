@@ -99,7 +99,7 @@ export async function GET(request: NextRequest) {
       new: 0,
       read: 0,
       replied: 0,
-      archived: 0,
+      closed: 0,
     };
     inquiryStatusGroup.forEach(g => {
       const s = g.status.toLowerCase() as keyof typeof inquiryStatus;

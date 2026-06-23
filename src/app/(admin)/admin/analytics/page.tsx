@@ -8,7 +8,7 @@ interface AnalyticsData {
     products: { total: number; active: number };
     categories: { total: number };
     blogs: { total: number; views: number };
-    inquiries: { total: number; status: { new: number; read: number; replied: number; archived: number } };
+    inquiries: { total: number; status: { new: number; read: number; replied: number; closed: number } };
     media: { total: number; size: number };
   };
   inventory: {
@@ -293,7 +293,7 @@ export default function AdminAnalyticsPage() {
     if (!data) return 0;
     const { total, status } = data.overview.inquiries;
     if (total === 0) return 100;
-    return Math.round(((status.replied + status.archived) / total) * 100);
+    return Math.round(((status.replied + status.closed) / total) * 100);
   };
 
   // SVG Line Chart coordinates generators

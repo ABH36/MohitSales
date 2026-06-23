@@ -24,6 +24,14 @@ interface User {
 }
 
 export default function AdminUsersPage() {
+  return (
+    <AdminShell pageTitle="User Management">
+      <AdminUsersPageInner />
+    </AdminShell>
+  );
+}
+
+function AdminUsersPageInner() {
   const { user, loading: authLoading } = useAdmin();
   const router = useRouter();
 
@@ -165,11 +173,9 @@ export default function AdminUsersPage() {
 
   if (authLoading) {
     return (
-      <AdminShell pageTitle="Loading...">
-        <div style={{ padding: '40px', textAlign: 'center', color: '#718096' }}>
-          Loading user authorization...
-        </div>
-      </AdminShell>
+      <div style={{ padding: '40px', textAlign: 'center', color: '#718096' }}>
+        Loading user authorization...
+      </div>
     );
   }
 
@@ -178,7 +184,7 @@ export default function AdminUsersPage() {
   }
 
   return (
-    <AdminShell pageTitle="User Management">
+    <>
       {toast && <div className={`admin-toast admin-toast-${toast.type}`}>{toast.msg}</div>}
 
       <div className="admin-table-wrapper">
@@ -364,6 +370,6 @@ export default function AdminUsersPage() {
           </div>
         </div>
       )}
-    </AdminShell>
+    </>
   );
 }
