@@ -353,7 +353,7 @@ function AdminProductsPageInner() {
   };
 
   return (
-    <AdminShell pageTitle="Products">
+    <>
       {toast && <div className={`admin-toast admin-toast-${toast.type}`}>{toast.msg}</div>}
 
       <div className="admin-table-wrapper">

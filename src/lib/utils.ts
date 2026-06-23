@@ -19,7 +19,7 @@ export function sanitizeHtml(html: string): string {
     
     // 2. Clean attributes on all remaining elements
     $('*').each((_, el) => {
-      const attribs = el.attribs;
+      const attribs = (el as any).attribs;
       if (!attribs) return;
       
       const keys = Object.keys(attribs);

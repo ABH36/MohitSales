@@ -366,7 +366,7 @@ function SeoPageInner() {
   ] as const;
 
   return (
-    <AdminShell pageTitle="SEO Manager">
+    <>
       {/* Toast */}
       {toast && (
         <div style={{ position: 'fixed', top: 24, right: 24, zIndex: 9999, background: toast.type === 'success' ? '#38a169' : '#e53e3e', color: '#fff', padding: '12px 20px', borderRadius: 8, boxShadow: '0 4px 16px rgba(0,0,0,0.15)', fontWeight: 500, fontSize: 14 }}>
