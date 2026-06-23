@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 import Image from 'next/image';
 import { usePublicSettings } from './PublicSettingsContext';
 
@@ -134,7 +135,7 @@ export default function Header() {
             <div className="rs-header-inner">
               <div className="rs-header-left" style={{ marginLeft: 0 }}>
                 <div className="rs-header-logo" style={{ marginLeft: 0, paddingLeft: 0 }}>
-                  <a href="/">
+                  <Link href="/">
                     <img
                       src="/assets/images/logo/msc_logo_without_bg.webp"
                       alt="logo"
@@ -142,7 +143,7 @@ export default function Header() {
                       height={55}
                       style={{ maxWidth: '100%', height: 'auto', margin: '0', background: 'transparent' }}
                     />
-                  </a>
+                  </Link>
                 </div>
               </div>
 
@@ -150,10 +151,10 @@ export default function Header() {
                 <nav id="mobile-menu" className="main-menu d-none d-lg-block">
                   <ul className="multipage-menu">
                     <li>
-                      <a href="/">Home</a>
+                      <Link href="/">Home</Link>
                     </li>
                     <li>
-                      <a href="/about-us">About Us</a>
+                      <Link href="/about-us">About Us</Link>
                     </li>
 
                     {/* ── Products — cascading flyout (matches PHP original) ── */}
@@ -190,13 +191,13 @@ export default function Header() {
                                               <ul className="nav-flyout">
                                                 {cat.children.map((sub: NavItem) => (
                                                   <li key={sub.id}>
-                                                    <a href={`/${sub.slug}`}>{sub.name}</a>
+                                                    <Link href={`/${sub.slug}`}>{sub.name}</Link>
                                                   </li>
                                                 ))}
                                               </ul>
                                             </>
                                           ) : (
-                                            <a href={`/${cat.slug}`}>{cat.name}</a>
+                                            <Link href={`/${cat.slug}`}>{cat.name}</Link>
                                           )}
                                         </li>
                                       );
@@ -204,7 +205,7 @@ export default function Header() {
                                   </ul>
                                 </>
                               ) : (
-                                <a href={`/${brand.slug}`}>{brand.name}</a>
+                                <Link href={`/${brand.slug}`}>{brand.name}</Link>
                               )}
                             </li>
                           );
@@ -213,16 +214,16 @@ export default function Header() {
                     </li>
 
                     <li>
-                      <a href="/catalogue">Catalogue</a>
+                      <Link href="/catalogue">Catalogue</Link>
                     </li>
                     <li>
-                      <a href="/pricelist">Pricelist</a>
+                      <Link href="/pricelist">Pricelist</Link>
                     </li>
                     <li>
                       <a href="/assets/images/pdf/MOHIT CATALOGUE.pdf" target="_blank">Company Profile</a>
                     </li>
                     <li>
-                      <a href="/contact-us">Contact Us</a>
+                      <Link href="/contact-us">Contact Us</Link>
                     </li>
                   </ul>
                 </nav>
@@ -249,7 +250,7 @@ export default function Header() {
             <div className="offcanvas-content">
               <div className="offcanvas-top d-flex justify-content-between align-items-center mb-20">
                 <div className="offcanvas-logo">
-                  <a className="logo-black" href="/">
+                  <Link className="logo-black" href="/">
                     <Image
                       src="/assets/images/logo/msc_logo_without_bg.webp"
                       alt="logo"
@@ -257,7 +258,7 @@ export default function Header() {
                       height={53}
                       style={{ maxWidth: '180px', height: 'auto' }}
                     />
-                  </a>
+                  </Link>
                 </div>
                 <div className="offcanvas-close">
                   <button className="offcanvas-close-icon" onClick={() => setIsSidebarOpen(false)}>
@@ -278,10 +279,10 @@ export default function Header() {
               <div className="mobile-menu mb-4 d-lg-none">
                 <ul className="list-none p-0 m-0">
                   <li className="mobile-nav-item">
-                    <a href="/" onClick={() => setIsSidebarOpen(false)} className="mobile-nav-link">Home</a>
+                    <Link href="/" onClick={() => setIsSidebarOpen(false)} className="mobile-nav-link">Home</Link>
                   </li>
                   <li className="mobile-nav-item">
-                    <a href="/about-us" onClick={() => setIsSidebarOpen(false)} className="mobile-nav-link">About Us</a>
+                    <Link href="/about-us" onClick={() => setIsSidebarOpen(false)} className="mobile-nav-link">About Us</Link>
                   </li>
 
                   {/* Dynamic Products mobile collapse */}
@@ -320,27 +321,35 @@ export default function Header() {
                                                   <ul className="mobile-submenu mt-1">
                                                     {catNode.children.map(subNode => (
                                                       <li key={subNode.id}>
+<<<<<<< HEAD
                                                         <a
+=======
+                                                        <Link
+>>>>>>> 370fcea (fast rendring)
                                                           href={`/${subNode.slug}`}
                                                           onClick={() => setIsSidebarOpen(false)}
                                                           className="mobile-leaf-link"
                                                         >
                                                           {subNode.name}
-                                                        </a>
+                                                        </Link>
                                                       </li>
                                                     ))}
                                                   </ul>
                                                 )}
                                               </>
                                             ) : (
+<<<<<<< HEAD
                                               <a
+=======
+                                              <Link
+>>>>>>> 370fcea (fast rendring)
                                                 href={`/${catNode.slug}`}
                                                 onClick={() => setIsSidebarOpen(false)}
                                                 className="mobile-leaf-link"
                                                 style={{ fontWeight: 500, paddingLeft: 0 }}
                                               >
                                                 {catNode.name}
-                                              </a>
+                                              </Link>
                                             )}
                                           </li>
                                         );
@@ -349,14 +358,18 @@ export default function Header() {
                                   )}
                                 </>
                               ) : (
+<<<<<<< HEAD
                                 <a
+=======
+                                <Link
+>>>>>>> 370fcea (fast rendring)
                                   href={`/${brandNode.slug}`}
                                   onClick={() => setIsSidebarOpen(false)}
                                   className="mobile-leaf-link"
                                   style={{ fontWeight: 600, paddingLeft: 0 }}
                                 >
                                   {brandNode.name}
-                                </a>
+                                </Link>
                               )}
                             </li>
                           );
@@ -366,16 +379,16 @@ export default function Header() {
                   </li>
 
                   <li className="mobile-nav-item">
-                    <a href="/catalogue" onClick={() => setIsSidebarOpen(false)} className="mobile-nav-link">Catalogue</a>
+                    <Link href="/catalogue" onClick={() => setIsSidebarOpen(false)} className="mobile-nav-link">Catalogue</Link>
                   </li>
                   <li className="mobile-nav-item">
-                    <a href="/pricelist" onClick={() => setIsSidebarOpen(false)} className="mobile-nav-link">Pricelist</a>
+                    <Link href="/pricelist" onClick={() => setIsSidebarOpen(false)} className="mobile-nav-link">Pricelist</Link>
                   </li>
                   <li className="mobile-nav-item">
                     <a href="/assets/images/pdf/MOHIT CATALOGUE.pdf" target="_blank" rel="noopener noreferrer" onClick={() => setIsSidebarOpen(false)} className="mobile-nav-link">Company Profile</a>
                   </li>
                   <li className="mobile-nav-item">
-                    <a href="/contact-us" onClick={() => setIsSidebarOpen(false)} className="mobile-nav-link">Contact Us</a>
+                    <Link href="/contact-us" onClick={() => setIsSidebarOpen(false)} className="mobile-nav-link">Contact Us</Link>
                   </li>
                 </ul>
               </div>

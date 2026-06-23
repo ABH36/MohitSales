@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import Link from 'next/link';
 import SplitText from '@/components/SplitText';
 
 export const metadata = {
@@ -100,7 +101,7 @@ export default function DowellsPage() {
                 <div className="rs-breadcrumb-menu">
                   <nav>
                     <ul>
-                      <li><span><a href="/">Home</a></span></li>
+                      <li><span><Link href="/">Home</Link></span></li>
                       <li><span>Dowells</span></li>
                     </ul>
                   </nav>
@@ -124,7 +125,7 @@ export default function DowellsPage() {
               <div className="products-grid">
                 {products.map((prod, idx) => (
                   <div key={idx} className="product-card">
-                    <a href={prod.link}>
+                    <Link href={prod.link}>
                       <img
                         src={prod.image}
                         alt={prod.title}
@@ -133,7 +134,7 @@ export default function DowellsPage() {
                       <div className="pricelist-button">
                         <span className="pricelist-btn">Explore More</span>
                       </div>
-                    </a>
+                    </Link>
                   </div>
                 ))}
               </div>

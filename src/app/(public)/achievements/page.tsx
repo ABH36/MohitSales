@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 
 export default function AchievementsPage() {
   const [lightboxImage, setLightboxImage] = useState<{ src: string; caption: string } | null>(null);
@@ -36,7 +37,7 @@ export default function AchievementsPage() {
                 <div className="rs-breadcrumb-menu">
                   <nav>
                     <ul>
-                      <li><span><a href="/">Home</a></span></li>
+                      <li><span><Link href="/">Home</Link></span></li>
                       <li><span>Achievements</span></li>
                     </ul>
                   </nav>

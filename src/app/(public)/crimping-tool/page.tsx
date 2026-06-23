@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import React from 'react';
+import Link from 'next/link';
 
 export default function CrimpingToolPage() {
   const products = [
@@ -42,8 +43,8 @@ export default function CrimpingToolPage() {
                 <div className="rs-breadcrumb-menu">
                   <nav>
                     <ul>
-                      <li><span><a href="/">Home</a></span></li>
-                      <li><span><a href="/dowells">Dowells</a></span></li>
+                      <li><span><Link href="/">Home</Link></span></li>
+                      <li><span><Link href="/dowells">Dowells</Link></span></li>
                       <li><span>Crimping Tool</span></li>
                     </ul>
                   </nav>

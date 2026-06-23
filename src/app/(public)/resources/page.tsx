@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -43,7 +44,7 @@ export default async function ResourcesPage() {
                 <div className="rs-breadcrumb-menu">
                   <nav>
                     <ul>
-                      <li><span><a href={l('/')}>Home</a></span></li>
+                      <li><span><Link href={l('/')}>Home</Link></span></li>
                       <li><span>Resources</span></li>
                     </ul>
                   </nav>

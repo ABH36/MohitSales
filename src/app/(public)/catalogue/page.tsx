@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import Link from 'next/link';
 
 export const metadata = {
   title: 'Catalogue - Mohit Sales Corporation Pvt. Ltd.',
@@ -74,7 +75,7 @@ export default function CataloguePage() {
                 <div className="rs-breadcrumb-menu">
                   <nav>
                     <ul>
-                      <li><span><a href="/">Home</a></span></li>
+                      <li><span><Link href="/">Home</Link></span></li>
                       <li><span>Catalogue</span></li>
                     </ul>
                   </nav>
@@ -97,10 +98,10 @@ export default function CataloguePage() {
           <div className="row">
             {catalogs.map((cat, idx) => (
               <div key={idx} className="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <a href={cat.link} className="catalogue-card">
+                <Link href={cat.link} className="catalogue-card">
                   <img src={cat.image} alt={cat.title} />
                   <h5>{cat.title}</h5>
-                </a>
+                </Link>
               </div>
             ))}
           </div>

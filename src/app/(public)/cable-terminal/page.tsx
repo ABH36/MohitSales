@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -61,8 +62,8 @@ export default async function CableTerminalPage() {
                 <div className="rs-breadcrumb-menu">
                   <nav>
                     <ul>
-                      <li><span><a href="/">Home</a></span></li>
-                      <li><span><a href="/dowells">Dowells</a></span></li>
+                      <li><span><Link href="/">Home</Link></span></li>
+                      <li><span><Link href="/dowells">Dowells</Link></span></li>
                       <li><span>Cable Terminal</span></li>
                     </ul>
                   </nav>
@@ -85,10 +86,10 @@ export default async function CableTerminalPage() {
               <div className="products-grid">
                 {cards.map((card, idx) => (
                   <div key={idx} className="product-card">
-                    <a href={linkPath(card.link)}>
-                      <img 
-                        src={card.image} 
-                        alt={card.title} 
+                    <Link href={linkPath(card.link)}>
+                      <img
+                        src={card.image}
+                        alt={card.title}
                       />
                       <h3>{card.title}</h3>
                       <div className="pricelist-button">
@@ -96,7 +97,7 @@ export default async function CableTerminalPage() {
                           Explore More
                         </span>
                       </div>
-                    </a>
+                    </Link>
                   </div>
                 ))}
               </div>

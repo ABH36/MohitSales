@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 
 
@@ -62,8 +63,8 @@ export default async function FansPage() {
                 <div className="rs-breadcrumb-menu">
                   <nav>
                     <ul>
-                      <li><span><a href={l('/')}>Home</a></span></li>
-                      <li><span><a href={l('/polycab')}>Polycab</a></span></li>
+                      <li><span><Link href={l('/')}>Home</Link></span></li>
+                      <li><span><Link href={l('/polycab')}>Polycab</Link></span></li>
                       <li><span>Fans</span></li>
                     </ul>
                   </nav>
@@ -87,7 +88,7 @@ export default async function FansPage() {
               <div className="products-grid">
                 {products.map((prod, idx) => (
                   <div key={idx} className="product-card">
-                    <a href={prod.link}>
+                    <Link href={prod.link}>
                       <img
                         src={prod.image}
                         alt={prod.title}
@@ -96,7 +97,7 @@ export default async function FansPage() {
                       <div className="pricelist-button">
                         <span className="pricelist-btn">Explore More</span>
                       </div>
-                    </a>
+                    </Link>
                   </div>
                 ))}
               </div>

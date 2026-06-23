@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, createContext, useContext } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import {
   LayoutDashboard,
   LineChart,
@@ -253,7 +254,7 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                     }
                     const IconComponent = item.icon as any;
                     return (
-                      <a
+                      <Link
                         key={item.href}
                         href={item.href}
                         className={`admin-nav-link ${pathname === item.href ? 'active' : ''}`}
@@ -270,7 +271,7 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                           )}
                         </span>
                         {item.label}
-                      </a>
+                      </Link>
                     );
                   })}
                 </div>

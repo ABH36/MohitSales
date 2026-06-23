@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 import Image from 'next/image';
 import { usePublicSettings } from './PublicSettingsContext';
 
@@ -55,7 +56,7 @@ export default function Footer() {
                   </h3>
                   <div ref={btnRef} className="contact-btn scroll-reveal" data-direction="left" data-delay="180">
                     <div className="rs-banner-btn">
-                      <a
+                      <Link
                         className="rs-btn has-theme-orange has-icon has-bg"
                         href="/contact-us#contact-us-form"
                       >
@@ -68,7 +69,7 @@ export default function Footer() {
                             <path d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z"></path>
                           </svg>
                         </span>
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -91,7 +92,7 @@ export default function Footer() {
                 <div className="col-xxl-4 col-lg-4 col-md-4 col-sm-6">
                   <div className="rs-footer-widget footer-2-col-1">
                     <div className="rs-footer-widget-logo mb-25">
-                      <a href="/">
+                      <Link href="/">
                         <Image
                           src="/assets/images/logo/msc_logo_without_bg.webp"
                           alt="logo"
@@ -99,7 +100,7 @@ export default function Footer() {
                           height={83}
                           style={{ maxWidth: '100%', height: 'auto' }}
                         />
-                      </a>
+                      </Link>
                     </div>
                     <div className="rs-footer-widget-content">
                       <p className="rs-footer-widget-description">
@@ -117,19 +118,19 @@ export default function Footer() {
                         <div className="product-col">
                           <h6>Polycab</h6>
                           <ul className="list-unstyled">
-                            <li><a href="/switchgears">Switchgears</a></li>
-                            <li><a href="/fans">Fans</a></li>
-                            <li><a href="/solar">Solar</a></li>
-                            <li><a href="/conduit-accessories">Conduit & Accessories</a></li>
-                            <li><a href="/home-appliances">Home Appliances</a></li>
+                            <li><Link href="/switchgears">Switchgears</Link></li>
+                            <li><Link href="/fans">Fans</Link></li>
+                            <li><Link href="/solar">Solar</Link></li>
+                            <li><Link href="/conduit-accessories">Conduit & Accessories</Link></li>
+                            <li><Link href="/home-appliances">Home Appliances</Link></li>
                           </ul>
                         </div>
                         <div className="product-col">
                           <h6>Dowells</h6>
                           <ul className="list-unstyled">
-                            <li><a href="/cable-terminal">Cable Terminal</a></li>
-                            <li><a href="/gland">Gland</a></li>
-                            <li><a href="/crimping-tool">Crimping Tool</a></li>
+                            <li><Link href="/cable-terminal">Cable Terminal</Link></li>
+                            <li><Link href="/gland">Gland</Link></li>
+                            <li><Link href="/crimping-tool">Crimping Tool</Link></li>
                           </ul>
                         </div>
                       </div>
@@ -177,11 +178,11 @@ export default function Footer() {
             <div className="row">
               <div className="col-md-12">
                 <ul className="footer-menu">
-                  <li><a href="/">Home</a></li>
-                  <li><a href="/about-us">About Us</a></li>
-                  <li><a href="/catalogue">Catalogue</a></li>
-                  <li><a href="/pricelist">Pricelist</a></li>
-                  <li><a href="/contact-us">Contact Us</a></li>
+                  <li><Link href="/">Home</Link></li>
+                  <li><Link href="/about-us">About Us</Link></li>
+                  <li><Link href="/catalogue">Catalogue</Link></li>
+                  <li><Link href="/pricelist">Pricelist</Link></li>
+                  <li><Link href="/contact-us">Contact Us</Link></li>
                 </ul>
               </div>
             </div>
@@ -232,18 +233,18 @@ export default function Footer() {
         <a href={getSetting('social_linkedin', '#') || '#'} className="LinkedIn linkedin" target="_blank" rel="noopener noreferrer">
           <i className="fa-brands fa-linkedin-in icon"></i> LinkedIn
         </a>
-        <a href="/contact-us#contact-us-form" className="Quote">
+        <Link href="/contact-us#contact-us-form" className="Quote">
           <div className="social_icon" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
             <Image src="/assets/images/icon/sign-document-icon.svg" className="img-fluid inline-block" alt="Quote Icon" width={24} height={24} />
           </div>
           Request a Quote
-        </a>
-        <a href="/pricelist" className="Twitter" target="_blank" rel="noopener noreferrer">
+        </Link>
+        <Link href="/pricelist" className="Twitter">
           <div className="social_icon" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
             <Image src="/assets/images/icon/price.png" className="img-fluid tweet inline-block" alt="Pricelist" width={24} height={24} />
           </div>
           View Pricelist
-        </a>
+        </Link>
       </div>
     </>
   );

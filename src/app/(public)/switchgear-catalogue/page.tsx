@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -50,8 +51,8 @@ export default async function SwitchgearCataloguePage() {
                 <div className="rs-breadcrumb-menu">
                   <nav>
                     <ul>
-                      <li><span><a href={l('/')}>Home</a></span></li>
-                      <li><span><a href={l('/catalogue')}>Catalogue</a></span></li>
+                      <li><span><Link href={l('/')}>Home</Link></span></li>
+                      <li><span><Link href={l('/catalogue')}>Catalogue</Link></span></li>
                       <li><span>Switchgear Catalogue</span></li>
                     </ul>
                   </nav>

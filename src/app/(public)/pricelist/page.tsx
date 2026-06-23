@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 
 export default function PricelistPage() {
   const [activeTab, setActiveTab] = useState<'polycab' | 'dowells'>('polycab');
@@ -86,7 +87,7 @@ export default function PricelistPage() {
                 <div className="rs-breadcrumb-menu">
                   <nav>
                     <ul>
-                      <li><span><a href="/">Home</a></span></li>
+                      <li><span><Link href="/">Home</Link></span></li>
                       <li><span>Catalogues</span></li>
                     </ul>
                   </nav>
@@ -141,7 +142,7 @@ export default function PricelistPage() {
                         <p>{item.title}</p>
                       </div>
                       <div className="pricelist-button">
-                        <a href={item.link} className="pricelist-btn">{item.label}</a>
+                        <Link href={item.link} className="pricelist-btn">{item.label}</Link>
                       </div>
                     </div>
                   </div>
@@ -161,7 +162,7 @@ export default function PricelistPage() {
                         <p>{item.title}</p>
                       </div>
                       <div className="pricelist-button">
-                        <a href={item.link} className="pricelist-btn">{item.label}</a>
+                        <Link href={item.link} className="pricelist-btn">{item.label}</Link>
                       </div>
                     </div>
                   </div>

@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -56,8 +57,8 @@ export default async function ConduitAccessoriesPage() {
                 <div className="rs-breadcrumb-menu">
                   <nav>
                     <ul>
-                      <li><span><a href={l('/')}>Home</a></span></li>
-                      <li><span><a href={l('/polycab')}>Polycab</a></span></li>
+                      <li><span><Link href={l('/')}>Home</Link></span></li>
+                      <li><span><Link href={l('/polycab')}>Polycab</Link></span></li>
                       <li><span>Conduit & Accessories</span></li>
                     </ul>
                   </nav>
@@ -80,10 +81,10 @@ export default async function ConduitAccessoriesPage() {
               <div className="products-grid">
                 {products.map((prod, idx) => (
                   <div key={idx} className="product-card">
-                    <a href={prod.link}>
-                      <img 
-                        src={prod.image} 
-                        alt={prod.title} 
+                    <Link href={prod.link}>
+                      <img
+                        src={prod.image}
+                        alt={prod.title}
                       />
                       <h3>{prod.title}</h3>
                       <div className="pricelist-button">
@@ -91,7 +92,7 @@ export default async function ConduitAccessoriesPage() {
                           Explore More
                         </span>
                       </div>
-                    </a>
+                    </Link>
                   </div>
                 ))}
               </div>

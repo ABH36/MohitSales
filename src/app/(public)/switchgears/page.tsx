@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import Link from 'next/link';
 
 export const metadata = {
   title: 'Switchgears - Mohit Sales Corporation Pvt. Ltd.',
@@ -99,8 +100,8 @@ export default function SwitchgearsPage() {
                 <div className="rs-breadcrumb-menu">
                   <nav>
                     <ul>
-                      <li><span><a href="/">Home</a></span></li>
-                      <li><span><a href="/polycab">Polycab</a></span></li>
+                      <li><span><Link href="/">Home</Link></span></li>
+                      <li><span><Link href="/polycab">Polycab</Link></span></li>
                       <li><span>Switchgears</span></li>
                     </ul>
                   </nav>
@@ -167,14 +168,14 @@ export default function SwitchgearsPage() {
             {mcbCards.slice(0, 3).map((card, idx) => (
               <div key={idx} className="col-md-4">
                 <div className="mcb-card">
-                  <a href={card.link}>
+                  <Link href={card.link}>
                     <div className="mcb-image">
                       <img src={card.image} alt={card.title} />
                     </div>
                     <div className="mcb-content">
                       <div className="mcb-title">{card.title}</div>
                     </div>
-                  </a>
+                  </Link>
                 </div>
               </div>
             ))}
@@ -183,14 +184,14 @@ export default function SwitchgearsPage() {
             {mcbCards.slice(3, 6).map((card, idx) => (
               <div key={idx} className="col-md-4">
                 <div className="mcb-card">
-                  <a href={card.link}>
+                  <Link href={card.link}>
                     <div className="mcb-image">
                       <img src={card.image} alt={card.title} />
                     </div>
                     <div className="mcb-content">
                       <div className="mcb-title">{card.title}</div>
                     </div>
-                  </a>
+                  </Link>
                 </div>
               </div>
             ))}
@@ -199,14 +200,14 @@ export default function SwitchgearsPage() {
             {mcbCards.slice(6).map((card, idx) => (
               <div key={idx} className="col-md-4">
                 <div className="mcb-card">
-                  <a href={card.link}>
+                  <Link href={card.link}>
                     <div className="mcb-image">
                       <img src={card.image} alt={card.title} />
                     </div>
                     <div className="mcb-content">
                       <div className="mcb-title">{card.title}</div>
                     </div>
-                  </a>
+                  </Link>
                 </div>
               </div>
             ))}
