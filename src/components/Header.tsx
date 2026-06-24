@@ -321,11 +321,7 @@ export default function Header() {
                                                   <ul className="mobile-submenu mt-1">
                                                     {catNode.children.map(subNode => (
                                                       <li key={subNode.id}>
-<<<<<<< HEAD
-                                                        <a
-=======
                                                         <Link
->>>>>>> 370fcea (fast rendring)
                                                           href={`/${subNode.slug}`}
                                                           onClick={() => setIsSidebarOpen(false)}
                                                           className="mobile-leaf-link"
@@ -338,11 +334,7 @@ export default function Header() {
                                                 )}
                                               </>
                                             ) : (
-<<<<<<< HEAD
-                                              <a
-=======
                                               <Link
->>>>>>> 370fcea (fast rendring)
                                                 href={`/${catNode.slug}`}
                                                 onClick={() => setIsSidebarOpen(false)}
                                                 className="mobile-leaf-link"
@@ -358,11 +350,7 @@ export default function Header() {
                                   )}
                                 </>
                               ) : (
-<<<<<<< HEAD
-                                <a
-=======
                                 <Link
->>>>>>> 370fcea (fast rendring)
                                   href={`/${brandNode.slug}`}
                                   onClick={() => setIsSidebarOpen(false)}
                                   className="mobile-leaf-link"
