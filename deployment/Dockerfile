@@ -37,6 +37,7 @@ COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/scripts ./scripts
+COPY --from=builder /app/content-export.json ./content-export.json
 
 EXPOSE 3000
 ENV PORT 3000
