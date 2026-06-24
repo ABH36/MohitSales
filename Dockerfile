@@ -29,6 +29,7 @@ WORKDIR /app
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 RUN apt-get update && apt-get install -y openssl libssl-dev ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN npx prisma generate
 
 # Copy package files, prisma schema, scripts, and build outputs
 COPY --from=builder /app/package*.json ./
