@@ -136,27 +136,32 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   const cache = loadBuildCache();
   let product = null;
   let seoMeta = null;
+  let dbProduct = null;
 
   if (cache) {
     product = await getProductData(slugPath);
     seoMeta = cache.seoMetas[`/${slugPath}`] || null;
+    dbProduct = cache.products[slugPath] || null;
   } else {
-    const [p, s] = await Promise.all([
+    const [p, s, dbP] = await Promise.all([
       getProductData(slugPath),
       prisma.seoMeta.findUnique({ where: { page: `/${slugPath}` } }).catch(() => null),
+      prisma.product.findUnique({ where: { slug: slugPath }, select: { metaTitle: true, metaDescription: true, metaKeywords: true, imageSrc: true } }).catch(() => null),
     ]);
     product = p;
     seoMeta = s;
+    dbProduct = dbP;
   }
 
   const pageUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'https://mohitscpl.com'}/${slugPath}`;
 
-  // Admin-managed SEO meta takes top priority
-  if (seoMeta) {
+  // Admin-managed SEO meta takes top priority (only if it has actual content)
+  const seoHasContent = seoMeta && (seoMeta.title || seoMeta.description || seoMeta.keywords || seoMeta.ogTitle || seoMeta.ogImage);
+  if (seoHasContent) {
     return {
       title: seoMeta.title || undefined,
       description: seoMeta.description || undefined,
-      keywords: seoMeta.keywords ? seoMeta.keywords.split(',').map((k: string) => k.trim()) : undefined,
+      keywords: seoMeta.keywords ? seoMeta.keywords.split(',').map((k: string) => k.trim()).filter(Boolean) : undefined,
       robots: { index: !seoMeta.noIndex, follow: !seoMeta.noFollow },
       alternates: seoMeta.canonicalUrl ? { canonical: seoMeta.canonicalUrl } : { canonical: pageUrl },
       openGraph: {
@@ -165,6 +170,30 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
         description: seoMeta.description || undefined,
         images: seoMeta.ogImage ? [seoMeta.ogImage] : undefined,
       },
+    };
+  }
+
+  // Product-specific admin-managed SEO meta takes next priority
+  if (dbProduct && (dbProduct.metaTitle || dbProduct.metaDescription || dbProduct.metaKeywords)) {
+    const title = dbProduct.metaTitle || `${product?.heading || product?.title || 'Product'} - Mohit Sales Corporation Pvt. Ltd.`;
+    const description = dbProduct.metaDescription || (product?.description && product.description[0]) || 'Authorized Polycab & Dowells Distributor';
+    return {
+      title,
+      description,
+      keywords: dbProduct.metaKeywords ? dbProduct.metaKeywords.split(',').map((k: string) => k.trim()).filter(Boolean) : undefined,
+      alternates: { canonical: pageUrl },
+      openGraph: {
+        url: pageUrl,
+        title,
+        description,
+        images: dbProduct.imageSrc ? [dbProduct.imageSrc] : [],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+        images: dbProduct.imageSrc ? [dbProduct.imageSrc] : [],
+      }
     };
   }
 

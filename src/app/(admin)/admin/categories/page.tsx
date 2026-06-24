@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import AdminShell, { useAdmin } from '../components/AdminShell';
+import { useAdminCache, getCached } from '../components/AdminCacheProvider';
+import SkeletonTable from '../components/SkeletonTable';
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -148,10 +150,12 @@ export default function AdminCategoriesPage() {
 
 function AdminCategoriesPageInner() {
   const { user } = useAdmin();
+  const { fetchWithCache, invalidate } = useAdminCache();
+  const cached = getCached('/api/admin/categories');
   const isReadOnly = user?.role === 'VIEWER';
 
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState<Category[]>(cached?.success ? cached.data : []);
+  const [loading, setLoading] = useState(!cached?.success);
   const [showModal, setShowModal] = useState(false);
   const [editCat, setEditCat] = useState<Category | null>(null);
   const [toast, setToast] = useState<{ msg: string; type: string } | null>(null);
@@ -170,11 +174,14 @@ function AdminCategoriesPageInner() {
 
   const fetchCategories = async () => {
     setLoading(true);
-    const res = await fetch('/api/admin/categories');
-    const data = await res.json();
-    if (data.success) {
-      setCategories(data.data);
-      setFlatCats(flattenTree(data.data));
+    try {
+      const data = await fetchWithCache('/api/admin/categories');
+      if (data.success) {
+        setCategories(data.data);
+        setFlatCats(flattenTree(data.data));
+      }
+    } catch (err) {
+      console.error('Failed to fetch categories', err);
     }
     setLoading(false);
   };
@@ -251,6 +258,7 @@ function AdminCategoriesPageInner() {
     const data = await res.json();
 
     if (data.success) {
+      invalidate('/api/admin/categories');
       showToast(editCat ? 'Category updated!' : 'Category created!', 'success');
       setShowModal(false);
       fetchCategories();
@@ -263,7 +271,7 @@ function AdminCategoriesPageInner() {
     if (!confirm('Delete this category? Products will be unlinked and child categories will be detached.')) return;
     const res = await fetch(`/api/admin/categories/${id}`, { method: 'DELETE' });
     const data = await res.json();
-    if (data.success) { showToast('Category deleted.', 'success'); fetchCategories(); }
+    if (data.success) { invalidate('/api/admin/categories'); showToast('Category deleted.', 'success'); fetchCategories(); }
     else showToast(data.message || 'Error', 'error');
   };
 
@@ -322,7 +330,7 @@ function AdminCategoriesPageInner() {
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={6} style={{ textAlign: 'center', padding: '40px' }}>Loading...</td></tr>
+              <tr><td colSpan={6} style={{ padding: 0 }}><SkeletonTable rows={6} cols={5} /></td></tr>
             ) : topLevel.length === 0 ? (
               <tr><td colSpan={6} style={{ textAlign: 'center', padding: '40px', color: '#718096' }}>No categories yet. Click "+ Add Category" to create one.</td></tr>
             ) : (

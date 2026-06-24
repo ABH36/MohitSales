@@ -418,6 +418,10 @@ async function main() {
     { key: 'seo_description', value: 'Authorized distributor of Polycab India Ltd. and Dowells. Premium quality cables, switchgears, fans, solar products since 1997.', type: 'string', group: 'seo', label: 'Default Meta Description', isPublic: true },
     { key: 'seo_keywords', value: 'polycab, dowells, cables, switchgear, fans, solar, Mumbai, authorised distributor', type: 'string', group: 'seo', label: 'Meta Keywords', isPublic: true },
     { key: 'google_analytics_id', value: '', type: 'string', group: 'seo', label: 'Google Analytics ID', isPublic: false },
+    { key: 'webmaster_google', value: '', type: 'string', group: 'seo', label: 'Google Search Console Verification', isPublic: false, description: 'Google site verification code (content value only, not full meta tag)' },
+    { key: 'webmaster_bing', value: '', type: 'string', group: 'seo', label: 'Bing Webmaster Verification', isPublic: false, description: 'Bing site verification code' },
+    { key: 'webmaster_baidu', value: '', type: 'string', group: 'seo', label: 'Baidu Webmaster Verification', isPublic: false, description: 'Baidu site verification code' },
+    { key: 'webmaster_yandex', value: '', type: 'string', group: 'seo', label: 'Yandex Webmaster Verification', isPublic: false, description: 'Yandex site verification code' },
 
     // Appearance
     { key: 'logo_url', value: '/assets/images/logo/logo.png', type: 'string', group: 'appearance', label: 'Logo URL', isPublic: true },

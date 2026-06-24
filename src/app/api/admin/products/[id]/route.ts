@@ -18,7 +18,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     }
 
     const body = await request.json();
-    const { slug, title, description, features, imageSrc, categoryId, datasheetLink, isActive, sortOrder } = body;
+    const { slug, title, description, features, imageSrc, categoryId, datasheetLink, isActive, sortOrder, metaTitle, metaDescription, metaKeywords } = body;
 
     const oldProduct = await prisma.product.findUnique({
       where: { id: params.id },
@@ -56,6 +56,9 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
         isActive: isActive !== undefined ? isActive : undefined,
         sortOrder: sortOrder !== undefined ? sortOrder : undefined,
         stock: body.stock !== undefined ? body.stock : undefined,
+        metaTitle: metaTitle !== undefined ? (metaTitle || null) : undefined,
+        metaDescription: metaDescription !== undefined ? (metaDescription || null) : undefined,
+        metaKeywords: metaKeywords !== undefined ? (metaKeywords || null) : undefined,
       },
     });
 

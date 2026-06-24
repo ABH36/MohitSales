@@ -1,6 +1,29 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect } from 'react';
 
 export default function NotFound() {
+  useEffect(() => {
+    // Log the 404 error asynchronously
+    const log404 = async () => {
+      try {
+        await fetch('/api/public/not-found', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            path: window.location.pathname,
+            referrer: document.referrer || null,
+          }),
+        });
+      } catch (err) {
+        console.error('[404 logger failed]:', err);
+      }
+    };
+    log404();
+  }, []);
+
   return (
     <main className="min-h-screen d-flex align-items-center justify-content-center py-16 px-4" style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%)' }}>
       <div 

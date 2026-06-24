@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import AdminShell, { useAdmin } from '../components/AdminShell';
+import { useAdminCache, getCached } from '../components/AdminCacheProvider';
+import SkeletonTable from '../components/SkeletonTable';
 
 interface Role {
   id: string;
@@ -33,6 +35,8 @@ export default function AdminUsersPage() {
 
 function AdminUsersPageInner() {
   const { user, loading: authLoading } = useAdmin();
+  const { fetchWithCache, invalidate } = useAdminCache();
+  const cachedUsers = getCached('/api/admin/users');
   const router = useRouter();
 
   useEffect(() => {
@@ -41,9 +45,9 @@ function AdminUsersPageInner() {
     }
   }, [user, authLoading, router]);
 
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<User[]>(cachedUsers?.success ? cachedUsers.data : []);
   const [roles, setRoles] = useState<Role[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!cachedUsers?.success);
   const [showModal, setShowModal] = useState(false);
   const [editUser, setEditUser] = useState<User | null>(null);
   const [toast, setToast] = useState<{ msg: string; type: string } | null>(null);
@@ -65,13 +69,10 @@ function AdminUsersPageInner() {
   const fetchUsersAndRoles = async () => {
     setLoading(true);
     try {
-      const [usersRes, rolesRes] = await Promise.all([
-        fetch('/api/admin/users'),
-        fetch('/api/admin/roles'),
+      const [usersData, rolesData] = await Promise.all([
+        fetchWithCache('/api/admin/users'),
+        fetchWithCache('/api/admin/roles', 120000),
       ]);
-
-      const usersData = await usersRes.json();
-      const rolesData = await rolesRes.json();
 
       if (usersData.success) {
         setUsers(usersData.data);
@@ -139,6 +140,7 @@ function AdminUsersPageInner() {
       const data = await res.json();
 
       if (data.success) {
+        invalidate('/api/admin/users');
         showToast(editUser ? 'User updated successfully!' : 'User created successfully!', 'success');
         setShowModal(false);
         fetchUsersAndRoles();
@@ -161,6 +163,7 @@ function AdminUsersPageInner() {
       const data = await res.json();
 
       if (data.success) {
+        invalidate('/api/admin/users');
         showToast('User deleted successfully.', 'success');
         fetchUsersAndRoles();
       } else {
@@ -209,8 +212,8 @@ function AdminUsersPageInner() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={6} style={{ textAlign: 'center', padding: '40px' }}>
-                  Loading admin users...
+                <td colSpan={6} style={{ padding: 0 }}>
+                  <SkeletonTable rows={4} cols={5} />
                 </td>
               </tr>
             ) : users.length === 0 ? (

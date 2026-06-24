@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import AdminShell, { useAdmin } from '../components/AdminShell';
+import { useAdminCache, getCached } from '../components/AdminCacheProvider';
+import SkeletonTable from '../components/SkeletonTable';
 
 interface Inquiry {
   id: string;
@@ -24,9 +26,11 @@ export default function AdminInquiriesPage() {
 
 function AdminInquiriesPageInner() {
   const { user } = useAdmin();
+  const { fetchWithCache, invalidate } = useAdminCache();
   const isReadOnly = user?.role === 'VIEWER';
-  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
-  const [loading, setLoading] = useState(true);
+  const cached = getCached('/api/admin/inquiries');
+  const [inquiries, setInquiries] = useState<Inquiry[]>(cached?.success ? cached.data : []);
+  const [loading, setLoading] = useState(!cached?.success);
   const [toast, setToast] = useState<{ msg: string; type: string } | null>(null);
   const [sourceFilter, setSourceFilter] = useState<'all' | 'website' | 'feedback'>('all');
 
@@ -39,8 +43,7 @@ function AdminInquiriesPageInner() {
   const fetchInquiries = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/admin/inquiries');
-      const data = await res.json();
+      const data = await fetchWithCache('/api/admin/inquiries');
       if (data.success) {
         setInquiries(data.data);
       }
@@ -69,6 +72,7 @@ function AdminInquiriesPageInner() {
       const data = await res.json();
       if (data.success) {
         setInquiries(inquiries.map(inq => inq.id === id ? { ...inq, status: newStatus } : inq));
+        invalidate('/api/admin/inquiries');
         showToast('Status updated successfully', 'success');
       } else {
         showToast('Failed to update status', 'error');
@@ -129,7 +133,7 @@ function AdminInquiriesPageInner() {
         </div>
         
         {loading ? (
-          <div style={{ padding: '40px', textAlign: 'center', color: '#718096' }}>Loading...</div>
+          <SkeletonTable rows={6} cols={5} />
         ) : (
           <table className="admin-table">
             <thead>

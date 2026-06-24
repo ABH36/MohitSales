@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import AdminShell, { useAdmin } from '../components/AdminShell';
+import { useAdminCache, getCached } from '../components/AdminCacheProvider';
+import SkeletonTable from '../components/SkeletonTable';
 
 const TipTapEditor = dynamic(() => import('../components/TipTapEditor'), {
   ssr: false,
@@ -38,10 +40,12 @@ export default function AdminBlogsPage() {
 
 function AdminBlogsPageInner() {
   const { user } = useAdmin();
+  const { fetchWithCache, invalidate } = useAdminCache();
+  const cachedBlogs = getCached('/api/admin/blogs');
   const isReadOnly = user?.role === 'VIEWER';
-  const [blogs, setBlogs] = useState<BlogPost[]>([]);
+  const [blogs, setBlogs] = useState<BlogPost[]>(cachedBlogs?.success ? cachedBlogs.data : []);
   const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!cachedBlogs?.success);
   const [showModal, setShowModal] = useState(false);
   const [editBlog, setEditBlog] = useState<BlogPost | null>(null);
   const [form, setForm] = useState({
@@ -62,11 +66,10 @@ function AdminBlogsPageInner() {
   const fetchBlogs = async () => {
     setLoading(true);
     try {
-      const [blogsRes, catsRes] = await Promise.all([
-        fetch('/api/admin/blogs'),
-        fetch('/api/admin/blogs/categories'),
+      const [blogsData, catsData] = await Promise.all([
+        fetchWithCache('/api/admin/blogs'),
+        fetchWithCache('/api/admin/blogs/categories', 120000),
       ]);
-      const [blogsData, catsData] = await Promise.all([blogsRes.json(), catsRes.json()]);
       if (blogsData.success) setBlogs(blogsData.data);
       if (catsData.success) setCategories(catsData.data);
     } catch (err) {
@@ -139,6 +142,7 @@ function AdminBlogsPageInner() {
       
       const data = await res.json();
       if (data.success) {
+        invalidate('/api/admin/blogs');
         showToast(`Blog ${editBlog ? 'updated' : 'created'} successfully`, 'success');
         setShowModal(false);
         fetchBlogs();
@@ -157,6 +161,7 @@ function AdminBlogsPageInner() {
       const res = await fetch(`/api/admin/blogs/${id}`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) {
+        invalidate('/api/admin/blogs');
         showToast('Blog deleted', 'success');
         fetchBlogs();
       } else {
@@ -186,7 +191,7 @@ function AdminBlogsPageInner() {
         </div>
         
         {loading ? (
-          <div style={{ padding: '40px', textAlign: 'center', color: '#718096' }}>Loading...</div>
+          <SkeletonTable rows={5} cols={5} />
         ) : (
           <table className="admin-table">
             <thead>

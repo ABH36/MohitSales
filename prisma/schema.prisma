@@ -85,6 +85,9 @@ model Product {
   isActive      Boolean   @default(true)
   sortOrder     Int       @default(0)
   stock         Int       @default(0)
+  metaTitle       String?
+  metaDescription String?
+  metaKeywords    String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -297,4 +300,17 @@ model AdminOtp {
 
   @@map("admin_otps")
 }
+
+// ─── 404 logs ─────────────────────────────────────────────
+model NotFoundLog {
+  id        String   @id @default(uuid())
+  path      String   @unique
+  referrer  String?  @db.Text
+  hitCount  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("not_found_logs")
+}
+
 
