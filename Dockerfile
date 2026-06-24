@@ -13,13 +13,13 @@ RUN apt-get update && apt-get install -y openssl libssl-dev ca-certificates && r
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED 1
-# Generate Prisma client for the correct platform (linux-slim)
-RUN npx prisma generate
 # Provide dummy env vars for Next.js build verification and Prisma schema validation
 ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
 ENV DIRECT_URL="postgresql://dummy:dummy@localhost:5432/dummy"
 ENV JWT_SECRET="dummy_secret_for_build_only"
 ENV CAPTCHA_SECRET="dummy_secret_for_build_only"
+# Generate Prisma client for the correct platform (linux-slim)
+RUN npx prisma generate
 # Build the application
 RUN npm run build
 
@@ -29,7 +29,6 @@ WORKDIR /app
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 RUN apt-get update && apt-get install -y openssl libssl-dev ca-certificates && rm -rf /var/lib/apt/lists/*
-RUN npx prisma generate
 
 # Copy package files, prisma schema, scripts, and build outputs
 COPY --from=builder /app/package*.json ./
