@@ -94,6 +94,18 @@ export default function NotFound() {
 
       {/* Animation Styles */}
       <style dangerouslySetInnerHTML={{ __html: `
+        /* Hide Header, Footer, CTA, and Floating sticky bar on 404 page */
+        header, 
+        .rs-header-area, 
+        footer, 
+        .rs-cta-area, 
+        .social_media_sticky, 
+        .sticky_icons, 
+        .offcanvas-overlay, 
+        .fix {
+          display: none !important;
+        }
+
         @keyframes fadeInUp {
           from {
             opacity: 0;

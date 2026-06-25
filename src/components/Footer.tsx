@@ -56,7 +56,7 @@ export default function Footer() {
                   </h3>
                   <div ref={btnRef} className="contact-btn scroll-reveal" data-direction="left" data-delay="180">
                     <div className="rs-banner-btn">
-                      <Link
+                      <a
                         className="rs-btn has-theme-orange has-icon has-bg"
                         href="/contact-us#contact-us-form"
                       >
@@ -69,7 +69,7 @@ export default function Footer() {
                             <path d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z"></path>
                           </svg>
                         </span>
-                      </Link>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -231,12 +231,12 @@ export default function Footer() {
         <a href={getSetting('social_linkedin', '#') || '#'} className="LinkedIn linkedin" target="_blank" rel="noopener noreferrer">
           <i className="fa-brands fa-linkedin-in icon"></i> LinkedIn
         </a>
-        <Link href="/contact-us#contact-us-form" className="Quote">
+        <a href="/contact-us#contact-us-form" className="Quote">
           <div className="social_icon" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
             <Image src="/assets/images/icon/sign-document-icon.svg" className="img-fluid inline-block" alt="Quote Icon" width={24} height={24} />
           </div>
           Request a Quote
-        </Link>
+        </a>
         <Link href="/pricelist" className="Twitter">
           <div className="social_icon" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
             <Image src="/assets/images/icon/price.png" className="img-fluid tweet inline-block" alt="Pricelist" width={24} height={24} />

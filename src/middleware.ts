@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { COOKIE_NAME } from './lib/auth';
+import { jwtVerify } from 'jose';
+import { COOKIE_NAME, JWT_SECRET } from './lib/auth';
 
 export async function middleware(request: NextRequest) {
   // Strip potential spoofed headers from incoming client request
@@ -77,45 +78,26 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    // Call /api/admin/auth/me to verify user state (isActive === true), token signature, and role in one DB query
-    const authMeUrl = new URL('/api/admin/auth/me', request.url);
-    const authResponse = await fetch(authMeUrl.toString(), {
-      headers: {
-        cookie: `${COOKIE_NAME}=${token}`,
-      },
-    });
+    const encodedSecret = new TextEncoder().encode(JWT_SECRET);
+    const { payload } = await jwtVerify(token, encodedSecret);
 
-    if (!authResponse.ok) {
-      if (authResponse.status === 500) {
-        console.error('[Middleware] Database down or internal auth error. Denying access (Fail Closed).');
-      } else {
-        console.warn(`[Middleware] Authentication check failed (status: ${authResponse.status}). Denying access.`);
-      }
-      throw new Error(`Auth API responded with status ${authResponse.status}`);
+    if (!payload || !payload.userId) {
+      throw new Error('Invalid token payload');
     }
 
-    const authData = await authResponse.json();
-    if (!authData || !authData.success || !authData.user) {
-      throw new Error('Invalid authentication response structure');
-    }
-    
-    // Pass the user ID or role in headers
-    requestHeaders.set('x-user-id', authData.user.id);
-    requestHeaders.set('x-user-role', authData.user.role);
+    requestHeaders.set('x-user-id', payload.userId as string);
+    requestHeaders.set('x-user-role', (payload.role as string) || 'VIEWER');
 
     return NextResponse.next({
       request: {
         headers: requestHeaders,
       },
     });
-  } catch (error) {
-    console.error('Session validation failed in middleware:', error);
-    
-    // Clear the invalid cookie and redirect to login
-    const response = pathname.startsWith('/api/') 
+  } catch {
+    const response = pathname.startsWith('/api/')
       ? NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 })
       : NextResponse.redirect(new URL('/admin/login', request.url));
-      
+
     response.cookies.delete(COOKIE_NAME);
     return response;
   }
