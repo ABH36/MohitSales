@@ -90,7 +90,7 @@ export default function SeoPage() {
 
 function SeoPageInner() {
   const { user } = useAdmin();
-  const { fetchWithCache } = useAdminCache();
+  const { fetchWithCache, invalidate } = useAdminCache();
   const isReadOnly = user?.role === 'VIEWER';
   const isAdmin = user?.role === 'ADMIN';
 
@@ -295,6 +295,7 @@ function SeoPageInner() {
     const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(metaForm) });
     const data = await res.json();
     if (data.success) {
+      invalidate('/api/admin/seo/meta');
       showToast(editingMetaId ? 'Meta updated' : 'Meta saved');
       setShowMetaModal(false);
       loadMetas();
@@ -307,7 +308,7 @@ function SeoPageInner() {
     if (!confirm('Delete this SEO meta entry?')) return;
     const res = await fetch(`/api/admin/seo/meta/${id}`, { method: 'DELETE' });
     const data = await res.json();
-    if (data.success) { showToast('Deleted'); loadMetas(); }
+    if (data.success) { invalidate('/api/admin/seo/meta'); showToast('Deleted'); loadMetas(); }
     else showToast('Failed to delete', 'error');
   };
 
@@ -342,6 +343,7 @@ function SeoPageInner() {
     const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(redirectForm) });
     const data = await res.json();
     if (data.success) {
+      invalidate('/api/admin/seo/redirects');
       showToast(editingRedirectId ? 'Redirect updated' : 'Redirect created');
       setShowRedirectModal(false);
       loadRedirects();
@@ -354,7 +356,7 @@ function SeoPageInner() {
     if (!confirm('Delete this redirect?')) return;
     const res = await fetch(`/api/admin/seo/redirects/${id}`, { method: 'DELETE' });
     const data = await res.json();
-    if (data.success) { showToast('Deleted'); loadRedirects(); }
+    if (data.success) { invalidate('/api/admin/seo/redirects'); showToast('Deleted'); loadRedirects(); }
     else showToast('Failed to delete', 'error');
   };
 
@@ -391,6 +393,7 @@ function SeoPageInner() {
     const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(schemaForm) });
     const data = await res.json();
     if (data.success) {
+      invalidate('/api/admin/seo/schema');
       showToast(editingSchemaId ? 'Schema updated' : 'Schema saved');
       setShowSchemaModal(false);
       loadSchemas();
@@ -403,7 +406,7 @@ function SeoPageInner() {
     if (!confirm('Delete this schema markup?')) return;
     const res = await fetch(`/api/admin/seo/schema/${id}`, { method: 'DELETE' });
     const data = await res.json();
-    if (data.success) { showToast('Deleted'); loadSchemas(); }
+    if (data.success) { invalidate('/api/admin/seo/schema'); showToast('Deleted'); loadSchemas(); }
     else showToast('Failed to delete', 'error');
   };
 
@@ -439,6 +442,7 @@ function SeoPageInner() {
     const data = await res.json();
     if (data.success) {
       showToast('Sitemap override saved');
+      invalidate('/api/admin/seo/sitemap');
       setShowOverrideModal(false);
       setEditingOverrideId(null);
       loadOverrides();
@@ -451,7 +455,7 @@ function SeoPageInner() {
     if (!confirm('Delete this sitemap override?')) return;
     const res = await fetch(`/api/admin/seo/sitemap/${id}`, { method: 'DELETE' });
     const data = await res.json();
-    if (data.success) { showToast('Deleted'); loadOverrides(); }
+    if (data.success) { invalidate('/api/admin/seo/sitemap'); showToast('Deleted'); loadOverrides(); }
     else showToast('Failed to delete', 'error');
   };
 
@@ -476,7 +480,7 @@ function SeoPageInner() {
     setRobotsSaving(true);
     const res = await fetch('/api/admin/seo/robots', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ rules: robotsRules }) });
     const data = await res.json();
-    if (data.success) showToast('Robots.txt rules saved');
+    if (data.success) { invalidate('/api/admin/seo/robots'); showToast('Robots.txt rules saved'); }
     else showToast('Failed to save', 'error');
     setRobotsSaving(false);
   };
@@ -608,6 +612,9 @@ function SeoPageInner() {
       {/* ── TAB 1: Page Meta Tags ── */}
       {activeTab === 'meta' && (
         <div>
+          <p style={{ fontSize: 13, color: '#718096', marginBottom: 16, lineHeight: 1.6, background: '#f0fff4', border: '1px solid #c6f6d5', borderRadius: 8, padding: '10px 14px' }}>
+            <strong>How to use:</strong> Add custom title, description & keywords for any page. Enter the page path like <code style={{ background: '#e2e8f0', padding: '1px 6px', borderRadius: 4 }}>/about-us</code> or <code style={{ background: '#e2e8f0', padding: '1px 6px', borderRadius: 4 }}>/polycab/fans</code>. These override the default meta tags on that page for better SEO ranking.
+          </p>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
             <h2 style={{ fontSize: 18, fontWeight: 700, color: '#1a202c' }}>Page Meta Tags</h2>
             {!isReadOnly && (
@@ -663,6 +670,9 @@ function SeoPageInner() {
       {/* ── TAB 2: REDIRECTS ── */}
       {activeTab === 'redirects' && (
         <div>
+          <p style={{ fontSize: 13, color: '#718096', marginBottom: 16, lineHeight: 1.6, background: '#f0fff4', border: '1px solid #c6f6d5', borderRadius: 8, padding: '10px 14px' }}>
+            <strong>How to use:</strong> Redirect old URLs to new ones. Example: From <code style={{ background: '#e2e8f0', padding: '1px 6px', borderRadius: 4 }}>/old-product</code> → To <code style={{ background: '#e2e8f0', padding: '1px 6px', borderRadius: 4 }}>/new-product</code>. Use 301 for permanent redirects (SEO value transfers) or 302 for temporary.
+          </p>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
             <h2 style={{ fontSize: 18, fontWeight: 700, color: '#1a202c' }}>URL Redirects</h2>
             {!isReadOnly && (
@@ -718,6 +728,9 @@ function SeoPageInner() {
       {/* ── TAB 3: SCHEMA MARKUP ── */}
       {activeTab === 'schema' && (
         <div>
+          <p style={{ fontSize: 13, color: '#718096', marginBottom: 16, lineHeight: 1.6, background: '#f0fff4', border: '1px solid #c6f6d5', borderRadius: 8, padding: '10px 14px' }}>
+            <strong>How to use:</strong> Add structured data (JSON-LD) for rich snippets in Google. Select page path, schema type (e.g. Organization, Product), and paste valid JSON-LD. Example: <code style={{ background: '#e2e8f0', padding: '1px 6px', borderRadius: 4 }}>{`{"@type":"Organization","name":"Mohit Sales"}`}</code>
+          </p>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
             <h2 style={{ fontSize: 18, fontWeight: 700, color: '#1a202c' }}>Schema Markup (JSON-LD)</h2>
             {!isReadOnly && (
@@ -769,6 +782,9 @@ function SeoPageInner() {
       {/* ── TAB 4: SITEMAP ── */}
       {activeTab === 'sitemap' && (
         <div>
+          <p style={{ fontSize: 13, color: '#718096', marginBottom: 16, lineHeight: 1.6, background: '#f0fff4', border: '1px solid #c6f6d5', borderRadius: 8, padding: '10px 14px' }}>
+            <strong>How to use:</strong> Override sitemap settings for specific URLs. Set priority (0.0–1.0), change frequency, or exclude pages. Example: <code style={{ background: '#e2e8f0', padding: '1px 6px', borderRadius: 4 }}>/contact-us</code> with priority <code style={{ background: '#e2e8f0', padding: '1px 6px', borderRadius: 4 }}>0.3</code> and frequency <code style={{ background: '#e2e8f0', padding: '1px 6px', borderRadius: 4 }}>yearly</code>.
+          </p>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
             <h2 style={{ fontSize: 18, fontWeight: 700, color: '#1a202c' }}>Sitemap Overrides</h2>
             {!isReadOnly && (
@@ -825,6 +841,9 @@ function SeoPageInner() {
       {/* ── TAB 5: ROBOTS.TXT ── */}
       {activeTab === 'robots' && (
         <div>
+          <p style={{ fontSize: 13, color: '#718096', marginBottom: 16, lineHeight: 1.6, background: '#f0fff4', border: '1px solid #c6f6d5', borderRadius: 8, padding: '10px 14px' }}>
+            <strong>How to use:</strong> Control which pages search engines can crawl. Disallow paths like <code style={{ background: '#e2e8f0', padding: '1px 6px', borderRadius: 4 }}>/admin</code> to block crawlers. Allow paths like <code style={{ background: '#e2e8f0', padding: '1px 6px', borderRadius: 4 }}>/</code> to permit crawling. Set crawl delay (seconds) to limit bot speed.
+          </p>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
             <h2 style={{ fontSize: 18, fontWeight: 700, color: '#1a202c' }}>Robots.txt Rules</h2>
             {!isReadOnly && (
@@ -914,6 +933,9 @@ function SeoPageInner() {
       {/* ── TAB: 404 DETECTED LOGS ── */}
       {activeTab === 'logs404' && (
         <div>
+          <p style={{ fontSize: 13, color: '#718096', marginBottom: 16, lineHeight: 1.6, background: '#f0fff4', border: '1px solid #c6f6d5', borderRadius: 8, padding: '10px 14px' }}>
+            <strong>How to use:</strong> Monitor broken links visitors are hitting. Review URLs, create redirects for important ones, and delete irrelevant entries. High hit-count URLs should be redirected to prevent SEO loss.
+          </p>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
             <h2 style={{ fontSize: 18, fontWeight: 700, color: '#1a202c' }}>404 Detection Logs</h2>
             {!isReadOnly && logs404.length > 0 && (
