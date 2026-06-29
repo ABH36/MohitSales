@@ -314,21 +314,30 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const isIndexPage = (product && product.cards && product.cards.length > 0) || hasLegacyCards;
 
   // ══════════════════════════════════════════════════════════════════════
-  // Extract legacy image fallback from HTML if DB/JSON is missing an image
+  // Extract legacy image & features fallback from HTML if DB/JSON is missing
   // ══════════════════════════════════════════════════════════════════════
   let legacyImage = null;
+  let legacyFeatures: string[] = [];
   let hasComplexLegacyHtml = false;
   if (legacyHtml) {
     hasComplexLegacyHtml = legacyHtml.includes('class="feature-card"') || 
                            legacyHtml.includes('class="features-grid"') || 
                            legacyHtml.includes('class="technical-table"');
                            
-    if (dbProductEarly && !dbProductEarly.imageSrc && !product?.imageSrc) {
-      try {
-        const $ = cheerio.load(legacyHtml, null, false);
+    try {
+      const $ = cheerio.load(legacyHtml, null, false);
+      if (dbProductEarly && !dbProductEarly.imageSrc && !product?.imageSrc) {
         legacyImage = $('.product-img img, .single-product-image img, .wires_inner img, img.img-fluid, .feature-image img').first().attr('src') || null;
-      } catch (e) {}
-    }
+      }
+      
+      const dbHasFeatures = dbProductEarly?.features && dbProductEarly.features !== '[]' && dbProductEarly.features !== 'null';
+      if (!dbHasFeatures) {
+         $('.animated-list li').each((_, el) => {
+             const text = $(el).text().trim();
+             if (text) legacyFeatures.push(text);
+         });
+      }
+    } catch (e) {}
   }
 
   // ══════════════════════════════════════════════════════════════════════
@@ -345,7 +354,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     return (
       <ProductPageWrapper>
         <SchemaInjector page={`/${slugPath}`} />
-        {renderDbProduct(dbProductEarly, product, legacyImage)}
+        {renderDbProduct(dbProductEarly, product, legacyImage, legacyFeatures)}
       </ProductPageWrapper>
     );
   }
@@ -623,11 +632,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
   // PRIORITY 4: DB Product fallback (seeded products with no PHP page)
   // These were auto-seeded; they only show when no PHP/JSON exists for the slug.
   // ══════════════════════════════════════════════════════════════════════
-  if (dbProductEarly) {
+  if (dbProductEarly && !skipDbTemplate) {
     return (
       <ProductPageWrapper>
         <SchemaInjector page={`/${slugPath}`} />
-        {renderDbProduct(dbProductEarly, product, legacyImage)}
+        {renderDbProduct(dbProductEarly, product, legacyImage, legacyFeatures)}
       </ProductPageWrapper>
     );
   }
@@ -676,7 +685,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 }
 
 // ── DB Product Detail Page ────────────────────────────────────────────
-function renderDbProduct(dbProduct: any, productJson: any = null, legacyImage: string | null = null) {
+function renderDbProduct(dbProduct: any, productJson: any = null, legacyImage: string | null = null, legacyFeatures: string[] = []) {
   const breadcrumbs = [];
   let currentCat = dbProduct.category;
   while (currentCat) {
@@ -716,6 +725,17 @@ function renderDbProduct(dbProduct: any, productJson: any = null, legacyImage: s
     } catch (e) {
       parsedFeatures = dbProduct.features.split(/\r?\n|,/).map((feat: string) => feat.trim()).filter(Boolean);
     }
+  }
+
+  // Fallback to json cards if DB has no features
+  if (parsedFeatures.length === 0 && productJson && productJson.cards && productJson.cards.length > 0) {
+    parsedFeatures = productJson.cards;
+    isMultiProduct = true;
+  }
+
+  // Fallback to extracted legacy features if still empty
+  if (parsedFeatures.length === 0 && legacyFeatures && legacyFeatures.length > 0) {
+    parsedFeatures = legacyFeatures;
   }
 
   const cleanLink = (url: string) => {
