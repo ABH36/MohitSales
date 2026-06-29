@@ -326,7 +326,7 @@
     }
 
     .rs-footer-two.footer-new .rs-footer-widget-title.get-in-touch.address {
-        margin-top: -35px;
+        margin-top: 0;
     }
 
     .rs-footer-widget-content {
@@ -337,7 +337,8 @@
     .rs-footer-widget-content .mobile-no,
     .rs-footer-widget-content .mobile-address {
         display: flex;
-        gap: 10px;
+        flex-direction: column;
+        gap: 5px;
         justify-content: center;
         align-items: center;
     }

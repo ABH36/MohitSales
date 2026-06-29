@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react';
 import AdminShell, { useAdmin } from '../components/AdminShell';
+import { useAdminCache, getCached } from '../components/AdminCacheProvider';
+import { SkeletonCards } from '../components/SkeletonTable';
 
 interface MediaFile {
   id: string;
@@ -22,9 +24,11 @@ export default function AdminMediaPage() {
 
 function AdminMediaPageInner() {
   const { user } = useAdmin();
+  const { fetchWithCache, invalidate } = useAdminCache();
+  const cached = getCached('/api/admin/media');
   const isReadOnly = user?.role === 'VIEWER';
-  const [media, setMedia] = useState<MediaFile[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [media, setMedia] = useState<MediaFile[]>(cached?.success ? cached.data : []);
+  const [loading, setLoading] = useState(!cached?.success);
   const [uploading, setUploading] = useState(false);
   const [toast, setToast] = useState<{ msg: string; type: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -33,8 +37,7 @@ function AdminMediaPageInner() {
   const fetchMedia = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/admin/media');
-      const data = await res.json();
+      const data = await fetchWithCache('/api/admin/media');
       if (data.success) {
         setMedia(data.data);
       } else {
@@ -73,6 +76,7 @@ function AdminMediaPageInner() {
       });
       const data = await res.json();
       if (data.success) {
+        invalidate('/api/admin/media');
         showToast('File uploaded successfully', 'success');
         fetchMedia();
       } else {
@@ -97,6 +101,7 @@ function AdminMediaPageInner() {
       });
       const data = await res.json();
       if (data.success) {
+        invalidate('/api/admin/media');
         showToast('File deleted successfully', 'success');
         fetchMedia();
       } else {
@@ -170,7 +175,7 @@ function AdminMediaPageInner() {
         </div>
 
         {loading ? (
-          <div style={{ padding: '40px', textAlign: 'center', color: '#718096' }}>Loading...</div>
+          <SkeletonCards count={6} />
         ) : (
           <table className="admin-table">
             <thead>

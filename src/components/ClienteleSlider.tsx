@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useRef, useEffect } from 'react';
 import SplitText from './SplitText';
@@ -6,7 +6,7 @@ import SplitText from './SplitText';
 // All 46 brand logos from the clone's assets/images/brand/ directory
 const brandImages = Array.from({ length: 46 }, (_, i) => {
   const n = String(i + 1).padStart(2, '0');
-  return `/assets/images/brand/brand-thumb-${n}.png`;
+  return `/assets/images/brand/brand-thumb-${n}.png?v=1.1`;
 });
 
 export default function ClienteleSlider() {
@@ -69,9 +69,9 @@ export default function ClienteleSlider() {
                     fill="#1E2E5E"
                   />
                 </svg>
-                Partners
+                Product Range
               </span>
-              <h2 className="rs-section-title rs-split-text-enable split-in-fade"><SplitText text="Trusted by Leading Companies Worldwide" /></h2>
+              <h2 className="rs-section-title rs-split-text-enable split-in-fade"><SplitText text="Authorized Wires, Switchgears & Electrical Solutions" /></h2>
             </div>
           </div>
         </div>

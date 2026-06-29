@@ -329,9 +329,11 @@ body.rtl .rs-breadcrumb-title {
     flex: 0 0 50% !important;
     max-width: 50% !important;
   }
+
   .card_box .product-card>div:first-child {
     padding-right: 30px !important;
   }
+
   .card_box .product-card>div:last-child {
     padding-left: 30px !important;
   }
@@ -492,22 +494,26 @@ body.rtl .rs-breadcrumb-title {
   .card_box .product-card {
     min-height: auto !important;
   }
-  .card_box .product-card > div:last-child {
+
+  .card_box .product-card>div:last-child {
     text-align: center !important;
     padding-top: 20px !important;
   }
+
   .card_box .features-title {
     text-align: center !important;
     margin-left: auto !important;
     margin-right: auto !important;
     margin-bottom: 15px !important;
   }
+
   .card_box .product-features {
     justify-content: center !important;
     margin: 0 auto 20px !important;
     max-width: 100% !important;
     padding-left: 0 !important;
   }
+
   .card_box a.pricelist-btn,
   .card_box a.enquiry-btn {
     align-self: center !important;
@@ -1175,8 +1181,8 @@ body.rtl .rs-breadcrumb-title {
    FOOTER STYLING REFINEMENTS
    ==================================================== */
 .rs-footer-area {
-  background-color: #0c0f12 !important;
-  color: #a0aec0;
+  background-color: transparent !important;
+  color: #e2e8f0;
   font-family: "Outfit", sans-serif;
   position: relative;
   padding-top: 140px;
@@ -1190,8 +1196,14 @@ body.rtl .rs-breadcrumb-title {
 .rs-footer-bg-thumb {
   opacity: 1 !important;
   /* Fully show the background image */
-  filter: brightness(1.2);
-  /* Make it slightly brighter */
+  filter: brightness(1.6) !important;
+  /* Make it brighter */
+  background-color: #0c0f12 !important;
+}
+
+/* Make overlay less dark so the highway light trails are visible */
+.rs-footer-two .rs-footer-bg-thumb::before {
+  opacity: 0.3 !important;
 }
 
 /* ── Footer logo ── */
@@ -1205,7 +1217,7 @@ body.rtl .rs-breadcrumb-title {
 
 /* ── About description ── */
 .rs-footer-widget-description {
-  color: #a0aec0 !important;
+  color: #e2e8f0 !important;
   font-size: 16px;
   line-height: 1.85;
   margin-top: 0;
@@ -1256,7 +1268,7 @@ body.rtl .rs-breadcrumb-title {
 }
 
 .product-col ul li a {
-  color: #a0aec0;
+  color: #e2e8f0;
   transition: color 0.3s ease, padding-left 0.3s ease;
   text-decoration: none;
   font-size: 16px;
@@ -1270,11 +1282,13 @@ body.rtl .rs-breadcrumb-title {
 
 /* ── Address / Email / Contact section headings ── */
 .get-in-touch {
-  font-size: 21px !important;
+  color: #ffffff !important;
+  font-size: 24px !important;
   font-weight: 700 !important;
-  margin-bottom: 8px !important;
-  margin-top: 24px !important;
-  letter-spacing: 0.2px;
+  margin-bottom: 12px !important;
+  margin-top: 32px !important;
+  letter-spacing: 0.3px;
+  font-family: "Outfit", sans-serif !important;
 }
 
 .get-in-touch.address {
@@ -1284,7 +1298,7 @@ body.rtl .rs-breadcrumb-title {
 /* ── Address / Email text ── */
 .rs-footer-widget-address a,
 .rs-footer-widget-email a {
-  color: #a0aec0;
+  color: #e2e8f0;
   text-decoration: none;
   font-size: 16px;
   line-height: 1.7;
@@ -1306,11 +1320,11 @@ body.rtl .rs-breadcrumb-title {
   padding: 20px 0 16px;
   list-style: none;
   margin: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: none;
 }
 
 .footer-menu li a {
-  color: #a0aec0;
+  color: #e2e8f0;
   font-size: 16px;
   font-weight: 500;
   font-family: "Outfit", sans-serif;
@@ -1323,9 +1337,23 @@ body.rtl .rs-breadcrumb-title {
 }
 
 /* ── Copyright bar ── */
-.rs-footer-copyright p {
-  color: #a0aec0;
+.rs-footer-copyright-area {
+  margin-top: 15px !important;
+}
+
+.rs-footer-copyright,
+.rs-footer-copyright p,
+.rs-footer-copyright a {
+  color: #e2e8f0;
   font-size: 15px;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-decoration: none !important;
+}
+
+.rs-footer-copyright a {
+  background: none !important;
+  background-image: none !important;
 }
 
 /* ── Responsive: stack product columns on mobile ── */
@@ -1586,7 +1614,7 @@ img[alt="logo"] {
   /* Lighter white-slate color for outstanding visibility */
   font-size: 16px !important;
   /* Larger text */
-  font-weight: 600 !important;
+  font-weight: 500 !important;
   /* Increased font weight */
   font-family: 'Outfit', sans-serif !important;
   text-decoration: none !important;
@@ -1596,6 +1624,12 @@ img[alt="logo"] {
   white-space: nowrap;
   line-height: 1.4;
   cursor: pointer;
+}
+
+.nav-flyout li>a span {
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 500 !important;
+  color: inherit !important;
 }
 
 .nav-flyout li:last-child>a {
@@ -2975,16 +3009,19 @@ a.enquiry-btn:hover,
     flex-direction: column;
     border-radius: 12px;
   }
+
   .tab-btn {
     padding: 10px 20px;
     font-size: 13px;
     border-radius: 8px;
   }
+
   .table-section,
   .lms-table-section,
   .spec-section {
     padding: 30px 10px;
   }
+
   .table-section h2,
   .lms-table-section h2,
   .spec-section h2 {
@@ -3002,4 +3039,149 @@ a.enquiry-btn:hover,
 .button_center {
   margin-top: 10px;
   text-align: center;
+}
+
+/* ═══════════════════════════════════════════════
+   Responsive Navbar Fixes — All Breakpoints
+   ═══════════════════════════════════════════════ */
+
+/* Desktop only (992px+) — flex layout for nav */
+@media (min-width: 992px) {
+  .rs-header-two.header-new .rs-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+  }
+
+  .rs-header-two.header-new .rs-header-menu {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .main-menu .multipage-menu {
+    display: flex !important;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 0;
+  }
+}
+
+/* Large desktop (1367px+) — full spacing */
+@media (min-width: 1367px) {
+  .main-menu .multipage-menu > li > a {
+    padding: 30px 16px !important;
+    font-size: 16px !important;
+  }
+}
+
+/* Medium desktop (1201px–1366px) — slightly compressed */
+@media (min-width: 1201px) and (max-width: 1366px) {
+  .main-menu .multipage-menu > li > a {
+    padding: 28px 10px !important;
+    font-size: 14px !important;
+  }
+
+  .rs-header-two.header-new .rs-header-logo img {
+    max-width: 150px !important;
+  }
+}
+
+/* Small desktop (992px–1200px) — tight but visible */
+@media (min-width: 992px) and (max-width: 1200px) {
+  .main-menu .multipage-menu > li > a {
+    padding: 25px 7px !important;
+    font-size: 13px !important;
+    letter-spacing: -0.01em;
+  }
+
+  .rs-header-two.header-new .rs-header-logo img {
+    max-width: 130px !important;
+  }
+
+  .rs-header-two.header-new .rs-header-menu {
+    margin-left: 10px !important;
+  }
+
+  .rs-header-two .rs-header-left {
+    padding-inline-end: 10px !important;
+    margin-inline-end: 0 !important;
+  }
+}
+
+/* Tablet & Mobile (< 992px) — hamburger only, desktop nav hidden */
+@media (max-width: 991px) {
+  .rs-header-two.header-new .rs-header-menu {
+    display: none !important;
+  }
+
+  .rs-header-two.header-new .rs-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 15px !important;
+  }
+
+  .rs-header-two .rs-header-left {
+    padding-inline-end: 0 !important;
+    margin-inline-end: 0 !important;
+  }
+
+  .rs-header-two .rs-header-right {
+    margin-left: auto;
+  }
+
+  .rs-header-hamburger {
+    display: block !important;
+  }
+}
+
+/* Small mobile (< 480px) */
+@media (max-width: 480px) {
+  .rs-header-two.header-new .rs-header-inner {
+    padding: 6px 10px !important;
+  }
+
+  .rs-header-two.header-new .rs-header-logo img {
+    max-width: 110px !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   Flyout Dropdown — Responsive Sizing
+   Big screen: full size. Small screen: compact.
+   Animation stays same (scaleY + opacity).
+   ═══════════════════════════════════════════════ */
+
+/* Medium desktop (1201–1440px) — compact flyout */
+@media (min-width: 1201px) and (max-width: 1440px) {
+  .nav-flyout {
+    min-width: 0 !important;
+    width: 200px !important;
+  }
+
+  .nav-flyout li>a {
+    padding: 10px 14px !important;
+    font-size: 13.5px !important;
+  }
+}
+
+/* Small desktop (992–1200px) — tight flyout to fit 3 levels */
+@media (min-width: 992px) and (max-width: 1200px) {
+  .nav-flyout {
+    min-width: 0 !important;
+    width: 170px !important;
+  }
+
+  .nav-flyout li>a {
+    padding: 8px 10px !important;
+    font-size: 12.5px !important;
+    font-weight: 500 !important;
+  }
+
+  .nav-fly-arrow {
+    font-size: 9px !important;
+  }
 }

@@ -17,7 +17,22 @@ import {
   Settings,
   Users
 } from 'lucide-react';
+import AdminCacheProvider, { prefetchUrl } from './AdminCacheProvider';
 import '../admin.css';
+
+const PAGE_API_MAP: Record<string, string[]> = {
+  '/admin/products': ['/api/admin/products?page=1&search=&limit=15&status=all&stock=', '/api/admin/categories'],
+  '/admin/categories': ['/api/admin/categories'],
+  '/admin/inquiries': ['/api/admin/inquiries'],
+  '/admin/blogs': ['/api/admin/blogs', '/api/admin/blogs/categories'],
+  '/admin/media': ['/api/admin/media'],
+  '/admin/users': ['/api/admin/users', '/api/admin/roles'],
+  '/admin/settings': ['/api/admin/settings'],
+  '/admin/seo': ['/api/admin/seo/meta'],
+  '/admin/analytics': ['/api/admin/analytics'],
+  '/admin/cms': ['/api/admin/cms'],
+  '/admin/pages': ['/api/admin/pages?page=1&limit=25'],
+};
 
 interface UserInfo {
   name: string;
@@ -200,6 +215,7 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
   };
 
   return (
+    <AdminCacheProvider>
     <AdminContext.Provider value={{ user, loading }}>
       <div className="admin-panel" data-font-size={fontSize} dir="ltr">
         {/* Animated Background */}
@@ -259,11 +275,16 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                       return null;
                     }
                     const IconComponent = item.icon as any;
+                    const handlePrefetch = () => {
+                      const apis = PAGE_API_MAP[item.href];
+                      if (apis) apis.forEach(url => prefetchUrl(url));
+                    };
                     return (
                       <Link
                         key={item.href}
                         href={item.href}
                         className={`admin-nav-link ${pathname === item.href ? 'active' : ''}`}
+                        onMouseEnter={handlePrefetch}
                       >
                         <span className="admin-nav-icon">
                           {typeof IconComponent === 'string' ? (
@@ -389,5 +410,6 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
       </div>
 
     </AdminContext.Provider>
+    </AdminCacheProvider>
   );
 }

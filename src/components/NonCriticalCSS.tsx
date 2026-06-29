@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation';
  * These are animation/plugin stylesheets that don't affect above-the-fold layout.
  */
 const NON_CRITICAL_CSS = [
+  '/assets/css/vendor/remixicon.css',
   '/assets/css/vendor/animate.min.css',
   '/assets/css/plugins/nice-select.css',
   '/assets/css/plugins/nouislider.min.css',

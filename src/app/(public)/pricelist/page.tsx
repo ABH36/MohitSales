@@ -102,13 +102,6 @@ export default function PricelistPage() {
       <section className="pricelist-inner">
         <div className="container pricelist">
 
-          {/* Info Banner */}
-          <div className="pricelist-info-banner">
-            <p>
-              Browse our complete product catalogues below. For current pricing, please
-              <a href="/contact-us"> contact us directly</a> or send an enquiry.
-            </p>
-          </div>
 
           {/* Tabs */}
           <ul className="pricelist-tabs">

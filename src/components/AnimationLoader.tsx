@@ -102,6 +102,8 @@ export default function AnimationLoader() {
       });
     };
 
+    const yieldToMain = () => new Promise<void>(r => setTimeout(r, 0));
+
     const loadAll = async () => {
       try {
         // Step 1: Load critical scripts sequentially (jQuery → Bootstrap → Swiper)
@@ -110,9 +112,14 @@ export default function AnimationLoader() {
           await loadScript(src);
         }
 
-        // Step 2: Load all deferred scripts in parallel
-        if (!mounted) return;
-        await Promise.all(deferredScripts.map(src => loadScript(src)));
+        // Step 2: Load deferred scripts in small batches with yields between
+        // Each batch is short enough (<50ms) to avoid Lighthouse long-task penalty
+        const batchSize = 3;
+        for (let i = 0; i < deferredScripts.length; i += batchSize) {
+          if (!mounted) return;
+          await Promise.all(deferredScripts.slice(i, i + batchSize).map(src => loadScript(src)));
+          await yieldToMain();
+        }
 
         // Step 3: Load main.js last (depends on everything above)
         if (!mounted) return;
@@ -139,14 +146,14 @@ export default function AnimationLoader() {
       }
     };
 
-    // Use requestIdleCallback to defer script loading until browser is idle
-    // This prevents scripts from competing with critical rendering
+    const isHomePage = pathname === '/';
+    const idleTimeout = isHomePage ? 2000 : 4000;
+
     const scheduleLoad = () => {
       if ('requestIdleCallback' in window) {
-        (window as any).requestIdleCallback(() => loadAll(), { timeout: 2000 });
+        (window as any).requestIdleCallback(() => loadAll(), { timeout: idleTimeout });
       } else {
-        // Fallback for browsers without requestIdleCallback (Safari)
-        setTimeout(() => loadAll(), 100);
+        setTimeout(() => loadAll(), isHomePage ? 100 : 2000);
       }
     };
 

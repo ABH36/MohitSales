@@ -1,5 +1,4 @@
-export const dynamic = 'force-dynamic';
-
+import Link from 'next/link';
 import AdminShell from '../components/AdminShell';
 import prisma from '@/lib/prisma';
 
@@ -117,9 +116,9 @@ export default async function AdminDashboardPage() {
       <div className="admin-table-wrapper">
         <div className="admin-table-header">
           <h3 className="admin-table-title">Recent Inquiries</h3>
-          <a href="/admin/inquiries" className="admin-btn admin-btn-outline admin-btn-sm">
+          <Link href="/admin/inquiries" className="admin-btn admin-btn-outline admin-btn-sm">
             View All →
-          </a>
+          </Link>
         </div>
         <table className="admin-table">
           <thead>

@@ -56,7 +56,7 @@ export default function Footer() {
                   </h3>
                   <div ref={btnRef} className="contact-btn scroll-reveal" data-direction="left" data-delay="180">
                     <div className="rs-banner-btn">
-                      <Link
+                      <a
                         className="rs-btn has-theme-orange has-icon has-bg"
                         href="/contact-us#contact-us-form"
                       >
@@ -69,7 +69,7 @@ export default function Footer() {
                             <path d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z"></path>
                           </svg>
                         </span>
-                      </Link>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -83,7 +83,7 @@ export default function Footer() {
       <footer>
         <div className="rs-footer-area rs-footer-two has-space has-theme-orange footer-new">
           <div
-            className="rs-footer-bg-thumb has-bg-none"
+            className="rs-footer-bg-thumb"
             style={{ backgroundImage: "url('/assets/images/bg/footer-bg.webp')" }}
           ></div>
           <div className="rs-footer-top">
@@ -93,7 +93,7 @@ export default function Footer() {
                   <div className="rs-footer-widget footer-2-col-1">
                     <div className="rs-footer-widget-logo mb-25">
                       <Link href="/">
-                        <Image
+                        <img
                           src="/assets/images/logo/msc_logo_without_bg.webp"
                           alt="logo"
                           width={280}
@@ -188,21 +188,19 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="rs-footer-copyright-area rs-copyright-one mt-4">
+          <div className="rs-footer-copyright-area rs-copyright-one">
             <div className="container">
               <div className="row justify-content-center">
                 <div className="w-full">
                   <div className="rs-footer-copyright has-theme-orange text-center">
-                    <p className="underline">
+                    <p>
                       © <span>2026</span> Mohit Sales Corporation Pvt. Ltd. Designed by{' '}
                       <a href="https://www.bdminfotech.com/" target="_blank" rel="noopener noreferrer">
-                        <Image
-                          src="/assets/images/logo/bdm_footer.png"
+                        <img
+                          src="/assets/images/logo/bdm_footer_group.png"
                           className="bdm-footer-logo inline-block align-middle ml-1"
                           alt="BDM InfoTech"
-                          width={80}
-                          height={20}
-                          style={{ display: 'inline-block', verticalAlign: 'middle' }}
+                          style={{ display: 'inline-block', verticalAlign: 'middle', height: '28px', width: 'auto' }}
                         />
                       </a>
                     </p>
@@ -233,12 +231,12 @@ export default function Footer() {
         <a href={getSetting('social_linkedin', '#') || '#'} className="LinkedIn linkedin" target="_blank" rel="noopener noreferrer">
           <i className="fa-brands fa-linkedin-in icon"></i> LinkedIn
         </a>
-        <Link href="/contact-us#contact-us-form" className="Quote">
+        <a href="/contact-us#contact-us-form" className="Quote">
           <div className="social_icon" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
             <Image src="/assets/images/icon/sign-document-icon.svg" className="img-fluid inline-block" alt="Quote Icon" width={24} height={24} />
           </div>
           Request a Quote
-        </Link>
+        </a>
         <Link href="/pricelist" className="Twitter">
           <div className="social_icon" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
             <Image src="/assets/images/icon/price.png" className="img-fluid tweet inline-block" alt="Pricelist" width={24} height={24} />
