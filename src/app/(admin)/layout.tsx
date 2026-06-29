@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next';
 import '@/app/(public)/globals.css';
 
+export const dynamic = 'force-dynamic';
+
 export function generateViewport(): Viewport {
   return {
     width: 'device-width',

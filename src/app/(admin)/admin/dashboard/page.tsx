@@ -2,6 +2,8 @@ import Link from 'next/link';
 import AdminShell from '../components/AdminShell';
 import prisma from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 async function getDashboardStats() {
   try {
     const [
