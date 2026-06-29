@@ -314,6 +314,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const isIndexPage = (product && product.cards && product.cards.length > 0) || hasLegacyCards;
 
   // ══════════════════════════════════════════════════════════════════════
+  // Extract legacy image fallback from HTML if DB/JSON is missing an image
+  // ══════════════════════════════════════════════════════════════════════
+  let legacyImage = null;
+  if (legacyHtml && dbProductEarly && !dbProductEarly.imageSrc && !product?.imageSrc) {
+    try {
+      const $ = cheerio.load(legacyHtml, null, false);
+      legacyImage = $('.product-img img, .single-product-image img, .wires_inner img, img.img-fluid').first().attr('src') || null;
+    } catch (e) {}
+  }
+
+  // ══════════════════════════════════════════════════════════════════════
   // PRIORITY 1: DB product always takes priority over legacy PHP.
   // If product exists in DB and this is not a category index page,
   // always render the DB React template — no more isModified check.
@@ -323,7 +334,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     return (
       <ProductPageWrapper>
         <SchemaInjector page={`/${slugPath}`} />
-        {renderDbProduct(dbProductEarly, product)}
+        {renderDbProduct(dbProductEarly, product, legacyImage)}
       </ProductPageWrapper>
     );
   }
@@ -605,7 +616,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     return (
       <ProductPageWrapper>
         <SchemaInjector page={`/${slugPath}`} />
-        {renderDbProduct(dbProductEarly, product)}
+        {renderDbProduct(dbProductEarly, product, legacyImage)}
       </ProductPageWrapper>
     );
   }
@@ -654,7 +665,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 }
 
 // ── DB Product Detail Page ────────────────────────────────────────────
-function renderDbProduct(dbProduct: any, productJson: any = null) {
+function renderDbProduct(dbProduct: any, productJson: any = null, legacyImage: string | null = null) {
   const breadcrumbs = [];
   let currentCat = dbProduct.category;
   while (currentCat) {
@@ -862,7 +873,7 @@ function renderDbProduct(dbProduct: any, productJson: any = null) {
             <div className="col-lg-5">
               <div className="product-img">
                 {(() => {
-                  const imgSrc = dbProduct.imageSrc || productJson?.imageSrc || dbProduct.category?.image || null;
+                  const imgSrc = dbProduct.imageSrc || productJson?.imageSrc || legacyImage || dbProduct.category?.image || null;
                   return imgSrc ? (
                     <img src={imgSrc} alt={dbProduct.title} className="img-fluid w-full h-auto object-contain" />
                   ) : (
