@@ -14,8 +14,8 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED 1
 # Provide dummy env vars for Next.js build verification and Prisma schema validation
-ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
-ENV DIRECT_URL="postgresql://dummy:dummy@localhost:5432/dummy"
+ENV DATABASE_URL="postgresql://dummy:dummy@187.127.146.111:5432/dummy"
+ENV DIRECT_URL="postgresql://dummy:dummy@187.127.146.111:5432/dummy"
 ENV JWT_SECRET="dummy_secret_for_build_only"
 ENV CAPTCHA_SECRET="dummy_secret_for_build_only"
 # Generate Prisma client for the correct platform (linux-slim)
