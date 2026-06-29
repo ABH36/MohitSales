@@ -3185,3 +3185,84 @@ a.enquiry-btn:hover,
     font-size: 9px !important;
   }
 }
+/* Footer Product Columns Match Screenshot */
+.rs-footer-widget .product-col h6 {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  text-transform: capitalize;
+}
+
+.rs-footer-widget .product-col ul li a {
+  color: #a0a0a0;
+  transition: all 0.3s ease;
+}
+
+.rs-footer-widget .product-col ul li a:hover {
+  color: #ff6a00;
+}
+
+/* Override Sticky Social Media Icons to match modern floating pills */
+.social_media_sticky {
+  right: 15px !important;
+  bottom: 80px !important;
+}
+
+.social_media_sticky a {
+  width: 45px !important;
+  height: 45px !important;
+  border-radius: 50px !important;
+  transform: translate(0, 0) !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 !important;
+  margin: 6px 0 !important;
+  background-color: #fff !important;
+  color: #333 !important;
+}
+
+.social_media_sticky a:hover {
+  width: 180px !important;
+  transform: translate(0, -2px) !important;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15) !important;
+}
+
+.social_media_sticky a i,
+.social_media_sticky a .social_icon {
+  width: 45px !important;
+  min-width: 45px !important;
+  height: 45px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  background-color: transparent !important;
+}
+
+.social_media_sticky a i {
+  font-size: 20px !important;
+}
+
+.social_media_sticky a:hover i,
+.social_media_sticky a:hover .social_icon img {
+  transform: rotate(0deg) !important; /* Disable crazy 360 spin from old css */
+}
+
+.social_media_sticky a .social_icon img {
+  width: 22px !important;
+  height: 22px !important;
+  object-fit: contain !important;
+}
+
+.social_media_sticky a {
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  padding-right: 15px !important;
+}
