@@ -317,20 +317,31 @@ export default async function ProductPage({ params }: ProductPageProps) {
   // Extract legacy image fallback from HTML if DB/JSON is missing an image
   // ══════════════════════════════════════════════════════════════════════
   let legacyImage = null;
-  if (legacyHtml && dbProductEarly && !dbProductEarly.imageSrc && !product?.imageSrc) {
-    try {
-      const $ = cheerio.load(legacyHtml, null, false);
-      legacyImage = $('.product-img img, .single-product-image img, .wires_inner img, img.img-fluid').first().attr('src') || null;
-    } catch (e) {}
+  let hasComplexLegacyHtml = false;
+  if (legacyHtml) {
+    hasComplexLegacyHtml = legacyHtml.includes('class="feature-card"') || 
+                           legacyHtml.includes('class="features-grid"') || 
+                           legacyHtml.includes('class="technical-table"');
+                           
+    if (dbProductEarly && !dbProductEarly.imageSrc && !product?.imageSrc) {
+      try {
+        const $ = cheerio.load(legacyHtml, null, false);
+        legacyImage = $('.product-img img, .single-product-image img, .wires_inner img, img.img-fluid, .feature-image img').first().attr('src') || null;
+      } catch (e) {}
+    }
   }
 
   // ══════════════════════════════════════════════════════════════════════
   // PRIORITY 1: DB product always takes priority over legacy PHP.
   // If product exists in DB and this is not a category index page,
   // always render the DB React template — no more isModified check.
-  // PHP fallback (Priority 2) only runs when DB has NO product for this slug.
+  // Exception: If the legacy HTML is a complex custom layout and the DB product
+  // has no features (was just auto-seeded), skip to Priority 2 to preserve the layout.
   // ══════════════════════════════════════════════════════════════════════
-  if (dbProductEarly && !isIndexPage) {
+  const dbHasFeatures = dbProductEarly?.features && dbProductEarly.features !== '[]' && dbProductEarly.features !== 'null';
+  const skipDbTemplate = hasComplexLegacyHtml && !dbHasFeatures;
+
+  if (dbProductEarly && !isIndexPage && !skipDbTemplate) {
     return (
       <ProductPageWrapper>
         <SchemaInjector page={`/${slugPath}`} />
