@@ -132,7 +132,7 @@ async function getProductData(slugPath: string) {
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const resolvedParams = await params;
   const slugPath = resolvedParams.slug.join('/');
-  
+
   const cache = loadBuildCache();
   let product = null;
   let seoMeta = null;
@@ -322,10 +322,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
   if (dbProductEarly && !isIndexPage) {
     return (
       <ProductPageWrapper>
-
-
         <SchemaInjector page={`/${slugPath}`} />
-        {renderDbProduct(dbProductEarly)}
+        {renderDbProduct(dbProductEarly, product)}
       </ProductPageWrapper>
     );
   }
@@ -607,7 +605,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     return (
       <ProductPageWrapper>
         <SchemaInjector page={`/${slugPath}`} />
-        {renderDbProduct(dbProductEarly)}
+        {renderDbProduct(dbProductEarly, product)}
       </ProductPageWrapper>
     );
   }
@@ -656,7 +654,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 }
 
 // ── DB Product Detail Page ────────────────────────────────────────────
-function renderDbProduct(dbProduct: any) {
+function renderDbProduct(dbProduct: any, productJson: any = null) {
   const breadcrumbs = [];
   let currentCat = dbProduct.category;
   while (currentCat) {
@@ -864,7 +862,7 @@ function renderDbProduct(dbProduct: any) {
             <div className="col-lg-5">
               <div className="product-img">
                 {(() => {
-                  const imgSrc = dbProduct.imageSrc || dbProduct.category?.image || null;
+                  const imgSrc = dbProduct.imageSrc || productJson?.imageSrc || dbProduct.category?.image || null;
                   return imgSrc ? (
                     <img src={imgSrc} alt={dbProduct.title} className="img-fluid w-full h-auto object-contain" />
                   ) : (

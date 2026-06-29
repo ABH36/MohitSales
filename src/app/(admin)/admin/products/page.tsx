@@ -146,6 +146,7 @@ function AdminProductsPageInner() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [categories, setCategories] = useState<FlatCategory[]>(cachedCats?.success ? flattenCategories(cachedCats.data) : []);
   const [rawCategories, setRawCategories] = useState<NestedCategory[]>(cachedCats?.success ? cachedCats.data : []);
@@ -228,6 +229,7 @@ function AdminProductsPageInner() {
       if (data.success) {
         setProducts(data.data);
         setTotalPages(data.pagination.totalPages);
+        setTotalProducts(data.pagination.total);
       }
       if (catData.success) {
         setCategories(flattenCategories(catData.data));
@@ -542,7 +544,7 @@ function AdminProductsPageInner() {
                 {selectedCategoryFilter 
                   ? `${categories.find(c => c.id === selectedCategoryFilter)?.label.split(' > ').pop()} Products`
                   : 'All Products'
-                } ({products.length})
+                } ({totalProducts})
               </h3>
               <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
                 <div className="admin-search-box">
