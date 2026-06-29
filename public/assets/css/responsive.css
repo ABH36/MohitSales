@@ -10,30 +10,38 @@
     }
 
     /* ── Header ─────────────────────────────────────────── */
-
-    .rs-header-two .sidebar-toggle.new .bar-icon svg path {
-        color: #0091b9 !important;
-    }
-
-    .rs-header-two.header-new .rs-header-logo {
-        width: 150px;
-        padding: 5px 0;
-    }
-
-    .rs-header-two .rs-header-inner {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        padding: 0 15px;
-    }
-
-    .rs-header-two .rs-header-left {
-        flex: 0 0 auto;
-        padding-inline-end: 0 !important;
-        margin-inline-end: 0 !important;
-    }
+ 
+     .rs-header-two .sidebar-toggle.new .bar-icon svg path {
+         color: #0091b9 !important;
+     }
+ 
+     .rs-header-two.header-new .rs-header-logo {
+         width: auto !important;
+         padding: 10px 0 !important;
+         margin: 0 !important;
+         display: flex;
+         align-items: center;
+     }
+ 
+     .rs-header-two.header-new .rs-header-logo img {
+         max-width: 115px !important;
+         height: auto !important;
+     }
+ 
+     .rs-header-two .rs-header-inner {
+         position: relative;
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         width: 100%;
+         padding: 0 10px;
+     }
+ 
+     .rs-header-two .rs-header-left {
+         flex: 0 0 auto;
+         padding: 0 !important;
+         margin: 0 !important;
+     }
 
     /* Hide desktop nav on mobile — sidebar handles it */
     .rs-header-two .rs-header-menu {
@@ -432,4 +440,26 @@
         display: none;
     }
 
+}
+
+/* --- Fix Mobile Banner Aspect Ratio and Prevent Cutting --- */
+@media (max-width: 991px) {
+    .banner_sec.mobile,
+    .banner_sec.mobile .banner-swiper {
+        height: auto !important;
+        aspect-ratio: 1920 / 911 !important;
+        padding-top: 0px !important;
+    }
+
+    .banner_sec.mobile .swiper-wrapper,
+    .banner_sec.mobile .swiper-slide {
+        height: 100% !important;
+        aspect-ratio: 1920 / 911 !important;
+    }
+
+    /* Adjust dots pagination to position correctly on responsive */
+    .banner_sec.mobile .swiper-pagination {
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+    }
 }

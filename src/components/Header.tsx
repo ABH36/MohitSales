@@ -261,12 +261,8 @@ export default function Header() {
                   </Link>
                 </div>
                 <div className="offcanvas-close">
-                  <button className="offcanvas-close-icon" onClick={() => setIsSidebarOpen(false)}>
-                    <span className="offcanvas-m-lines">
-                      <span className="offcanvas-m-line line--1"></span>
-                      <span className="offcanvas-m-line line--2"></span>
-                      <span className="offcanvas-m-line line--3"></span>
-                    </span>
+                  <button className="offcanvas-close-icon" onClick={() => setIsSidebarOpen(false)} aria-label="Close menu" style={{ background: 'none', border: 'none', padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <i className="fa-solid fa-xmark" style={{ fontSize: '22px', color: '#ffffff' }}></i>
                   </button>
                 </div>
               </div>

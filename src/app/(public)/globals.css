@@ -1093,7 +1093,7 @@ body.ltr .rs-breadcrumb-title {
 
 /* Section title styling in clientele */
 .clientle_sec .rs-section-subtitle {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 8px;
   font-size: 15px;
