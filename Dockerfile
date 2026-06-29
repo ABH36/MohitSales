@@ -39,8 +39,8 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/content-export.json ./content-export.json
 
-EXPOSE 3000
-ENV PORT 3000
+EXPOSE 3005
+ENV PORT 3005
 ENV HOSTNAME "0.0.0.0"
 
 # Startup command: sync schema (additive only, no data loss) then start app

@@ -52,7 +52,7 @@ Before starting, make sure you have:
    - Add your domain (e.g., `mohit.bdm.co.in`).
    - Easypanel will automatically route traffic and generate Let's Encrypt SSL certificates.
 6. Configure the **Network** tab:
-   - Set **Container Port** to `3000`. This maps traffic from port 80/443 to the port exposed by our Dockerfile.
+   - Set **Container Port** to `3005`. This maps traffic from port 80/443 to the port exposed by our Dockerfile.
 
 ---
 
@@ -91,7 +91,7 @@ Go to the **Environment** tab of your `app` service and add the following variab
    - Install dependencies.
    - Compile the Next.js project.
    - Run `npx prisma db push` to synchronize the PostgreSQL database schema.
-   - Start the web server on port `3000`.
+   - Start the web server on port `3005`.
 
 ---
 
