@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 /* Global heading weight — bold like PHP site (scoped to public site only) */
-body.rtl h1,
-body.rtl h2,
-body.rtl h3,
-body.rtl h4,
-body.rtl h5,
-body.rtl h6,
-body.rtl .rs-section-title,
-body.rtl .rs-breadcrumb-title {
+body.ltr h1,
+body.ltr h2,
+body.ltr h3,
+body.ltr h4,
+body.ltr h5,
+body.ltr h6,
+body.ltr .rs-section-title,
+body.ltr .rs-breadcrumb-title {
   font-family: "Space Grotesk", "Outfit", sans-serif !important;
   font-weight: 900 !important;
 }

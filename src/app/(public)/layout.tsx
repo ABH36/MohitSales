@@ -137,7 +137,7 @@ export default function RootLayout({
           })();
         ` }} />
       </head>
-      <body className="rtl" suppressHydrationWarning={true}>
+      <body className="ltr" suppressHydrationWarning={true}>
         <PublicSettingsProvider>
           <AnimationLoader />
           <NonCriticalCSS />

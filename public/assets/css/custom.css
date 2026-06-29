@@ -2790,6 +2790,7 @@ a.enquiry-btn:hover {
 .rs-split-text-enable {
   opacity: 1;
   transition: opacity 0.3s ease;
+  display: inline !important;
 }
 
 .rs-split-text-enable .word,
@@ -2798,6 +2799,7 @@ a.enquiry-btn:hover {
 .rs-split-text-enable span {
   display: inline-block !important;
   white-space: nowrap !important;
+  vertical-align: baseline !important;
 }
 
 /* Portfolio Slider Navigation Styles (Swiper nav buttons on top right) */
