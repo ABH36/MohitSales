@@ -571,7 +571,7 @@
 
                                         <!-- LEFT SIDE : IMAGE + TITLE -->
                                         <div class="col-md-6 text-center">
-                                            <img src="https://placehold.co/253x253"
+                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
                                                 alt="AERY Table Fan" class="product-img">
                                             <h3 class="product-title">AERY</h3>
                                         </div>
@@ -620,7 +620,7 @@
 
                                         <!-- LEFT SIDE : IMAGE + TITLE -->
                                         <div class="col-md-6 text-center">
-                                            <img src="https://placehold.co/253x253"
+                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
                                                 alt="AMAZE Table Fan" class="product-img">
                                             <h3 class="product-title">AMAZE</h3>
                                         </div>
@@ -668,7 +668,7 @@
 
                                         <!-- LEFT SIDE : IMAGE + TITLE -->
                                         <div class="col-md-6 text-center">
-                                            <img src="https://placehold.co/253x253"
+                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
                                                 alt="ASPIRE Table Fan" class="product-img">
                                             <h3 class="product-title">ASPIRE</h3>
                                         </div>
