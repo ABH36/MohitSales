@@ -10,38 +10,65 @@
     }
 
     /* ── Header ─────────────────────────────────────────── */
- 
-     .rs-header-two .sidebar-toggle.new .bar-icon svg path {
-         color: #0091b9 !important;
-     }
- 
-     .rs-header-two.header-new .rs-header-logo {
-         width: auto !important;
-         padding: 10px 0 !important;
-         margin: 0 !important;
-         display: flex;
-         align-items: center;
-     }
- 
-     .rs-header-two.header-new .rs-header-logo img {
-         max-width: 115px !important;
-         height: auto !important;
-     }
- 
-     .rs-header-two .rs-header-inner {
-         position: relative;
-         display: flex;
-         align-items: center;
-         justify-content: space-between;
-         width: 100%;
-         padding: 0 10px;
-     }
- 
-     .rs-header-two .rs-header-left {
-         flex: 0 0 auto;
-         padding: 0 !important;
-         margin: 0 !important;
-     }
+
+    .rs-header-two .sidebar-toggle.new .bar-icon svg path {
+        color: #0091b9 !important;
+    }
+
+    /* ── Section Titles — Responsive Text Fix ────────────── */
+
+    .rs-section-title {
+        font-size: 22px !important;
+        line-height: 1.3 !important;
+    }
+
+    .rs-section-title.rs-split-text-enable {
+        font-size: 22px !important;
+        line-height: 1.3 !important;
+    }
+
+    .split-text-wrapper {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        perspective: none !important;
+    }
+
+    .rs-section-subtitle {
+        font-size: 13px !important;
+        letter-spacing: 2px !important;
+    }
+
+    .rs-why-choose-three.wcu_sec .rs-section-title {
+        font-size: 20px !important;
+    }
+
+    .rs-header-two.header-new .rs-header-logo {
+        width: auto !important;
+        padding: 10px 0 !important;
+        margin: 0 !important;
+        display: flex;
+        align-items: center;
+    }
+
+    .rs-header-two.header-new .rs-header-logo img {
+        max-width: 115px !important;
+        height: auto !important;
+    }
+
+    .rs-header-two .rs-header-inner {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0 10px;
+    }
+
+    .rs-header-two .rs-header-left {
+        flex: 0 0 auto;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
 
     /* Hide desktop nav on mobile — sidebar handles it */
     .rs-header-two .rs-header-menu {
@@ -51,7 +78,8 @@
     .rs-header-two .rs-header-right {
         flex: 0 0 auto;
         margin-left: auto;
-        margin-right: 0;     /* BUG FIX: was missing, caused right overflow */
+        margin-right: 0;
+        /* BUG FIX: was missing, caused right overflow */
     }
 
     /* Remove the decorative divider line on mobile — overlaps logo */
@@ -187,7 +215,8 @@
     }
 
     .rs-cta-two .rs-cta-title {
-        font-size: 18px !important;  /* BUG FIX: was duplicated with 20px above — kept lower value */
+        font-size: 18px !important;
+        /* BUG FIX: was duplicated with 20px above — kept lower value */
     }
 
     .rs-cta-two .rs-cta-bg-thumb {
@@ -249,7 +278,8 @@
     }
 
     .colors ul {
-        gap: 10px;   /* BUG FIX: was missing semicolon */
+        gap: 10px;
+        /* BUG FIX: was missing semicolon */
     }
 
     /* ── Buttons ─────────────────────────────────────────── */
@@ -295,7 +325,7 @@
         padding-top: 60px;
     }
 
-    .rs-footer-two.has-space > .rs-footer-top {
+    .rs-footer-two.has-space>.rs-footer-top {
         padding: 0 0 20px;
     }
 
@@ -444,6 +474,7 @@
 
 /* --- Fix Mobile Banner Aspect Ratio and Prevent Cutting --- */
 @media (max-width: 991px) {
+
     .banner_sec.mobile,
     .banner_sec.mobile .banner-swiper {
         height: auto !important;

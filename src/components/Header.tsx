@@ -220,7 +220,7 @@ export default function Header() {
                       <Link href="/pricelist">Pricelist</Link>
                     </li>
                     <li>
-                      <a href="/assets/images/pdf/MOHIT CATALOGUE.pdf" target="_blank">Company Profile</a>
+                      <Link href="/company-profile">Company Profile</Link>
                     </li>
                     <li>
                       <Link href="/contact-us">Contact Us</Link>
@@ -369,7 +369,7 @@ export default function Header() {
                     <Link href="/pricelist" onClick={() => setIsSidebarOpen(false)} className="mobile-nav-link">Pricelist</Link>
                   </li>
                   <li className="mobile-nav-item">
-                    <a href="/assets/images/pdf/MOHIT CATALOGUE.pdf" target="_blank" rel="noopener noreferrer" onClick={() => setIsSidebarOpen(false)} className="mobile-nav-link">Company Profile</a>
+                    <Link href="/company-profile" onClick={() => setIsSidebarOpen(false)} className="mobile-nav-link">Company Profile</Link>
                   </li>
                   <li className="mobile-nav-item">
                     <Link href="/contact-us" onClick={() => setIsSidebarOpen(false)} className="mobile-nav-link">Contact Us</Link>

@@ -74,13 +74,34 @@ const SPOTLIGHT_PRESET = `<div style="display: flex; flex-direction: row; flex-w
   <div style="flex: 1 1 180px; background: url('/assets/images/banner/desktop/wire.webp') center/cover no-repeat; min-height: 180px;"></div>
 </div>`;
 
+const DEFAULT_HOMEPAGE_ABOUT: PageContent = {
+  title: 'About Us',
+  content: 'Established in 1997, Mohit Sales Corporation Pvt. Ltd. has built a strong reputation as a trusted leader in the electrical distribution industry. With over 27+ years of experience, we deliver reliable, high-quality electrical products and customized solutions to diverse sectors.\n\nWe are a proud Authorised Distributor of Polycab and Dowells, ensuring our customers receive only genuine, certified products that meet the highest industry standards.\n\nOur success is driven by a customer-first approach, technical expertise, timely delivery, and dependable after-sales support. Today, we proudly serve contractors, industries, retailers, and large-scale infrastructure projects, helping power growth and innovation across the region.',
+  imageUrl: '/assets/images/about/authorized distributor.png',
+  extraField: '',
+};
+
+const DEFAULT_ABOUT_US: PageContent = {
+  title: 'About Mohit Sales Corporation Pvt. Ltd.',
+  content: '<p>Founded in <strong>1997</strong>, Mohit Sales Corporation Pvt. Ltd. has grown into a trusted and leading name in the electrical distribution industry. With <strong>27+ years of experience</strong>, we specialize in delivering high-quality electrical products and solutions across multiple sectors.</p>\n\n<p>As an <strong>Authorised Distributor of Polycab and Dowells</strong> we ensure our customers receive genuine products backed by technical expertise, timely supply, and reliable after-sales support. Our strong industry presence, expert team, and customer-centric approach have enabled us to consistently meet the evolving needs of contractors, industries, retailers, and infrastructure projects.</p>\n\n<p>Mohit Sales Corporation continues to build a reputation for trust, quality, and professionalism—values that form the foundation of our long-standing success.</p>',
+  imageUrl: '/assets/images/inner-banner/about-us.png',
+  extraField: '',
+};
+
+const DEFAULT_COMPANY_PROFILE: PageContent = {
+  title: 'Company Profile',
+  content: '<p>Mohit Sales Corporation Pvt. Ltd. is a trusted name in the electrical distribution industry. With over 27+ years of experience, we deliver high-quality electrical products and customized solutions to diverse sectors. As an Authorised Distributor of Polycab and Dowells, we ensure our customers receive only genuine, certified products that meet the highest industry standards.</p>',
+  imageUrl: '/assets/images/inner-banner/company-profile.png',
+  extraField: '/assets/images/pdf/MOHIT CATALOGUE.pdf',
+};
+
 export default function CmsPage() {
   const [tab, setTab] = useState<TabKey>('banners');
   const [banners, setBanners] = useState<BannerItem[]>([]);
   const [pageData, setPageData] = useState<Record<string, PageContent>>({
-    homepage: { title: '', content: '', imageUrl: '', extraField: '' },
-    'about-us': { title: '', content: '', imageUrl: '', extraField: '' },
-    'company-profile': { title: '', content: '', imageUrl: '', extraField: '' },
+    homepage: DEFAULT_HOMEPAGE_ABOUT,
+    'about-us': DEFAULT_ABOUT_US,
+    'company-profile': DEFAULT_COMPANY_PROFILE,
   });
   const [promoData, setPromoData] = useState({
     showPopup: false,

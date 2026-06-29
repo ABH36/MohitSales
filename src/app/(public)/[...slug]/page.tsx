@@ -138,14 +138,25 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   let seoMeta = null;
   let dbProduct = null;
 
+  const cleanPath = `/${slugPath}`;
+  const altPath = cleanPath.includes('_') 
+    ? cleanPath.replace(/_/g, '-') 
+    : (cleanPath.includes('-') ? cleanPath.replace(/-/g, '_') : null);
+
   if (cache) {
     product = await getProductData(slugPath);
-    seoMeta = cache.seoMetas[`/${slugPath}`] || null;
+    seoMeta = cache.seoMetas[cleanPath] || (altPath ? cache.seoMetas[altPath] : null) || null;
     dbProduct = cache.products[slugPath] || null;
   } else {
     const [p, s, dbP] = await Promise.all([
       getProductData(slugPath),
-      prisma.seoMeta.findUnique({ where: { page: `/${slugPath}` } }).catch(() => null),
+      prisma.seoMeta.findFirst({
+        where: {
+          page: {
+            in: altPath ? [cleanPath, altPath] : [cleanPath]
+          }
+        }
+      }).catch(() => null),
       prisma.product.findUnique({ where: { slug: slugPath }, select: { metaTitle: true, metaDescription: true, metaKeywords: true, imageSrc: true } }).catch(() => null),
     ]);
     product = p;

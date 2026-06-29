@@ -1,19 +1,50 @@
 import React from 'react';
 import Link from 'next/link';
+import prisma from '@/lib/prisma';
 
-export const metadata = {
-  title: 'About Us | Mohit Sales Corporation Pvt. Ltd.',
-  description: 'About Mohit Sales Corporation Pvt. Ltd. - Authorised Distributor of Polycab and Dowells',
+import { Metadata } from 'next';
+import { getSeoMetadata } from '@/lib/seo';
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata('/about-us', {
+    title: 'About Us | Mohit Sales Corporation Pvt. Ltd.',
+    description: 'About Mohit Sales Corporation Pvt. Ltd. - Authorised Distributor of Polycab and Dowells',
+  });
+}
+
+
+const FALLBACK_ABOUT_US = {
+  title: 'About Mohit Sales Corporation Pvt. Ltd.',
+  content: `<p>Founded in <strong>1997</strong>, Mohit Sales Corporation Pvt. Ltd. has grown into a trusted and leading name in the electrical distribution industry. With <strong> 27+ years of experience</strong>, we specialize in delivering high-quality electrical products and solutions across multiple sectors.</p>
+<p>As an <strong>Authorised Distributor of Polycab and Dowells</strong> we ensure our customers receive genuine products backed by technical expertise, timely supply, and reliable after-sales support. Our strong industry presence, expert team, and customer-centric approach have enabled us to consistently meet the evolving needs of contractors, industries, retailers, and infrastructure projects.</p>
+<p>Mohit Sales Corporation continues to build a reputation for trust, quality, and professionalism—values that form the foundation of our long-standing success.</p>`,
+  imageUrl: '/assets/images/inner-banner/about-us.png',
 };
 
-export default function AboutUsPage() {
+export default async function AboutUsPage() {
+  const cmsAbout = await prisma.cmsSection.findUnique({
+    where: { page_section: { page: 'about-us', section: 'content' } },
+  }).catch(() => null);
+
+  let aboutData = FALLBACK_ABOUT_US;
+  if (cmsAbout?.content) {
+    try {
+      const parsed = JSON.parse(cmsAbout.content);
+      aboutData = {
+        title: parsed.title || FALLBACK_ABOUT_US.title,
+        content: parsed.content || FALLBACK_ABOUT_US.content,
+        imageUrl: parsed.imageUrl || FALLBACK_ABOUT_US.imageUrl,
+      };
+    } catch {}
+  }
+
   return (
     <main>
       {/* breadcrumb area start */}
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('/assets/images/inner-banner/about-us.png')" }}
+          style={{ backgroundImage: `url('${aboutData.imageUrl}')` }}
         ></div>
         <div className="container">
           <div className="row">
@@ -46,12 +77,8 @@ export default function AboutUsPage() {
             <div className="about-inner-content"></div>
             
             <div className="prabhat-about" id="prabhat-wire-llp">
-              <h3>About Mohit Sales Corporation Pvt. Ltd.</h3>
-              <p>Founded in <strong>1997</strong>, Mohit Sales Corporation Pvt. Ltd. has grown into a trusted and leading name in the electrical distribution industry. With <strong> 27+ years of experience</strong>, we specialize in delivering high-quality electrical products and solutions across multiple sectors.</p>
-
-              <p>As an <strong>Authorised Distributor of Polycab and Dowells</strong> we ensure our customers receive genuine products backed by technical expertise, timely supply, and reliable after-sales support. Our strong industry presence, expert team, and customer-centric approach have enabled us to consistently meet the evolving needs of contractors, industries, retailers, and infrastructure projects.</p>
-              
-              <p>Mohit Sales Corporation continues to build a reputation for trust, quality, and professionalism—values that form the foundation of our long-standing success.</p>
+              <h3>{aboutData.title}</h3>
+              <div dangerouslySetInnerHTML={{ __html: aboutData.content }} />
 
               <div className="core-values llp">
                 <h4>Our Authorised Brands & Product Portfolio</h4>

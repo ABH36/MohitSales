@@ -140,6 +140,19 @@ function SeoPageInner() {
   const [overrideForm, setOverrideForm] = useState(emptyOverride);
   const [editingOverrideId, setEditingOverrideId] = useState<string | null>(null);
   const [showOverrideModal, setShowOverrideModal] = useState(false);
+  const [generatingSitemap, setGeneratingSitemap] = useState(false);
+  const [sitemapPreview, setSitemapPreview] = useState<{
+    totalUrls: number;
+    urls: Array<{ url: string; lastmod: string; changefreq: string; priority: number; type: string; title: string }>;
+    generatedAt: string;
+    stats: {
+      static: number;
+      categories: number;
+      products: number;
+      legacyProducts: number;
+      blogs: number;
+    }
+  } | null>(null);
 
   // ── ROBOTS STATE ──
   const [robotsRules, setRobotsRules] = useState<RobotsRule[]>([]);
@@ -449,6 +462,109 @@ function SeoPageInner() {
     } else {
       showToast(data.error || 'Failed to save', 'error');
     }
+  };
+
+  const generateSitemapUrls = async () => {
+    setGeneratingSitemap(true);
+    try {
+      const res = await fetch('/api/admin/seo/sitemap/generate?format=json');
+      const data = await res.json();
+      if (data.success) {
+        setSitemapPreview(data.data);
+        showToast('Sitemap generated successfully!');
+      } else {
+        showToast(data.error || 'Failed to generate sitemap', 'error');
+      }
+    } catch (err) {
+      showToast('Error generating sitemap', 'error');
+    } finally {
+      setGeneratingSitemap(false);
+    }
+  };
+
+  const downloadPdf = () => {
+    if (!sitemapPreview) return showToast('Please generate the sitemap first', 'error');
+
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return showToast('Popup blocked! Please allow popups.', 'error');
+
+    const htmlContent = `
+      <html>
+        <head>
+          <title>Mohit Sales Corporation Pvt. Ltd. - Sitemap URL Catalog</title>
+          <style>
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 30px; color: #2d3748; }
+            h1 { color: #1e2e5e; border-bottom: 2px solid #1e2e5e; padding-bottom: 10px; margin-bottom: 5px; font-size: 24px; }
+            p.meta { color: #718096; font-size: 13px; margin-bottom: 25px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
+            th { background-color: #1e2e5e; color: white; text-align: left; padding: 10px; }
+            td { padding: 10px; border-bottom: 1px solid #e2e8f0; }
+            tr:nth-child(even) { background-color: #f7fafc; }
+            .type { font-weight: bold; color: #4a5568; }
+            .priority { text-align: center; }
+            .changefreq { text-align: center; }
+            @media print {
+              body { padding: 0; }
+              button { display: none; }
+            }
+            .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+            .print-btn { background-color: #1e2e5e; color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 5px; cursor: pointer; }
+          </style>
+        </head>
+        <body>
+          <div class="header-bar">
+            <div>
+              <h1>Sitemap URL Catalog Report</h1>
+              <p class="meta">Generated on: ${new Date(sitemapPreview.generatedAt).toLocaleString()} | Total URLs: ${sitemapPreview.totalUrls}</p>
+            </div>
+            <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
+          </div>
+          
+          <div style="margin-bottom: 20px; font-size: 14px;">
+            <strong>Summary:</strong> 
+            Static: ${sitemapPreview.stats.static} | 
+            Categories: ${sitemapPreview.stats.categories} | 
+            Products: ${sitemapPreview.stats.products} | 
+            Legacy Products: ${sitemapPreview.stats.legacyProducts} | 
+            Blogs: ${sitemapPreview.stats.blogs}
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 15%;">Type</th>
+                <th>Name / URL</th>
+                <th style="width: 10%; text-align: center;">Priority</th>
+                <th style="width: 15%; text-align: center;">Frequency</th>
+                <th style="width: 15%;">Last Modified</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${sitemapPreview.urls.map(u => `
+                <tr>
+                  <td class="type">${u.type}</td>
+                  <td>
+                    <div style="font-weight: 500;">${u.title}</div>
+                    <div style="color: #718096; font-size: 11px;">${u.url}</div>
+                  </td>
+                  <td class="priority">${u.priority.toFixed(1)}</td>
+                  <td class="changefreq">${u.changefreq}</td>
+                  <td>${u.lastmod}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          <script>
+            window.onload = function() {
+              setTimeout(function() { window.print(); }, 500);
+            };
+          </script>
+        </body>
+      </html>
+    `;
+
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
   };
 
   const deleteOverride = async (id: string) => {
@@ -782,57 +898,135 @@ function SeoPageInner() {
       {/* ── TAB 4: SITEMAP ── */}
       {activeTab === 'sitemap' && (
         <div>
-          <p style={{ fontSize: 13, color: '#718096', marginBottom: 16, lineHeight: 1.6, background: '#f0fff4', border: '1px solid #c6f6d5', borderRadius: 8, padding: '10px 14px' }}>
-            <strong>How to use:</strong> Override sitemap settings for specific URLs. Set priority (0.0–1.0), change frequency, or exclude pages. Example: <code style={{ background: '#e2e8f0', padding: '1px 6px', borderRadius: 4 }}>/contact-us</code> with priority <code style={{ background: '#e2e8f0', padding: '1px 6px', borderRadius: 4 }}>0.3</code> and frequency <code style={{ background: '#e2e8f0', padding: '1px 6px', borderRadius: 4 }}>yearly</code>.
-          </p>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: '#1a202c' }}>Sitemap Overrides</h2>
-            {!isReadOnly && (
-              <button onClick={() => openOverrideModal()} style={{ background: '#1e2e5e', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 6, cursor: 'pointer', fontWeight: 600 }}>
-                + Add Override
+          {/* Sitemap Generator Card */}
+          <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 24, marginBottom: 24, boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+            <h3 style={{ fontSize: 16, fontWeight: 700, color: '#1e2e5e', marginBottom: 8 }}>Sitemap Generator & XML/PDF Export</h3>
+            <p style={{ fontSize: 13, color: '#718096', marginBottom: 16 }}>
+              Generate complete URLs for all products, categories, blogs, and static pages. You can preview all links and download them directly as a standard XML sitemap or format it as a PDF catalog.
+            </p>
+            
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 20 }}>
+              <button 
+                onClick={generateSitemapUrls} 
+                disabled={generatingSitemap}
+                style={{ background: '#1e2e5e', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 14 }}
+              >
+                {generatingSitemap ? 'Generating...' : '🔍 Generate sitemap URLs'}
               </button>
+              
+              {sitemapPreview && (
+                <>
+                  <a 
+                    href="/api/admin/seo/sitemap/generate?format=xml" 
+                    download="sitemap.xml"
+                    style={{ background: '#2b6cb0', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 14, textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}
+                  >
+                    💾 Download XML
+                  </a>
+                  
+                  <button 
+                    onClick={downloadPdf} 
+                    style={{ background: '#c53030', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 14 }}
+                  >
+                    📄 Download PDF Report
+                  </button>
+                </>
+              )}
+            </div>
+
+            {sitemapPreview && (
+              <div style={{ background: '#f7fafc', borderRadius: 8, padding: 16, border: '1px solid #e2e8f0', marginBottom: 20 }}>
+                <h4 style={{ fontSize: 14, fontWeight: 700, color: '#4a5568', marginBottom: 12 }}>Generation Stats:</h4>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 12 }}>
+                  <div style={{ background: '#fff', padding: 12, borderRadius: 6, border: '1px solid #edf2f7', textAlign: 'center' }}>
+                    <div style={{ fontSize: 12, color: '#718096' }}>Total URLs</div>
+                    <div style={{ fontSize: 18, fontWeight: 800, color: '#1e2e5e' }}>{sitemapPreview.totalUrls}</div>
+                  </div>
+                  <div style={{ background: '#fff', padding: 12, borderRadius: 6, border: '1px solid #edf2f7', textAlign: 'center' }}>
+                    <div style={{ fontSize: 12, color: '#718096' }}>Products</div>
+                    <div style={{ fontSize: 18, fontWeight: 800, color: '#48bb78' }}>{sitemapPreview.stats.products}</div>
+                  </div>
+                  <div style={{ background: '#fff', padding: 12, borderRadius: 6, border: '1px solid #edf2f7', textAlign: 'center' }}>
+                    <div style={{ fontSize: 12, color: '#718096' }}>Categories</div>
+                    <div style={{ fontSize: 18, fontWeight: 800, color: '#3182ce' }}>{sitemapPreview.stats.categories}</div>
+                  </div>
+                  <div style={{ background: '#fff', padding: 12, borderRadius: 6, border: '1px solid #edf2f7', textAlign: 'center' }}>
+                    <div style={{ fontSize: 12, color: '#718096' }}>Static Pages</div>
+                    <div style={{ fontSize: 18, fontWeight: 800, color: '#dd6b20' }}>{sitemapPreview.stats.static}</div>
+                  </div>
+                  <div style={{ background: '#fff', padding: 12, borderRadius: 6, border: '1px solid #edf2f7', textAlign: 'center' }}>
+                    <div style={{ fontSize: 12, color: '#718096' }}>Blogs</div>
+                    <div style={{ fontSize: 18, fontWeight: 800, color: '#805ad5' }}>{sitemapPreview.stats.blogs}</div>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
-          <p style={{ fontSize: 13, color: '#718096', marginBottom: 16 }}>
-            Override sitemap priority/frequency for specific URLs, or exclude URLs entirely from the sitemap.
-          </p>
-          {sitemapLoading ? (
-            <div style={{ textAlign: 'center', padding: 40, color: '#718096' }}>Loading...</div>
-          ) : overrides.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: 40, color: '#a0aec0', background: '#f7fafc', borderRadius: 8 }}>
-              No sitemap overrides yet. All pages use default settings.
-            </div>
-          ) : (
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead>
-                  <tr style={{ background: '#f7fafc', fontSize: 13, color: '#4a5568' }}>
-                    <th style={th}>URL Path</th>
-                    <th style={th}>Priority</th>
-                    <th style={th}>Change Freq</th>
-                    <th style={th}>Excluded</th>
-                    <th style={th}>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {overrides.map(o => (
-                    <tr key={o.id} style={{ borderBottom: '1px solid #e2e8f0' }}>
-                      <td style={td}><code style={{ background: '#edf2f7', padding: '2px 6px', borderRadius: 4, fontSize: 12 }}>{o.urlPath}</code></td>
-                      <td style={{ ...td, textAlign: 'center' }}>{o.priority.toFixed(1)}</td>
-                      <td style={{ ...td, textAlign: 'center' }}>{o.changeFreq}</td>
-                      <td style={{ ...td, textAlign: 'center' }}>{o.isExcluded ? <Badge color="#e53e3e">Yes</Badge> : <Badge color="#38a169">No</Badge>}</td>
-                      <td style={td}>
-                        {!isReadOnly && (
-                          <div style={{ display: 'flex', gap: 6 }}>
-                            <button onClick={() => openOverrideModal(o)} style={editBtn}>Edit</button>
-                            <button onClick={() => deleteOverride(o.id)} style={delBtn}>Delete</button>
-                          </div>
-                        )}
-                      </td>
+
+          {/* Generated URLs Preview Table */}
+          {sitemapPreview && (
+            <div style={{ marginTop: 24, background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 20 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 12 }}>
+                <h4 style={{ fontSize: 15, fontWeight: 700, color: '#1e2e5e', margin: 0 }}>Generated URLs List ({sitemapPreview.totalUrls} links)</h4>
+                <div style={{ position: 'relative', width: '100%', maxWidth: '300px' }}>
+                  <input 
+                    type="text" 
+                    placeholder="🔍 Search URLs..."
+                    id="sitemapSearchInput"
+                    style={{ ...inputStyle, paddingLeft: 12 }}
+                    onChange={(e) => {
+                      const val = e.target.value.toLowerCase();
+                      const rows = document.querySelectorAll('.sitemap-preview-row');
+                      rows.forEach((row: any) => {
+                        const text = row.innerText.toLowerCase();
+                        if (text.includes(val)) {
+                          row.style.display = '';
+                        } else {
+                          row.style.display = 'none';
+                        }
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+              <div style={{ overflowY: 'auto', maxHeight: '450px', border: '1px solid #edf2f7', borderRadius: 8 }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <thead>
+                    <tr style={{ background: '#f7fafc', fontSize: 13, color: '#4a5568', borderBottom: '1px solid #edf2f7', position: 'sticky', top: 0, zIndex: 1 }}>
+                      <th style={{ ...th, padding: '10px 14px' }}>Type</th>
+                      <th style={th}>Page Title / URL Path</th>
+                      <th style={{ ...th, textAlign: 'center' }}>Priority</th>
+                      <th style={{ ...th, textAlign: 'center' }}>Frequency</th>
+                      <th style={th}>Last Modified</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {sitemapPreview.urls.map((u, index) => (
+                      <tr key={index} className="sitemap-preview-row" style={{ borderBottom: '1px solid #e2e8f0' }}>
+                        <td style={{ ...td, padding: '10px 14px' }}>
+                          <span style={{ 
+                            padding: '2px 8px', 
+                            borderRadius: 4, 
+                            fontSize: 11, 
+                            fontWeight: 600,
+                            background: u.type === 'Product' ? '#def7ec' : u.type === 'Category' ? '#e1f5fe' : u.type === 'Static Page' ? '#feecdc' : '#f3e8ff',
+                            color: u.type === 'Product' ? '#03543f' : u.type === 'Category' ? '#0288d1' : u.type === 'Static Page' ? '#b45309' : '#6b21a8'
+                          }}>
+                            {u.type}
+                          </span>
+                        </td>
+                        <td style={td}>
+                          <div style={{ fontWeight: 600, color: '#2d3748' }}>{u.title}</div>
+                          <div style={{ fontSize: 11, color: '#718096' }}>{u.url.replace(process.env.NEXT_PUBLIC_BASE_URL || 'https://mohitscpl.com', '') || '/'}</div>
+                        </td>
+                        <td style={{ ...td, textAlign: 'center', fontWeight: 600, color: '#4a5568' }}>{u.priority.toFixed(1)}</td>
+                        <td style={{ ...td, textAlign: 'center', color: '#4a5568' }}>{u.changefreq}</td>
+                        <td style={{ ...td, fontSize: 12, color: '#718096' }}>{u.lastmod}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </div>
