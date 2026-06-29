@@ -145,7 +145,7 @@ export default function Footer() {
                         <div className="mobile-address">
                           <h5 className="rs-footer-widget-title get-in-touch address">Address</h5>
                           <div className="rs-footer-widget-address">
-                            <a target="_blank" rel="noopener noreferrer" href={getSetting('google_maps_embed') || "https://maps.app.goo.gl/89E8AUKpxbPN95mx5"}>
+                            <a target="_blank" rel="noopener noreferrer" href={getSetting('google_maps_embed') || "https://www.google.co.in/maps/place/Siddharth+Farms/@22.7822609,75.9059646,17z/data=!3m1!4b1!4m6!3m5!1s0x39631da62f44dfe1:0xb76224f845182eed!8m2!3d22.7822609!4d75.9085395!16s%2Fg%2F11rw8_q8gf?entry=ttu&g_ep=EgoyMDI2MDYyNC4wIKXMDSoASAFQAw%3D%3D"}>
                               <span 
                                 style={{ whiteSpace: 'pre-line' }}
                                 dangerouslySetInnerHTML={{ 
