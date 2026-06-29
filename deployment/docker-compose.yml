@@ -24,7 +24,7 @@ services:
     container_name: mohit-industries-app
     restart: always
     ports:
-      - "3000:3000"
+      - "3005:3005"
     depends_on:
       db:
         condition: service_healthy
