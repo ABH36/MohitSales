@@ -146,9 +146,12 @@ export default function Footer() {
                           <h5 className="rs-footer-widget-title get-in-touch address">Address</h5>
                           <div className="rs-footer-widget-address">
                             <a target="_blank" rel="noopener noreferrer" href={getSetting('google_maps_embed') || "https://maps.app.goo.gl/89E8AUKpxbPN95mx5"}>
-                              <span style={{ whiteSpace: 'pre-line' }}>
-                                {getSetting('contact_address', '54/2/16 & 54/2/18 Siddharth Farms\nLasudia Mori Dewas Naka\nIndore-452010')}
-                              </span>
+                              <span 
+                                style={{ whiteSpace: 'pre-line' }}
+                                dangerouslySetInnerHTML={{ 
+                                  __html: getSetting('contact_address', '') 
+                                }}
+                              />
                             </a>
                           </div>
                         </div>
