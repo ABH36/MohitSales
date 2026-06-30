@@ -17,7 +17,8 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
     captchaInput: ''
   });
 
-  const [captcha, setCaptcha] = useState(() => Math.floor(1000 + Math.random() * 9000).toString());
+  const [captchaSvg, setCaptchaSvg] = useState('');
+  const [captchaToken, setCaptchaToken] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -25,10 +26,25 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
 
   const firstInputRef = useRef<HTMLInputElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+  const captchaAbortRef = useRef<AbortController | null>(null);
 
-  const generateCaptcha = () => {
-    const code = Math.floor(1000 + Math.random() * 9000).toString();
-    setCaptcha(code);
+  const generateCaptcha = async () => {
+    captchaAbortRef.current?.abort();
+    const ctrl = new AbortController();
+    captchaAbortRef.current = ctrl;
+    
+    try {
+      const res = await fetch('/api/captcha', { signal: ctrl.signal });
+      const data = await res.json();
+      if (data.success) {
+        setCaptchaSvg(data.svg);
+        setCaptchaToken(data.token);
+      }
+    } catch (err) {
+      if (err instanceof Error && err.name !== 'AbortError') {
+        console.error('Failed to generate captcha', err);
+      }
+    }
   };
 
   const handleClose = () => {
@@ -43,6 +59,7 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
   handleCloseRef.current = handleClose;
 
   useEffect(() => {
+    generateCaptcha();
     // Lock body scroll on mount
     document.body.style.overflow = 'hidden';
 
@@ -99,11 +116,6 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
     e.preventDefault();
     setStatusMessage(null);
 
-    if (formData.captchaInput !== captcha) {
-      setStatusMessage({ type: 'error', text: 'Captcha code mismatch. Please check and try again.' });
-      return;
-    }
-
     setIsSubmitting(true);
 
     try {
@@ -113,6 +125,8 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
       postData.append('email', formData.email);
       postData.append('mobile', formData.mobile);
       postData.append('message', formData.message);
+      postData.append('captchaInput', formData.captchaInput);
+      postData.append('captchaToken', captchaToken);
       if (file) {
         postData.append('file', file);
       }
@@ -130,6 +144,10 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
         setTimeout(handleClose, 2000);
       } else {
         setStatusMessage({ type: 'error', text: data.message || 'Failed to submit the form. Please try again.' });
+        if (data.message && data.message.toLowerCase().includes('captcha')) {
+          setFormData(prev => ({ ...prev, captchaInput: '' }));
+          generateCaptcha();
+        }
       }
     } catch (err) {
       console.error('[EnquiryModal Submit Error]:', err);
@@ -336,13 +354,9 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
             </label>
             <div className="flex items-center gap-3">
               <div 
-                className="bg-gradient-to-r from-slate-100 to-slate-200 border border-slate-300 px-6 py-3 rounded-xl font-bold tracking-[8px] text-2xl text-[#1e2e5e] select-none shadow-sm flex items-center justify-center font-mono relative overflow-hidden min-w-[120px]"
-                style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.1)' }}
-              >
-                {/* Decorative lines for captcha look */}
-                <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_45%,#ccc_45%,#ccc_55%,transparent_55%)] bg-[length:10px_10px] opacity-20 pointer-events-none" />
-                <span className="relative z-10">{captcha}</span>
-              </div>
+                className="bg-white border border-slate-300 rounded-xl overflow-hidden min-w-[120px] h-[52px] flex items-center justify-center select-none"
+                dangerouslySetInnerHTML={{ __html: captchaSvg || '<span class="text-xs text-slate-400">Loading...</span>' }}
+              />
               <button 
                 type="button" 
                 onClick={generateCaptcha}
