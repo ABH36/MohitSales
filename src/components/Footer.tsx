@@ -200,7 +200,7 @@ export default function Footer() {
                       © <span>2026</span> Mohit Sales Corporation Pvt. Ltd. Designed by{' '}
                       <a href="https://www.bdminfotech.com/" target="_blank" rel="noopener noreferrer">
                         <img
-                          src="/assets/images/logo/bdm_cloudtech_white.png"
+                          src="/assets/images/logo/bdm_footer.png"
                           className="bdm-footer-logo inline-block align-middle ml-1"
                           alt="BDM Cloudtech"
                           style={{ display: 'inline-block', verticalAlign: 'middle', height: '28px', width: 'auto' }}
