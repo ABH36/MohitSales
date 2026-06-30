@@ -82,15 +82,86 @@ async function main() {
     }
 
     if (exists) {
-      // Re-categorize existing products that are stuck in "General"
+      const updateData = {};
       if (exists.categoryId === generalCatId && matchedCatSlug && catMap.get(matchedCatSlug)) {
+        updateData.categoryId = catMap.get(matchedCatSlug);
+      }
+
+      // Check if features are empty/null and update if we found legacy features
+      const dbProduct = await prisma.product.findUnique({
+        where: { id: exists.id },
+        select: { features: true }
+      });
+
+      if (!dbProduct.features || dbProduct.features === '[]' || dbProduct.features === 'null') {
+        let productFeatures = null;
+        if (item.cards && item.cards.length > 0) {
+          productFeatures = JSON.stringify(item.cards);
+        } else if (item.features && item.features.length > 0) {
+          productFeatures = JSON.stringify(item.features);
+        } else {
+          try {
+            const phpPath = item.path;
+            const fullPhpPath = path.join(__dirname, '..', 'legacy_content', phpPath);
+            if (fs.existsSync(fullPhpPath)) {
+              const phpContent = fs.readFileSync(fullPhpPath, 'utf8');
+              const cheerio = require('cheerio');
+              const $ = cheerio.load(phpContent);
+              const legacyFeatures = [];
+              $('.animated-list li, .features ul li, .features li').each((_, el) => {
+                const text = $(el).text().replace(/\s+/g, ' ').trim();
+                if (text) legacyFeatures.push(text);
+              });
+              if (legacyFeatures.length > 0) {
+                productFeatures = JSON.stringify(legacyFeatures);
+              }
+            }
+          } catch (e) {
+            console.error(`Failed to parse legacy features on update for ${cleanSlug}:`, e.message);
+          }
+        }
+        if (productFeatures) {
+          updateData.features = productFeatures;
+        }
+      }
+
+      if (Object.keys(updateData).length > 0) {
         await prisma.product.update({
           where: { id: exists.id },
-          data: { categoryId: catMap.get(matchedCatSlug) },
+          data: updateData,
         });
       }
+
       skipCount++;
       continue;
+    }
+
+    // Determine features for new product
+    let productFeatures = null;
+    if (item.cards && item.cards.length > 0) {
+      productFeatures = JSON.stringify(item.cards);
+    } else if (item.features && item.features.length > 0) {
+      productFeatures = JSON.stringify(item.features);
+    } else {
+      try {
+        const phpPath = item.path;
+        const fullPhpPath = path.join(__dirname, '..', 'legacy_content', phpPath);
+        if (fs.existsSync(fullPhpPath)) {
+          const phpContent = fs.readFileSync(fullPhpPath, 'utf8');
+          const cheerio = require('cheerio');
+          const $ = cheerio.load(phpContent);
+          const legacyFeatures = [];
+          $('.animated-list li, .features ul li, .features li').each((_, el) => {
+            const text = $(el).text().replace(/\s+/g, ' ').trim();
+            if (text) legacyFeatures.push(text);
+          });
+          if (legacyFeatures.length > 0) {
+            productFeatures = JSON.stringify(legacyFeatures);
+          }
+        }
+      } catch (e) {
+        console.error(`Failed to parse legacy features for ${cleanSlug}:`, e.message);
+      }
     }
 
     try {
@@ -99,7 +170,7 @@ async function main() {
           slug: cleanSlug,
           title: item.heading || item.title || cleanSlug.split('/').pop(),
           description: item.description ? JSON.stringify(item.description) : null,
-          features: item.cards ? JSON.stringify(item.cards) : null,
+          features: productFeatures,
           imageSrc: item.imageSrc || null,
           datasheetLink: item.datasheet || null,
           categoryId,

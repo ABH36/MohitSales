@@ -343,8 +343,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
       
       const dbHasFeatures = dbProductEarly?.features && dbProductEarly.features !== '[]' && dbProductEarly.features !== 'null';
       if (!dbHasFeatures) {
-         $('.animated-list li').each((_, el) => {
-             const text = $(el).text().trim();
+         $('.animated-list li, .features ul li, .features li').each((_, el) => {
+             const text = $(el).text().replace(/\s+/g, ' ').trim();
              if (text) legacyFeatures.push(text);
          });
       }
