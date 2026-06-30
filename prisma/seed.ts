@@ -436,11 +436,26 @@ async function main() {
   ];
 
   for (const setting of settingsData) {
-    await prisma.setting.upsert({
-      where: { key: setting.key },
-      update: {},
-      create: setting,
-    });
+    const existing = await prisma.setting.findUnique({ where: { key: setting.key } });
+    if (existing) {
+      // Overwrite dummy values if they match old defaults
+      if (
+        (setting.key === 'contact_address' && existing.value === 'Mumbai, Maharashtra, India') ||
+        (setting.key === 'contact_phone_1' && existing.value === '+91-22-2632-1234') ||
+        (setting.key === 'contact_phone_2' && existing.value === '+91-98765-43210') ||
+        (setting.key === 'whatsapp_number' && existing.value === '+919876543210') ||
+        (setting.key === 'seo_keywords' && existing.value.includes('Mumbai'))
+      ) {
+        await prisma.setting.update({
+          where: { key: setting.key },
+          data: { value: setting.value },
+        });
+      }
+    } else {
+      await prisma.setting.create({
+        data: setting,
+      });
+    }
   }
   console.log(`   ✓ ${settingsData.length} site settings seeded\n`);
 
