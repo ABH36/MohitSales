@@ -133,11 +133,11 @@ export default function Header() {
         >
           <div className="container-fluid" style={{ paddingLeft: 0, paddingRight: 0 }}>
             <div className="rs-header-inner">
-              <div className="rs-header-left" style={{ marginLeft: 0 }}>
+              <div className={`rs-header-left ${isHomePage ? 'index' : ''}`} style={{ marginLeft: 0 }}>
                 <div className="rs-header-logo" style={{ marginLeft: 0, paddingLeft: 0 }}>
                   <Link href="/">
                     <img
-                      src="/assets/images/logo/msc_logo_without_bg.webp"
+                      src="/assets/images/logo/msc_logo_without_bg.png"
                       alt="logo"
                       width={185}
                       height={55}
@@ -252,7 +252,7 @@ export default function Header() {
                 <div className="offcanvas-logo">
                   <Link className="logo-black" href="/">
                     <Image
-                      src="/assets/images/logo/msc_logo_without_bg.webp"
+                      src="/assets/images/logo/msc_logo_without_bg.png"
                       alt="logo"
                       width={180}
                       height={53}

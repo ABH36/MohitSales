@@ -94,7 +94,7 @@ export default function Footer() {
                     <div className="rs-footer-widget-logo mb-25">
                       <Link href="/">
                         <img
-                          src="/assets/images/logo/msc_logo_without_bg.webp"
+                          src="/assets/images/logo/msc_logo_without_bg.png"
                           alt="logo"
                           width={280}
                           height={83}
