@@ -149,7 +149,7 @@ export default function Footer() {
                               <span 
                                 style={{ whiteSpace: 'pre-line' }}
                                 dangerouslySetInnerHTML={{ 
-                                  __html: getSetting('contact_address', '') 
+                                  __html: getSetting('contact_address', '54/2/16 & 54/2/18 Siddharth Farms<br/>Lasudia Mori Dewas Naka<br/>Indore-452010') 
                                 }}
                               />
                             </a>
