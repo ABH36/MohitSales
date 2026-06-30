@@ -10,6 +10,8 @@ import PublicSettingsProvider from '@/components/PublicSettingsContext';
 import prisma from '@/lib/prisma';
 import './globals.css';
 
+export const dynamic = 'force-dynamic';
+
 export function generateViewport(): Viewport {
   return {
     width: 'device-width',
