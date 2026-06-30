@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import StickySocialMedia from '@/components/StickySocialMedia';
 import AnimationLoader from '@/components/AnimationLoader';
 import ScrollReveal from '@/components/ScrollReveal';
 import NonCriticalCSS from '@/components/NonCriticalCSS';
@@ -145,6 +146,7 @@ export default function RootLayout({
           <Header />
           {children}
           <Footer />
+          <StickySocialMedia />
         </PublicSettingsProvider>
       </body>
     </html>
