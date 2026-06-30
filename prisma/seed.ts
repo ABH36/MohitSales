@@ -438,13 +438,17 @@ async function main() {
   for (const setting of settingsData) {
     const existing = await prisma.setting.findUnique({ where: { key: setting.key } });
     if (existing) {
-      // Overwrite dummy values if they match old defaults
+      // Overwrite if it is dummy data or does not contain correct company details
+      const isDummyAddress = existing.value === 'Mumbai, Maharashtra, India' || !existing.value.includes('Siddharth Farms');
+      const isDummyPhone = existing.value === '+91-22-2632-1234' || !existing.value.includes('9522952267');
+      const isDummyWhatsapp = existing.value === '+919876543210' || !existing.value.includes('9522952267');
+      const isDummyKeywords = existing.value.includes('Mumbai');
+
       if (
-        (setting.key === 'contact_address' && existing.value === 'Mumbai, Maharashtra, India') ||
-        (setting.key === 'contact_phone_1' && existing.value === '+91-22-2632-1234') ||
-        (setting.key === 'contact_phone_2' && existing.value === '+91-98765-43210') ||
-        (setting.key === 'whatsapp_number' && existing.value === '+919876543210') ||
-        (setting.key === 'seo_keywords' && existing.value.includes('Mumbai'))
+        (setting.key === 'contact_address' && isDummyAddress) ||
+        (setting.key === 'contact_phone_1' && isDummyPhone) ||
+        (setting.key === 'whatsapp_number' && isDummyWhatsapp) ||
+        (setting.key === 'seo_keywords' && isDummyKeywords)
       ) {
         await prisma.setting.update({
           where: { key: setting.key },
