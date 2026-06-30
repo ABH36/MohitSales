@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { encryptCaptcha } from '@/lib/captcha';
 
+export const dynamic = 'force-dynamic';
+
 function generateCaptchaSvg(code: string): string {
   const width = 120;
   const height = 40;
