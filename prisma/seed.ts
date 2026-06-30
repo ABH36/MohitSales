@@ -401,9 +401,9 @@ async function main() {
 
     // Contact
     { key: 'contact_email', value: 'info@mohitscpl.com', type: 'string', group: 'contact', label: 'Contact Email', isPublic: true },
-    { key: 'contact_phone_1', value: '+91-22-2632-1234', type: 'string', group: 'contact', label: 'Phone 1', isPublic: true },
-    { key: 'contact_phone_2', value: '+91-98765-43210', type: 'string', group: 'contact', label: 'Phone 2', isPublic: true },
-    { key: 'contact_address', value: 'Mumbai, Maharashtra, India', type: 'string', group: 'contact', label: 'Address', isPublic: true },
+    { key: 'contact_phone_1', value: '+91 9522952267', type: 'string', group: 'contact', label: 'Phone 1', isPublic: true },
+    { key: 'contact_phone_2', value: '', type: 'string', group: 'contact', label: 'Phone 2', isPublic: true },
+    { key: 'contact_address', value: '54/2/16 & 54/2/18 Siddharth Farms\nLasudia Mori Dewas Naka\nIndore-452010', type: 'string', group: 'contact', label: 'Address', isPublic: true },
     { key: 'google_maps_embed', value: '', type: 'string', group: 'contact', label: 'Google Maps Embed URL', isPublic: true },
 
     // Social
@@ -411,12 +411,12 @@ async function main() {
     { key: 'social_instagram', value: '', type: 'string', group: 'social', label: 'Instagram URL', isPublic: true },
     { key: 'social_linkedin', value: '', type: 'string', group: 'social', label: 'LinkedIn URL', isPublic: true },
     { key: 'social_youtube', value: '', type: 'string', group: 'social', label: 'YouTube URL', isPublic: true },
-    { key: 'whatsapp_number', value: '+919876543210', type: 'string', group: 'social', label: 'WhatsApp Number', isPublic: true },
+    { key: 'whatsapp_number', value: '+919522952267', type: 'string', group: 'social', label: 'WhatsApp Number', isPublic: true },
 
     // SEO
     { key: 'seo_title', value: 'Mohit Sales Corporation Pvt. Ltd. | Authorized Polycab & Dowells Distributor', type: 'string', group: 'seo', label: 'Default SEO Title', isPublic: true },
     { key: 'seo_description', value: 'Authorized distributor of Polycab India Ltd. and Dowells. Premium quality cables, switchgears, fans, solar products since 1997.', type: 'string', group: 'seo', label: 'Default Meta Description', isPublic: true },
-    { key: 'seo_keywords', value: 'polycab, dowells, cables, switchgear, fans, solar, Mumbai, authorised distributor', type: 'string', group: 'seo', label: 'Meta Keywords', isPublic: true },
+    { key: 'seo_keywords', value: 'polycab, dowells, cables, switchgear, fans, solar, Indore, authorised distributor', type: 'string', group: 'seo', label: 'Meta Keywords', isPublic: true },
     { key: 'google_analytics_id', value: '', type: 'string', group: 'seo', label: 'Google Analytics ID', isPublic: false },
     { key: 'webmaster_google', value: '', type: 'string', group: 'seo', label: 'Google Search Console Verification', isPublic: false, description: 'Google site verification code (content value only, not full meta tag)' },
     { key: 'webmaster_bing', value: '', type: 'string', group: 'seo', label: 'Bing Webmaster Verification', isPublic: false, description: 'Bing site verification code' },
