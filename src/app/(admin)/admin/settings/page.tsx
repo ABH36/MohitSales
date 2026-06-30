@@ -369,6 +369,15 @@ function AdminSettingsPageInner() {
                           <option value="true">Yes</option>
                           <option value="false">No</option>
                         </select>
+                      ) : s.key === 'contact_address' || s.key === 'seo_description' ? (
+                        <textarea
+                          className="admin-form-input"
+                          value={editValues[s.id] || ''}
+                          onChange={(e) => setEditValues({ ...editValues, [s.id]: e.target.value })}
+                          disabled={!isAdmin}
+                          rows={3}
+                          style={{ borderRadius: '10px', width: '100%', padding: '8px 12px', border: '1px solid rgba(0,0,0,0.1)', resize: 'vertical' }}
+                        />
                       ) : (
                         <input
                           className="admin-form-input"
