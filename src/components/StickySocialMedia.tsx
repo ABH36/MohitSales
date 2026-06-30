@@ -13,7 +13,7 @@ export default function StickySocialMedia() {
         <i className="fab fa-facebook-f icon"></i> Facebook
       </a>
       <a
-        href={`https://api.whatsapp.com/send?phone=${getSetting('whatsapp_number', '919522952267').replace(/[^0-9]/g, '')}&text=Hi,%20I%20would%20like%20to%20do%20enquire%20about%20your%20products.`}
+        href="https://api.whatsapp.com/send?phone=919522952267&text=Hi,%20I%20would%20like%20to%20do%20enquire%20about%20your%20products."
         className="Google"
         target="_blank"
         rel="noopener noreferrer"
