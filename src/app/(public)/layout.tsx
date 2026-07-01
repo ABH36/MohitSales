@@ -6,6 +6,7 @@ import StickySocialMedia from '@/components/StickySocialMedia';
 import AnimationLoader from '@/components/AnimationLoader';
 import ScrollReveal from '@/components/ScrollReveal';
 import NonCriticalCSS from '@/components/NonCriticalCSS';
+import GoogleFontsLoader from '@/components/GoogleFontsLoader';
 import PublicSettingsProvider from '@/components/PublicSettingsContext';
 import prisma from '@/lib/prisma';
 import './globals.css';
@@ -116,10 +117,17 @@ export default function RootLayout({
         <link rel="stylesheet" href="/assets/css/custom.css?v=1.0.4" />
         <link rel="stylesheet" href="/assets/css/responsive.css?v=1.0.1" />
 
-        {/* ── Google Fonts (preconnect + async) ── */}
+        {/* ── Google Fonts (preconnect + non-blocking load via GoogleFontsLoader) ── */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+        <link
+          rel="preload"
+          as="style"
+          href="https://fonts.googleapis.com/css2?family=Mukta:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+        />
+        <noscript>
+          <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+        </noscript>
         <script dangerouslySetInnerHTML={{ __html: `
           (function() {
             var intercept = function(key) {
@@ -142,6 +150,7 @@ export default function RootLayout({
       </head>
       <body className="ltr" suppressHydrationWarning={true}>
         <PublicSettingsProvider>
+          <GoogleFontsLoader />
           <AnimationLoader />
           <NonCriticalCSS />
           <ScrollReveal />
