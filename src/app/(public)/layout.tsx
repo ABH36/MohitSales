@@ -40,19 +40,35 @@ async function getWebmasterCodes(): Promise<Record<string, string>> {
 export async function generateMetadata(): Promise<Metadata> {
   const codes = await getWebmasterCodes();
 
+  // Try to load homepage metadata from database
+  let homepageMeta = null;
+  try {
+    homepageMeta = await prisma.seoMeta.findUnique({
+      where: { page: '/' }
+    });
+  } catch (err) {
+    console.error('Error fetching homepage metadata:', err);
+  }
+
+  const title = homepageMeta?.title || 'Mohit Sales Corporation Pvt. Ltd. | Authorized Polycab & Dowells Distributor';
+  const description = homepageMeta?.description || 'Authorized distributor of Polycab India Ltd. and Dowells. Delivering premium quality wires, cables, terminals, switchgears, and solar products since 1997.';
+  const keywords = homepageMeta?.keywords
+    ? homepageMeta.keywords.split(',').map((k: string) => k.trim()).filter(Boolean)
+    : ['Polycab', 'Dowells', 'Cables', 'Wires', 'Terminals', 'Switchgears', 'Solar', 'Distributor', 'India'];
+
   return {
     metadataBase: new URL('https://mohitscpl.com'),
-    title: 'Mohit Sales Corporation Pvt. Ltd. | Authorized Polycab & Dowells Distributor',
-    description: 'Authorized distributor of Polycab India Ltd. and Dowells. Delivering premium quality wires, cables, terminals, switchgears, and solar products since 1997.',
-    keywords: ['Polycab', 'Dowells', 'Cables', 'Wires', 'Terminals', 'Switchgears', 'Solar', 'Distributor', 'India'],
+    title,
+    description,
+    keywords,
     openGraph: {
-      title: 'Mohit Sales Corporation Pvt. Ltd.',
-      description: 'Authorized distributor of Polycab India Ltd. and Dowells. Delivering premium quality wires, cables, terminals, switchgears, and solar products since 1997.',
+      title: homepageMeta?.ogTitle || title,
+      description,
       url: 'https://mohitscpl.com',
       siteName: 'Mohit Sales Corporation Pvt. Ltd.',
       images: [
         {
-          url: '/assets/images/logo/logo.png',
+          url: homepageMeta?.ogImage || '/assets/images/logo/logo.png',
           width: 800,
           height: 600,
           alt: 'Mohit Sales Corporation Logo',
@@ -63,9 +79,9 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     twitter: {
       card: 'summary_large_image',
-      title: 'Mohit Sales Corporation Pvt. Ltd.',
-      description: 'Authorized distributor of Polycab India Ltd. and Dowells.',
-      images: ['/assets/images/logo/logo.png'],
+      title: homepageMeta?.ogTitle || title,
+      description,
+      images: [homepageMeta?.ogImage || '/assets/images/logo/logo.png'],
     },
     verification: {
       google: codes.webmaster_google || undefined,

@@ -1,8 +1,10 @@
+import { getSeoMetadata } from '@/lib/seo';
 ﻿import React from 'react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata('/resources', {
   title: 'Resources & Downloads | Mohit Sales Corporation Pvt. Ltd.',
   description: 'Download product brochures, technical specifications, and installation guides for Polycab cables, wires, switchgears, fans, and Dowells cable terminals.',
   openGraph: {
@@ -18,6 +20,7 @@ export const metadata: Metadata = {
     description: 'Download product brochures, technical specifications, and installation guides for Polycab and Dowells products.',
   },
   alternates: { canonical: 'https://mohit.bdm.co.in/resources' },
+});
 };
 
 

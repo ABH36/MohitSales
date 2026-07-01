@@ -1,8 +1,10 @@
+import { getSeoMetadata } from '@/lib/seo';
 ﻿import React from 'react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata('/solar', {
   title: 'Solar Products | Polycab Solar DC Cables & Systems | Mohit Sales Corporation',
   description: 'Authorized distributor of Polycab solar DC cables, solar wires, and solar power accessories in Indore. High-efficiency solar products for residential and commercial installations.',
   openGraph: {
@@ -18,6 +20,7 @@ export const metadata: Metadata = {
     description: 'Authorized distributor of Polycab solar DC cables and solar accessories in Indore.',
   },
   alternates: { canonical: 'https://mohit.bdm.co.in/solar' },
+});
 };
 
 

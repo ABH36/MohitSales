@@ -1,8 +1,10 @@
+import { getSeoMetadata } from '@/lib/seo';
 ﻿import React from 'react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata('/cables-catalogue', {
   title: 'Cables Catalogue | Polycab Power & Control Cables | Mohit Sales Corporation',
   description: 'Browse the complete Polycab cables catalogue — power cables, armoured cables, XLPE cables, control cables, and flexible cables. Download datasheets and specifications.',
   openGraph: {
@@ -18,6 +20,7 @@ export const metadata: Metadata = {
     description: 'Browse the complete Polycab cables catalogue — power, armoured, XLPE, and control cables.',
   },
   alternates: { canonical: 'https://mohit.bdm.co.in/cables-catalogue' },
+});
 };
 
 export default async function CablesCataloguePage() {

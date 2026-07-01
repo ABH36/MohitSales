@@ -1,9 +1,13 @@
+import type { Metadata } from 'next';
+import { getSeoMetadata } from '@/lib/seo';
 ﻿import React from 'react';
 import Link from 'next/link';
 
-export const metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata('/catalogue', {
   title: 'Catalogue - Mohit Sales Corporation Pvt. Ltd.',
   description: 'Product Catalogues - Cables, Switchgears, Fans, Solar, Conduit & Accessories, Home Appliances - Mohit Sales Corporation Pvt. Ltd.',
+});
 };
 
 export default function CataloguePage() {

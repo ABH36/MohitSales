@@ -1,9 +1,11 @@
+import { getSeoMetadata } from '@/lib/seo';
 import type { Metadata } from 'next';
 import SchemaInjector from '@/components/SchemaInjector';
 
 export const revalidate = 3600;
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata('/pricelist', {
   title: 'Price List | Polycab & Dowells Products | Mohit Sales Corporation',
   description: 'Download the latest Polycab wires, cables, fans, switchgear and Dowells cable terminal price lists. Updated pricing for authorized dealer Mohit Sales Corporation Pvt. Ltd., Indore.',
   openGraph: {
@@ -19,6 +21,7 @@ export const metadata: Metadata = {
     description: 'Download the latest Polycab and Dowells price lists from authorized dealer Mohit Sales Corporation, Indore.',
   },
   alternates: { canonical: 'https://mohit.bdm.co.in/pricelist' },
+});
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

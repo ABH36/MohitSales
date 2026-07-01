@@ -1,9 +1,11 @@
+import { getSeoMetadata } from '@/lib/seo';
 import type { Metadata } from 'next';
 import SchemaInjector from '@/components/SchemaInjector';
 
 export const revalidate = 3600;
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata('/certificates', {
   title: 'Certificates & Authorizations | Mohit Sales Corporation Pvt. Ltd.',
   description: 'View the certificates, authorizations, and dealer credentials of Mohit Sales Corporation Pvt. Ltd. — authorized distributor for Polycab and Dowells in Indore.',
   openGraph: {
@@ -19,6 +21,7 @@ export const metadata: Metadata = {
     description: 'Authorized distributor certificates for Polycab and Dowells — Mohit Sales Corporation Pvt. Ltd., Indore.',
   },
   alternates: { canonical: 'https://mohit.bdm.co.in/certificates' },
+});
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

@@ -1,8 +1,10 @@
+import { getSeoMetadata } from '@/lib/seo';
 ﻿import React from 'react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata('/cable-terminal', {
   title: 'Cable Terminals | Dowells Cable Lugs & Connectors | Mohit Sales Corporation',
   description: 'Authorized dealer of Dowells cable terminals, lugs, and connectors in Indore. Premium copper and aluminium cable terminals for industrial and commercial applications.',
   openGraph: {
@@ -18,6 +20,7 @@ export const metadata: Metadata = {
     description: 'Authorized dealer of Dowells cable terminals, lugs, and connectors in Indore.',
   },
   alternates: { canonical: 'https://mohit.bdm.co.in/cable-terminal' },
+});
 };
 
 

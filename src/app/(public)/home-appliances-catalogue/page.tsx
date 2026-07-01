@@ -1,8 +1,10 @@
+import { getSeoMetadata } from '@/lib/seo';
 ﻿import React from 'react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata('/home-appliances-catalogue', {
   title: 'Home Appliances Catalogue | Polycab Water Heaters & Appliances | Mohit Sales Corporation',
   description: 'Download the complete Polycab home appliances catalogue — water heaters, irons, coolers, and household electrical appliances for homes and offices.',
   openGraph: {
@@ -18,6 +20,7 @@ export const metadata: Metadata = {
     description: 'Download the complete Polycab home appliances catalogue.',
   },
   alternates: { canonical: 'https://mohit.bdm.co.in/home-appliances-catalogue' },
+});
 };
 
 export default async function HomeAppliancesCataloguePage() {

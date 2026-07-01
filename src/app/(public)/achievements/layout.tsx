@@ -1,9 +1,11 @@
+import { getSeoMetadata } from '@/lib/seo';
 import type { Metadata } from 'next';
 import SchemaInjector from '@/components/SchemaInjector';
 
 export const revalidate = 3600;
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata('/achievements', {
   title: 'Awards & Achievements | Mohit Sales Corporation Pvt. Ltd.',
   description: 'Discover the awards, recognitions, and milestones achieved by Mohit Sales Corporation Pvt. Ltd. — trusted Polycab and Dowells distributor in Indore since decades.',
   openGraph: {
@@ -19,6 +21,7 @@ export const metadata: Metadata = {
     description: 'Awards and recognitions earned by Mohit Sales Corporation Pvt. Ltd. — Polycab and Dowells distributor in Indore.',
   },
   alternates: { canonical: 'https://mohit.bdm.co.in/achievements' },
+});
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

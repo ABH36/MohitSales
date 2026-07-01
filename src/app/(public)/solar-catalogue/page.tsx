@@ -1,8 +1,10 @@
+import { getSeoMetadata } from '@/lib/seo';
 ﻿import React from 'react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata('/solar-catalogue', {
   title: 'Solar Catalogue | Polycab Solar DC Cables & Panel Specs | Mohit Sales Corporation',
   description: 'Download the complete Polycab solar products catalogue — solar DC cables, solar panels, grid-tie inverters, and DC MCBs for residential and commercial solar installations.',
   openGraph: {
@@ -18,6 +20,7 @@ export const metadata: Metadata = {
     description: 'Download the complete Polycab solar products catalogue.',
   },
   alternates: { canonical: 'https://mohit.bdm.co.in/solar-catalogue' },
+});
 };
 
 export default async function SolarCataloguePage() {

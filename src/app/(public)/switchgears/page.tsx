@@ -1,9 +1,13 @@
+import type { Metadata } from 'next';
+import { getSeoMetadata } from '@/lib/seo';
 ﻿import React from 'react';
 import Link from 'next/link';
 
-export const metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata('/switchgears', {
   title: 'Switchgears - Mohit Sales Corporation Pvt. Ltd.',
   description: 'Polycab Switchgears - MCB, RCCB, RCBO, Isolators, DB, MCB Changeover Switch, ACCL - Mohit Sales Corporation Pvt. Ltd.',
+});
 };
 
 export default function SwitchgearsPage() {

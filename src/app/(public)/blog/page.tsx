@@ -1,14 +1,16 @@
+import type { Metadata } from 'next';
+import { getSeoMetadata } from '@/lib/seo';
 import React from 'react';
 import Link from 'next/link';
 import prisma from '@/lib/prisma';
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata() {
-  return {
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata('/blog', {
     title: 'Insights & News Blog | Mohit Sales Corporation Pvt. Ltd.',
     description: 'Explore our latest articles, electrical engineering updates, Polycab product releases, and industrial cable guides.',
-  };
+  });
 }
 
 export default async function BlogPage({

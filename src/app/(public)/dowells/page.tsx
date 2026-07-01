@@ -1,10 +1,14 @@
+import type { Metadata } from 'next';
+import { getSeoMetadata } from '@/lib/seo';
 ﻿import React from 'react';
 import Link from 'next/link';
 import SplitText from '@/components/SplitText';
 
-export const metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata('/dowells', {
   title: 'Dowells - Mohit Sales Corporation Pvt. Ltd.',
   description: 'Dowells Cable Terminals, Glands, and Crimping Tools - Mohit Sales Corporation Pvt. Ltd.',
+});
 };
 
 export default function DowellsPage() {

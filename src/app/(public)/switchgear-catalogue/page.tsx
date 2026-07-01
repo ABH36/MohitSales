@@ -1,8 +1,10 @@
+import { getSeoMetadata } from '@/lib/seo';
 ﻿import React from 'react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata('/switchgear-catalogue', {
   title: 'Switchgear Catalogue | Polycab MCBs, RCCBs & DBs | Mohit Sales Corporation',
   description: 'Download the complete Polycab switchgear catalogue — MCBs, RCCBs, MCCBs, distribution boards, and protection devices for residential, commercial, and industrial use.',
   openGraph: {
@@ -18,6 +20,7 @@ export const metadata: Metadata = {
     description: 'Download the complete Polycab switchgear catalogue — MCBs, RCCBs, MCCBs and distribution boards.',
   },
   alternates: { canonical: 'https://mohit.bdm.co.in/switchgear-catalogue' },
+});
 };
 
 export default async function SwitchgearCataloguePage() {

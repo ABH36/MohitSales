@@ -1,8 +1,10 @@
+import { getSeoMetadata } from '@/lib/seo';
 ﻿import React from 'react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata('/conduit-accessories', {
   title: 'Conduit & Accessories | Polycab PVC Conduit Pipes | Mohit Sales Corporation',
   description: 'Authorized distributor of Polycab PVC conduit pipes and accessories in Indore. ISI-marked conduits, bends, junction boxes, and saddles for residential and commercial wiring.',
   openGraph: {
@@ -18,6 +20,7 @@ export const metadata: Metadata = {
     description: 'Authorized distributor of Polycab PVC conduit pipes and accessories in Indore.',
   },
   alternates: { canonical: 'https://mohit.bdm.co.in/conduit-accessories' },
+});
 };
 
 

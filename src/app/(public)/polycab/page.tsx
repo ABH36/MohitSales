@@ -1,10 +1,14 @@
+import type { Metadata } from 'next';
+import { getSeoMetadata } from '@/lib/seo';
 ﻿import React from 'react';
 import Link from 'next/link';
 import SplitText from '@/components/SplitText';
 
-export const metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata('/polycab', {
   title: 'Polycab - Mohit Sales Corporation Pvt. Ltd.',
   description: 'Authorised Distributor of Polycab Cables, Wires, Switchgears, Fans, Solar, Conduit & Home Appliances',
+});
 };
 
 export default function PolycabPage() {

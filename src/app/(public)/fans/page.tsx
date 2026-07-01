@@ -1,3 +1,5 @@
+import type { Metadata } from 'next';
+import { getSeoMetadata } from '@/lib/seo';
 import React from 'react';
 import Link from 'next/link';
 
@@ -110,7 +112,9 @@ export default async function FansPage() {
   );
 }
 
-export const metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata('/fans', {
   title: 'Fans - Mohit Sales Corporation Pvt. Ltd.',
   description: 'Polycab Fans - Ceiling, Table, Pedestal, Wall, Exhaust, Farrata, Air Circulator Fans - Mohit Sales Corporation Pvt. Ltd.',
+});
 };

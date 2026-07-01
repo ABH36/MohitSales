@@ -1,8 +1,10 @@
+import { getSeoMetadata } from '@/lib/seo';
 ﻿import React from 'react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata('/fans-catalogue', {
   title: 'Fans Catalogue | Polycab Ceiling, Table & Exhaust Fans | Mohit Sales Corporation',
   description: 'Browse the complete Polycab fans catalogue — ceiling fans, table fans, wall fans, exhaust fans, and BLDC energy-saving fans. Download product brochures.',
   openGraph: {
@@ -18,6 +20,7 @@ export const metadata: Metadata = {
     description: 'Browse the complete Polycab fans catalogue — ceiling, table, wall, exhaust, and BLDC fans.',
   },
   alternates: { canonical: 'https://mohit.bdm.co.in/fans-catalogue' },
+});
 };
 
 export default async function FansCataloguePage() {

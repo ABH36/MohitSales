@@ -27,6 +27,11 @@ let buildCache: BuildCacheData | null = null;
 const cachePath = path.join(process.cwd(), 'build-cache.json');
 
 function loadBuildCache(): BuildCacheData | null {
+  // Only use build-time cache file during Next.js static production build phase.
+  // At runtime (dev/production server), query live database to allow instant metadata updates.
+  const isBuildPhase = process.env.NEXT_PHASE === 'phase-production-build';
+  if (!isBuildPhase) return null;
+
   if (buildCache) return buildCache;
   try {
     if (fs.existsSync(cachePath)) {

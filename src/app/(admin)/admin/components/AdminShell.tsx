@@ -15,7 +15,9 @@ import {
   Globe,
   Image,
   Settings,
-  Users
+  Users,
+  ChevronDown,
+  LogOut
 } from 'lucide-react';
 import AdminCacheProvider, { prefetchUrl } from './AdminCacheProvider';
 import '../admin.css';
@@ -94,7 +96,9 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
   const [user, setUser] = useState<UserInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [fontSize, setFontSize] = useState<'normal' | 'medium' | 'large'>('normal');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const sidebarRef = useRef<HTMLElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Load font size preference from localStorage
   useEffect(() => {
@@ -109,19 +113,35 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
     localStorage.setItem('admin-font-size', size);
   };
 
-  // Close sidebar on ESC key
+  // Close sidebar and profile dropdown on ESC key
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setSidebarOpen(false);
+      if (e.key === 'Escape') {
+        setSidebarOpen(false);
+        setDropdownOpen(false);
+      }
     };
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
   }, []);
 
-  // Close sidebar when route changes (mobile nav click)
+  // Close sidebar and profile dropdown when route changes (mobile nav click)
   useEffect(() => {
     setSidebarOpen(false);
+    setDropdownOpen(false);
   }, [pathname]);
+
+  // Close profile dropdown on outside click
+  useEffect(() => {
+    if (!dropdownOpen) return;
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, [dropdownOpen]);
 
   // Close sidebar on outside click
   useEffect(() => {
@@ -305,17 +325,7 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
               ))}
             </nav>
 
-            <div className="admin-sidebar-footer">
-              <div className="admin-user-card">
-                <div className="admin-user-avatar">
-                  {(user?.name || user?.email || 'A')[0].toUpperCase()}
-                </div>
-                <div className="admin-user-info">
-                  <p>{user?.name || 'Admin'}{user?.role ? ` (${user.role})` : ''}</p>
-                  <span>{user?.email || 'admin@mohitscpl.com'}</span>
-                </div>
-              </div>
-            </div>
+            {/* Sidebar Footer removed since profile is moved to Topbar */}
           </aside>
 
           {/* Main Content */}
@@ -383,14 +393,49 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                 >
                   🌐 View Site
                 </a>
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="admin-btn admin-btn-logout"
-                  style={{ pointerEvents: 'auto', cursor: 'pointer' }}
-                >
-                  Logout
-                </button>
+
+                {/* Redesigned Admin Profile Dropdown */}
+                <div className="admin-profile-menu" ref={dropdownRef}>
+                  <button
+                    type="button"
+                    className="admin-profile-trigger"
+                    onClick={() => setDropdownOpen(prev => !prev)}
+                    aria-haspopup="true"
+                    aria-expanded={dropdownOpen}
+                    style={{ pointerEvents: 'auto', cursor: 'pointer' }}
+                  >
+                    <div className="admin-profile-avatar">
+                      {(user?.name || user?.email || 'A')[0].toUpperCase()}
+                    </div>
+                    <div className="admin-profile-meta">
+                      <span className="admin-profile-name">{user?.name || 'Admin'}</span>
+                      <span className="admin-profile-role">{user?.role || 'Staff'}</span>
+                    </div>
+                    <ChevronDown size={14} className={`admin-profile-chevron ${dropdownOpen ? 'open' : ''}`} />
+                  </button>
+
+                  {dropdownOpen && (
+                    <div className="admin-profile-dropdown">
+                      <div className="admin-dropdown-header">
+                        <p className="admin-dropdown-name">{user?.name || 'Admin'}</p>
+                        <p className="admin-dropdown-email">{user?.email || 'admin@mohitscpl.com'}</p>
+                        {user?.role && <span className="admin-dropdown-role-badge">{user.role}</span>}
+                      </div>
+                      <div className="admin-dropdown-divider" />
+                      <a href="/" target="_blank" className="admin-dropdown-item">
+                        <Globe size={14} /> View Website
+                      </a>
+                      <div className="admin-dropdown-divider" />
+                      <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="admin-dropdown-item admin-dropdown-logout"
+                      >
+                        <LogOut size={14} /> Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             </header>
             <div className="admin-content">

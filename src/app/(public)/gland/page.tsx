@@ -1,8 +1,10 @@
+import { getSeoMetadata } from '@/lib/seo';
 ﻿import React from 'react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  return getSeoMetadata('/gland', {
   title: 'Cable Glands | Dowells Metal & Nylon Glands | Mohit Sales Corporation',
   description: 'Authorized distributor of Dowells cable glands in Indore. Industrial grade metal and nylon cable glands for safe cable entry, IP rating, and strain relief.',
   openGraph: {
@@ -18,6 +20,7 @@ export const metadata: Metadata = {
     description: 'Authorized distributor of Dowells cable glands in Indore.',
   },
   alternates: { canonical: 'https://mohit.bdm.co.in/gland' },
+});
 };
 
 
