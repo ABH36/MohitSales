@@ -1,35 +1,30 @@
 #!/bin/bash
+# ============================================================
+# Mohit Sales — Automated PostgreSQL Database Backup Script
+# Keeps 7 days of backups and deletes older ones.
+# ============================================================
 
-# Configuration
-BACKUP_DIR="/var/backups/mohit-industries"
-RETENTION_DAYS=30
-DATE=$(date +%Y-%m-%d_%H%M%S)
-BACKUP_FILE="${BACKUP_DIR}/db_backup_${DATE}.sql.gz"
+# Save backups to the easypanel user directory (avoids Permission Denied errors)
+BACKUP_DIR="/home/easypanel/db_backups"
 
-# Ensure backup directory exists
-mkdir -p "${BACKUP_DIR}"
+# Create the backup directory if it doesn't exist
+mkdir -p "$BACKUP_DIR"
 
-# Ensure DATABASE_URL is available
-if [ -z "$DATABASE_URL" ]; then
-  echo "Error: DATABASE_URL environment variable is not set." >&2
-  exit 1
-fi
+# Get current date in YYYY-MM-DD format
+DATE=$(date +%Y-%m-%d)
+BACKUP_FILE="$BACKUP_DIR/mohit_postgres_$DATE.sql"
 
-echo "Starting database backup at $(date)..."
+# Use the exact container name for PostgreSQL
+CONTAINER_ID="mohit-industries-db"
 
-# Run pg_dump using DATABASE_URL directly and compress it
-if pg_dump "$DATABASE_URL" | gzip > "${BACKUP_FILE}"; then
-  echo "Backup successfully written to ${BACKUP_FILE}"
-else
-  echo "Error: pg_dump failed!" >&2
-  exit 1
-fi
+echo "Starting PostgreSQL database backup for $DATE..."
 
-# Set strict permissions (read/write only for owner)
-chmod 600 "${BACKUP_FILE}"
+# Run pg_dump to backup the database (username: postgres, dbname: mohit_industries)
+docker exec -t "$CONTAINER_ID" pg_dump -U postgres mohit_industries > "$BACKUP_FILE"
 
-# Prune old backups
-echo "Pruning backups older than ${RETENTION_DAYS} days..."
-find "${BACKUP_DIR}" -type f -name "db_backup_*.sql.gz" -mtime +${RETENTION_DAYS} -exec rm -f {} \;
+echo "Backup saved to $BACKUP_FILE"
 
-echo "Backup process finished at $(date)."
+# Find and delete backup files older than 7 days
+find "$BACKUP_DIR" -type f -name "*.sql" -mtime +7 -exec rm {} \;
+
+echo "Old backups cleaned up successfully!"
