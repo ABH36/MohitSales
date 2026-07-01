@@ -82,6 +82,44 @@ function AdminInquiriesPageInner() {
     }
   };
 
+  const handleDelete = async (id: string) => {
+    if (!window.confirm('Are you sure you want to delete this inquiry? This action cannot be undone.')) return;
+    try {
+      const res = await fetch(`/api/admin/inquiries/${id}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (data.success) {
+        setInquiries(inquiries.filter(inq => inq.id !== id));
+        invalidate('/api/admin/inquiries');
+        showToast('Inquiry deleted successfully', 'success');
+      } else {
+        showToast(data.message || 'Failed to delete inquiry', 'error');
+      }
+    } catch (error) {
+      showToast('Error deleting inquiry', 'error');
+    }
+  };
+
+  const handleClearAll = async () => {
+    if (!window.confirm('WARNING: Are you sure you want to delete ALL inquiries? This will permanently wipe all inquiry logs from the database.')) return;
+    try {
+      const res = await fetch('/api/admin/inquiries', {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (data.success) {
+        setInquiries([]);
+        invalidate('/api/admin/inquiries');
+        showToast('All inquiries cleared successfully', 'success');
+      } else {
+        showToast(data.message || 'Failed to clear inquiries', 'error');
+      }
+    } catch (error) {
+      showToast('Error clearing inquiries', 'error');
+    }
+  };
+
   return (
     <>
       {toast && (
@@ -117,13 +155,37 @@ function AdminInquiriesPageInner() {
       <div className="admin-table-wrapper">
         <div className="admin-table-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h3 className="admin-table-title">All Inquiries</h3>
-          <div>
-            <label style={{ fontSize: '14px', marginRight: '8px', color: '#4a5568', fontWeight: 600 }}>Source:</label>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            {!isReadOnly && inquiries.length > 0 && (
+              <button 
+                onClick={handleClearAll}
+                className="admin-btn"
+                style={{ 
+                  padding: '6px 14px', 
+                  fontSize: '13px', 
+                  background: '#ef4444', 
+                  color: 'white', 
+                  border: 'none', 
+                  borderRadius: '6px', 
+                  cursor: 'pointer', 
+                  fontWeight: 600,
+                  transition: 'background 0.2s',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = '#dc2626'}
+                onMouseLeave={(e) => e.currentTarget.style.background = '#ef4444'}
+              >
+                🗑️ Clear All
+              </button>
+            )}
+            <label style={{ fontSize: '14px', color: '#4a5568', fontWeight: 600 }}>Source:</label>
             <select 
               value={sourceFilter} 
               onChange={(e: any) => setSourceFilter(e.target.value)}
               className="admin-form-select"
-              style={{ width: '160px', display: 'inline-block', padding: '6px 12px', fontSize: '13px' }}
+              style={{ width: '160px', display: 'inline-block', padding: '6px 12px', fontSize: '13px', margin: 0 }}
             >
               <option value="all">All Sources</option>
               <option value="website">Contact Form</option>
@@ -175,18 +237,42 @@ function AdminInquiriesPageInner() {
                       {new Date(inq.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </td>
                     <td>
-                      <select 
-                        value={inq.status} 
-                        onChange={(e) => handleStatusChange(inq.id, e.target.value)}
-                        disabled={isReadOnly}
-                        className="admin-form-select"
-                        style={{ padding: '4px 8px', fontSize: '12px', width: 'auto', display: 'inline-block', minWidth: '100px' }}
-                      >
-                        <option value="new">New</option>
-                        <option value="read">Read</option>
-                        <option value="replied">Replied</option>
-                        <option value="closed">Closed</option>
-                      </select>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <select 
+                          value={inq.status} 
+                          onChange={(e) => handleStatusChange(inq.id, e.target.value)}
+                          disabled={isReadOnly}
+                          className="admin-form-select"
+                          style={{ padding: '4px 8px', fontSize: '12px', width: 'auto', display: 'inline-block', minWidth: '100px', margin: 0 }}
+                        >
+                          <option value="new">New</option>
+                          <option value="read">Read</option>
+                          <option value="replied">Replied</option>
+                          <option value="closed">Closed</option>
+                        </select>
+                        {!isReadOnly && (
+                          <button
+                            onClick={() => handleDelete(inq.id)}
+                            title="Delete Inquiry"
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              cursor: 'pointer',
+                              fontSize: '16px',
+                              padding: '4px 8px',
+                              borderRadius: '4px',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              transition: 'background 0.2s',
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.background = '#fed7d7'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = 'none'}
+                          >
+                            🗑️
+                          </button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))
