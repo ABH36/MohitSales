@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import prisma from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const userRole = request.headers.get('x-user-role');
