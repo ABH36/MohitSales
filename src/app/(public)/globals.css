@@ -2607,7 +2607,7 @@ img.product-img {
   }
 
   .rs-header-two.header-new .rs-header-logo {
-    width: 220px !important;
+    width: auto !important;
   }
 }
 
@@ -2651,7 +2651,7 @@ img.product-img {
   }
 
   .rs-header-two.header-new .rs-header-logo {
-    width: 180px !important;
+    width: auto !important;
   }
 
   h1,
@@ -3202,5 +3202,108 @@ a.enquiry-btn:hover,
 
 .rs-footer-widget .product-col ul li a:hover {
   color: #ff6a00;
+}
+
+/* ============================================================
+   HEADER LOGO — single source of truth (fluid + responsive)
+   Wins over the older fixed px !important rules scattered across
+   custom.css / responsive.css / main.css via higher specificity,
+   so the logo now shrinks smoothly with the viewport instead of
+   jumping between conflicting breakpoint values.
+   ============================================================ */
+header .rs-header-area.rs-header-two .rs-header-left {
+  padding: clamp(4px, 1vw, 10px) clamp(16px, 4vw, 50px) clamp(4px, 1vw, 10px) clamp(8px, 2vw, 18px) !important;
+  border-radius: 0 0 clamp(16px, 5vw, 100px) 0 !important;
+}
+
+header .rs-header-area.rs-header-two .rs-header-left .rs-header-logo {
+  width: auto !important;
+  max-width: max-content !important;
+  padding: 0 !important;
+}
+
+/* Desktop full-wordmark logo only — the mobile circular MSC icon
+   (className "d-block d-lg-none") has its own fixed crop/sizing
+   and must not be touched by this clamp. */
+header .rs-header-area.rs-header-two .rs-header-left .rs-header-logo img.d-lg-block {
+  width: clamp(50px, 14vw, 130px) !important;
+  max-width: clamp(50px, 14vw, 130px) !important;
+  height: auto !important;
+}
+
+/* Protect the mobile circular MSC icon's crop from the older
+   ".rs-header-logo img { width:100% }" rules earlier in this file —
+   it needs its own fixed height + auto width to stay circular. */
+header .rs-header-area.rs-header-two .rs-header-left .rs-header-logo img[alt="logo mobile"] {
+  width: auto !important;
+  max-width: none !important;
+  height: 50px !important;
+  display: block !important;
+}
+
+/* Restore the desktop/mobile logo toggle — an older rule
+   (".rs-header-logo img { display:block !important }") outranks
+   Bootstrap's ".d-none" utility class and was forcing the desktop
+   wordmark logo to stay visible on mobile too. Re-assert the
+   correct show/hide per breakpoint here with higher specificity. */
+@media (max-width: 991px) {
+  header .rs-header-area.rs-header-two .rs-header-left .rs-header-logo img.d-lg-block {
+    display: none !important;
+  }
+}
+@media (min-width: 992px) {
+  header .rs-header-area.rs-header-two .rs-header-left .rs-header-logo > div {
+    display: none !important;
+  }
+}
+
+/* ============================================================
+   MOBILE + TABLET HOME HEADER — flat bar instead of transparent
+   overlay. Below 992px the header no longer floats over the
+   banner with a curved white logo card (that required pixel-
+   matching a cutout baked into every banner image, which broke
+   on some slides). Instead it becomes a plain solid white bar
+   sitting above the banner in normal flow, same as the interior-
+   page header. Desktop (>=992px) keeps the original overlay look.
+   ============================================================ */
+@media (max-width: 991px) {
+  header .rs-header-area.rs-header-two.header-transparent {
+    position: relative !important;
+    background: #ffffff !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+    z-index: 5 !important;
+  }
+
+  header .rs-header-area.rs-header-two.header-transparent .rs-header-left {
+    background: transparent !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 8px 0 !important;
+  }
+
+  header .rs-header-area.rs-header-two.header-transparent .rs-header-hamburger i {
+    color: #121a2f !important;
+  }
+
+  /* Interior pages (solid dark header) — same flat treatment: drop
+     the curved bottom-right corner + drop-shadow under the logo,
+     desktop keeps it. */
+  header .rs-header-area.rs-header-two .rs-header-left {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* Every banner slide image has a white rounded cutout baked into
+     its own top-left corner (designed for the old overlapping
+     header). Now that the header sits above the banner instead of
+     on top of it, pull the banner up underneath the (opaque, higher
+     z-index) header by that same cutout height so it tucks away
+     out of view instead of floating as a stray white shape. */
+  .banner_sec.mobile,
+  .banner_sec.desktop {
+    margin-top: -10vw !important;
+    position: relative !important;
+    z-index: 1 !important;
+  }
 }
 

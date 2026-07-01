@@ -139,9 +139,15 @@ export default function Header() {
                     <img
                       src="/assets/images/logo/msc_logo_without_bg.png"
                       alt="logo"
-                      width={185}
-                      height={55}
-                      style={{ maxWidth: '100%', height: 'auto', margin: '0', background: 'transparent' }}
+                      width={170}
+                      height={68}
+                      style={{
+                        width: 'clamp(50px, 14vw, 130px)',
+                        maxWidth: '100%',
+                        height: 'auto',
+                        margin: '0',
+                        background: 'transparent',
+                      }}
                     />
                   </Link>
                 </div>
@@ -255,7 +261,7 @@ export default function Header() {
                       src="/assets/images/logo/msc_logo_without_bg.png"
                       alt="logo"
                       width={180}
-                      height={53}
+                      height={72}
                       style={{ maxWidth: '180px', height: 'auto' }}
                     />
                   </Link>
