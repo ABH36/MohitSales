@@ -1572,6 +1572,7 @@ img[alt="logo"] {
   transform-origin: top center;
   pointer-events: none;
   transition: opacity 0.35s ease, transform 0.35s ease, visibility 0s linear 0.35s;
+  border-top: 2px solid #ff5e14;
 }
 
 /* Level 1 — below the "Products" nav item */
@@ -1579,7 +1580,6 @@ img[alt="logo"] {
   top: 100%;
   left: 0;
   border-radius: 0 0 6px 6px;
-  border-top: 2px solid #ff5e14;
 }
 
 /* Level 2+ — to the RIGHT of the parent li */
@@ -1588,7 +1588,6 @@ img[alt="logo"] {
   left: 100%;
   transform-origin: top left;
   border-radius: 0 6px 6px 6px;
-  border-top: none;
 }
 
 /* Show on hover — CSS only, no JS */
