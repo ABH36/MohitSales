@@ -9,6 +9,9 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/prisma';
+import { requireRole } from '@/lib/api/guard';
+import { parseBody } from '@/lib/api/validate';
+import { productCreateSchema } from '@/lib/schemas/product';
 
 export async function GET(request: NextRequest) {
   try {
@@ -63,20 +66,12 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const userRole = request.headers.get('x-user-role');
-    if (userRole !== 'ADMIN' && userRole !== 'EDITOR') {
-      return NextResponse.json({ success: false, message: 'Forbidden: Insufficient permissions.' }, { status: 403 });
-    }
+    const auth = requireRole(request, ['ADMIN', 'EDITOR']);
+    if (auth instanceof NextResponse) return auth;
 
-    const body = await request.json();
-    const { slug, title, description, features, imageSrc, categoryId, datasheetLink, isActive, sortOrder, stock, metaTitle, metaDescription, metaKeywords } = body;
-
-    if (!slug || !title) {
-      return NextResponse.json(
-        { success: false, message: 'Slug and title are required.' },
-        { status: 400 }
-      );
-    }
+    const parsed = await parseBody(request, productCreateSchema);
+    if (parsed instanceof NextResponse) return parsed;
+    const { slug, title, description, features, imageSrc, categoryId, datasheetLink, isActive, sortOrder, stock, metaTitle, metaDescription, metaKeywords } = parsed.data;
 
     // Check for duplicate slug in Products table
     const existing = await prisma.product.findUnique({ where: { slug } });

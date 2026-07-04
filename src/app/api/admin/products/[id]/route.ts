@@ -9,15 +9,18 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/prisma';
+import { requireRole } from '@/lib/api/guard';
+import { parseBody } from '@/lib/api/validate';
+import { productUpdateSchema } from '@/lib/schemas/product';
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const userRole = request.headers.get('x-user-role');
-    if (userRole !== 'ADMIN' && userRole !== 'EDITOR') {
-      return NextResponse.json({ success: false, message: 'Forbidden: Insufficient permissions.' }, { status: 403 });
-    }
+    const auth = requireRole(request, ['ADMIN', 'EDITOR']);
+    if (auth instanceof NextResponse) return auth;
 
-    const body = await request.json();
+    const parsed = await parseBody(request, productUpdateSchema);
+    if (parsed instanceof NextResponse) return parsed;
+    const body = parsed.data;
     const { slug, title, description, features, imageSrc, categoryId, datasheetLink, isActive, sortOrder, metaTitle, metaDescription, metaKeywords } = body;
 
     const oldProduct = await prisma.product.findUnique({
@@ -105,10 +108,8 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const userRole = request.headers.get('x-user-role');
-    if (userRole !== 'ADMIN' && userRole !== 'EDITOR') {
-      return NextResponse.json({ success: false, message: 'Forbidden: Insufficient permissions.' }, { status: 403 });
-    }
+    const auth = requireRole(request, ['ADMIN', 'EDITOR']);
+    if (auth instanceof NextResponse) return auth;
 
     const product = await prisma.product.findUnique({ where: { id: params.id }, select: { slug: true, categoryId: true } });
     await prisma.product.delete({ where: { id: params.id } });
