@@ -1,22 +1,20 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import prisma from '@/lib/prisma';
+import { requireRole } from '@/lib/api/guard';
+import { parseBody } from '@/lib/api/validate';
+import { inquiryUpdateSchema } from '@/lib/schemas/inquiry';
 
 export const dynamic = 'force-dynamic';
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const userRole = request.headers.get('x-user-role');
-    if (userRole !== 'ADMIN' && userRole !== 'EDITOR') {
-      return NextResponse.json({ success: false, message: 'Forbidden: Insufficient permissions.' }, { status: 403 });
-    }
+    const auth = requireRole(request, ['ADMIN', 'EDITOR']);
+    if (auth instanceof NextResponse) return auth;
 
-    const body = await request.json();
-    const { status } = body;
-
-    if (!['new', 'read', 'replied', 'closed'].includes(status)) {
-      return NextResponse.json({ success: false, message: 'Invalid status' }, { status: 400 });
-    }
+    const parsed = await parseBody(request, inquiryUpdateSchema);
+    if (parsed instanceof NextResponse) return parsed;
+    const { status } = parsed.data;
 
     const inquiry = await prisma.inquiry.update({
       where: { id: params.id },
@@ -35,10 +33,8 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const userRole = request.headers.get('x-user-role');
-    if (userRole !== 'ADMIN' && userRole !== 'EDITOR') {
-      return NextResponse.json({ success: false, message: 'Forbidden: Insufficient permissions.' }, { status: 403 });
-    }
+    const auth = requireRole(request, ['ADMIN', 'EDITOR']);
+    if (auth instanceof NextResponse) return auth;
 
     await prisma.inquiry.delete({
       where: { id: params.id },

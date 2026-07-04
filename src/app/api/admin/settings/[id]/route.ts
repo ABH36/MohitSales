@@ -7,22 +7,19 @@ import type { NextRequest } from 'next/server';
 import prisma from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import { revalidatePath } from 'next/cache';
+import { requireRole } from '@/lib/api/guard';
+import { parseBody } from '@/lib/api/validate';
+import { settingUpdateSchema } from '@/lib/schemas/setting';
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const userRole = request.headers.get('x-user-role');
-    const userId = request.headers.get('x-user-id');
+    const auth = requireRole(request, ['ADMIN']);
+    if (auth instanceof NextResponse) return auth;
+    const userId = auth.userId;
 
-    if (userRole !== 'ADMIN' || !userId) {
-      return NextResponse.json({ success: false, message: 'Forbidden: Insufficient permissions.' }, { status: 403 });
-    }
-
-    const body = await request.json();
-    const { value, password } = body;
-
-    if (!password) {
-      return NextResponse.json({ success: false, message: 'Password is required to authorize updates.' }, { status: 400 });
-    }
+    const parsed = await parseBody(request, settingUpdateSchema);
+    if (parsed instanceof NextResponse) return parsed;
+    const { value, password } = parsed.data;
 
     // Fetch user from DB to verify password
     const user = await prisma.user.findUnique({

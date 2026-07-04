@@ -1,20 +1,15 @@
 import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 import bcrypt from 'bcryptjs';
 import prisma from '@/lib/prisma';
+import { requireRole } from '@/lib/api/guard';
+import { parseBody } from '@/lib/api/validate';
+import { userCreateSchema } from '@/lib/schemas/user';
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
-    const userId = request.headers.get('x-user-id');
-    const userRole = request.headers.get('x-user-role');
-
-    if (!userId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
-    }
-
-    // Only ADMIN role can view the users list
-    if (userRole !== 'ADMIN') {
-      return NextResponse.json({ success: false, message: 'Forbidden: Insufficient permissions.' }, { status: 403 });
-    }
+    const auth = requireRole(request, ['ADMIN']);
+    if (auth instanceof NextResponse) return auth;
 
     const users = await prisma.user.findMany({
       select: {
@@ -44,26 +39,14 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
-    const userId = request.headers.get('x-user-id');
-    const userRole = request.headers.get('x-user-role');
+    const auth = requireRole(request, ['ADMIN']);
+    if (auth instanceof NextResponse) return auth;
 
-    if (!userId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
-    }
-
-    // Only ADMIN role can create new users
-    if (userRole !== 'ADMIN') {
-      return NextResponse.json({ success: false, message: 'Forbidden: Insufficient permissions.' }, { status: 403 });
-    }
-
-    const body = await request.json();
-    const { name, email, password, roleId, isActive } = body;
-
-    if (!email || !password || !roleId) {
-      return NextResponse.json({ success: false, message: 'Email, password, and role are required.' }, { status: 400 });
-    }
+    const parsed = await parseBody(request, userCreateSchema);
+    if (parsed instanceof NextResponse) return parsed;
+    const { name, email, password, roleId, isActive } = parsed.data;
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({

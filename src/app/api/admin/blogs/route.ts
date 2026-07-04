@@ -1,5 +1,9 @@
 import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 import prisma from '@/lib/prisma';
+import { requireRole } from '@/lib/api/guard';
+import { parseBody } from '@/lib/api/validate';
+import { blogCreateSchema } from '@/lib/schemas/blog';
 
 export async function GET() {
   try {
@@ -18,20 +22,15 @@ export async function GET() {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
-    const userRole = request.headers.get('x-user-role');
-    if (userRole !== 'ADMIN' && userRole !== 'EDITOR') {
-      return NextResponse.json({ success: false, message: 'Forbidden: Insufficient permissions.' }, { status: 403 });
-    }
+    const auth = requireRole(request, ['ADMIN', 'EDITOR']);
+    if (auth instanceof NextResponse) return auth;
 
-    const body = await request.json();
-    const { slug, title, content, isPublished, excerpt, coverImage, categoryId, tags, metaTitle, metaDesc, isFeatured } = body;
-    const authorId = request.headers.get('x-user-id');
-
-    if (!slug || !title || !content) {
-      return NextResponse.json({ success: false, message: 'Slug, title, and content are required' }, { status: 400 });
-    }
+    const parsed = await parseBody(request, blogCreateSchema);
+    if (parsed instanceof NextResponse) return parsed;
+    const { slug, title, content, isPublished, excerpt, coverImage, categoryId, tags, metaTitle, metaDesc, isFeatured } = parsed.data;
+    const authorId = auth.userId;
 
     const blog = await prisma.blogPost.create({
       data: {

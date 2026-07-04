@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import prisma from '@/lib/prisma';
+import { requireRole } from '@/lib/api/guard';
+import { parseBody } from '@/lib/api/validate';
+import { pageCreateSchema } from '@/lib/schemas/page';
 
 export async function GET(request: NextRequest) {
   try {
@@ -42,17 +45,12 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const userRole = request.headers.get('x-user-role');
-    if (userRole !== 'ADMIN' && userRole !== 'EDITOR') {
-      return NextResponse.json({ success: false, message: 'Forbidden.' }, { status: 403 });
-    }
+    const auth = requireRole(request, ['ADMIN', 'EDITOR']);
+    if (auth instanceof NextResponse) return auth;
 
-    const body = await request.json();
-    const { slug, htmlContent, title, heading } = body;
-
-    if (!slug || !htmlContent) {
-      return NextResponse.json({ success: false, message: 'Slug and HTML content are required.' }, { status: 400 });
-    }
+    const parsed = await parseBody(request, pageCreateSchema);
+    if (parsed instanceof NextResponse) return parsed;
+    const { slug, htmlContent, title, heading } = parsed.data;
 
     const existing = await prisma.pageContent.findUnique({ where: { slug } });
     if (existing) {

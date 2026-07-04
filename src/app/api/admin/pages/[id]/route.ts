@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/prisma';
+import { requireRole } from '@/lib/api/guard';
+import { parseBody } from '@/lib/api/validate';
+import { pageUpdateSchema } from '@/lib/schemas/page';
 
 export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -18,13 +21,12 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const userRole = request.headers.get('x-user-role');
-    if (userRole !== 'ADMIN' && userRole !== 'EDITOR') {
-      return NextResponse.json({ success: false, message: 'Forbidden.' }, { status: 403 });
-    }
+    const auth = requireRole(request, ['ADMIN', 'EDITOR']);
+    if (auth instanceof NextResponse) return auth;
 
-    const body = await request.json();
-    const { slug, htmlContent, title, heading, isActive } = body;
+    const parsed = await parseBody(request, pageUpdateSchema);
+    if (parsed instanceof NextResponse) return parsed;
+    const { slug, htmlContent, title, heading, isActive } = parsed.data;
 
     const existing = await prisma.pageContent.findUnique({ where: { id: params.id } });
     if (!existing) {
@@ -63,10 +65,8 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const userRole = request.headers.get('x-user-role');
-    if (userRole !== 'ADMIN') {
-      return NextResponse.json({ success: false, message: 'Forbidden: Only admins can delete pages.' }, { status: 403 });
-    }
+    const auth = requireRole(request, ['ADMIN']);
+    if (auth instanceof NextResponse) return auth;
 
     const existing = await prisma.pageContent.findUnique({ where: { id: params.id } });
     if (!existing) {

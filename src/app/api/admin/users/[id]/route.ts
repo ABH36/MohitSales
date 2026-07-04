@@ -1,24 +1,21 @@
 import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 import bcrypt from 'bcryptjs';
 import prisma from '@/lib/prisma';
+import { requireRole } from '@/lib/api/guard';
+import { parseBody } from '@/lib/api/validate';
+import { userUpdateSchema } from '@/lib/schemas/user';
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const userId = request.headers.get('x-user-id');
-    const userRole = request.headers.get('x-user-role');
-
-    if (!userId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
-    }
-
-    // Only ADMIN role can modify users
-    if (userRole !== 'ADMIN') {
-      return NextResponse.json({ success: false, message: 'Forbidden: Insufficient permissions.' }, { status: 403 });
-    }
+    const auth = requireRole(request, ['ADMIN']);
+    if (auth instanceof NextResponse) return auth;
+    const userId = auth.userId;
 
     const targetUserId = params.id;
-    const body = await request.json();
-    const { name, email, password, roleId, isActive } = body;
+    const parsed = await parseBody(request, userUpdateSchema);
+    if (parsed instanceof NextResponse) return parsed;
+    const { name, email, password, roleId, isActive } = parsed.data;
 
     // Check if user exists
     const user = await prisma.user.findUnique({
@@ -89,19 +86,11 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const userId = request.headers.get('x-user-id');
-    const userRole = request.headers.get('x-user-role');
-
-    if (!userId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
-    }
-
-    // Only ADMIN role can delete users
-    if (userRole !== 'ADMIN') {
-      return NextResponse.json({ success: false, message: 'Forbidden: Insufficient permissions.' }, { status: 403 });
-    }
+    const auth = requireRole(request, ['ADMIN']);
+    if (auth instanceof NextResponse) return auth;
+    const userId = auth.userId;
 
     const targetUserId = params.id;
 

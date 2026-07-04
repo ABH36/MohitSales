@@ -2,17 +2,19 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import { requireRole } from '@/lib/api/guard';
+import { parseBody } from '@/lib/api/validate';
+import { blogUpdateSchema } from '@/lib/schemas/blog';
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const userRole = request.headers.get('x-user-role');
-    if (userRole !== 'ADMIN' && userRole !== 'EDITOR') {
-      return NextResponse.json({ success: false, message: 'Forbidden: Insufficient permissions.' }, { status: 403 });
-    }
+    const auth = requireRole(request, ['ADMIN', 'EDITOR']);
+    if (auth instanceof NextResponse) return auth;
 
-    const body = await request.json();
-    const { slug, title, content, isPublished, excerpt, coverImage, categoryId, tags, metaTitle, metaDesc, isFeatured } = body;
-    const authorId = request.headers.get('x-user-id');
+    const parsed = await parseBody(request, blogUpdateSchema);
+    if (parsed instanceof NextResponse) return parsed;
+    const { slug, title, content, isPublished, excerpt, coverImage, categoryId, tags, metaTitle, metaDesc, isFeatured } = parsed.data;
+    const authorId = auth.userId;
 
     // Fetch existing blog to prevent publishedAt from resetting
     const existing = await prisma.blogPost.findUnique({
@@ -60,10 +62,8 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const userRole = request.headers.get('x-user-role');
-    if (userRole !== 'ADMIN' && userRole !== 'EDITOR') {
-      return NextResponse.json({ success: false, message: 'Forbidden: Insufficient permissions.' }, { status: 403 });
-    }
+    const auth = requireRole(request, ['ADMIN', 'EDITOR']);
+    if (auth instanceof NextResponse) return auth;
 
     const blog = await prisma.blogPost.findUnique({ where: { id: params.id }, select: { slug: true } });
     await prisma.blogPost.delete({ where: { id: params.id } });

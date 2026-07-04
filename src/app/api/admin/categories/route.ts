@@ -5,6 +5,9 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import prisma from '@/lib/prisma';
+import { requireRole } from '@/lib/api/guard';
+import { parseBody } from '@/lib/api/validate';
+import { categoryCreateSchema } from '@/lib/schemas/category';
 
 export async function GET() {
   try {
@@ -40,17 +43,13 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const userRole = request.headers.get('x-user-role');
-    if (userRole !== 'ADMIN' && userRole !== 'EDITOR') {
-      return NextResponse.json({ success: false, message: 'Forbidden: Insufficient permissions.' }, { status: 403 });
-    }
+    const auth = requireRole(request, ['ADMIN', 'EDITOR']);
+    if (auth instanceof NextResponse) return auth;
 
-    const body = await request.json();
+    const parsed = await parseBody(request, categoryCreateSchema);
+    if (parsed instanceof NextResponse) return parsed;
+    const body = parsed.data;
     const { slug, name, description, image, parentId, sortOrder } = body;
-
-    if (!slug || !name) {
-      return NextResponse.json({ success: false, message: 'Slug and name are required.' }, { status: 400 });
-    }
 
     // Check duplicate slug in Categories table
     const existing = await prisma.category.findUnique({ where: { slug } });
