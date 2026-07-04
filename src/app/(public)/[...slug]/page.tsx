@@ -1468,22 +1468,8 @@ export async function generateStaticParams() {
       categoryNameMap[c.name.trim().toLowerCase()] = c.slug;
     }
 
-    const cacheData = {
-      products: productMap,
-      categories: categoryMap,
-      pageContents: pageContentMap,
-      legacyPageContents: legacyPageContentMap,
-      seoMetas: seoMetaMap,
-      categoryNames: categoryNameMap
-    };
-
-    // Save cache to disk
-    try {
-      fs.writeFileSync(cachePath, JSON.stringify(cacheData), 'utf-8');
-      console.log(`[generateStaticParams] Saved build cache to ${cachePath}`);
-    } catch (err) {
-      console.error('[generateStaticParams] Failed to write build cache file:', err);
-    }
+    // (Removed: build-cache.json write — runtime now always queries the DB,
+    //  which is serverless-safe and avoids per-build filesystem writes.)
 
     // Collect all unique active slugs
     const allSlugs = new Set<string>();
