@@ -13,38 +13,6 @@ import { sanitizeHtml } from '@/lib/utils';
 export const revalidate = 3600; // ISR: revalidate every 1 hour (admin edits trigger instant revalidation via API)
 export const dynamicParams = true; // Allow on-demand generation for pages not generated at build time
 
-// Build-time cache loader interface
-interface BuildCacheData {
-  products: Record<string, any>;
-  categories: Record<string, any>;
-  pageContents: Record<string, any>;
-  legacyPageContents: Record<string, any>;
-  seoMetas: Record<string, any>;
-  categoryNames: Record<string, string>;
-}
-
-let buildCache: BuildCacheData | null = null;
-const cachePath = path.join(process.cwd(), 'build-cache.json');
-
-function loadBuildCache(): BuildCacheData | null {
-  // Only use build-time cache file during Next.js static production build phase.
-  // At runtime (dev/production server), query live database to allow instant metadata updates.
-  const isBuildPhase = process.env.NEXT_PHASE === 'phase-production-build';
-  if (!isBuildPhase) return null;
-
-  if (buildCache) return buildCache;
-  try {
-    if (fs.existsSync(cachePath)) {
-      const content = fs.readFileSync(cachePath, 'utf-8');
-      buildCache = JSON.parse(content);
-      return buildCache;
-    }
-  } catch (e) {
-    // Fail silently during runtime, as cache is only required during build time
-  }
-  return null;
-}
-
 // Module-level LRU cache: holds parsed content-export.json for 1 hour
 const contentCache = new LRUCache<string, any[]>({
   max: 1,
@@ -138,36 +106,19 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   const resolvedParams = await params;
   const slugPath = resolvedParams.slug.join('/');
 
-  const cache = loadBuildCache();
-  let product = null;
-  let seoMeta = null;
-  let dbProduct = null;
-
   const cleanPath = `/${slugPath}`;
-  const altPath = cleanPath.includes('_') 
-    ? cleanPath.replace(/_/g, '-') 
+  const altPath = cleanPath.includes('_')
+    ? cleanPath.replace(/_/g, '-')
     : (cleanPath.includes('-') ? cleanPath.replace(/-/g, '_') : null);
 
-  if (cache) {
-    product = await getProductData(slugPath);
-    seoMeta = cache.seoMetas[cleanPath] || (altPath ? cache.seoMetas[altPath] : null) || null;
-    dbProduct = cache.products[slugPath] || null;
-  } else {
-    const [p, s, dbP] = await Promise.all([
-      getProductData(slugPath),
-      prisma.seoMeta.findFirst({
-        where: {
-          page: {
-            in: altPath ? [cleanPath, altPath] : [cleanPath]
-          }
-        }
-      }).catch(() => null),
-      prisma.product.findUnique({ where: { slug: slugPath }, select: { metaTitle: true, metaDescription: true, metaKeywords: true, imageSrc: true } }).catch(() => null),
-    ]);
-    product = p;
-    seoMeta = s;
-    dbProduct = dbP;
-  }
+  // Runtime is always DB-driven (build-cache removed).
+  const [product, seoMeta, dbProduct] = await Promise.all([
+    getProductData(slugPath),
+    prisma.seoMeta.findFirst({
+      where: { page: { in: altPath ? [cleanPath, altPath] : [cleanPath] } }
+    }).catch(() => null),
+    prisma.product.findUnique({ where: { slug: slugPath }, select: { metaTitle: true, metaDescription: true, metaKeywords: true, imageSrc: true } }).catch(() => null),
+  ]);
 
   const pageUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'https://mohitscpl.com'}/${slugPath}`;
 
@@ -248,19 +199,8 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   };
 }
 
-// ── DB lookup for page content (replaces PHP file reading) ──────────
+// ── DB lookup for page content (PageContent table; 4,339 pages) ──────────
 async function getPageContentHtml(slugPath: string): Promise<string | null> {
-  const cache = loadBuildCache();
-  if (cache) {
-    let pageContent = cache.pageContents[slugPath];
-    if (!pageContent) {
-      const legacyPath = getLegacyPath(slugPath);
-      pageContent = cache.legacyPageContents[legacyPath];
-    }
-    if (!pageContent || !pageContent.isActive) return null;
-    return pageContent.htmlContent;
-  }
-
   try {
     let pageContent = await prisma.pageContent.findUnique({
       where: { slug: slugPath }
@@ -283,38 +223,24 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const resolvedParams = await params;
   const slugPath = resolvedParams.slug.join('/');
 
-  const cache = loadBuildCache();
-  let dbProductEarlyRaw = null;
-  let product = null;
-  let dbCategoryEarly = null;
-
-  if (cache) {
-    dbProductEarlyRaw = cache.products[slugPath] || null;
-    product = await getProductData(slugPath);
-    dbCategoryEarly = cache.categories[slugPath] || null;
-  } else {
-    // Fetch DB product early and local state in parallel
-    // Note: redirect check is handled by middleware (/api/public/redirect). This is the fallback.
-    const [dbProductRaw, prod, dbCat] = await Promise.all([
-      prisma.product.findUnique({
-        where: { slug: slugPath },
-        include: { category: { include: { parent: { include: { parent: { include: { parent: true } } } } } } }
-      }).catch((e) => {
-        console.error('[slug:dbProductEarly] Error fetching product early:', e);
-        return null;
-      }),
-      getProductData(slugPath),
-      prisma.category.findUnique({
-        where: { slug: slugPath }
-      }).catch((e) => {
-        console.error('[slug:dbCategoryEarly] Error fetching category early:', e);
-        return null;
-      })
-    ]);
-    dbProductEarlyRaw = dbProductRaw;
-    product = prod;
-    dbCategoryEarly = dbCat;
-  }
+  // Runtime is always DB-driven (build-cache removed). Redirect checks are
+  // handled upstream by middleware (/api/public/redirect).
+  const [dbProductEarlyRaw, product, dbCategoryEarly] = await Promise.all([
+    prisma.product.findUnique({
+      where: { slug: slugPath },
+      include: { category: { include: { parent: { include: { parent: { include: { parent: true } } } } } } }
+    }).catch((e) => {
+      console.error('[slug:dbProductEarly] Error fetching product early:', e);
+      return null;
+    }),
+    getProductData(slugPath),
+    prisma.category.findUnique({
+      where: { slug: slugPath }
+    }).catch((e) => {
+      console.error('[slug:dbCategoryEarly] Error fetching category early:', e);
+      return null;
+    })
+  ]);
 
   const dbProductEarly = (dbCategoryEarly || (dbProductEarlyRaw && (!dbProductEarlyRaw.isActive || dbProductEarlyRaw.stock <= 0))) ? null : dbProductEarlyRaw;
   const legacyHtml = await getPageContentHtml(slugPath);
@@ -414,25 +340,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
         }
 
         if (pendingNames.length > 0) {
-          let dbCats: { name: string; slug: string }[] = [];
-          if (cache) {
-            dbCats = pendingNames
-              .map(name => {
-                const slug = cache.categoryNames[name.toLowerCase()];
-                return slug ? { name, slug } : null;
-              })
-              .filter((x): x is { name: string; slug: string } => x !== null);
-          } else {
-            dbCats = await prisma.category.findMany({
-              where: {
-                name: {
-                  in: pendingNames,
-                  mode: 'insensitive'
-                }
-              },
-              select: { name: true, slug: true }
-            });
-          }
+          const dbCats = await prisma.category.findMany({
+            where: {
+              name: {
+                in: pendingNames,
+                mode: 'insensitive'
+              }
+            },
+            select: { name: true, slug: true }
+          });
 
           const catMap = new Map<string, string>();
           dbCats.forEach(c => catMap.set(c.name.toLowerCase(), c.slug));
@@ -468,14 +384,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
       // Only query DB for category products if the HTML actually has card slots to fill
       let dbCategory = null;
       if (hasLegacyCards) {
-        if (cache) {
-          dbCategory = cache.categories[slugPath] || null;
-        } else {
-          dbCategory = await prisma.category.findUnique({
-            where: { slug: slugPath },
-            include: { products: true }
-          });
-        }
+        dbCategory = await prisma.category.findUnique({
+          where: { slug: slugPath },
+          include: { products: true }
+        });
       }
 
       if (dbCategory && dbCategory.products.length > 0) {
@@ -661,11 +573,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   // PRIORITY 5: Admin Panel Category (Prisma DB exact slug match)
   // Renders a full product listing page for admin-created categories.
   // ══════════════════════════════════════════════════════════════════════
-  let dbCategory = null;
-  if (cache) {
-    dbCategory = cache.categories[slugPath] || null;
-  } else {
-    dbCategory = await prisma.category.findUnique({
+  const dbCategory = await prisma.category.findUnique({
       where: { slug: slugPath },
       include: {
         parent: { include: { parent: { include: { parent: true } } } },
@@ -683,7 +591,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
         }
       }
     });
-  }
 
   if (dbCategory && dbCategory.isActive) {
     return (
