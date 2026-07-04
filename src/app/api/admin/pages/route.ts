@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { Prisma } from '@prisma/client';
 import prisma from '@/lib/prisma';
 import { requireRole } from '@/lib/api/guard';
 import { parseBody } from '@/lib/api/validate';
@@ -12,7 +13,7 @@ export async function GET(request: NextRequest) {
     const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 100);
     const search = searchParams.get('search') || '';
 
-    const where: any = {};
+    const where: Prisma.PageContentWhereInput = {};
     if (search) {
       where.OR = [
         { slug: { contains: search, mode: 'insensitive' } },

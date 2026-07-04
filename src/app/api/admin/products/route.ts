@@ -8,6 +8,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { revalidatePath } from 'next/cache';
+import { Prisma } from '@prisma/client';
 import prisma from '@/lib/prisma';
 import { requireRole } from '@/lib/api/guard';
 import { parseBody } from '@/lib/api/validate';
@@ -24,7 +25,7 @@ export async function GET(request: NextRequest) {
     const statusFilter = searchParams.get('status') || 'all'; // 'all' | 'active' | 'inactive'
     const stockFilter = searchParams.get('stock') || '';       // '' | 'outofstock'
 
-    const where: any = {};
+    const where: Prisma.ProductWhereInput = {};
     // Admin shows ALL products by default (no isActive filter unless explicitly requested)
     if (statusFilter === 'active') where.isActive = true;
     if (statusFilter === 'inactive') where.isActive = false;
