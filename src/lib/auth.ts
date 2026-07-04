@@ -1,14 +1,22 @@
 import { jwtVerify, SignJWT } from 'jose';
 
-if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
-  throw new Error('FATAL: JWT_SECRET environment variable is not defined in production!');
+// No insecure hardcoded fallback: JWT_SECRET must be provided via the
+// environment (.env) in every environment. Fail fast if it is missing.
+if (!process.env.JWT_SECRET) {
+  throw new Error('FATAL: JWT_SECRET environment variable is not defined. Set it in your .env.');
 }
 
-export const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-key-for-dev-only-mohit';
+export const JWT_SECRET = process.env.JWT_SECRET;
 export const COOKIE_NAME = 'admin_token';
 const encodedSecret = new TextEncoder().encode(JWT_SECRET);
 
-export async function createToken(payload: any, expiresIn: string = '1d') {
+export interface TokenPayload {
+  userId: string;
+  role?: string;
+  [key: string]: unknown;
+}
+
+export async function createToken(payload: TokenPayload, expiresIn: string = '1d') {
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
