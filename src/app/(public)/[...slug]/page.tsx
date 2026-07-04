@@ -1,9 +1,6 @@
 import React from 'react';
 import { notFound, redirect } from 'next/navigation';
 import { Metadata } from 'next';
-import fs from 'fs';
-import path from 'path';
-import { LRUCache } from 'lru-cache';
 import * as cheerio from 'cheerio';
 import prisma from '@/lib/prisma';
 import ProductPageWrapper from '@/components/ProductPageWrapper';
@@ -12,12 +9,6 @@ import { sanitizeHtml } from '@/lib/utils';
 
 export const revalidate = 3600; // ISR: revalidate every 1 hour (admin edits trigger instant revalidation via API)
 export const dynamicParams = true; // Allow on-demand generation for pages not generated at build time
-
-// Module-level LRU cache: holds parsed content-export.json for 1 hour
-const contentCache = new LRUCache<string, any[]>({
-  max: 1,
-  ttl: 60 * 60 * 1000,
-});
 
 interface ProductPageProps {
   params: {
@@ -55,51 +46,12 @@ function getLegacyPath(slugPath: string): string {
   return clean;
 }
 
-async function getProductData(slugPath: string) {
-  try {
-    const CACHE_KEY = 'content-export';
-    let dataList = contentCache.get(CACHE_KEY);
-
-    if (!dataList) {
-      const jsonPath = path.join(process.cwd(), 'content-export.json');
-      const jsonExists = await fs.promises.access(jsonPath).then(() => true).catch(() => false);
-      if (!jsonExists) return null;
-      dataList = JSON.parse(await fs.promises.readFile(jsonPath, 'utf-8'));
-      contentCache.set(CACHE_KEY, dataList!);
-    }
-
-    // Try 1: Exact match
-    const matchPath = slugPath.endsWith('.php') ? slugPath : `${slugPath}.php`;
-    let found = dataList!.find((item: any) => item.path.toLowerCase() === matchPath.toLowerCase());
-    if (found) return found;
-
-    // Try 2: Map using legacy path helper
-    const legacyPath = getLegacyPath(slugPath);
-    const matchLegacyPath = legacyPath.endsWith('.php') ? legacyPath : `${legacyPath}.php`;
-    found = dataList!.find((item: any) => item.path.toLowerCase() === matchLegacyPath.toLowerCase());
-    if (found) return found;
-
-    // Try 3: Match by final filename + parent directory (prevents cross-category false matches)
-    const slugParts = slugPath.split('/');
-    const lastPart = slugParts[slugParts.length - 1].toLowerCase();
-    const parentPart = slugParts.length >= 2 ? slugParts[slugParts.length - 2].toLowerCase() : '';
-
-    found = dataList!.find((item: any) => {
-      const itemParts = item.path.replace(/\.php$/, '').split('/');
-      const itemLastPart = itemParts[itemParts.length - 1].toLowerCase();
-      if (itemLastPart !== lastPart) return false;
-      if (parentPart && itemParts.length >= 2) {
-        const itemParent = itemParts[itemParts.length - 2].toLowerCase();
-        return itemParent === parentPart;
-      }
-      return true;
-    });
-
-    return found || null;
-  } catch (error) {
-    console.error('Error reading product data:', error);
-    return null;
-  }
+// content-export.json removed — the database (products + pageContent) is now
+// authoritative and fully covers every slug. Kept as a no-op so the handful of
+// call sites stay untouched; `product` is always null and handled by the
+// null-safe rendering paths (verified: identical output).
+async function getProductData(_slugPath: string): Promise<any> {
+  return null;
 }
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
