@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/prisma';
+import { requireRole } from '@/lib/api/guard';
 
 // Follow the redirect chain: check if adding fromPath→toPath creates any cycle
 async function wouldCreateLoop(from: string, to: string, excludeId?: string): Promise<boolean> {
@@ -31,8 +32,8 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const role = request.headers.get('x-user-role');
-    if (role !== 'ADMIN' && role !== 'EDITOR') return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 });
+    const auth = requireRole(request, ['ADMIN', 'EDITOR']);
+    if (auth instanceof NextResponse) return auth;
     const body = await request.json();
     const { fromPath, toPath, type, isActive } = body;
     if (!fromPath || !toPath) return NextResponse.json({ success: false, error: 'fromPath and toPath required' }, { status: 400 });

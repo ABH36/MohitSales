@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/prisma';
+import { requireRole } from '@/lib/api/guard';
 
 export async function GET() {
   try {
@@ -14,8 +15,8 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const role = request.headers.get('x-user-role');
-    if (role !== 'ADMIN' && role !== 'EDITOR') return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 });
+    const auth = requireRole(request, ['ADMIN', 'EDITOR']);
+    if (auth instanceof NextResponse) return auth;
     const body = await request.json();
     const { page, schemaType, jsonLd, isActive } = body;
     if (!page || !schemaType || !jsonLd) return NextResponse.json({ success: false, error: 'page, schemaType, jsonLd required' }, { status: 400 });

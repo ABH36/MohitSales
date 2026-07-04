@@ -2,11 +2,12 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/prisma';
+import { requireRole } from '@/lib/api/guard';
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const role = request.headers.get('x-user-role');
-    if (role !== 'ADMIN' && role !== 'EDITOR') return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 });
+    const auth = requireRole(request, ['ADMIN', 'EDITOR']);
+    if (auth instanceof NextResponse) return auth;
     const { id } = await (params as any);
     const body = await request.json();
     const { page, schemaType, jsonLd, isActive } = body;
@@ -35,8 +36,8 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const role = request.headers.get('x-user-role');
-    if (role !== 'ADMIN' && role !== 'EDITOR') return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 });
+    const auth = requireRole(request, ['ADMIN', 'EDITOR']);
+    if (auth instanceof NextResponse) return auth;
     const { id } = await (params as any);
     const existing = await prisma.schemaMarkup.findUnique({ where: { id }, select: { page: true } });
     await prisma.schemaMarkup.delete({ where: { id } });

@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import prisma from '@/lib/prisma';
+import { requireRole } from '@/lib/api/guard';
 
 export async function GET(request: NextRequest) {
   try {
-    const role = request.headers.get('x-user-role');
-    if (role !== 'ADMIN' && role !== 'EDITOR' && role !== 'VIEWER') {
-      return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 });
-    }
+    const auth = requireRole(request, ['ADMIN', 'EDITOR', 'VIEWER']);
+    if (auth instanceof NextResponse) return auth;
 
     const logs = await prisma.notFoundLog.findMany({
       orderBy: { hitCount: 'desc' },
@@ -22,10 +21,8 @@ export async function GET(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const role = request.headers.get('x-user-role');
-    if (role !== 'ADMIN' && role !== 'EDITOR') {
-      return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 });
-    }
+    const auth = requireRole(request, ['ADMIN', 'EDITOR']);
+    if (auth instanceof NextResponse) return auth;
 
     await prisma.notFoundLog.deleteMany();
 

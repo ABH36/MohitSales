@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import prisma from '@/lib/prisma';
+import { requireRole } from '@/lib/api/guard';
 
 const ROBOTS_KEY = 'seo_robots_txt';
 
@@ -15,8 +16,8 @@ export async function GET() {
 
 export async function PUT(request: NextRequest) {
   try {
-    const role = request.headers.get('x-user-role');
-    if (role !== 'ADMIN' && role !== 'EDITOR') return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 });
+    const auth = requireRole(request, ['ADMIN', 'EDITOR']);
+    if (auth instanceof NextResponse) return auth;
     const body = await request.json();
     const { rules } = body; // array of { userAgent, allow, disallow, crawlDelay }
     if (!rules) return NextResponse.json({ success: false, error: 'rules required' }, { status: 400 });

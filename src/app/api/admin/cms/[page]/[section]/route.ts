@@ -3,6 +3,9 @@ import type { NextRequest } from 'next/server';
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { sanitizeHtml } from '@/lib/utils';
+import { requireRole } from '@/lib/api/guard';
+import { parseBody } from '@/lib/api/validate';
+import { cmsUpdateSchema } from '@/lib/schemas/cms';
 
 interface RouteParams {
   params: { page: string; section: string };
@@ -30,22 +33,17 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
 
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
-    const userRole = request.headers.get('x-user-role');
-    if (userRole !== 'ADMIN' && userRole !== 'EDITOR') {
-      return NextResponse.json({ success: false, message: 'Forbidden: Insufficient permissions.' }, { status: 403 });
-    }
+    const auth = requireRole(request, ['ADMIN', 'EDITOR']);
+    if (auth instanceof NextResponse) return auth;
 
     const validSlug = /^[a-z0-9][a-z0-9_-]{0,63}$/;
     if (!validSlug.test(params.page) || !validSlug.test(params.section)) {
       return NextResponse.json({ success: false, message: 'Invalid page or section slug.' }, { status: 400 });
     }
 
-    const body = await request.json();
-    const { content, sortOrder, isActive } = body;
-
-    if (content === undefined) {
-      return NextResponse.json({ success: false, message: 'content is required.' }, { status: 400 });
-    }
+    const parsed = await parseBody(request, cmsUpdateSchema);
+    if (parsed instanceof NextResponse) return parsed;
+    const { content, sortOrder, isActive } = parsed.data;
 
     let finalContent = content;
     if (params.section === 'promo_popup') {
