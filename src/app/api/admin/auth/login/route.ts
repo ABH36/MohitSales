@@ -20,14 +20,12 @@ export async function POST(request: NextRequest) {
       || request.headers.get('x-real-ip')
       || '127.0.0.1';
 
-    /*
     if (loginRateLimiter.limit(ip)) {
       return NextResponse.json(
         { success: false, message: 'Too many attempts. Try again in 15 minutes.' },
         { status: 429 }
       );
     }
-    */
 
     const body = await request.json();
     const { email, password } = body;

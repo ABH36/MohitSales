@@ -80,7 +80,7 @@ async function main() {
     },
   });
 
-  const editorRole = await prisma.role.upsert({
+  await prisma.role.upsert({
     where: { name: 'EDITOR' },
     update: {},
     create: {
@@ -94,7 +94,7 @@ async function main() {
     },
   });
 
-  const viewerRole = await prisma.role.upsert({
+  await prisma.role.upsert({
     where: { name: 'VIEWER' },
     update: {},
     create: {
@@ -113,7 +113,7 @@ async function main() {
   console.log('👤 Creating admin user...');
   const hashedPassword = await bcrypt.hash('Admin@2024!', 12);
 
-  const adminUser = await prisma.user.upsert({
+  await prisma.user.upsert({
     where: { email: 'admin@mohitscpl.com' },
     update: {},
     create: {
@@ -155,7 +155,7 @@ async function main() {
   });
 
   // Polycab Sub-categories
-  const cablesCat = await prisma.category.upsert({
+  await prisma.category.upsert({
     where: { slug: 'polycab-cables' },
     update: {},
     create: {

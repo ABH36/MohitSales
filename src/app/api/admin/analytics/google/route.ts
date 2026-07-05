@@ -257,8 +257,7 @@ export async function GET(request: NextRequest) {
     }
 
     // ─── Demo / Fallback Mode with simulated dynamic values ───
-    const currentHour = new Date().getHours();
-    const currentDay = new Date().getDay();
+    const currentHour = new Date().getHours();
 
     // Fluctuating real-time active users (higher during business hours 9-18)
     const baseActive = (currentHour >= 9 && currentHour <= 18) ? 5 : 2;

@@ -3,7 +3,6 @@
 import React, { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePublicSettings } from './PublicSettingsContext';
 import { cld } from '@/lib/cloudinary';
 

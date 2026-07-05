@@ -67,7 +67,6 @@ export default function PricelistPage() {
     },
   ];
 
-  const activeItems = activeTab === 'polycab' ? polycabItems : dowellsItems;
 
   return (
     <main>
