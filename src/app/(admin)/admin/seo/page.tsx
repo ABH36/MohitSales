@@ -963,6 +963,55 @@ function SeoPageInner() {
             )}
           </div>
 
+          {/* ── Sitemap Overrides (custom priority / changeFreq / exclusion per URL) ── */}
+          <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 24, marginBottom: 24, boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, flexWrap: 'wrap', gap: 12 }}>
+              <div>
+                <h3 style={{ fontSize: 16, fontWeight: 700, color: '#1e2e5e', marginBottom: 4 }}>Sitemap Overrides</h3>
+                <p style={{ fontSize: 13, color: '#718096', margin: 0 }}>
+                  Set a custom priority / change frequency for a specific URL, or exclude it from the sitemap. These apply on top of the auto-generated links.
+                </p>
+              </div>
+              <button onClick={() => openOverrideModal()} style={{ background: '#1e2e5e', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 14, whiteSpace: 'nowrap' }}>
+                + Add Override
+              </button>
+            </div>
+
+            {sitemapLoading ? (
+              <p style={{ fontSize: 13, color: '#718096', padding: '16px 0', margin: 0 }}>Loading overrides…</p>
+            ) : overrides.length === 0 ? (
+              <p style={{ fontSize: 13, color: '#718096', padding: '16px 0', margin: 0 }}>No overrides yet. Add one to customise a URL&apos;s sitemap entry.</p>
+            ) : (
+              <div style={{ overflowX: 'auto', marginTop: 12 }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                  <thead>
+                    <tr style={{ textAlign: 'left', color: '#718096', borderBottom: '1px solid #e2e8f0' }}>
+                      <th style={{ padding: '8px 10px' }}>URL Path</th>
+                      <th style={{ padding: '8px 10px' }}>Priority</th>
+                      <th style={{ padding: '8px 10px' }}>Change Freq</th>
+                      <th style={{ padding: '8px 10px' }}>Excluded</th>
+                      <th style={{ padding: '8px 10px', textAlign: 'right' }}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {overrides.map(o => (
+                      <tr key={o.id} style={{ borderBottom: '1px solid #edf2f7' }}>
+                        <td style={{ padding: '8px 10px', fontWeight: 600, color: '#1e2e5e' }}>{o.urlPath}</td>
+                        <td style={{ padding: '8px 10px' }}>{o.priority}</td>
+                        <td style={{ padding: '8px 10px' }}>{o.changeFreq}</td>
+                        <td style={{ padding: '8px 10px' }}>{o.isExcluded ? 'Yes' : 'No'}</td>
+                        <td style={{ padding: '8px 10px', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                          <button onClick={() => openOverrideModal(o)} style={{ background: 'transparent', border: '1px solid #cbd5e0', color: '#2b6cb0', padding: '4px 12px', borderRadius: 6, cursor: 'pointer', fontSize: 12, marginRight: 8 }}>Edit</button>
+                          <button onClick={() => deleteOverride(o.id)} style={{ background: 'transparent', border: '1px solid #fbb6b6', color: '#c53030', padding: '4px 12px', borderRadius: 6, cursor: 'pointer', fontSize: 12 }}>Delete</button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+
           {/* Generated URLs Preview Table */}
           {sitemapPreview && (
             <div style={{ marginTop: 24, background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 20 }}>

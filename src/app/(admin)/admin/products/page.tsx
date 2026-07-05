@@ -149,7 +149,6 @@ function AdminProductsPageInner() {
   const [totalProducts, setTotalProducts] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [categories, setCategories] = useState<FlatCategory[]>(cachedCats?.success ? flattenCategories(cachedCats.data) : []);
-  const [rawCategories, setRawCategories] = useState<NestedCategory[]>(cachedCats?.success ? cachedCats.data : []);
   const [editProduct, setEditProduct] = useState<Product | null>(null);
   const [toast, setToast] = useState<{ msg: string; type: string } | null>(null);
   const [statusFilter, setStatusFilter] = useState('all'); // 'all' | 'active' | 'inactive'
@@ -233,7 +232,6 @@ function AdminProductsPageInner() {
       }
       if (catData.success) {
         setCategories(flattenCategories(catData.data));
-        setRawCategories(catData.data);
       }
     } catch (err) {
       console.error('Failed to fetch products/categories', err);
