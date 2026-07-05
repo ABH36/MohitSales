@@ -227,6 +227,7 @@ export default function HomeContactForm() {
                     <div className="rs-contact-input text-center">
                       <input
                         type="file"
+                        aria-label="Attach a file (PDF, DOC, JPG or PNG)"
                         accept=".pdf,.doc,.docx,.jpg,.png"
                         onChange={handleFileChange}
                         style={{ fontSize: '14px', color: '#fff' }}

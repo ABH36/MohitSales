@@ -134,8 +134,9 @@ export default function ProductSlider({ products, prevElSelector, nextElSelector
                   <Link
                     href={prod.link}
                     className="portfolio-red-btn"
+                    aria-label={`View ${prod.title}`}
                   >
-                    <i className="fa-regular fa-arrow-right"></i>
+                    <i className="fa-regular fa-arrow-right" aria-hidden="true"></i>
                   </Link>
                 </div>
               </div>
