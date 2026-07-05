@@ -2,13 +2,22 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [ main, master, dev ]
+    branches: [main, testing, production]
   pull_request:
-    branches: [ main, master, dev ]
+    branches: [main, testing, production]
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+
+    env:
+      # No live database in CI. Prisma client still generates, and the app is
+      # built to tolerate a missing DB at build time — generateStaticParams and
+      # every DB-backed generateMetadata catch connection errors and fall back,
+      # so `next build` validates that the whole app compiles and renders.
+      DATABASE_URL: "postgresql://ci:ci@localhost:5432/ci?schema=public"
+      NEXT_PUBLIC_BASE_URL: "https://mohitscpl.com"
+      NEXT_TELEMETRY_DISABLED: "1"
 
     steps:
       - name: Checkout repository
@@ -25,11 +34,12 @@ jobs:
 
       - name: Generate Prisma Client
         run: npx prisma generate
-        env:
-          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/postgres"
 
       - name: Typecheck
         run: npx tsc --noEmit
 
-      - name: Run Test Suite
+      - name: Run test suite
         run: npm test
+
+      - name: Build
+        run: npm run build

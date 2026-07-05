@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
 import prisma from '@/lib/prisma';
 import { LRUCache } from 'lru-cache';
+import { isRedirectedPath } from '@/lib/seo-routes';
 
 const sitemapCache = new LRUCache<string, MetadataRoute.Sitemap>({
   max: 1,
@@ -79,7 +80,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   //     crawlers at a page the product routes intentionally drop.
   // Overlaps with static/product/category routes are merged by the URL de-dup
   // in step 4, so listing every active page here is safe.
-  const REDIRECTED_PREFIX = /^polycab\/cables-by-(application|type|standards)(\/|$)/i;
   let pageContentRoutes: MetadataRoute.Sitemap = [];
   try {
     const pages = await prisma.pageContent.findMany({
@@ -89,7 +89,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     pageContentRoutes = pages
       .filter((p) => {
         const key = p.slug.toLowerCase().trim();
-        return !REDIRECTED_PREFIX.test(key) && !excludedSlugs.has(key);
+        return !isRedirectedPath(key) && !excludedSlugs.has(key);
       })
       .map((p) => ({
         url: `${baseUrl}/${p.slug}`,
@@ -152,17 +152,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // /industries/* (next.config.js). Listing a redirecting URL in the sitemap is
   // a crawl-hygiene error, so exclude the whole redirected subtree + legacy
   // homepage aliases here.
-  const isRedirected = (url: string): boolean => {
-    const p = url.replace(baseUrl, '').replace(/^\//, '').toLowerCase();
-    return REDIRECTED_PREFIX.test(p) || p === 'index' || p === 'index-old';
-  };
-
   const allRoutes = [...staticRoutes, ...pageContentRoutes, ...dbRoutes];
   const uniqueUrls = new Set<string>();
   const uniqueRoutes: MetadataRoute.Sitemap = [];
 
   for (const route of allRoutes) {
-    if (isRedirected(route.url)) continue;
+    if (isRedirectedPath(route.url)) continue;
     const urlLower = route.url.toLowerCase();
     if (!uniqueUrls.has(urlLower)) {
       uniqueUrls.add(urlLower);
