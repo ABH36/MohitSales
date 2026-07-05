@@ -12,7 +12,12 @@ export async function GET(_request: Request, { params }: RouteParams) {
     });
 
     if (!record || !record.isActive) {
-      return NextResponse.json({ success: false, message: 'Not found.' }, { status: 404 });
+      // Optional CMS content (e.g. homepage banners / promo popup) an admin hasn't
+      // configured yet. Every consumer already treats a falsy response as "use the
+      // built-in fallback", so return 200 with no data rather than a noisy 404.
+      const res = NextResponse.json({ success: false, data: null, message: 'Not configured.' });
+      res.headers.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+      return res;
     }
 
     let parsed;
