@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePublicSettings } from './PublicSettingsContext';
+import { cld } from '@/lib/cloudinary';
 
 
 export default function Footer() {
@@ -42,7 +43,7 @@ export default function Footer() {
           <div ref={wrapperRef} className="rs-cta-wrapper footer scroll-reveal" data-direction="left">
             <div
               className="rs-cta-bg-thumb"
-              style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167843/mohit/bg/footer-top-bg.png')" }}
+              style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167843/mohit/bg/footer-top-bg.png')}')` }}
             ></div>
             <div className="row">
               <div className="w-full">
@@ -84,7 +85,7 @@ export default function Footer() {
         <div className="rs-footer-area rs-footer-two has-space has-theme-orange footer-new">
           <div
             className="rs-footer-bg-thumb"
-            style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167842/mohit/bg/footer-bg.webp')" }}
+            style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167842/mohit/bg/footer-bg.webp')}')` }}
           ></div>
           <div className="rs-footer-top">
             <div className="container">
@@ -94,7 +95,7 @@ export default function Footer() {
                     <div className="rs-footer-widget-logo mb-25">
                       <Link href="/">
                         <img
-                          src="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167908/mohit/logo/msc_logo_without_bg.png"
+                          src={cld("https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167908/mohit/logo/msc_logo_without_bg.png")}
                           alt="logo"
                           width={280}
                           height={83}
@@ -200,7 +201,7 @@ export default function Footer() {
                       © <span>2026</span> Mohit Sales Corporation Pvt. Ltd. Designed by{' '}
                       <a href="https://www.bdminfotech.com/" target="_blank" rel="noopener noreferrer">
                         <img
-                          src="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167907/mohit/logo/bdm_footer.png"
+                          src={cld("https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167907/mohit/logo/bdm_footer.png")}
                           className="bdm-footer-logo inline-block align-middle ml-1"
                           alt="BDM Cloudtech"
                           style={{ display: 'inline-block', verticalAlign: 'middle', height: '28px', width: 'auto' }}

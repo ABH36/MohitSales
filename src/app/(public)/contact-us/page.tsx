@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePublicSettings } from '@/components/PublicSettingsContext';
+import { cld } from '@/lib/cloudinary';
 
 
 export default function ContactUsPage() {
@@ -147,7 +148,7 @@ export default function ContactUsPage() {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167903/mohit/inner-banner/contact-us.png')" }}
+          style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167903/mohit/inner-banner/contact-us.png')}')` }}
         ></div>
         <div className="container">
           <div className="row">

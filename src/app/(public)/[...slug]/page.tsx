@@ -7,6 +7,7 @@ import ProductPageWrapper from '@/components/ProductPageWrapper';
 import SchemaInjector from '@/components/SchemaInjector';
 import { sanitizeHtml } from '@/lib/utils';
 import { renderDbProduct, renderDbCategory, renderProductLayout } from './render';
+import { cld } from '@/lib/cloudinary';
 
 export const revalidate = 3600; // ISR: revalidate every 1 hour (admin edits trigger instant revalidation via API)
 export const dynamicParams = true; // Allow on-demand generation for pages not generated at build time
@@ -474,7 +475,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <SchemaInjector page={`/${slugPath}`} />
           <main>
             <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
-              <div className="rs-breadcrumb-bg" style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')" }}></div>
+              <div className="rs-breadcrumb-bg" style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')}')` }}></div>
               <div className="container">
                 <div className="row">
                   <div className="w-full">

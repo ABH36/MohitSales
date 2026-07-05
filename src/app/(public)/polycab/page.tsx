@@ -3,6 +3,7 @@ import { getSeoMetadata } from '@/lib/seo';
 ﻿import React from 'react';
 import Link from 'next/link';
 import SplitText from '@/components/SplitText';
+import { cld } from '@/lib/cloudinary';
 
 export async function generateMetadata(): Promise<Metadata> {
   return getSeoMetadata('/polycab', {
@@ -99,7 +100,7 @@ export default function PolycabPage() {
         <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
           <div 
             className="rs-breadcrumb-bg"
-            style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')" }}
+            style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')}')` }}
           ></div>
           <div className="container">
             <div className="row">
@@ -136,7 +137,7 @@ export default function PolycabPage() {
                   {PRODUCTS.map((prod, idx) => (
                     <div key={idx} className="product-card">
                       <Link href={prod.link}>
-                        <img src={prod.image} alt={prod.title} loading="lazy" decoding="async" />
+                        <img src={cld(prod.image)} alt={prod.title} loading="lazy" decoding="async" />
                         <h3>{prod.title}</h3>
                         <div className="pricelist-button">
                           <span className="pricelist-btn">Explore More</span>

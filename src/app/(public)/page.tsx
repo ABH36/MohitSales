@@ -10,6 +10,7 @@ import SplitText from '@/components/SplitText';
 import SchemaInjector from '@/components/SchemaInjector';
 import PromoPopup from '@/components/PromoPopup';
 import prisma from '@/lib/prisma';
+import { cld } from '@/lib/cloudinary';
 
 export const revalidate = 3600; // ISR: revalidate every 1 hour
 
@@ -143,8 +144,8 @@ export default async function Page() {
         <span className="rs-why-choose-shape gsap-move down-200 start-61"></span>
         <div 
           className="rs-why-choose-bg-thumb" 
-          data-background="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167838/mohit/bg/background.png"
-          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167838/mohit/bg/background.png')" }}
+          data-background={cld("https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167838/mohit/bg/background.png")}
+          style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167838/mohit/bg/background.png')}')` }}
         ></div>
         <div className="container">
           <div className="row">
@@ -225,8 +226,8 @@ export default async function Page() {
         </div>
         <div 
           className="rs-why-choose-btn-wrapper" 
-          data-background="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167989/mohit/why-choose/why_choose.png"
-          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167989/mohit/why-choose/why_choose.png')" }}
+          data-background={cld("https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167989/mohit/why-choose/why_choose.png")}
+          style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167989/mohit/why-choose/why_choose.png')}')` }}
         ></div>
       </section>
 

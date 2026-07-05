@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { cld } from '@/lib/cloudinary';
 
 export default function AchievementsPage() {
   const [lightboxImage, setLightboxImage] = useState<{ src: string; caption: string } | null>(null);
@@ -25,7 +26,7 @@ export default function AchievementsPage() {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167901/mohit/inner-banner/achievement.png')" }}
+          style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167901/mohit/inner-banner/achievement.png')}')` }}
         ></div>
         <div className="container">
           <div className="row">
@@ -61,7 +62,7 @@ export default function AchievementsPage() {
                       onClick={() => setLightboxImage({ src: ach.image, caption: ach.caption })}
                     >
                       <img 
-                        src={ach.image} 
+                        src={cld(ach.image)} 
                         alt={ach.title} 
                       />
                     </div>

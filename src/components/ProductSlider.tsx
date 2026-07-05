@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { cld } from '@/lib/cloudinary';
 
 interface SwiperElement extends HTMLDivElement {
   _cleanupSwiper?: () => void;
@@ -122,8 +123,10 @@ export default function ProductSlider({ products, prevElSelector, nextElSelector
             <div className="rs-portfolio-item">
               <div className="rs-portfolio-thumb">
                 <img
-                  src={prod.image}
+                  src={cld(prod.image)}
                   alt={prod.title}
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div className="rs-portfolio-content">

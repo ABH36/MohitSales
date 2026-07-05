@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePublicSettings } from './PublicSettingsContext';
+import { cld } from '@/lib/cloudinary';
 
 
 interface NavItem {
@@ -137,7 +138,7 @@ export default function Header() {
                 <div className="rs-header-logo" style={{ marginLeft: 0, paddingLeft: 0 }}>
                   <Link href="/">
                     <img
-                      src="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167908/mohit/logo/msc_logo_without_bg.png"
+                      src={cld("https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167908/mohit/logo/msc_logo_without_bg.png")}
                       alt="logo"
                       width={170}
                       height={68}
@@ -258,7 +259,7 @@ export default function Header() {
                 <div className="offcanvas-logo">
                   <Link className="logo-black" href="/">
                     <Image
-                      src="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167908/mohit/logo/msc_logo_without_bg.png"
+                      src={cld("https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167908/mohit/logo/msc_logo_without_bg.png")}
                       alt="logo"
                       width={180}
                       height={72}

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import BreadcrumbBanner from '@/components/BreadcrumbBanner';
+import { cld } from '@/lib/cloudinary';
 
 export default function CrimpingToolPage() {
   const products = [
@@ -45,7 +46,7 @@ export default function CrimpingToolPage() {
                 <div className="product-card">
                   <div className="product-img">
                     <img 
-                      src={prod.image} 
+                      src={cld(prod.image)} 
                       alt={prod.title} 
                       className="img-fluid" 
                     />

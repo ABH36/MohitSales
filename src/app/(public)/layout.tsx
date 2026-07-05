@@ -117,8 +117,11 @@ export default function RootLayout({
       <head>
         <link rel="shortcut icon" type="image/x-icon" href="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167895/mohit/favicon/favicon.png" />
 
-        {/* ── Preload LCP image (banner) — browser downloads immediately ── */}
-        <link rel="preload" as="image" href="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167821/mohit/banner/desktop/cable.webp" type="image/webp" />
+        {/* ── Preload LCP image (banner) — browser downloads immediately.
+             URL carries f_auto,q_auto to match BannerSlider's rendered
+             background so the preload is reused (no duplicate download).
+             `type` is omitted because f_auto may deliver AVIF or WebP. ── */}
+        <link rel="preload" as="image" href="https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/v1783167821/mohit/banner/desktop/cable.webp" />
 
         {/* ── DNS prefetch for external domains ── */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />

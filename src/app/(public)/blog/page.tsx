@@ -3,6 +3,7 @@ import { getSeoMetadata } from '@/lib/seo';
 import React from 'react';
 import Link from 'next/link';
 import prisma from '@/lib/prisma';
+import { cld } from '@/lib/cloudinary';
 
 export const dynamic = 'force-dynamic';
 
@@ -56,7 +57,7 @@ export default async function BlogPage({
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167900/mohit/inner-banner/about-us.png')", filter: "brightness(0.65)" }}
+          style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167900/mohit/inner-banner/about-us.png')}')`, filter: "brightness(0.65)" }}
         ></div>
         <div className="container">
           <div className="row">

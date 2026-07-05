@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import React, { useRef, useEffect } from 'react';
+import { cld } from '@/lib/cloudinary';
 
 export default function IndustriesSlider() {
   const swiperRef = useRef<HTMLDivElement>(null);
@@ -72,7 +73,7 @@ export default function IndustriesSlider() {
                 <div key={index} className="swiper-slide">
                   <div className="rs-portfolio-item">
                     <div className="rs-portfolio-thumb">
-                      <img src={ind.image} alt={ind.name} />
+                      <img src={cld(ind.image)} alt={ind.name} />
                     </div>
                     <div className="rs-portfolio-content">
                       <h4 className="rs-portfolio-title">

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { cld } from '@/lib/cloudinary';
 
 export default function PricelistPage() {
   const [activeTab, setActiveTab] = useState<'polycab' | 'dowells'>('polycab');
@@ -75,7 +76,7 @@ export default function PricelistPage() {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167905/mohit/inner-banner/pricelist.png')" }}
+          style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167905/mohit/inner-banner/pricelist.png')}')` }}
         ></div>
         <div className="container">
           <div className="row">
@@ -129,7 +130,7 @@ export default function PricelistPage() {
                   <div key={idx} className="col-lg-4 col-md-6 mb-4">
                     <div className="pricelist-card">
                       <div className="pricelist-image">
-                        <img src={item.image} alt={item.title} />
+                        <img src={cld(item.image)} alt={item.title} />
                       </div>
                       <div className="pricelist-title">
                         <p>{item.title}</p>
@@ -149,7 +150,7 @@ export default function PricelistPage() {
                   <div key={idx} className="col-lg-4 col-md-6 mb-4">
                     <div className="pricelist-card">
                       <div className="pricelist-image">
-                        <img src={item.image} alt={item.title} />
+                        <img src={cld(item.image)} alt={item.title} />
                       </div>
                       <div className="pricelist-title">
                         <p>{item.title}</p>

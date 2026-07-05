@@ -2,6 +2,7 @@ import { getSeoMetadata } from '@/lib/seo';
 ﻿import React from 'react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { cld } from '@/lib/cloudinary';
 
 export async function generateMetadata(): Promise<Metadata> {
   return getSeoMetadata('/resources', {
@@ -35,7 +36,7 @@ export default async function ResourcesPage() {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167900/mohit/inner-banner/about-us.png')" }}
+          style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167900/mohit/inner-banner/about-us.png')}')` }}
         ></div>
         <div className="container">
           <div className="row">

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePublicSettings } from '@/components/PublicSettingsContext';
+import { cld } from '@/lib/cloudinary';
 
 export default function StickySocialMedia() {
   const { getSetting } = usePublicSettings();
@@ -51,13 +52,13 @@ export default function StickySocialMedia() {
       </a>
       <a href="/contact-us#contact-us-form" className="Quote">
         <div className="social_icon" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Image src="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167897/mohit/icon/sign-document-icon.svg" className="img-fluid inline-block" alt="Quote Icon" width={24} height={24} />
+          <Image src={cld("https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167897/mohit/icon/sign-document-icon.svg")} className="img-fluid inline-block" alt="Quote Icon" width={24} height={24} />
         </div>
         Request a Quote
       </a>
       <Link href="/pricelist" className="Twitter">
         <div className="social_icon" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Image src="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167896/mohit/icon/price.png" className="img-fluid tweet inline-block" alt="Pricelist" width={24} height={24} />
+          <Image src={cld("https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167896/mohit/icon/price.png")} className="img-fluid tweet inline-block" alt="Pricelist" width={24} height={24} />
         </div>
         View Pricelist
       </Link>

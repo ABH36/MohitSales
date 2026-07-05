@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import AdminShell from '../components/AdminShell';
 import prisma from '@/lib/prisma';
+import { cld } from '@/lib/cloudinary';
 
 export const dynamic = 'force-dynamic';
 
@@ -62,7 +63,7 @@ export default async function AdminDashboardPage() {
       {/* Welcome Banner */}
       <div className="admin-welcome-banner">
         <img
-          src="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167908/mohit/logo/msc_logo_without_bg.png"
+          src={cld("https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167908/mohit/logo/msc_logo_without_bg.png")}
           alt="Mohit Sales Corporation"
           className="admin-welcome-logo"
         />

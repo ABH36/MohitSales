@@ -3,6 +3,7 @@ import { getSeoMetadata } from '@/lib/seo';
 import React from 'react';
 import Link from 'next/link';
 import BreadcrumbBanner from '@/components/BreadcrumbBanner';
+import { cld } from '@/lib/cloudinary';
 
 export async function generateMetadata(): Promise<Metadata> {
   return getSeoMetadata('/switchgears', {
@@ -113,7 +114,7 @@ export default function SwitchgearsPage() {
             </div>
             <div className="col-md-4">
               <div className="image-box">
-                <img src="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167986/mohit/switchgears/Polyshield-Logo.png" alt="Polycab Distribution Box" />
+                <img src={cld("https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167986/mohit/switchgears/Polyshield-Logo.png")} alt="Polycab Distribution Box" />
               </div>
             </div>
           </div>
@@ -125,7 +126,7 @@ export default function SwitchgearsPage() {
                 <div className="feature-card">
                   {!feat.imgRight && (
                     <div className="feature-image">
-                      <img src={feat.image} alt={feat.title} />
+                      <img src={cld(feat.image)} alt={feat.title} loading="lazy" decoding="async" />
                     </div>
                   )}
                   <div className="feature-content">
@@ -134,7 +135,7 @@ export default function SwitchgearsPage() {
                   </div>
                   {feat.imgRight && (
                     <div className="feature-image">
-                      <img src={feat.image} alt={feat.title} />
+                      <img src={cld(feat.image)} alt={feat.title} loading="lazy" decoding="async" />
                     </div>
                   )}
                 </div>
@@ -152,7 +153,7 @@ export default function SwitchgearsPage() {
                 <div className="mcb-card">
                   <Link href={card.link}>
                     <div className="mcb-image">
-                      <img src={card.image} alt={card.title} />
+                      <img src={cld(card.image)} alt={card.title} />
                     </div>
                     <div className="mcb-content">
                       <div className="mcb-title">{card.title}</div>
@@ -168,7 +169,7 @@ export default function SwitchgearsPage() {
                 <div className="mcb-card">
                   <Link href={card.link}>
                     <div className="mcb-image">
-                      <img src={card.image} alt={card.title} />
+                      <img src={cld(card.image)} alt={card.title} />
                     </div>
                     <div className="mcb-content">
                       <div className="mcb-title">{card.title}</div>
@@ -184,7 +185,7 @@ export default function SwitchgearsPage() {
                 <div className="mcb-card">
                   <Link href={card.link}>
                     <div className="mcb-image">
-                      <img src={card.image} alt={card.title} />
+                      <img src={cld(card.image)} alt={card.title} />
                     </div>
                     <div className="mcb-content">
                       <div className="mcb-title">{card.title}</div>

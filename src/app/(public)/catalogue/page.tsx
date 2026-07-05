@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { getSeoMetadata } from '@/lib/seo';
 ﻿import React from 'react';
 import Link from 'next/link';
+import { cld } from '@/lib/cloudinary';
 
 export async function generateMetadata(): Promise<Metadata> {
   return getSeoMetadata('/catalogue', {
@@ -67,7 +68,7 @@ export default function CataloguePage() {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167902/mohit/inner-banner/catalogue.png')" }}
+          style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167902/mohit/inner-banner/catalogue.png')}')` }}
         ></div>
         <div className="container">
           <div className="row">
@@ -103,7 +104,7 @@ export default function CataloguePage() {
             {catalogs.map((cat, idx) => (
               <div key={idx} className="col-lg-3 col-md-4 col-sm-6 mb-4">
                 <Link href={cat.link} className="catalogue-card">
-                  <img src={cat.image} alt={cat.title} />
+                  <img src={cld(cat.image)} alt={cat.title} />
                   <h5>{cat.title}</h5>
                 </Link>
               </div>

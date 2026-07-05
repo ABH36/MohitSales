@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { cld } from '@/lib/cloudinary';
 
 interface BannerItem {
   id: string;
@@ -85,7 +86,7 @@ export default function BannerSlider() {
                 className={`swiper-slide ${index === activeIndex ? 'swiper-slide-active' : ''}`}
                 onClick={() => handleSlideClick(index)}
                 style={{
-                  backgroundImage: `url('${banner}')`,
+                  backgroundImage: `url('${cld(banner)}')`,
                   position: 'absolute',
                   opacity: index === activeIndex ? 1 : 0,
                   transition: 'opacity 1s ease-in-out',
@@ -129,7 +130,7 @@ export default function BannerSlider() {
                 className={`swiper-slide ${index === activeIndex ? 'swiper-slide-active' : ''}`}
                 onClick={() => handleSlideClick(index)}
                 style={{
-                  backgroundImage: `url('${banner}')`,
+                  backgroundImage: `url('${cld(banner)}')`,
                   position: 'absolute',
                   opacity: index === activeIndex ? 1 : 0,
                   transition: 'opacity 1s ease-in-out',

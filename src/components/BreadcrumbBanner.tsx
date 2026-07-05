@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import { cld } from '@/lib/cloudinary';
 
 export interface Crumb {
   label: string;
@@ -28,7 +29,7 @@ export default function BreadcrumbBanner({
 }) {
   return (
     <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
-      <div className="rs-breadcrumb-bg" style={{ backgroundImage: `url('${bannerImage}')` }}></div>
+      <div className="rs-breadcrumb-bg" style={{ backgroundImage: `url('${cld(bannerImage)}')` }}></div>
       <div className="container">
         <div className="row">
           <div className="w-full">

@@ -1,5 +1,6 @@
 import React from 'react';
 import BreadcrumbBanner, { BANNER } from '@/components/BreadcrumbBanner';
+import { cld } from '@/lib/cloudinary';
 
 export interface CatalogueItem {
   title: string;
@@ -45,7 +46,7 @@ export default function CatalogueGrid({
                 <div className="catalogue-card">
                   <a href={cat.pdf} className="catalogue-link" target="_blank" rel="noopener noreferrer">
                     <div className="catalogue-img">
-                      <img src={cat.image} alt={cat.title} loading="lazy" decoding="async" />
+                      <img src={cld(cat.image)} alt={cat.title} loading="lazy" decoding="async" />
                     </div>
                     <div className="catalogue-content">
                       <h3>{cat.title}</h3>

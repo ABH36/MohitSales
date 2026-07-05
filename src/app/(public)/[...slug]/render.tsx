@@ -1,5 +1,6 @@
 import React from 'react';
 import { sanitizeHtml } from '@/lib/utils';
+import { cld } from '@/lib/cloudinary';
 
 export function renderDbProduct(dbProduct: any, productJson: any = null, legacyImage: string | null = null, legacyFeatures: string[] = []) {
   const breadcrumbs = [];
@@ -71,7 +72,7 @@ export function renderDbProduct(dbProduct: any, productJson: any = null, legacyI
     return (
       <main>
         <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
-          <div className="rs-breadcrumb-bg" style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')" }}></div>
+          <div className="rs-breadcrumb-bg" style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')}')` }}></div>
           <div className="container">
             <div className="row">
               <div className="w-full">
@@ -117,7 +118,7 @@ export function renderDbProduct(dbProduct: any, productJson: any = null, legacyI
                             <div className="col-md-6 text-center">
                               {card.image && (
                                 <img
-                                  src={card.image}
+                                  src={cld(card.image)}
                                   alt={card.title || 'Product'}
                                   className="product-img img-fluid"
                                   loading="lazy"
@@ -152,7 +153,7 @@ export function renderDbProduct(dbProduct: any, productJson: any = null, legacyI
                           <div className="p-[15px] bg-white d-flex justify-content-center align-items-center">
                             {card.image && (
                               <img
-                                src={card.image}
+                                src={cld(card.image)}
                                 alt={card.title || 'Product'}
                                 className="w-full h-[250px] object-contain rounded-[10px] shadow-[0_1px_2px_rgba(60,64,67,0.3),0_2px_6px_2px_rgba(60,64,67,0.15)] transition-transform duration-300 group-hover:scale-105"
                                 loading="lazy"
@@ -191,7 +192,7 @@ export function renderDbProduct(dbProduct: any, productJson: any = null, legacyI
   return (
     <main>
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
-        <div className="rs-breadcrumb-bg" style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')" }}></div>
+        <div className="rs-breadcrumb-bg" style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')}')` }}></div>
         <div className="container">
           <div className="row">
             <div className="w-full">
@@ -340,7 +341,7 @@ export function renderDbCategory(cat: any) {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')" }}
+          style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')}')` }}
         ></div>
         <div className="container">
           <div className="row">
@@ -383,7 +384,7 @@ export function renderDbCategory(cat: any) {
                   <div key={child.id} className="col-lg-3 col-md-4 col-sm-6 mt-4">
                     <a href={`/${child.slug}`} className="db-subcategory-card">
                       {child.image ? (
-                        <img src={child.image} alt={child.name} className="db-subcategory-img" />
+                        <img src={cld(child.image)} alt={child.name} className="db-subcategory-img" />
                       ) : (
                         <div className="db-subcategory-icon">
                           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#f7931e" strokeWidth="1.5">
@@ -459,7 +460,7 @@ export function renderDbCategory(cat: any) {
                 {cat.image && (
                   <div className="col-lg-5 col-md-6 mb-4 mb-md-0 text-center">
                     <img
-                      src={cat.image}
+                      src={cld(cat.image)}
                       alt={cat.name}
                       style={{ maxWidth: '100%', maxHeight: '400px', objectFit: 'contain', borderRadius: '12px', boxShadow: '0 12px 30px rgba(0,0,0,0.12)', border: '1px solid rgba(0,0,0,0.08)' }}
                     />
@@ -515,7 +516,7 @@ export function renderProductLayout(isMultiProduct: boolean, product: any, clean
                           <div className="col-md-6 text-center">
                             {card.image && (
                               <img
-                                src={card.image}
+                                src={cld(card.image)}
                                 alt={card.title || 'Product'}
                                 className="product-img img-fluid"
                                 loading="lazy"
@@ -550,7 +551,7 @@ export function renderProductLayout(isMultiProduct: boolean, product: any, clean
                         <div className="p-[15px] bg-white d-flex justify-content-center align-items-center">
                           {card.image && (
                             <img
-                              src={card.image}
+                              src={cld(card.image)}
                               alt={card.title || 'Product'}
                               className="w-full h-[250px] object-contain rounded-[10px] shadow-[0_1px_2px_rgba(60,64,67,0.3),0_2px_6px_2px_rgba(60,64,67,0.15)] transition-transform duration-300 group-hover:scale-105"
                               loading="lazy"

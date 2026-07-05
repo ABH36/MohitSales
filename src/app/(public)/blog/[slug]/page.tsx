@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import prisma from '@/lib/prisma';
 import { sanitizeHtml } from '@/lib/utils';
+import { cld } from '@/lib/cloudinary';
 
 export const dynamic = 'force-dynamic';
 
@@ -125,7 +126,7 @@ export default async function BlogDetailsPage({ params }: BlogDetailsPageProps) 
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167900/mohit/inner-banner/about-us.png')", filter: "brightness(0.65)" }}
+          style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167900/mohit/inner-banner/about-us.png')}')`, filter: "brightness(0.65)" }}
         ></div>
         <div className="container">
           <div className="row">

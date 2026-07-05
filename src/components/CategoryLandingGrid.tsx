@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import BreadcrumbBanner, { type Crumb } from '@/components/BreadcrumbBanner';
+import { cld } from '@/lib/cloudinary';
 
 /** @deprecated use `Crumb` from BreadcrumbBanner — kept as an alias for callers. */
 export type LandingCrumb = Crumb;
@@ -43,7 +44,7 @@ export default function CategoryLandingGrid({
                 {items.map((item, idx) => (
                   <div key={idx} className="product-card">
                     <Link href={item.link}>
-                      <img src={item.image} alt={item.title} loading="lazy" decoding="async" />
+                      <img src={cld(item.image)} alt={item.title} loading="lazy" decoding="async" />
                       <h3>{item.title}</h3>
                       <div className="pricelist-button">
                         <span className="pricelist-btn">{buttonLabel}</span>
