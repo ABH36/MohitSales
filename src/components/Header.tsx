@@ -25,37 +25,37 @@ const DEFAULT_MENU_TREE: NavItem[] = [
     children: [
       {
         id: 'cba-static',
-        slug: 'polycab/cables-by-application',
+        slug: 'industries/cables-by-application',
         name: 'Cables By Application',
         children: [
-          { id: 'cba-1', name: 'Building Infrastructure', slug: 'polycab/cables-by-application/building-infrastructure', children: [] },
-          { id: 'cba-2', name: 'Energy And Power Grid', slug: 'polycab/cables-by-application/energy-and-power-grid', children: [] },
-          { id: 'cba-3', name: 'Exploration Industries', slug: 'polycab/cables-by-application/exploration-industries', children: [] },
-          { id: 'cba-4', name: 'Manufacturing Industries', slug: 'polycab/cables-by-application/manufacturing-industries', children: [] },
-          { id: 'cba-5', name: 'Mobility Infrastructure', slug: 'polycab/cables-by-application/mobility-infrastructure', children: [] }
+          { id: 'cba-1', name: 'Building Infrastructure', slug: 'industries/cables-by-application/building-infrastructure', children: [] },
+          { id: 'cba-2', name: 'Energy And Power Grid', slug: 'industries/cables-by-application/energy-and-power-grid', children: [] },
+          { id: 'cba-3', name: 'Exploration Industries', slug: 'industries/cables-by-application/exploration-industries', children: [] },
+          { id: 'cba-4', name: 'Manufacturing Industries', slug: 'industries/cables-by-application/manufacturing-industries', children: [] },
+          { id: 'cba-5', name: 'Mobility Infrastructure', slug: 'industries/cables-by-application/mobility-infrastructure', children: [] }
         ]
       },
       {
         id: 'cbs-static',
-        slug: 'polycab/cables-by-standards',
+        slug: 'industries/cables-by-standards',
         name: 'Cables By Standards',
         children: [
-          { id: 'cbs-1', name: 'Indian Standards (IS)', slug: 'polycab/cables-by-standards/indian-standards', children: [] },
-          { id: 'cbs-2', name: 'International Standards', slug: 'polycab/cables-by-standards/international-standards', children: [] }
+          { id: 'cbs-1', name: 'Indian Standards (IS)', slug: 'industries/cables-by-standards/indian-standards', children: [] },
+          { id: 'cbs-2', name: 'International Standards', slug: 'industries/cables-by-standards/international-standards', children: [] }
         ]
       },
       {
         id: 'cbt-static',
-        slug: 'polycab/cables-by-type',
+        slug: 'industries/cables-by-type',
         name: 'Cables By Type',
         children: [
-          { id: 'cbt-1', name: 'LV Power Cable', slug: 'polycab/cables-by-type/lv-power-cable', children: [] },
-          { id: 'cbt-2', name: 'MV Power Cable', slug: 'polycab/cables-by-type/mv-power-cable', children: [] },
-          { id: 'cbt-3', name: 'EHV Power Cable', slug: 'polycab/cables-by-type/ehv-power-cable', children: [] },
-          { id: 'cbt-4', name: 'Instrumentation Cable', slug: 'polycab/cables-by-type/instrumentation-cable', children: [] },
-          { id: 'cbt-5', name: 'Communication & Data Cable', slug: 'polycab/cables-by-type/communication-and-data-cable', children: [] },
-          { id: 'cbt-6', name: 'Renewable Energy', slug: 'polycab/cables-by-type/renewable-energy', children: [] },
-          { id: 'cbt-7', name: 'Others', slug: 'polycab/cables-by-type/others', children: [] }
+          { id: 'cbt-1', name: 'LV Power Cable', slug: 'industries/cables-by-type/lv-power-cable', children: [] },
+          { id: 'cbt-2', name: 'MV Power Cable', slug: 'industries/cables-by-type/mv-power-cable', children: [] },
+          { id: 'cbt-3', name: 'EHV Power Cable', slug: 'industries/cables-by-type/ehv-power-cable', children: [] },
+          { id: 'cbt-4', name: 'Instrumentation Cable', slug: 'industries/cables-by-type/instrumentation-cable', children: [] },
+          { id: 'cbt-5', name: 'Communication & Data Cable', slug: 'industries/cables-by-type/communication-and-data-cable', children: [] },
+          { id: 'cbt-6', name: 'Renewable Energy', slug: 'industries/cables-by-type/renewable-energy', children: [] },
+          { id: 'cbt-7', name: 'Others', slug: 'industries/cables-by-type/others', children: [] }
         ]
       },
       { id: 'sg-static', slug: 'polycab/switchgears', name: 'Switchgears', children: [] },
@@ -87,7 +87,10 @@ export default function Header() {
   const [openSubmenus, setOpenSubmenus] = useState<Record<string, boolean>>({});
 
 
-  const [menuTree, setMenuTree] = useState<NavItem[]>(DEFAULT_MENU_TREE);
+  // Curated static navigation. This is intentional and richer than the DB
+  // category tree (which only has Polycab/Dowells roots), so the menu is a
+  // fixed const rather than DB-driven state.
+  const menuTree = DEFAULT_MENU_TREE;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -95,22 +98,6 @@ export default function Header() {
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Fetch dynamic categories tree on mount
-  useEffect(() => {
-    async function loadNavigation() {
-      try {
-        const res = await fetch('/api/public/navigation');
-        const data = await res.json();
-        if (data.success && Array.isArray(data.data) && data.data.length > 0) {
-          // setMenuTree(data.data); // Disabled to show static products
-        }
-      } catch (err) {
-        console.error('Error loading navigation:', err);
-      }
-    }
-    // loadNavigation(); // Do not sync with prisma existing data
   }, []);
 
   if (pathname?.startsWith('/admin')) {
