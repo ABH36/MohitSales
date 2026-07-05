@@ -18,6 +18,10 @@ jobs:
       DATABASE_URL: "postgresql://ci:ci@localhost:5432/ci?schema=public"
       NEXT_PUBLIC_BASE_URL: "https://mohitscpl.com"
       NEXT_TELEMETRY_DISABLED: "1"
+      # Build-only dummy — auth.ts fails fast if JWT_SECRET is unset (it is
+      # imported while Next collects page data for the /api/admin/auth/* routes).
+      # Not a real secret; no tokens are signed/verified during a build.
+      JWT_SECRET: "ci-build-only-placeholder-secret"
 
     steps:
       - name: Checkout repository
