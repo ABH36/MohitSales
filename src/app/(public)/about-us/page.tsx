@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import prisma from '@/lib/prisma';
+import { sanitizeHtml } from '@/lib/utils';
 
 import { Metadata } from 'next';
 import { getSeoMetadata } from '@/lib/seo';
@@ -78,7 +79,7 @@ export default async function AboutUsPage() {
             
             <div className="prabhat-about" id="prabhat-wire-llp">
               <h3>{aboutData.title}</h3>
-              <div dangerouslySetInnerHTML={{ __html: aboutData.content }} />
+              <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(aboutData.content) }} />
 
               <div className="core-values llp">
                 <h4>Our Authorised Brands & Product Portfolio</h4>

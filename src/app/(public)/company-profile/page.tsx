@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import prisma from '@/lib/prisma';
+import { sanitizeHtml } from '@/lib/utils';
 
 import { Metadata } from 'next';
 import { getSeoMetadata } from '@/lib/seo';
@@ -75,7 +76,7 @@ export default async function CompanyProfilePage() {
             </div>
             
             <div className="prabhat-about w-full" id="company-profile-content">
-              <div className="mb-5" dangerouslySetInnerHTML={{ __html: profileData.content }} />
+              <div className="mb-5" dangerouslySetInnerHTML={{ __html: sanitizeHtml(profileData.content) }} />
 
               {profileData.extraField && (
                 <div className="d-flex justify-content-start mt-4">
