@@ -35,6 +35,9 @@ desktop.ini
 .vscode/
 .idea/
 .claude/
+
+# ─── Local scratchpad (throwaway investigation scripts) ─
+scratch/
 *.suo
 *.ntvs*
 *.njsproj
