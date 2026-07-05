@@ -9,7 +9,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: 'Home Appliances | Polycab Fans, Wires & Switches | Mohit Sales Corporation',
       description: 'Authorized dealer of Polycab home appliances in Indore. Ceiling fans, wires, switches, modular accessories, and electrical fittings for home and office.',
-      url: 'https://mohit.bdm.co.in/home-appliances',
+      url: 'https://mohitscpl.com/home-appliances',
       siteName: 'Mohit Sales Corporation Pvt. Ltd.',
       type: 'website',
     },
@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: 'Home Appliances | Polycab Fans, Wires & Switches | Mohit Sales Corporation',
       description: 'Authorized dealer of Polycab home appliances in Indore.',
     },
-    alternates: { canonical: 'https://mohit.bdm.co.in/home-appliances' },
+    alternates: { canonical: 'https://mohitscpl.com/home-appliances' },
   });
 }
 

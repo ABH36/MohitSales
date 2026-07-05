@@ -10,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: 'Solar Catalogue | Polycab Solar DC Cables & Panel Specs | Mohit Sales Corporation',
       description: 'Download the complete Polycab solar products catalogue — solar DC cables, solar panels, grid-tie inverters, and DC MCBs.',
-      url: 'https://mohit.bdm.co.in/solar-catalogue',
+      url: 'https://mohitscpl.com/solar-catalogue',
       siteName: 'Mohit Sales Corporation Pvt. Ltd.',
       type: 'website',
     },
@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: 'Solar Catalogue | Polycab Solar DC Cables & Panel Specs | Mohit Sales Corporation',
       description: 'Download the complete Polycab solar products catalogue.',
     },
-    alternates: { canonical: 'https://mohit.bdm.co.in/solar-catalogue' },
+    alternates: { canonical: 'https://mohitscpl.com/solar-catalogue' },
   });
 }
 

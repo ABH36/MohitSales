@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   openGraph: {
     title: 'Resources & Downloads | Mohit Sales Corporation Pvt. Ltd.',
     description: 'Download product brochures, technical specifications, and installation guides for Polycab cables, wires, switchgears, fans, and Dowells cable terminals.',
-    url: 'https://mohit.bdm.co.in/resources',
+    url: 'https://mohitscpl.com/resources',
     siteName: 'Mohit Sales Corporation Pvt. Ltd.',
     type: 'website',
   },
@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: 'Resources & Downloads | Mohit Sales Corporation Pvt. Ltd.',
     description: 'Download product brochures, technical specifications, and installation guides for Polycab and Dowells products.',
   },
-  alternates: { canonical: 'https://mohit.bdm.co.in/resources' },
+  alternates: { canonical: 'https://mohitscpl.com/resources' },
 });
 };
 

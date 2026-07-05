@@ -9,7 +9,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: 'Solar Products | Polycab Solar DC Cables & Systems | Mohit Sales Corporation',
       description: 'Authorized distributor of Polycab solar DC cables, solar wires, and solar power accessories in Indore.',
-      url: 'https://mohit.bdm.co.in/solar',
+      url: 'https://mohitscpl.com/solar',
       siteName: 'Mohit Sales Corporation Pvt. Ltd.',
       type: 'website',
     },
@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: 'Solar Products | Polycab Solar DC Cables & Systems | Mohit Sales Corporation',
       description: 'Authorized distributor of Polycab solar DC cables and solar accessories in Indore.',
     },
-    alternates: { canonical: 'https://mohit.bdm.co.in/solar' },
+    alternates: { canonical: 'https://mohitscpl.com/solar' },
   });
 }
 

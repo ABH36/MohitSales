@@ -8,6 +8,7 @@ import ScrollReveal from '@/components/ScrollReveal';
 import NonCriticalCSS from '@/components/NonCriticalCSS';
 import GoogleFontsLoader from '@/components/GoogleFontsLoader';
 import PublicSettingsProvider from '@/components/PublicSettingsContext';
+import OrganizationSchema from '@/components/OrganizationSchema';
 import prisma from '@/lib/prisma';
 import './globals.css';
 
@@ -61,6 +62,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title,
     description,
     keywords,
+    alternates: { canonical: 'https://mohitscpl.com' },
     openGraph: {
       title: homepageMeta?.ogTitle || title,
       description,
@@ -168,6 +170,7 @@ export default function RootLayout({
         ` }} />
       </head>
       <body className="ltr" suppressHydrationWarning={true}>
+        <OrganizationSchema />
         <PublicSettingsProvider>
           <GoogleFontsLoader />
           <AnimationLoader />

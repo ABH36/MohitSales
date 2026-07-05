@@ -1,6 +1,4 @@
 import { MetadataRoute } from 'next';
-import fs from 'fs';
-import path from 'path';
 import prisma from '@/lib/prisma';
 import { LRUCache } from 'lru-cache';
 
@@ -16,7 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return cachedSitemap;
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://mohit.bdm.co.in';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://mohitscpl.com';
 
   // 1. Static routes (All core navigation routes)
   const staticPaths = [
@@ -72,34 +70,35 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Error fetching inactive/out of stock products for exclusion:', error);
   }
 
-  // 2. Generate dynamic routes from JSON file (legacy content)
-  let jsonRoutes: MetadataRoute.Sitemap = [];
+  // 2. Dynamic routes from the PageContent table (the ~4,339 stored HTML pages).
+  // This is authoritative and covers every content page (the old content-export.json
+  // source was removed and no longer exists). Two exclusions:
+  //   • slugs matching a permanent redirect (polycab/cables-by-* → industries/*
+  //     in next.config.js) — including them would list URLs that 308-redirect;
+  //   • inactive / out-of-stock product slugs (excludedSlugs), so we never point
+  //     crawlers at a page the product routes intentionally drop.
+  // Overlaps with static/product/category routes are merged by the URL de-dup
+  // in step 4, so listing every active page here is safe.
+  const REDIRECTED_PREFIX = /^polycab\/cables-by-(application|type|standards)(\/|$)/i;
+  let pageContentRoutes: MetadataRoute.Sitemap = [];
   try {
-    const jsonPath = path.join(process.cwd(), 'content-export.json');
-    if (fs.existsSync(jsonPath)) {
-      const rawData = await fs.promises.readFile(jsonPath, 'utf-8');
-      const dataList = JSON.parse(rawData);
-
-      jsonRoutes = dataList
-        .map((item: any) => {
-          // Clean path: "cable-terminal/aluminium.php" -> "/cable-terminal/aluminium"
-          const cleanPath = item.path.replace(/\.php$/i, '').trim();
-          return {
-            url: `${baseUrl}/${cleanPath}`,
-            pathKey: cleanPath.toLowerCase(),
-            lastModified: new Date(),
-            changeFrequency: 'monthly' as const,
-            priority: 0.6,
-          };
-        })
-        .filter((route: any) => !excludedSlugs.has(route.pathKey))
-        .map((route: any) => {
-          const { pathKey, ...rest } = route;
-          return rest;
-        });
-    }
+    const pages = await prisma.pageContent.findMany({
+      where: { isActive: true },
+      select: { slug: true, updatedAt: true },
+    });
+    pageContentRoutes = pages
+      .filter((p) => {
+        const key = p.slug.toLowerCase().trim();
+        return !REDIRECTED_PREFIX.test(key) && !excludedSlugs.has(key);
+      })
+      .map((p) => ({
+        url: `${baseUrl}/${p.slug}`,
+        lastModified: p.updatedAt,
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+      }));
   } catch (error) {
-    console.error('Error generating sitemap JSON routes:', error);
+    console.error('Error generating sitemap PageContent routes:', error);
   }
 
   // 3. Generate dynamic routes from Database (Products, Categories, and Blogs)
@@ -146,12 +145,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Error generating sitemap DB routes:', error);
   }
 
-  // 4. Combine and Deduplicate by URL
-  const allRoutes = [...staticRoutes, ...jsonRoutes, ...dbRoutes];
+  // 4. Combine, drop URLs that permanently redirect, and de-duplicate by URL.
+  // The redirect filter runs on ALL sources (not just pageContent) because a
+  // product/category can also carry a redirected slug — e.g. the bare
+  // `polycab/cables-by-*` section pages exist as products but 308 to
+  // /industries/* (next.config.js). Listing a redirecting URL in the sitemap is
+  // a crawl-hygiene error, so exclude the whole redirected subtree + legacy
+  // homepage aliases here.
+  const isRedirected = (url: string): boolean => {
+    const p = url.replace(baseUrl, '').replace(/^\//, '').toLowerCase();
+    return REDIRECTED_PREFIX.test(p) || p === 'index' || p === 'index-old';
+  };
+
+  const allRoutes = [...staticRoutes, ...pageContentRoutes, ...dbRoutes];
   const uniqueUrls = new Set<string>();
   const uniqueRoutes: MetadataRoute.Sitemap = [];
 
   for (const route of allRoutes) {
+    if (isRedirected(route.url)) continue;
     const urlLower = route.url.toLowerCase();
     if (!uniqueUrls.has(urlLower)) {
       uniqueUrls.add(urlLower);

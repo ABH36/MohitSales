@@ -4,7 +4,7 @@ import prisma from '@/lib/prisma';
 export const dynamic = 'force-dynamic';
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://mohit.bdm.co.in';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://mohitscpl.com';
 
   // Try fetching admin-managed rules from DB first
   try {

@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   openGraph: {
     title: 'Certificates & Authorizations | Mohit Sales Corporation Pvt. Ltd.',
     description: 'View the certificates, authorizations, and dealer credentials of Mohit Sales Corporation Pvt. Ltd. — authorized distributor for Polycab and Dowells in Indore.',
-    url: 'https://mohit.bdm.co.in/certificates',
+    url: 'https://mohitscpl.com/certificates',
     siteName: 'Mohit Sales Corporation Pvt. Ltd.',
     type: 'website',
   },
@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: 'Certificates & Authorizations | Mohit Sales Corporation Pvt. Ltd.',
     description: 'Authorized distributor certificates for Polycab and Dowells — Mohit Sales Corporation Pvt. Ltd., Indore.',
   },
-  alternates: { canonical: 'https://mohit.bdm.co.in/certificates' },
+  alternates: { canonical: 'https://mohitscpl.com/certificates' },
 });
 };
 

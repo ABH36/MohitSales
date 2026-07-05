@@ -10,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: 'Switchgear Catalogue | Polycab MCBs, RCCBs & DBs | Mohit Sales Corporation',
       description: 'Download the complete Polycab switchgear catalogue — MCBs, RCCBs, MCCBs, distribution boards, and protection devices.',
-      url: 'https://mohit.bdm.co.in/switchgear-catalogue',
+      url: 'https://mohitscpl.com/switchgear-catalogue',
       siteName: 'Mohit Sales Corporation Pvt. Ltd.',
       type: 'website',
     },
@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: 'Switchgear Catalogue | Polycab MCBs, RCCBs & DBs | Mohit Sales Corporation',
       description: 'Download the complete Polycab switchgear catalogue — MCBs, RCCBs, MCCBs and distribution boards.',
     },
-    alternates: { canonical: 'https://mohit.bdm.co.in/switchgear-catalogue' },
+    alternates: { canonical: 'https://mohitscpl.com/switchgear-catalogue' },
   });
 }
 

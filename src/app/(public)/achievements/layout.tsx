@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   openGraph: {
     title: 'Awards & Achievements | Mohit Sales Corporation Pvt. Ltd.',
     description: 'Discover the awards, recognitions, and milestones achieved by Mohit Sales Corporation Pvt. Ltd. — trusted Polycab and Dowells distributor in Indore.',
-    url: 'https://mohit.bdm.co.in/achievements',
+    url: 'https://mohitscpl.com/achievements',
     siteName: 'Mohit Sales Corporation Pvt. Ltd.',
     type: 'website',
   },
@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: 'Awards & Achievements | Mohit Sales Corporation Pvt. Ltd.',
     description: 'Awards and recognitions earned by Mohit Sales Corporation Pvt. Ltd. — Polycab and Dowells distributor in Indore.',
   },
-  alternates: { canonical: 'https://mohit.bdm.co.in/achievements' },
+  alternates: { canonical: 'https://mohitscpl.com/achievements' },
 });
 };
 

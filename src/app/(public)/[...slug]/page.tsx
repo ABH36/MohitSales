@@ -150,6 +150,8 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   return {
     title: `${formattedTitle} - Mohit Sales Corporation Pvt. Ltd.`,
     description: 'Authorized Polycab & Dowells Distributor',
+    alternates: { canonical: pageUrl },
+    openGraph: { url: pageUrl },
   };
 }
 

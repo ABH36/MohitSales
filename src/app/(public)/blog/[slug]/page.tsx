@@ -8,7 +8,7 @@ import { cld } from '@/lib/cloudinary';
 
 export const dynamic = 'force-dynamic';
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://mohit.bdm.co.in';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://mohitscpl.com';
 
 interface BlogDetailsPageProps {
   params: {

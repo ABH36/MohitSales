@@ -10,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: 'Fans Catalogue | Polycab Ceiling, Table & Exhaust Fans | Mohit Sales Corporation',
       description: 'Browse the complete Polycab fans catalogue — ceiling fans, table fans, wall fans, exhaust fans, and BLDC energy-saving fans.',
-      url: 'https://mohit.bdm.co.in/fans-catalogue',
+      url: 'https://mohitscpl.com/fans-catalogue',
       siteName: 'Mohit Sales Corporation Pvt. Ltd.',
       type: 'website',
     },
@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: 'Fans Catalogue | Polycab Ceiling, Table & Exhaust Fans | Mohit Sales Corporation',
       description: 'Browse the complete Polycab fans catalogue — ceiling, table, wall, exhaust, and BLDC fans.',
     },
-    alternates: { canonical: 'https://mohit.bdm.co.in/fans-catalogue' },
+    alternates: { canonical: 'https://mohitscpl.com/fans-catalogue' },
   });
 }
 

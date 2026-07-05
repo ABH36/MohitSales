@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   openGraph: {
     title: 'Price List | Polycab & Dowells Products | Mohit Sales Corporation',
     description: 'Download the latest Polycab and Dowells price lists — wires, cables, fans, switchgear, and cable terminals. Authorized dealer in Indore.',
-    url: 'https://mohit.bdm.co.in/pricelist',
+    url: 'https://mohitscpl.com/pricelist',
     siteName: 'Mohit Sales Corporation Pvt. Ltd.',
     type: 'website',
   },
@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: 'Price List | Polycab & Dowells Products | Mohit Sales Corporation',
     description: 'Download the latest Polycab and Dowells price lists from authorized dealer Mohit Sales Corporation, Indore.',
   },
-  alternates: { canonical: 'https://mohit.bdm.co.in/pricelist' },
+  alternates: { canonical: 'https://mohitscpl.com/pricelist' },
 });
 };
 

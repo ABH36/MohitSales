@@ -1,9 +1,15 @@
 import { Metadata } from 'next';
 import prisma from '@/lib/prisma';
 
+/** Canonical production origin — single source of truth for absolute URLs. */
+export const SITE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://mohitscpl.com';
+
 export async function getSeoMetadata(pagePath: string, fallback: Metadata): Promise<Metadata> {
   try {
     const cleanPath = pagePath.startsWith('/') ? pagePath : `/${pagePath}`;
+    // Self-referencing canonical by default (best practice); DB value or an
+    // explicit fallback canonical still win.
+    const defaultCanonical = `${SITE_URL}${cleanPath === '/' ? '' : cleanPath}`;
     
     // Look up both exact path and underscore/hyphen alternate versions
     const altPath = cleanPath.includes('_') 
@@ -18,7 +24,11 @@ export async function getSeoMetadata(pagePath: string, fallback: Metadata): Prom
       }
     }).catch(() => null);
 
-    if (!seoMeta) return fallback;
+    // No admin SEO row: use the caller's fallback but ensure a self-referencing
+    // canonical exists (many landing pages pass only title/description).
+    if (!seoMeta) {
+      return fallback.alternates ? fallback : { ...fallback, alternates: { canonical: defaultCanonical } };
+    }
 
     return {
       title: seoMeta.title || (fallback.title as string) || undefined,
@@ -30,9 +40,9 @@ export async function getSeoMetadata(pagePath: string, fallback: Metadata): Prom
         index: !seoMeta.noIndex, 
         follow: !seoMeta.noFollow 
       },
-      alternates: seoMeta.canonicalUrl 
-        ? { canonical: seoMeta.canonicalUrl } 
-        : fallback.alternates || undefined,
+      alternates: seoMeta.canonicalUrl
+        ? { canonical: seoMeta.canonicalUrl }
+        : fallback.alternates || { canonical: defaultCanonical },
       openGraph: {
         ...(fallback.openGraph || {}),
         title: seoMeta.ogTitle || seoMeta.title || (fallback.openGraph?.title as string) || undefined,

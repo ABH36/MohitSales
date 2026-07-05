@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   openGraph: {
     title: 'Contact Us | Mohit Sales Corporation Pvt. Ltd. — Indore',
     description: 'Get in touch with Mohit Sales Corporation Pvt. Ltd. in Indore for Polycab and Dowells product inquiries, pricing, and bulk orders.',
-    url: 'https://mohit.bdm.co.in/contact-us',
+    url: 'https://mohitscpl.com/contact-us',
     siteName: 'Mohit Sales Corporation Pvt. Ltd.',
     type: 'website',
   },
@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: 'Contact Us | Mohit Sales Corporation Pvt. Ltd. — Indore',
     description: 'Contact Mohit Sales Corporation Pvt. Ltd. in Indore for Polycab and Dowells product inquiries.',
   },
-  alternates: { canonical: 'https://mohit.bdm.co.in/contact-us' },
+  alternates: { canonical: 'https://mohitscpl.com/contact-us' },
 });
 };
 
