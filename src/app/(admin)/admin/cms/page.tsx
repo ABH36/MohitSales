@@ -91,7 +91,7 @@ const DEFAULT_ABOUT_US: PageContent = {
 const DEFAULT_COMPANY_PROFILE: PageContent = {
   title: 'Company Profile',
   content: '<p>Mohit Sales Corporation Pvt. Ltd. is a trusted name in the electrical distribution industry. With over 27+ years of experience, we deliver high-quality electrical products and customized solutions to diverse sectors. As an Authorised Distributor of Polycab and Dowells, we ensure our customers receive only genuine, certified products that meet the highest industry standards.</p>',
-  imageUrl: '/assets/images/inner-banner/company-profile.png',
+  imageUrl: 'https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/inner-banner/products.png',
   extraField: '/assets/images/pdf/MOHIT CATALOGUE.pdf',
 };
 
@@ -917,7 +917,7 @@ export default function CmsPage() {
                     placeholder="/assets/images/pdf/MOHIT CATALOGUE.pdf"
                     onChange={e => updatePage('company-profile', 'extraField', e.target.value)} />
                 </div>
-                {renderImageField('Hero Image', pageData['company-profile'].imageUrl, (url) => updatePage('company-profile', 'imageUrl', url), 'profile-img', '/assets/images/inner-banner/company-profile.png')}
+                {renderImageField('Hero Image', pageData['company-profile'].imageUrl, (url) => updatePage('company-profile', 'imageUrl', url), 'profile-img', 'https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/inner-banner/products.png')}
               </div>
             </div>
           )}

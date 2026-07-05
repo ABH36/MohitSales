@@ -3,10 +3,10 @@
 import React, { useRef, useEffect } from 'react';
 import SplitText from './SplitText';
 
-// All 46 brand logos from the clone's assets/images/brand/ directory
+// All 46 brand logos — served from Cloudinary (mohit/brand/brand-thumb-NN)
 const brandImages = Array.from({ length: 46 }, (_, i) => {
   const n = String(i + 1).padStart(2, '0');
-  return `/assets/images/brand/brand-thumb-${n}.png?v=1.1`;
+  return `https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/brand/brand-thumb-${n}.png`;
 });
 
 export default function ClienteleSlider() {

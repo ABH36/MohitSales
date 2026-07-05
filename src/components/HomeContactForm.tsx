@@ -109,7 +109,7 @@ export default function HomeContactForm() {
       <div
         className="rs-contact-bg-thumb"
         data-background={cld("https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167841/mohit/bg/contact-form-bg.webp")}
-        style={{ backgroundImage: "url('/assets/images/bg/contact-bg-04.png')" }}
+        style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/bg/contact-bg-04.png')" }}
       ></div>
       <div className="container">
         <div className="row align-items-xl-center g-5">

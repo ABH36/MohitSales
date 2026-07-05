@@ -31,9 +31,10 @@ yarn-error.log*
 Thumbs.db
 desktop.ini
 
-# ─── Editor ───────────────────────────────────────────
+# ─── Editor / AI tooling (local, per-developer config) ─
 .vscode/
 .idea/
+.claude/
 *.suo
 *.ntvs*
 *.njsproj

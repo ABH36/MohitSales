@@ -410,7 +410,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               // Update image
               const img = newCol.find('img');
               if (img.length) {
-                img.attr('src', prod.imageSrc || '/assets/images/no-image.png');
+                img.attr('src', prod.imageSrc || 'https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/logo/msc_logo_without_bg.png');
                 img.attr('alt', prod.title);
               }
 

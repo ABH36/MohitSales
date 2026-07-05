@@ -70,7 +70,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: 'Mohit Sales Corporation Pvt. Ltd.',
       images: [
         {
-          url: homepageMeta?.ogImage || '/assets/images/logo/logo.png',
+          url: homepageMeta?.ogImage || 'https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/logo/msc_logo_without_bg.png',
           width: 800,
           height: 600,
           alt: 'Mohit Sales Corporation Logo',
@@ -83,7 +83,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: 'summary_large_image',
       title: homepageMeta?.ogTitle || title,
       description,
-      images: [homepageMeta?.ogImage || '/assets/images/logo/logo.png'],
+      images: [homepageMeta?.ogImage || 'https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/logo/msc_logo_without_bg.png'],
     },
     verification: {
       google: codes.webmaster_google || undefined,
