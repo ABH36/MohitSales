@@ -473,7 +473,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <SchemaInjector page={`/${slugPath}`} />
           <main>
             <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
-              <div className="rs-breadcrumb-bg" style={{ backgroundImage: "url('/assets/images/inner-banner/products.png')" }}></div>
+              <div className="rs-breadcrumb-bg" style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')" }}></div>
               <div className="container">
                 <div className="row">
                   <div className="w-full">
@@ -630,7 +630,7 @@ function renderDbProduct(dbProduct: any, productJson: any = null, legacyImage: s
     return (
       <main>
         <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
-          <div className="rs-breadcrumb-bg" style={{ backgroundImage: "url('/assets/images/inner-banner/products.png')" }}></div>
+          <div className="rs-breadcrumb-bg" style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')" }}></div>
           <div className="container">
             <div className="row">
               <div className="w-full">
@@ -750,7 +750,7 @@ function renderDbProduct(dbProduct: any, productJson: any = null, legacyImage: s
   return (
     <main>
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
-        <div className="rs-breadcrumb-bg" style={{ backgroundImage: "url('/assets/images/inner-banner/products.png')" }}></div>
+        <div className="rs-breadcrumb-bg" style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')" }}></div>
         <div className="container">
           <div className="row">
             <div className="w-full">
@@ -899,7 +899,7 @@ function renderDbCategory(cat: any) {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('/assets/images/inner-banner/products.png')" }}
+          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')" }}
         ></div>
         <div className="container">
           <div className="row">

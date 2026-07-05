@@ -31,13 +31,13 @@ export default async function FansCataloguePage() {
     {
       title: 'Polycab Fans Range Catalogue',
       category: 'Fan',
-      image: '/assets/images/catalogue/fans/Fans-Range-Catalogue.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167868/mohit/catalogue/fans/Fans-Range-Catalogue.png',
       pdf: '/assets/images/catalogue/fans/pdf/Fans-Range-Catalogue-2024.pdf'
     },
     {
       title: 'Silencio Mini Catalogue',
       category: 'Fan',
-      image: '/assets/images/catalogue/fans/Updated_Silencio_Mini.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167869/mohit/catalogue/fans/Updated_Silencio_Mini.jpg',
       pdf: '/assets/images/catalogue/fans/pdf/A5_SIZE-Silencio_Mini.pdf'
     }
   ];
@@ -48,7 +48,7 @@ export default async function FansCataloguePage() {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('/assets/images/inner-banner/pricelist.png')" }}
+          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167905/mohit/inner-banner/pricelist.png')" }}
         ></div>
         <div className="container">
           <div className="row">

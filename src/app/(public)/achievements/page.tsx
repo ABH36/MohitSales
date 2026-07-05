@@ -9,12 +9,12 @@ export default function AchievementsPage() {
   const achievements = [
     {
       title: 'APPRECIATION AWARD',
-      image: '/assets/images/certificate/certificate.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167894/mohit/certificate/certificate.png',
       caption: 'APPRECIATION AWARD'
     },
     {
       title: 'LEGACY EXCELLENCE AWARD (FY 2022-23)',
-      image: '/assets/images/certificate/award.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167889/mohit/certificate/award.png',
       caption: 'LEGACY EXCELLENCE AWARD (FY 2022-23)'
     }
   ];
@@ -25,7 +25,7 @@ export default function AchievementsPage() {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('/assets/images/inner-banner/achievement.png')" }}
+          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167901/mohit/inner-banner/achievement.png')" }}
         ></div>
         <div className="container">
           <div className="row">

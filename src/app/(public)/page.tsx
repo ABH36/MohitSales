@@ -66,17 +66,17 @@ export default async function Page() {
   const polycabProducts = [
     {
       title: 'MV Power Cables',
-      image: '/assets/images/our_products/polycab-mv-is-7098-ii-3c-a2xwy.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167948/mohit/our_products/polycab-mv-is-7098-ii-3c-a2xwy.png',
       link: '/industries/cables-by-type/mv-power-cable'
     },
     {
       title: 'LV Power Cables',
-      image: '/assets/images/our_products/polycab-lv-is-7098-i-4c-a2xfy.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167947/mohit/our_products/polycab-lv-is-7098-i-4c-a2xfy.png',
       link: '/industries/cables-by-type/lv-power-cable'
     },
     {
       title: 'EHV Power Cable',
-      image: '/assets/images/our_products/polycab-ehv-cu-al-cor-132kv.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167946/mohit/our_products/polycab-ehv-cu-al-cor-132kv.png',
       link: '/industries/cables-by-type/ehv-power-cable'
     }
   ];
@@ -84,17 +84,17 @@ export default async function Page() {
   const dowellsProducts = [
     {
       title: 'Crimping Tool',
-      image: '/assets/images/our_products/dowells/crimping_tool.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167920/mohit/our_products/dowells/crimping_tool.png',
       link: '/crimping-tool'
     },
     {
       title: 'Gland',
-      image: '/assets/images/our_products/dowells/gland.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167926/mohit/our_products/dowells/gland.png',
       link: '/gland'
     },
     {
       title: 'Cable Terminal',
-      image: '/assets/images/our_products/dowells/cable_terminal.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167915/mohit/our_products/dowells/cable_terminal.png',
       link: '/cable-terminal'
     }
   ];
@@ -143,8 +143,8 @@ export default async function Page() {
         <span className="rs-why-choose-shape gsap-move down-200 start-61"></span>
         <div 
           className="rs-why-choose-bg-thumb" 
-          data-background="/assets/images/bg/background.png"
-          style={{ backgroundImage: "url('/assets/images/bg/background.png')" }}
+          data-background="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167838/mohit/bg/background.png"
+          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167838/mohit/bg/background.png')" }}
         ></div>
         <div className="container">
           <div className="row">
@@ -225,8 +225,8 @@ export default async function Page() {
         </div>
         <div 
           className="rs-why-choose-btn-wrapper" 
-          data-background="/assets/images/why-choose/why_choose.png"
-          style={{ backgroundImage: "url('/assets/images/why-choose/why_choose.png')" }}
+          data-background="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167989/mohit/why-choose/why_choose.png"
+          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167989/mohit/why-choose/why_choose.png')" }}
         ></div>
       </section>
 

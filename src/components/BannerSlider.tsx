@@ -13,23 +13,23 @@ interface BannerItem {
 }
 
 const FALLBACK_DESKTOP = [
-  '/assets/images/banner/desktop/cable.webp',
-  '/assets/images/banner/desktop/polycab.webp',
-  '/assets/images/banner/desktop/fans.webp',
-  '/assets/images/banner/desktop/solar_product.webp',
-  '/assets/images/banner/desktop/switchgear.webp',
-  '/assets/images/banner/desktop/wire.webp',
-  '/assets/images/banner/desktop/dowells.webp',
+  'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167821/mohit/banner/desktop/cable.webp',
+  'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167824/mohit/banner/desktop/polycab.webp',
+  'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167823/mohit/banner/desktop/fans.webp',
+  'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167826/mohit/banner/desktop/solar_product.webp',
+  'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167827/mohit/banner/desktop/switchgear.webp',
+  'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167828/mohit/banner/desktop/wire.webp',
+  'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167822/mohit/banner/desktop/dowells.webp',
 ];
 
 const FALLBACK_MOBILE = [
-  '/assets/images/banner/mobile/cable.webp',
-  '/assets/images/banner/mobile/polycab_banner.webp',
-  '/assets/images/banner/mobile/fans.webp',
-  '/assets/images/banner/mobile/solar_product.webp',
-  '/assets/images/banner/mobile/switchgear.webp',
-  '/assets/images/banner/mobile/wire.webp',
-  '/assets/images/banner/mobile/dowells.webp',
+  'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167829/mohit/banner/mobile/cable.webp',
+  'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167834/mohit/banner/mobile/polycab_banner.webp',
+  'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167833/mohit/banner/mobile/fans.webp',
+  'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167835/mohit/banner/mobile/solar_product.webp',
+  'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167836/mohit/banner/mobile/switchgear.webp',
+  'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167837/mohit/banner/mobile/wire.webp',
+  'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167830/mohit/banner/mobile/dowells.webp',
 ];
 
 export default function BannerSlider() {

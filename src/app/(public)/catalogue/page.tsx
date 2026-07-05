@@ -15,47 +15,47 @@ export default function CataloguePage() {
   const catalogs = [
     {
       title: 'Cables',
-      image: '/assets/images/catalogue/cables.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167845/mohit/catalogue/cables.png',
       link: '/cables-catalogue'
     },
     {
       title: 'Switchgears',
-      image: '/assets/images/catalogue/switchgear.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167886/mohit/catalogue/switchgear.png',
       link: '/switchgear-catalogue'
     },
     {
       title: 'Fans',
-      image: '/assets/images/catalogue/fans.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167867/mohit/catalogue/fans.png',
       link: '/fans-catalogue'
     },
     {
       title: 'Solar',
-      image: '/assets/images/catalogue/solar.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167875/mohit/catalogue/solar.png',
       link: '/solar-catalogue'
     },
     {
       title: 'Conduit & Accessories',
-      image: '/assets/images/catalogue/conduit.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167864/mohit/catalogue/conduit.png',
       link: '/conduit-catalogue'
     },
     {
       title: 'Home Appliances',
-      image: '/assets/images/catalogue/home-appliances.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167871/mohit/catalogue/home-appliances.png',
       link: '/home-appliances-catalogue'
     },
     {
       title: 'Cable Terminal',
-      image: '/assets/images/catalogue/cable-terminal.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167844/mohit/catalogue/cable-terminal.png',
       link: '#'
     },
     {
       title: 'Gland',
-      image: '/assets/images/catalogue/gland.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167870/mohit/catalogue/gland.png',
       link: '#'
     },
     {
       title: 'Crimping Tool',
-      image: '/assets/images/catalogue/crimping-tool.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167866/mohit/catalogue/crimping-tool.png',
       link: '#'
     }
   ];
@@ -67,7 +67,7 @@ export default function CataloguePage() {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('/assets/images/inner-banner/catalogue.png')" }}
+          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167902/mohit/inner-banner/catalogue.png')" }}
         ></div>
         <div className="container">
           <div className="row">

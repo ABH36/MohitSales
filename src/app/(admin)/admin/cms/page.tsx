@@ -31,13 +31,13 @@ const TABS: { key: TabKey; label: string }[] = [
 ];
 
 const DEFAULT_BANNERS: BannerItem[] = [
-  { id: '1', title: 'Cable', desktopImage: '/assets/images/banner/desktop/cable.webp', mobileImage: '/assets/images/banner/mobile/cable.webp', link: '', isActive: true, sortOrder: 0 },
-  { id: '2', title: 'Polycab', desktopImage: '/assets/images/banner/desktop/polycab.webp', mobileImage: '/assets/images/banner/mobile/polycab_banner.webp', link: '', isActive: true, sortOrder: 1 },
-  { id: '3', title: 'Fans', desktopImage: '/assets/images/banner/desktop/fans.webp', mobileImage: '/assets/images/banner/mobile/fans.webp', link: '', isActive: true, sortOrder: 2 },
-  { id: '4', title: 'Solar', desktopImage: '/assets/images/banner/desktop/solar_product.webp', mobileImage: '/assets/images/banner/mobile/solar_product.webp', link: '', isActive: true, sortOrder: 3 },
-  { id: '5', title: 'Switchgear', desktopImage: '/assets/images/banner/desktop/switchgear.webp', mobileImage: '/assets/images/banner/mobile/switchgear.webp', link: '', isActive: true, sortOrder: 4 },
-  { id: '6', title: 'Wire', desktopImage: '/assets/images/banner/desktop/wire.webp', mobileImage: '/assets/images/banner/mobile/wire.webp', link: '', isActive: true, sortOrder: 5 },
-  { id: '7', title: 'Dowells', desktopImage: '/assets/images/banner/desktop/dowells.webp', mobileImage: '/assets/images/banner/mobile/dowells.webp', link: '', isActive: true, sortOrder: 6 },
+  { id: '1', title: 'Cable', desktopImage: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167821/mohit/banner/desktop/cable.webp', mobileImage: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167829/mohit/banner/mobile/cable.webp', link: '', isActive: true, sortOrder: 0 },
+  { id: '2', title: 'Polycab', desktopImage: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167824/mohit/banner/desktop/polycab.webp', mobileImage: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167834/mohit/banner/mobile/polycab_banner.webp', link: '', isActive: true, sortOrder: 1 },
+  { id: '3', title: 'Fans', desktopImage: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167823/mohit/banner/desktop/fans.webp', mobileImage: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167833/mohit/banner/mobile/fans.webp', link: '', isActive: true, sortOrder: 2 },
+  { id: '4', title: 'Solar', desktopImage: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167826/mohit/banner/desktop/solar_product.webp', mobileImage: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167835/mohit/banner/mobile/solar_product.webp', link: '', isActive: true, sortOrder: 3 },
+  { id: '5', title: 'Switchgear', desktopImage: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167827/mohit/banner/desktop/switchgear.webp', mobileImage: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167836/mohit/banner/mobile/switchgear.webp', link: '', isActive: true, sortOrder: 4 },
+  { id: '6', title: 'Wire', desktopImage: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167828/mohit/banner/desktop/wire.webp', mobileImage: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167837/mohit/banner/mobile/wire.webp', link: '', isActive: true, sortOrder: 5 },
+  { id: '7', title: 'Dowells', desktopImage: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167822/mohit/banner/desktop/dowells.webp', mobileImage: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167830/mohit/banner/mobile/dowells.webp', link: '', isActive: true, sortOrder: 6 },
 ];
 
 const DISCOUNT_PRESET = `<div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 36px; text-align: center; color: #fff;">
@@ -71,7 +71,7 @@ const SPOTLIGHT_PRESET = `<div style="display: flex; flex-direction: row; flex-w
       View Catalogue
     </a>
   </div>
-  <div style="flex: 1 1 180px; background: url('/assets/images/banner/desktop/wire.webp') center/cover no-repeat; min-height: 180px;"></div>
+  <div style="flex: 1 1 180px; background: url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167828/mohit/banner/desktop/wire.webp') center/cover no-repeat; min-height: 180px;"></div>
 </div>`;
 
 const DEFAULT_HOMEPAGE_ABOUT: PageContent = {
@@ -84,7 +84,7 @@ const DEFAULT_HOMEPAGE_ABOUT: PageContent = {
 const DEFAULT_ABOUT_US: PageContent = {
   title: 'About Mohit Sales Corporation Pvt. Ltd.',
   content: '<p>Founded in <strong>1997</strong>, Mohit Sales Corporation Pvt. Ltd. has grown into a trusted and leading name in the electrical distribution industry. With <strong>27+ years of experience</strong>, we specialize in delivering high-quality electrical products and solutions across multiple sectors.</p>\n\n<p>As an <strong>Authorised Distributor of Polycab and Dowells</strong> we ensure our customers receive genuine products backed by technical expertise, timely supply, and reliable after-sales support. Our strong industry presence, expert team, and customer-centric approach have enabled us to consistently meet the evolving needs of contractors, industries, retailers, and infrastructure projects.</p>\n\n<p>Mohit Sales Corporation continues to build a reputation for trust, quality, and professionalism—values that form the foundation of our long-standing success.</p>',
-  imageUrl: '/assets/images/inner-banner/about-us.png',
+  imageUrl: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167900/mohit/inner-banner/about-us.png',
   extraField: '',
 };
 
@@ -884,7 +884,7 @@ export default function CmsPage() {
                     value={pageData['about-us'].content} placeholder="<p>Company history...</p>"
                     onChange={e => updatePage('about-us', 'content', e.target.value)} />
                 </div>
-                {renderImageField('Hero Banner Image', pageData['about-us'].imageUrl, (url) => updatePage('about-us', 'imageUrl', url), 'aboutus-img', '/assets/images/inner-banner/about-us.png')}
+                {renderImageField('Hero Banner Image', pageData['about-us'].imageUrl, (url) => updatePage('about-us', 'imageUrl', url), 'aboutus-img', 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167900/mohit/inner-banner/about-us.png')}
               </div>
             </div>
           )}

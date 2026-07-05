@@ -35,7 +35,7 @@ export default async function ResourcesPage() {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('/assets/images/inner-banner/about-us.png')" }}
+          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167900/mohit/inner-banner/about-us.png')" }}
         ></div>
         <div className="container">
           <div className="row">

@@ -31,7 +31,7 @@ export default async function SwitchgearCataloguePage() {
     {
       title: 'Mini MCB',
       category: 'Switchgear',
-      image: '/assets/images/catalogue/switchgear_catalogue/Mini-MCB.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167887/mohit/catalogue/switchgear_catalogue/Mini-MCB.jpg',
       pdf: '/assets/images/catalogue/switchgear_catalogue/pdf/Small_PC012-Polycab-mini-MCB.pdf'
     }
   ];
@@ -42,7 +42,7 @@ export default async function SwitchgearCataloguePage() {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('/assets/images/inner-banner/pricelist.png')" }}
+          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167905/mohit/inner-banner/pricelist.png')" }}
         ></div>
         <div className="container">
           <div className="row">

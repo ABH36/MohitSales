@@ -32,27 +32,27 @@ export default async function GlandPage() {
   const products = [
     {
       title: 'Single Compression Gland',
-      image: '/assets/images/our_products/gland/1.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167936/mohit/our_products/gland/1.jpg',
       link: l('/gland/single-compression-gland')
     },
     {
       title: 'Double Compression Gland',
-      image: '/assets/images/our_products/gland/2.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167937/mohit/our_products/gland/2.jpg',
       link: l('/gland/double-compression-gland')
     },
     {
       title: 'Flang Type Gland',
-      image: '/assets/images/our_products/gland/3.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783166512/mohit/our_products/gland/3.jpg',
       link: l('/gland/flang-type-gland')
     },
     {
       title: 'Shrouds',
-      image: '/assets/images/our_products/gland/4.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783166513/mohit/our_products/gland/4.jpg',
       link: l('/gland/shrouds')
     },
     {
       title: 'Earthing Tag',
-      image: '/assets/images/our_products/gland/5.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783166511/mohit/our_products/gland/5.jpg',
       link: l('/gland/earthing-tag')
     }
   ];
@@ -63,7 +63,7 @@ export default async function GlandPage() {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('/assets/images/inner-banner/products.png')" }}
+          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')" }}
         ></div>
         <div className="container">
           <div className="row">

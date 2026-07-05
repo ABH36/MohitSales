@@ -32,17 +32,17 @@ export default async function HomeAppliancesPage() {
   const products = [
     {
       title: 'Water Heaters',
-      image: '/assets/images/our_products/home_appliances/1.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783166522/mohit/our_products/home_appliances/1.png',
       link: l('/home-appliances/water-heaters')
     },
     {
       title: 'Irons',
-      image: '/assets/images/our_products/home_appliances/2.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167944/mohit/our_products/home_appliances/2.png',
       link: l('/home-appliances/irons')
     },
     {
       title: 'Coolers',
-      image: '/assets/images/our_products/home_appliances/3.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167945/mohit/our_products/home_appliances/3.png',
       link: l('/home-appliances/coolers')
     }
   ];
@@ -53,7 +53,7 @@ export default async function HomeAppliancesPage() {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('/assets/images/inner-banner/products.png')" }}
+          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')" }}
         ></div>
         <div className="container">
           <div className="row">

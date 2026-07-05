@@ -31,7 +31,7 @@ export default async function ConduitCataloguePage() {
     {
       title: 'UPVC Conduits And Fittings',
       category: 'Conduits And Accessories',
-      image: '/assets/images/catalogue/conduit_catalogue/upvc-conduit.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167865/mohit/catalogue/conduit_catalogue/upvc-conduit.png',
       pdf: '/assets/images/catalogue/conduit_catalogue/pdf/upvc-conduits-and-fittings.pdf'
     }
   ];
@@ -42,7 +42,7 @@ export default async function ConduitCataloguePage() {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('/assets/images/inner-banner/pricelist.png')" }}
+          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167905/mohit/inner-banner/pricelist.png')" }}
         ></div>
         <div className="container">
           <div className="row">

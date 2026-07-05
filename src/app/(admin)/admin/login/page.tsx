@@ -261,7 +261,7 @@ export default function AdminLogin() {
       <div className="hidden md:flex md:w-1/2 flex-col items-center justify-center relative" style={{ backgroundColor: '#0d2b2b' }}>
         <div className="flex flex-col items-center gap-8 select-none">
           <img
-            src="/assets/images/logo/msc_logo_without_bg.png"
+            src="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167908/mohit/logo/msc_logo_without_bg.png"
             alt="Mohit Sales Corporation"
             className="w-52 h-52 object-contain"
             style={{ filter: 'drop-shadow(0 6px 32px rgba(224,120,32,0.30))' }}
@@ -285,7 +285,7 @@ export default function AdminLogin() {
 
         {/* Mobile logo */}
         <div className="md:hidden flex flex-col items-center mb-10">
-          <img src="/assets/images/logo/msc_logo_without_bg.png" alt="MSC" className="w-16 h-16 object-contain mb-3" />
+          <img src="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167908/mohit/logo/msc_logo_without_bg.png" alt="MSC" className="w-16 h-16 object-contain mb-3" />
           <div style={{ fontFamily: "'Inter',sans-serif", fontSize: '14px', color: '#fff', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
             Mohit Sales Corp.
           </div>

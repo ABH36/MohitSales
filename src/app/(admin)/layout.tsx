@@ -23,7 +23,7 @@ export default function AdminRootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicon/favicon.png" />
+        <link rel="shortcut icon" type="image/x-icon" href="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167895/mohit/favicon/favicon.png" />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

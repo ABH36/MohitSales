@@ -31,61 +31,61 @@ export default async function SolarCataloguePage() {
     {
       title: 'Solar Grid Tie Inverter 2kw_6kw',
       category: 'Solar',
-      image: '/assets/images/catalogue/solar_catalogue/SOLAR-GRID-TIE-INVERTER-2KW-6KW-1.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167878/mohit/catalogue/solar_catalogue/SOLAR-GRID-TIE-INVERTER-2KW-6KW-1.png',
       pdf: '/assets/images/catalogue/solar_catalogue/pdf/SOLAR-GRID-TIE-INVERTER-2KW-6KW.pdf'
     },
     {
       title: 'Solar Grid Tie String Inverter 3 Phase 5kw_30kw',
       category: 'Solar',
-      image: '/assets/images/catalogue/solar_catalogue/SOLAR-GRID-TIE-INVERTER-3-PHASE-5KW-30KW-1.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167880/mohit/catalogue/solar_catalogue/SOLAR-GRID-TIE-INVERTER-3-PHASE-5KW-30KW-1.png',
       pdf: '/assets/images/catalogue/solar_catalogue/pdf/SOLAR-GRID-TIE-INVERTER-3-PHASE-5KW-30KW.pdf'
     },
     {
       title: 'Solar Grid Tie String Inverter 25kw_40kw-5g',
       category: 'Solar',
-      image: '/assets/images/catalogue/solar_catalogue/Solar-grid-three-phase-tie-25kw-1-1.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167881/mohit/catalogue/solar_catalogue/Solar-grid-three-phase-tie-25kw-1-1.png',
       pdf: '/assets/images/catalogue/solar_catalogue/pdf/Solar-Catalogue_PSIT-25KW-40KW-5G.pdf'
     },
     {
       title: 'Solar Grid Tie String Inverter 50kw_60kw',
       category: 'Solar',
-      image: '/assets/images/catalogue/solar_catalogue/Solar-grid-three-phase-tie-50kw-60KW-string-inverter-1.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167882/mohit/catalogue/solar_catalogue/Solar-grid-three-phase-tie-50kw-60KW-string-inverter-1.png',
       pdf: '/assets/images/catalogue/solar_catalogue/pdf/string-inverter_50KW-60KW.pdf'
     },
     {
       title: 'Solar Grid Tie String Inverter 80kw_110kw-5g',
       category: 'Solar',
-      image: '/assets/images/catalogue/solar_catalogue/Solar-grid-three-phase-tie-80kw-110KW-5G-string-inverter-1.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167883/mohit/catalogue/solar_catalogue/Solar-grid-three-phase-tie-80kw-110KW-5G-string-inverter-1.png',
       pdf: '/assets/images/catalogue/solar_catalogue/pdf/Final-Solar-Leaflet-80kw-110kw-5G.pdf'
     },
     {
       title: 'Solar Grid Tie String Inverter 255k-ehv-5g',
       category: 'Solar',
-      image: '/assets/images/catalogue/solar_catalogue/06-Grid-Tie-Solar-Inverter_3-Phase_-255K-EHV-5G-2-2-294x420.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167876/mohit/catalogue/solar_catalogue/06-Grid-Tie-Solar-Inverter_3-Phase_-255K-EHV-5G-2-2-294x420.png',
       pdf: '/assets/images/catalogue/solar_catalogue/pdf/Final-Solar-Leaflet-80kw-110kw-5G.pdf'
     },
     {
       title: 'Solar Cable',
       category: 'Solar',
-      image: '/assets/images/catalogue/solar_catalogue/08-Solar-Cable-Brochure-2-211x300-1.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167877/mohit/catalogue/solar_catalogue/08-Solar-Cable-Brochure-2-211x300-1.png',
       pdf: '/assets/images/catalogue/solar_catalogue/pdf/SOLAR-CABLE.pdf'
     },
     {
       title: 'Polycrystalline Solar Module',
       category: 'Solar',
-      image: '/assets/images/catalogue/solar_catalogue/Solar-grid-three-phase-tie-50kw-60KW-string-inverter-1.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167882/mohit/catalogue/solar_catalogue/Solar-grid-three-phase-tie-50kw-60KW-string-inverter-1.png',
       pdf: '/assets/images/catalogue/solar_catalogue/pdf/string-inverter_50KW-60KW.pdf'
     },
     {
       title: 'Polycab Solar Catalogue',
       category: 'Solar',
-      image: '/assets/images/catalogue/solar_catalogue/first_page.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167884/mohit/catalogue/solar_catalogue/first_page.jpg',
       pdf: '/assets/images/catalogue/solar_catalogue/pdf/Polycab-Solar-Catalogue.pdf'
     },
     {
       title: 'Solar Catalogue(Grid Tie Inverter, PV Module, Solar DC Cables)',
       category: 'Solar',
-      image: '/assets/images/catalogue/solar_catalogue/solar_catalogue.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167885/mohit/catalogue/solar_catalogue/solar_catalogue.png',
       pdf: '/assets/images/catalogue/solar_catalogue/pdf/REI-Cat-oct3-2023.pdf'
     }
   ];
@@ -96,7 +96,7 @@ export default async function SolarCataloguePage() {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('/assets/images/inner-banner/pricelist.png')" }}
+          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167905/mohit/inner-banner/pricelist.png')" }}
         ></div>
         <div className="container">
           <div className="row">

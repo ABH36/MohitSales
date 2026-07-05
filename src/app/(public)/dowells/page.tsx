@@ -16,17 +16,17 @@ export default function DowellsPage() {
   const products = [
     {
       title: 'Cable Terminal',
-      image: '/assets/images/our_products/dowells/cable_terminal_dowells.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167919/mohit/our_products/dowells/cable_terminal_dowells.png',
       link: '/cable-terminal'
     },
     {
       title: 'Gland',
-      image: '/assets/images/our_products/dowells/gland_dowells.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167927/mohit/our_products/dowells/gland_dowells.png',
       link: '/gland'
     },
     {
       title: 'Crimping Tool',
-      image: '/assets/images/our_products/dowells/crimping_tool_dowells.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167925/mohit/our_products/dowells/crimping_tool_dowells.png',
       link: '/crimping-tool'
     }
   ];
@@ -93,7 +93,7 @@ export default function DowellsPage() {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('/assets/images/inner-banner/products.png')" }}
+          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')" }}
         ></div>
         <div className="container">
           <div className="row">

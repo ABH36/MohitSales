@@ -115,10 +115,10 @@ export default function RootLayout({
         `}
       </Script>
       <head>
-        <link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicon/favicon.png" />
+        <link rel="shortcut icon" type="image/x-icon" href="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167895/mohit/favicon/favicon.png" />
 
         {/* ── Preload LCP image (banner) — browser downloads immediately ── */}
-        <link rel="preload" as="image" href="/assets/images/banner/desktop/cable.webp" type="image/webp" />
+        <link rel="preload" as="image" href="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167821/mohit/banner/desktop/cable.webp" type="image/webp" />
 
         {/* ── DNS prefetch for external domains ── */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />

@@ -32,17 +32,17 @@ export default async function CableTerminalPage() {
   const cards = [
     {
       title: 'Aluminium',
-      image: '/assets/images/our_products/dowells/cable_terminal/1.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167916/mohit/our_products/dowells/cable_terminal/1.jpg',
       link: '/cable-terminal/aluminium'
     },
     {
       title: 'Bimetallic',
-      image: '/assets/images/our_products/dowells/cable_terminal/2.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167917/mohit/our_products/dowells/cable_terminal/2.jpg',
       link: '/cable-terminal/bimetallic'
     },
     {
       title: 'Copper',
-      image: '/assets/images/our_products/dowells/cable_terminal/3.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167918/mohit/our_products/dowells/cable_terminal/3.jpg',
       link: '/cable-terminal/copper'
     }
   ];
@@ -53,7 +53,7 @@ export default async function CableTerminalPage() {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('/assets/images/inner-banner/products.png')" }}
+          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')" }}
         ></div>
         <div className="container">
           <div className="row">

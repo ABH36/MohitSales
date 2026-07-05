@@ -8,19 +8,19 @@ export default function CrimpingToolPage() {
     {
       subtitle: 'Hand Manual Crimping Tool',
       title: '12 Type Different Tool',
-      image: '/assets/images/our_products/dowells/crimping_tool/hand-manual-crimping-tool.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783166541/mohit/our_products/dowells/crimping_tool/hand-manual-crimping-tool.jpg',
       size: 'CAP:0.5 to 400 sq.mm'
     },
     {
       subtitle: 'Hand Hydroulic Crimping Tool',
       title: '5 Type Different Jack',
-      image: '/assets/images/our_products/dowells/crimping_tool/hand-hydrolic-crimping-tool.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783166542/mohit/our_products/dowells/crimping_tool/hand-hydrolic-crimping-tool.jpg',
       size: 'CAP:10 to 1000 sq.mm'
     },
     {
       subtitle: 'Foot Hydroulic Crimping Tool',
       title: 'Foot Hydroulic Crimping Tool',
-      image: '/assets/images/our_products/dowells/crimping_tool/foot-hydrolic-crimping-tool.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783166544/mohit/our_products/dowells/crimping_tool/foot-hydrolic-crimping-tool.jpg',
       size: 'CAP:50 to 630 sq.mm'
     }
   ];
@@ -31,7 +31,7 @@ export default function CrimpingToolPage() {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('/assets/images/inner-banner/products.png')" }}
+          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')" }}
         ></div>
         <div className="container">
           <div className="row">

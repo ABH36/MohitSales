@@ -32,22 +32,22 @@ export default async function SolarPage() {
   const products = [
     {
       title: 'Solar Grid Tie Inverter',
-      image: '/assets/images/our_products/solar/solar-grid-tie-inverter.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167960/mohit/our_products/solar/solar-grid-tie-inverter.png',
       link: l('/solar/solar-grid-tie-inverter')
     },
     {
       title: 'DC MCB',
-      image: '/assets/images/our_products/solar/DC-MCB-2.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783166551/mohit/our_products/solar/DC-MCB-2.png',
       link: l('/solar/dc-mcb')
     },
     {
       title: 'Solar DC Cable',
-      image: '/assets/images/our_products/solar/solar-dc-cable.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783166523/mohit/our_products/solar/solar-dc-cable.png',
       link: l('/solar/solar-dc-cable')
     },
     {
       title: 'Solar Panel',
-      image: '/assets/images/our_products/solar/Mono_Crystalline.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783166527/mohit/our_products/solar/Mono_Crystalline.png',
       link: l('/solar/solar-panel')
     }
   ];
@@ -58,7 +58,7 @@ export default async function SolarPage() {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('/assets/images/inner-banner/products.png')" }}
+          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')" }}
         ></div>
         <div className="container">
           <div className="row">

@@ -12,37 +12,37 @@ export default async function FansPage() {
   const products = [
     {
       title: 'Ceiling Fans',
-      image: '/assets/images/our_products/fans/ceiling_fan.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167933/mohit/our_products/fans/ceiling_fan.png',
       link: l('/polycab/fans/ceiling-fans')
     },
     {
       title: 'Table Fans',
-      image: '/assets/images/our_products/fans/table-fan.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167935/mohit/our_products/fans/table-fan.png',
       link: l('/polycab/fans/table-fans')
     },
     {
       title: 'Pedestal Fans',
-      image: '/assets/images/our_products/fans/pedestal-fan.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167934/mohit/our_products/fans/pedestal-fan.png',
       link: l('/polycab/fans/pedestal-fans')
     },
     {
       title: 'Wall Fans',
-      image: '/assets/images/our_products/fans/Wall-Fan.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167932/mohit/our_products/fans/Wall-Fan.png',
       link: l('/polycab/fans/wall-fans')
     },
     {
       title: 'Exhaust Fans',
-      image: '/assets/images/our_products/fans/EXHAUST-FAN.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167929/mohit/our_products/fans/EXHAUST-FAN.png',
       link: l('/polycab/fans/exhaust-fans')
     },
     {
       title: 'Farrata Fans',
-      image: '/assets/images/our_products/fans/Farrata-Fan.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167931/mohit/our_products/fans/Farrata-Fan.png',
       link: l('/polycab/fans/farrata-fans')
     },
     {
       title: 'Air Circulator Fans',
-      image: '/assets/images/our_products/fans/Air-Circulator.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167928/mohit/our_products/fans/Air-Circulator.png',
       link: l('/polycab/fans/air-circulator-fans')
     }
   ];
@@ -53,7 +53,7 @@ export default async function FansPage() {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('/assets/images/inner-banner/products.png')" }}
+          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')" }}
         ></div>
         <div className="container">
           <div className="row">

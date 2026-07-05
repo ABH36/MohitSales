@@ -107,7 +107,7 @@ export default function HomeContactForm() {
     <section className="rs-contact-area rs-contact-one section-space has-theme-orange p-relative contact_us_sec">
       <div
         className="rs-contact-bg-thumb"
-        data-background="/assets/images/bg/contact-form-bg.webp"
+        data-background="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167841/mohit/bg/contact-form-bg.webp"
         style={{ backgroundImage: "url('/assets/images/bg/contact-bg-04.png')" }}
       ></div>
       <div className="container">
@@ -152,8 +152,8 @@ export default function HomeContactForm() {
             <div className="rs-contact-form">
               <div
                 className="rs-contact-form-bg-thumb"
-                data-background="/assets/images/bg/contact-bg-03.png"
-                style={{ backgroundImage: "url('/assets/images/bg/contact-bg-03.png')" }}
+                data-background="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167839/mohit/bg/contact-bg-03.png"
+                style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167839/mohit/bg/contact-bg-03.png')" }}
               ></div>
               <h3 className="rs-contact-form-title">Get in Touch</h3>
               <p className="descrip">

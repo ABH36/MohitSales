@@ -56,7 +56,7 @@ export default async function BlogPage({
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('/assets/images/inner-banner/about-us.png')", filter: "brightness(0.65)" }}
+          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167900/mohit/inner-banner/about-us.png')", filter: "brightness(0.65)" }}
         ></div>
         <div className="container">
           <div className="row">

@@ -9,12 +9,12 @@ export default function CertificatesPage() {
   const certificates = [
     {
       title: 'Mohit Sales Corporation Pvt. Ltd.',
-      image: '/assets/images/certificate/certificate-of-authorisationllp-fy25-26.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167892/mohit/certificate/certificate-of-authorisationllp-fy25-26.png',
       caption: 'Mohit Sales Corporation Pvt. Ltd.'
     },
     {
       title: 'Mohit Sales Corporation Pvt. Ltd. AK Private Limited',
-      image: '/assets/images/certificate/certificate-of-authorisation-ak-pvt-ltd.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167891/mohit/certificate/certificate-of-authorisation-ak-pvt-ltd.png',
       caption: 'Mohit Sales Corporation Pvt. Ltd. AK Private Limited'
     }
   ];
@@ -25,7 +25,7 @@ export default function CertificatesPage() {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('/assets/images/inner-banner/achievement.png')" }}
+          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167901/mohit/inner-banner/achievement.png')" }}
         ></div>
         <div className="container">
           <div className="row">

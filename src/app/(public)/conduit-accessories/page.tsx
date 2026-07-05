@@ -32,12 +32,12 @@ export default async function ConduitAccessoriesPage() {
   const products = [
     {
       title: 'UPVC Conduit',
-      image: '/assets/images/our_products/conduit_accessories/CONDUITS.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167913/mohit/our_products/conduit_accessories/CONDUITS.png',
       link: l('/conduit-accessories/upvc-conduit')
     },
     {
       title: 'Concealed Box',
-      image: '/assets/images/our_products/conduit_accessories/Concealed-Box.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167914/mohit/our_products/conduit_accessories/Concealed-Box.png',
       link: l('/conduit-accessories/concealed-box')
     }
   ];
@@ -48,7 +48,7 @@ export default async function ConduitAccessoriesPage() {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('/assets/images/inner-banner/products.png')" }}
+          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')" }}
         ></div>
         <div className="container">
           <div className="row">

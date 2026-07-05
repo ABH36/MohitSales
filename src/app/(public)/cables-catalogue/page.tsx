@@ -31,91 +31,91 @@ export default async function CablesCataloguePage() {
     {
       title: 'Uninyvin Cable',
       category: 'Cable',
-      image: '/assets/images/catalogue/cables_catalogue/Uninyvin-Cable.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167861/mohit/catalogue/cables_catalogue/Uninyvin-Cable.jpg',
       pdf: '/assets/images/catalogue/cables_catalogue/pdf/Uninyvin-cable.pdf'
     },
     {
       title: 'LT-Cable',
       category: 'Cable',
-      image: '/assets/images/catalogue/cables_catalogue/LT-Cable.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167857/mohit/catalogue/cables_catalogue/LT-Cable.jpg',
       pdf: '/assets/images/catalogue/cables_catalogue/pdf/LT-Cable-Catalog.pdf'
     },
     {
       title: 'HT-Cable',
       category: 'Cable',
-      image: '/assets/images/catalogue/cables_catalogue/HT-Cable.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167853/mohit/catalogue/cables_catalogue/HT-Cable.jpg',
       pdf: '/assets/images/catalogue/cables_catalogue/pdf/HT-Cable-Catalogue.pdf'
     },
     {
       title: 'Fire-Survival-Cable',
       category: 'Cable',
-      image: '/assets/images/catalogue/cables_catalogue/Fire-Survival-Cable.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167852/mohit/catalogue/cables_catalogue/Fire-Survival-Cable.jpg',
       pdf: '/assets/images/catalogue/cables_catalogue/pdf/Fire-Survival-Cable-Brochure-Artwork_2.pdf'
     },
     {
       title: 'EHV',
       category: 'Cable',
-      image: '/assets/images/catalogue/cables_catalogue/EHV-Thumb.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167851/mohit/catalogue/cables_catalogue/EHV-Thumb.png',
       pdf: '/assets/images/catalogue/cables_catalogue/pdf/Polycab-EHV.pdf'
     },
     {
       title: 'Cables & Wires Z',
       category: 'Cable',
-      image: '/assets/images/catalogue/cables_catalogue/LDC-Img.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167856/mohit/catalogue/cables_catalogue/LDC-Img.png',
       pdf: '/assets/images/catalogue/cables_catalogue/pdf/CABLES_HANDBOOK_ORD-10061-V12_FOR-WEB.pdf'
     },
     {
       title: 'Rubber Cable Catalogue',
       category: 'Cable',
-      image: '/assets/images/catalogue/cables_catalogue/Rubber-Cable.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167859/mohit/catalogue/cables_catalogue/Rubber-Cable.png',
       pdf: '/assets/images/catalogue/cables_catalogue/pdf/Rubber-Cable-Catalogue.pdf'
     },
     {
       title: 'BMS Cable',
       category: 'Cable',
-      image: '/assets/images/catalogue/cables_catalogue/BMS-Cable.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167846/mohit/catalogue/cables_catalogue/BMS-Cable.png',
       pdf: '/assets/images/catalogue/cables_catalogue/pdf/BMS-Cable-Brochure_v3.pdf'
     },
     {
       title: 'Telephone Wire',
       category: 'Cable',
-      image: '/assets/images/catalogue/cables_catalogue/telephone_wire.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167862/mohit/catalogue/cables_catalogue/telephone_wire.jpg',
       pdf: '/assets/images/catalogue/cables_catalogue/pdf/Polycab-Telephone-wire.pdf'
     },
     {
       title: 'Optical Fiber Cables (OFC)',
       category: 'Cable',
-      image: '/assets/images/catalogue/cables_catalogue/OPTICAL-FIBER-CABLES.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167858/mohit/catalogue/cables_catalogue/OPTICAL-FIBER-CABLES.jpg',
       pdf: '/assets/images/catalogue/cables_catalogue/pdf/OPTICAL-FIBER-CABLES.pdf'
     },
     {
       title: 'Lan Cables',
       category: 'Cable',
-      image: '/assets/images/catalogue/cables_catalogue/telephone_wires.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167863/mohit/catalogue/cables_catalogue/telephone_wires.jpg',
       pdf: '/assets/images/catalogue/cables_catalogue/pdf/LAN-Cable.pdf'
     },
     {
       title: 'Instrumentation Cable Catalogue',
       category: 'Cable',
-      image: '/assets/images/catalogue/cables_catalogue/Instrumentation-Cable.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167855/mohit/catalogue/cables_catalogue/Instrumentation-Cable.jpg',
       pdf: '/assets/images/catalogue/cables_catalogue/pdf/Instrumentation-Cable.pdf'
     },
     {
       title: 'Co-axial Wires',
       category: 'Cable',
-      image: '/assets/images/catalogue/cables_catalogue/Coaxial.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167849/mohit/catalogue/cables_catalogue/Coaxial.jpg',
       pdf: '/assets/images/catalogue/cables_catalogue/pdf/Polycab-Coaxial-Cable.pdf'
     },
     {
       title: 'CCTV Cable',
       category: 'Cable',
-      image: '/assets/images/catalogue/cables_catalogue/CCTV-CABLE.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167847/mohit/catalogue/cables_catalogue/CCTV-CABLE.jpg',
       pdf: '/assets/images/catalogue/cables_catalogue/pdf/Polycab-CCTV.pdf'
     },
     {
       title: 'Submersible Cables (Flat)',
       category: 'Cable',
-      image: '/assets/images/catalogue/cables_catalogue/SUBMERSIBLE-CABLE.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167860/mohit/catalogue/cables_catalogue/SUBMERSIBLE-CABLE.jpg',
       pdf: '/assets/images/catalogue/cables_catalogue/pdf/SUBMERSIBLE-CABLE.pdf'
     }
   ];
@@ -126,7 +126,7 @@ export default async function CablesCataloguePage() {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('/assets/images/inner-banner/pricelist.png')" }}
+          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167905/mohit/inner-banner/pricelist.png')" }}
         ></div>
         <div className="container">
           <div className="row">

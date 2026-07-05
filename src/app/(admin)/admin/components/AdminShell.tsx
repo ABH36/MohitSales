@@ -279,7 +279,7 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
 
             <div className="admin-sidebar-header">
               <img
-                src="/assets/images/logo/msc_logo_without_bg.png"
+                src="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167908/mohit/logo/msc_logo_without_bg.png"
                 alt="Mohit Sales Corporation Logo"
                 className="admin-sidebar-logo-large"
               />

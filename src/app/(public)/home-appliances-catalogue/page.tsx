@@ -31,19 +31,19 @@ export default async function HomeAppliancesCataloguePage() {
     {
       title: 'Water Heaters',
       category: 'Appliances',
-      image: '/assets/images/catalogue/home_appliances_catalogue/water_heater.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167874/mohit/catalogue/home_appliances_catalogue/water_heater.png',
       pdf: '/assets/images/catalogue/home_appliances_catalogue/pdf/Water-Heater-Brochure-2023.pdf'
     },
     {
       title: 'Coolers',
       category: 'Appliances',
-      image: '/assets/images/catalogue/home_appliances_catalogue/coolers.jpg',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167872/mohit/catalogue/home_appliances_catalogue/coolers.jpg',
       pdf: '/assets/images/catalogue/home_appliances_catalogue/pdf/Polycab-Cooler-Catalogue_2020.pdf'
     },
     {
       title: 'Irons',
       category: 'Appliances',
-      image: '/assets/images/catalogue/home_appliances_catalogue/iron.png',
+      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167873/mohit/catalogue/home_appliances_catalogue/iron.png',
       pdf: '/assets/images/catalogue/home_appliances_catalogue/pdf/Polycab-Iron-Catalogue_2020.pdf'
     }
   ];
@@ -54,7 +54,7 @@ export default async function HomeAppliancesCataloguePage() {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('/assets/images/inner-banner/pricelist.png')" }}
+          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167905/mohit/inner-banner/pricelist.png')" }}
         ></div>
         <div className="container">
           <div className="row">
