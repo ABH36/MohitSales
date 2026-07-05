@@ -11,6 +11,17 @@ export async function generateMetadata(): Promise<Metadata> {
 });
 };
 
+const PRODUCTS = [
+  { title: 'Cables By Application', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167950/mohit/our_products/polycab/polycab_cable.png', link: '/industries/cables-by-application/building-infrastructure' },
+  { title: 'Cables By Standards', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167956/mohit/our_products/polycab/polycab_wires.png', link: '/industries/cables-by-standards/indian-standards' },
+  { title: 'Cables By Type', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167956/mohit/our_products/polycab/polycab_wires.png', link: '/industries/cables-by-type/lv-power-cable' },
+  { title: 'Switchgears', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167955/mohit/our_products/polycab/polycab_switchgears.png', link: '/switchgears' },
+  { title: 'Fans', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167953/mohit/our_products/polycab/polycab_fans.png', link: '/fans' },
+  { title: 'Solar', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167953/mohit/our_products/polycab/polycab_solar.png', link: '/solar' },
+  { title: 'Conduit & Accessories', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167951/mohit/our_products/polycab/polycab_conduit_and_accessories.png', link: '/conduit-accessories' },
+  { title: 'Home Appliances', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167949/mohit/our_products/polycab/home_appliances.png', link: '/home-appliances' },
+];
+
 export default function PolycabPage() {
   return (
     <>
@@ -122,87 +133,17 @@ export default function PolycabPage() {
               <div className="custom-container">
                 {/* Products Grid */}
                 <div className="products-grid">
-
-                  <div className="product-card">
-                    <Link href="/industries/cables-by-application/building-infrastructure">
-                      <img src="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167950/mohit/our_products/polycab/polycab_cable.png" alt="Cables By Application" />
-                      <h3>Cables By Application</h3>
-                      <div className="pricelist-button">
-                        <span className="pricelist-btn">Explore More</span>
-                      </div>
-                    </Link>
-                  </div>
-
-                  <div className="product-card">
-                    <Link href="/industries/cables-by-standards/indian-standards">
-                      <img src="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167956/mohit/our_products/polycab/polycab_wires.png" alt="Cables By Standards" />
-                      <h3>Cables By Standards</h3>
-                      <div className="pricelist-button">
-                        <span className="pricelist-btn">Explore More</span>
-                      </div>
-                    </Link>
-                  </div>
-
-                  <div className="product-card">
-                    <Link href="/industries/cables-by-type/lv-power-cable">
-                      <img src="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167956/mohit/our_products/polycab/polycab_wires.png" alt="Cables By Type" />
-                      <h3>Cables By Type</h3>
-                      <div className="pricelist-button">
-                        <span className="pricelist-btn">Explore More</span>
-                      </div>
-                    </Link>
-                  </div>
-
-                  <div className="product-card">
-                    <Link href="/switchgears">
-                      <img src="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167955/mohit/our_products/polycab/polycab_switchgears.png" alt="Switchgears" />
-                      <h3>Switchgears</h3>
-                      <div className="pricelist-button">
-                        <span className="pricelist-btn">Explore More</span>
-                      </div>
-                    </Link>
-                  </div>
-
-                  <div className="product-card">
-                    <Link href="/fans">
-                      <img src="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167953/mohit/our_products/polycab/polycab_fans.png" alt="Fans" />
-                      <h3>Fans</h3>
-                      <div className="pricelist-button">
-                        <span className="pricelist-btn">Explore More</span>
-                      </div>
-                    </Link>
-                  </div>
-
-                  <div className="product-card">
-                    <Link href="/solar">
-                      <img src="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167953/mohit/our_products/polycab/polycab_solar.png" alt="Solar" />
-                      <h3>Solar</h3>
-                      <div className="pricelist-button">
-                        <span className="pricelist-btn">Explore More</span>
-                      </div>
-                    </Link>
-                  </div>
-
-                  <div className="product-card">
-                    <Link href="/conduit-accessories">
-                      <img src="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167951/mohit/our_products/polycab/polycab_conduit_and_accessories.png" alt="Conduit & Accessories" />
-                      <h3>Conduit & Accessories</h3>
-                      <div className="pricelist-button">
-                        <span className="pricelist-btn">Explore More</span>
-                      </div>
-                    </Link>
-                  </div>
-
-                  <div className="product-card">
-                    <Link href="/home-appliances">
-                      <img src="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167949/mohit/our_products/polycab/home_appliances.png" alt="Home Appliances" />
-                      <h3>Home Appliances</h3>
-                      <div className="pricelist-button">
-                        <span className="pricelist-btn">Explore More</span>
-                      </div>
-                    </Link>
-                  </div>
-
+                  {PRODUCTS.map((prod, idx) => (
+                    <div key={idx} className="product-card">
+                      <Link href={prod.link}>
+                        <img src={prod.image} alt={prod.title} loading="lazy" decoding="async" />
+                        <h3>{prod.title}</h3>
+                        <div className="pricelist-button">
+                          <span className="pricelist-btn">Explore More</span>
+                        </div>
+                      </Link>
+                    </div>
+                  ))}
                 </div>
               </div>
             </section>
