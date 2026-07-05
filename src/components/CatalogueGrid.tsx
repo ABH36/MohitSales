@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from 'next/link';
+import BreadcrumbBanner, { BANNER } from '@/components/BreadcrumbBanner';
 
 export interface CatalogueItem {
   title: string;
@@ -26,33 +26,11 @@ export default function CatalogueGrid({
 }) {
   return (
     <main>
-      {/* Breadcrumb Area */}
-      <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
-        <div
-          className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167905/mohit/inner-banner/pricelist.png')" }}
-        ></div>
-        <div className="container">
-          <div className="row">
-            <div className="w-full">
-              <div className="rs-breadcrumb-content-wrapper">
-                <div className="rs-breadcrumb-title-wrapper">
-                  <h1 className="rs-breadcrumb-title">{title}</h1>
-                </div>
-                <div className="rs-breadcrumb-menu">
-                  <nav>
-                    <ul>
-                      <li><span><Link href="/">Home</Link></span></li>
-                      <li><span><Link href="/catalogue">Catalogue</Link></span></li>
-                      <li><span>{crumbLabel}</span></li>
-                    </ul>
-                  </nav>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <BreadcrumbBanner
+        title={title}
+        bannerImage={BANNER.pricelist}
+        crumbs={[{ label: 'Home', href: '/' }, { label: 'Catalogue', href: '/catalogue' }, { label: crumbLabel }]}
+      />
 
       {/* Grid Section */}
       <section className="catalogue-section">

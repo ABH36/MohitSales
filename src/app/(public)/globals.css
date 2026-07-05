@@ -91,6 +91,24 @@ body.ltr .rs-breadcrumb-title {
 
 :root {
   --rs-ff-fontawesome: "Font Awesome 6 Pro", "Font Awesome 5 Pro", "FontAwesome" !important;
+
+  /* ----------------------------------------------------------------
+     Brand design tokens — single source of truth for the public site.
+     Change a brand colour here and it updates everywhere it is used
+     (all globals.css rules reference these via var()).
+     ---------------------------------------------------------------- */
+  --brand-navy: #1e2e5e;        /* primary brand navy (headings, titles) */
+  --brand-red: #c1272d;         /* brand red (accents, CTAs) */
+  --brand-orange: #f7931e;      /* theme orange (buttons, highlights) */
+  --brand-orange-hover: #e07b0e;/* orange hover state */
+  --brand-surface: #f8f9fb;     /* light section background */
+
+  --brand-text: #333333;        /* default body text */
+  --brand-text-muted: #555555;  /* secondary/muted text */
+  --brand-heading: #222222;     /* strong heading text */
+
+  --brand-radius: 14px;         /* card corner radius */
+  --brand-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* card elevation */
 }
 
 /* ====================================================
@@ -99,7 +117,7 @@ body.ltr .rs-breadcrumb-title {
 
 .catalogue-section {
   padding: 80px 0;
-  background: #f8f9fb;
+  background: var(--brand-surface);
 }
 
 .catalogue-section .container,
@@ -115,7 +133,7 @@ body.ltr .rs-breadcrumb-title {
 .catalogue-section .section-title h2 {
   font-size: 38px;
   font-weight: 700;
-  color: #1e2e5e;
+  color: var(--brand-navy);
   font-family: "Outfit", sans-serif;
   margin-bottom: 0;
 }
@@ -145,7 +163,7 @@ body.ltr .rs-breadcrumb-title {
 .product-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 16px 40px rgba(30, 46, 94, 0.15);
-  border-color: #1e2e5e;
+  border-color: var(--brand-navy);
 }
 
 .product-card>a {
@@ -171,7 +189,7 @@ body.ltr .rs-breadcrumb-title {
 .product-card h3 {
   font-size: 18px;
   font-weight: 700;
-  color: #1e2e5e;
+  color: var(--brand-navy);
   margin-bottom: 14px;
   line-height: 26px;
   font-family: "Outfit", sans-serif;
@@ -194,7 +212,7 @@ body.ltr .rs-breadcrumb-title {
   min-width: 140px;
   align-self: center;
   padding: 10px 24px;
-  background: linear-gradient(135deg, #1e2e5e, #2d4080);
+  background: linear-gradient(135deg, var(--brand-navy), #2d4080);
   color: #fff;
   border-radius: 30px;
   font-size: 14px;
@@ -206,7 +224,7 @@ body.ltr .rs-breadcrumb-title {
 }
 
 .product-card:hover .pricelist-btn {
-  background: linear-gradient(135deg, #ef3d45, #c1272d);
+  background: linear-gradient(135deg, #ef3d45, var(--brand-red));
 }
 
 /* Responsive: 2-cols on tablet */
@@ -271,7 +289,7 @@ body.ltr .rs-breadcrumb-title {
   font-size: 22px;
   font-weight: 600;
   margin-bottom: 10px;
-  color: #c1272d;
+  color: var(--brand-red);
 }
 
 .detail-product-details {
@@ -364,7 +382,7 @@ body.ltr .rs-breadcrumb-title {
 .card_box .product-title {
   font-size: 24px !important;
   font-weight: 800 !important;
-  color: #c1272d !important;
+  color: var(--brand-red) !important;
   margin-top: 12px !important;
   margin-bottom: 0 !important;
   min-height: auto !important;
@@ -376,7 +394,7 @@ body.ltr .rs-breadcrumb-title {
 .card_box .features-title {
   font-size: 15px !important;
   font-weight: 800 !important;
-  color: #1e2e5e !important;
+  color: var(--brand-navy) !important;
   letter-spacing: 1.5px !important;
   text-transform: uppercase !important;
   margin-bottom: 18px !important;
@@ -470,7 +488,7 @@ body.ltr .rs-breadcrumb-title {
   width: auto !important;
   min-width: 160px !important;
   padding: 12px 28px !important;
-  background: linear-gradient(135deg, #1e2e5e, #2d4080) !important;
+  background: linear-gradient(135deg, var(--brand-navy), #2d4080) !important;
   color: #ffffff !important;
   border-radius: 30px !important;
   text-decoration: none !important;
@@ -484,7 +502,7 @@ body.ltr .rs-breadcrumb-title {
 
 .card_box a.pricelist-btn:hover,
 .card_box a.enquiry-btn:hover {
-  background: linear-gradient(135deg, #ef3d45, #c1272d) !important;
+  background: linear-gradient(135deg, #ef3d45, var(--brand-red)) !important;
   color: #ffffff !important;
   transform: translateY(-3px) !important;
   box-shadow: 0 8px 20px rgba(193, 39, 45, 0.25) !important;
@@ -538,14 +556,14 @@ body.ltr .rs-breadcrumb-title {
 
 .fan-product-card:hover {
   transform: translateY(-6px);
-  border-color: #1e2e5e;
+  border-color: var(--brand-navy);
   box-shadow: 0 14px 35px rgba(30, 46, 94, 0.14);
 }
 
 .fan-product-card .fan-img {
   padding: 20px;
   text-align: center;
-  background: #f8f9fb;
+  background: var(--brand-surface);
 }
 
 .fan-product-card .fan-img img {
@@ -567,7 +585,7 @@ body.ltr .rs-breadcrumb-title {
 .fan-product-card .fan-info h4 {
   font-size: 17px;
   font-weight: 700;
-  color: #1e2e5e;
+  color: var(--brand-navy);
   font-family: "Outfit", sans-serif;
   margin-bottom: 8px;
   line-height: 24px;
@@ -583,7 +601,7 @@ body.ltr .rs-breadcrumb-title {
 .fan-product-card .fan-info a.fan-btn {
   display: inline-block;
   padding: 9px 22px;
-  background: #1e2e5e;
+  background: var(--brand-navy);
   color: #fff;
   border-radius: 6px;
   font-size: 14px;
@@ -609,7 +627,7 @@ body.ltr .rs-breadcrumb-title {
 }
 
 .contact_us_sec .rs-contact-form {
-  background: #1e2e5e;
+  background: var(--brand-navy);
   border-radius: 16px;
   padding: 40px 40px;
   position: relative;
@@ -715,7 +733,7 @@ body.ltr .rs-breadcrumb-title {
    PRODUCT SLIDER CARD - MATCHING ORIGINAL SITE
    ==================================================== /* Portfolio Section Background */
 .our_products {
-  background-color: #f8f9fb;
+  background-color: var(--brand-surface);
 }
 
 .our_products .rs-section-title {
@@ -870,7 +888,7 @@ body.ltr .rs-breadcrumb-title {
 }
 
 .portfolio-red-btn:hover {
-  background-color: #c1272d !important;
+  background-color: var(--brand-red) !important;
   transform: scale(1.08) !important;
   color: #ffffff !important;
 }
@@ -898,7 +916,7 @@ body.ltr .rs-breadcrumb-title {
   border-radius: 4px !important;
   background: #ffffff !important;
   border: 1px solid rgba(239, 61, 69, 0.08) !important;
-  color: #1e2e5e !important;
+  color: var(--brand-navy) !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -918,9 +936,9 @@ body.ltr .rs-breadcrumb-title {
 /* Hover turns button dark blue */
 .rs-portfolio-navigation .rs-swiper-btn:hover,
 .portfolio-slider-navigation .rs-swiper-btn:hover {
-  background: #1e2e5e !important;
+  background: var(--brand-navy) !important;
   color: #ffffff !important;
-  border-color: #1e2e5e !important;
+  border-color: var(--brand-navy) !important;
   box-shadow: 0 6px 18px rgba(30, 46, 94, 0.28) !important;
   transform: translateY(-2px) !important;
 }
@@ -1098,7 +1116,7 @@ body.ltr .rs-breadcrumb-title {
   gap: 8px;
   font-size: 15px;
   font-weight: 600;
-  color: #1e2e5e;
+  color: var(--brand-navy);
   text-transform: uppercase;
   letter-spacing: 1px;
   font-family: "Outfit", sans-serif;
@@ -1108,7 +1126,7 @@ body.ltr .rs-breadcrumb-title {
 .clientle_sec .rs-section-title {
   font-size: 38px;
   font-weight: 700;
-  color: #1e2e5e;
+  color: var(--brand-navy);
   font-family: "Outfit", sans-serif;
   line-height: 1.25;
   margin-top: 10px;
@@ -1502,7 +1520,7 @@ img[alt="logo"] {
 
 /* Mega menu drop down styles (Original Dark Blue UI) */
 .main-menu .submenu {
-  background: #1e2e5e !important;
+  background: var(--brand-navy) !important;
   border-radius: 4px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
   border: none !important;
@@ -1746,7 +1764,7 @@ img[alt="logo"] {
 
   .product-card>a>h3,
   .detail-product-title {
-    @apply text-[20px] font-semibold text-[#c1272d] my-[15px] px-[15px];
+    @apply text-[20px] font-semibold text-[var(--brand-red)] my-[15px] px-[15px];
     font-family: 'Outfit', sans-serif;
   }
 
@@ -1770,7 +1788,7 @@ img[alt="logo"] {
   a.pricelist-btn,
   a.enquiry-btn,
   a.fan-btn {
-    @apply bg-gradient-to-br from-[#f7931e] to-[#c1272d] rounded-[4px] px-[24px] py-[10px] font-medium text-[15px] border-none inline-flex items-center justify-center transition-all duration-300 w-auto min-w-[140px] h-[45px] box-border mt-auto mb-0 whitespace-nowrap self-center;
+    @apply bg-gradient-to-br from-[var(--brand-orange)] to-[var(--brand-red)] rounded-[4px] px-[24px] py-[10px] font-medium text-[15px] border-none inline-flex items-center justify-center transition-all duration-300 w-auto min-w-[140px] h-[45px] box-border mt-auto mb-0 whitespace-nowrap self-center;
     color: white !important;
     text-align: center;
   }
@@ -1778,7 +1796,7 @@ img[alt="logo"] {
   a.pricelist-btn:hover,
   a.enquiry-btn:hover,
   a.fan-btn:hover {
-    @apply bg-none bg-[#1e2e5e] -translate-y-[2px];
+    @apply bg-none bg-[var(--brand-navy)] -translate-y-[2px];
     box-shadow: 0 4px 12px rgba(30, 46, 94, 0.25);
     color: white !important;
   }
@@ -1806,7 +1824,7 @@ img[alt="logo"] {
 .product-title,
 .detail-product-title,
 .fan-info h4 {
-  color: #c1272d !important;
+  color: var(--brand-red) !important;
   font-size: 20px !important;
   font-weight: 700 !important;
   margin-bottom: 12px !important;
@@ -1857,7 +1875,7 @@ img[alt="logo"] {
 .image-box {
   text-align: center;
   padding: 15px;
-  background: #f8f9fb;
+  background: var(--brand-surface);
   border-radius: 12px;
 }
 
@@ -1906,7 +1924,7 @@ img[alt="logo"] {
 .feature-content h2 {
   font-size: 22px;
   font-weight: 700;
-  color: #1e2e5e;
+  color: var(--brand-navy);
   font-family: "Outfit", sans-serif;
   margin-bottom: 12px;
   letter-spacing: 0.3px;
@@ -1960,7 +1978,7 @@ img[alt="logo"] {
 }
 
 .cables-img {
-  background: #f8f9fb;
+  background: var(--brand-surface);
   padding: 16px;
   flex: 0 0 auto;
   display: flex;
@@ -2005,7 +2023,7 @@ img[alt="logo"] {
 .cables-name h4 {
   font-size: 15px;
   font-weight: 600;
-  color: #1e2e5e;
+  color: var(--brand-navy);
   font-family: "Outfit", sans-serif;
   line-height: 1.45;
   margin: 0;
@@ -2013,7 +2031,7 @@ img[alt="logo"] {
 }
 
 .cables-card:hover .cables-name h4 {
-  color: #c1272d;
+  color: var(--brand-red);
 }
 
 @media (max-width: 767px) {
@@ -2056,7 +2074,7 @@ img.product-img {
 }
 
 .wires_inner .product-img {
-  background: #f8f9fb;
+  background: var(--brand-surface);
   border-radius: 16px;
   padding: 20px;
   display: flex;
@@ -2089,7 +2107,7 @@ img.product-img {
 .wires-title h3 {
   font-size: 28px;
   font-weight: 700;
-  color: #1e2e5e;
+  color: var(--brand-navy);
   font-family: "Outfit", sans-serif;
   line-height: 1.35;
   margin-bottom: 14px;
@@ -2098,7 +2116,7 @@ img.product-img {
 .separator1 {
   width: 60px;
   height: 3px;
-  background: linear-gradient(90deg, #f7931e, #c1272d);
+  background: linear-gradient(90deg, var(--brand-orange), var(--brand-red));
   border-radius: 3px;
   margin-bottom: 20px;
 }
@@ -2121,7 +2139,7 @@ img.product-img {
 .features h4 {
   font-size: 20px;
   font-weight: 700;
-  color: #1e2e5e;
+  color: var(--brand-navy);
   font-family: "Outfit", sans-serif;
   margin-bottom: 10px;
 }
@@ -2153,11 +2171,11 @@ img.product-img {
 
 .animated-list li:hover {
   padding-left: 6px;
-  color: #1e2e5e;
+  color: var(--brand-navy);
 }
 
 .animated-list li i {
-  color: #f7931e;
+  color: var(--brand-orange);
   font-size: 13px;
   margin-top: 3px;
   flex-shrink: 0;
@@ -2204,7 +2222,7 @@ img.product-img {
   display: block;
   width: 60px;
   height: 3px;
-  background: linear-gradient(90deg, #f7931e, #c1272d);
+  background: linear-gradient(90deg, var(--brand-orange), var(--brand-red));
   border-radius: 3px;
   margin: 10px auto 0;
 }
@@ -2238,7 +2256,7 @@ img.product-img {
 }
 
 .pricelist-info-banner {
-  background: linear-gradient(135deg, #1e2e5e 0%, #2d4a8a 100%);
+  background: linear-gradient(135deg, var(--brand-navy) 0%, #2d4a8a 100%);
   color: #fff;
   border-radius: 12px;
   padding: 18px 28px;
@@ -2247,7 +2265,7 @@ img.product-img {
 }
 
 .pricelist-info-banner a {
-  color: #f7931e;
+  color: var(--brand-orange);
   font-weight: 600;
   text-decoration: underline;
 }
@@ -2274,12 +2292,12 @@ img.product-img {
 }
 
 .pricelist-tabs li:hover {
-  color: #1e2e5e;
+  color: var(--brand-navy);
 }
 
 .pricelist-tabs li.active {
-  color: #f7931e;
-  border-bottom-color: #f7931e;
+  color: var(--brand-orange);
+  border-bottom-color: var(--brand-orange);
   background: #fff;
 }
 
@@ -2330,7 +2348,7 @@ img.product-img {
 .pricelist-title p {
   font-size: 16px;
   font-weight: 700;
-  color: #1e2e5e;
+  color: var(--brand-navy);
   font-family: "Outfit", sans-serif;
   margin: 0;
 }
@@ -2341,7 +2359,7 @@ img.product-img {
 
 .pricelist-btn {
   display: inline-block;
-  background: linear-gradient(135deg, #f7931e, #e07b0e);
+  background: linear-gradient(135deg, var(--brand-orange), var(--brand-orange-hover));
   color: #fff;
   font-size: 14px;
   font-weight: 600;
@@ -2353,7 +2371,7 @@ img.product-img {
 }
 
 .pricelist-btn:hover {
-  background: linear-gradient(135deg, #e07b0e, #c96a00);
+  background: linear-gradient(135deg, var(--brand-orange-hover), #c96a00);
   color: #fff;
   text-decoration: none;
   transform: scale(1.04);
@@ -2383,7 +2401,7 @@ img.product-img {
 .db-subcategory-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 12px 32px rgba(247, 147, 30, 0.15);
-  border-color: #f7931e;
+  border-color: var(--brand-orange);
   text-decoration: none;
 }
 
@@ -2408,7 +2426,7 @@ img.product-img {
 .db-subcategory-name {
   font-size: 15px;
   font-weight: 700;
-  color: #1e2e5e;
+  color: var(--brand-navy);
   font-family: "Outfit", sans-serif;
   margin-bottom: 6px;
 }
@@ -2476,7 +2494,7 @@ img.product-img {
 .db-product-title {
   font-size: 15px;
   font-weight: 700;
-  color: #1e2e5e;
+  color: var(--brand-navy);
   font-family: "Outfit", sans-serif;
   margin-bottom: 8px;
   line-height: 1.4;
@@ -2505,8 +2523,8 @@ img.product-img {
   flex: 1;
   text-align: center;
   padding: 9px 14px;
-  border: 2px solid #1e2e5e;
-  color: #1e2e5e;
+  border: 2px solid var(--brand-navy);
+  color: var(--brand-navy);
   border-radius: 6px;
   font-size: 13px;
   font-weight: 600;
@@ -2516,7 +2534,7 @@ img.product-img {
 }
 
 .db-product-detail-btn:hover {
-  background: #1e2e5e;
+  background: var(--brand-navy);
   color: #fff;
   text-decoration: none;
 }
@@ -2525,7 +2543,7 @@ img.product-img {
   flex: 1;
   text-align: center;
   padding: 9px 14px;
-  background: linear-gradient(135deg, #f7931e, #c1272d);
+  background: linear-gradient(135deg, var(--brand-orange), var(--brand-red));
   color: #fff;
   border-radius: 6px;
   font-size: 13px;
@@ -2672,7 +2690,7 @@ img.product-img {
   /* Section heading inside offcanvas (e.g. "Contact Info") */
   .offcanvas-title-meta {
     @apply font-semibold text-base mb-3;
-    color: #1e2e5e;
+    color: var(--brand-navy);
   }
 
   /* Top-level nav links: Home, About Us, Catalogue… */
@@ -2749,7 +2767,7 @@ a.pricelist-btn:hover,
 .product-card a.pricelist-btn:hover,
 .product-content a.pricelist-btn:hover,
 .wires_inner a.pricelist-btn:hover {
-  background: #1e2e5e !important;
+  background: var(--brand-navy) !important;
   color: #fff !important;
 }
 
@@ -2771,7 +2789,7 @@ a.enquiry-btn:hover,
 .product-card a.enquiry-btn:hover,
 .product-content a.enquiry-btn:hover,
 .wires_inner a.enquiry-btn:hover {
-  background: #1e2e5e !important;
+  background: var(--brand-navy) !important;
   color: #fff !important;
 }
 

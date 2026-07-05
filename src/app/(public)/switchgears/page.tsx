@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { getSeoMetadata } from '@/lib/seo';
-﻿import React from 'react';
+import React from 'react';
 import Link from 'next/link';
+import BreadcrumbBanner from '@/components/BreadcrumbBanner';
 
 export async function generateMetadata(): Promise<Metadata> {
   return getSeoMetadata('/switchgears', {
@@ -88,33 +89,10 @@ export default function SwitchgearsPage() {
   return (
     <main>
 
-      {/* Breadcrumb Area */}
-      <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
-        <div
-          className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')" }}
-        ></div>
-        <div className="container">
-          <div className="row">
-            <div className="w-full">
-              <div className="rs-breadcrumb-content-wrapper">
-                <div className="rs-breadcrumb-title-wrapper">
-                  <h1 className="rs-breadcrumb-title">Switchgears</h1>
-                </div>
-                <div className="rs-breadcrumb-menu">
-                  <nav>
-                    <ul>
-                      <li><span><Link href="/">Home</Link></span></li>
-                      <li><span><Link href="/polycab">Polycab</Link></span></li>
-                      <li><span>Switchgears</span></li>
-                    </ul>
-                  </nav>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <BreadcrumbBanner
+        title="Switchgears"
+        crumbs={[{ label: 'Home', href: '/' }, { label: 'Polycab', href: '/polycab' }, { label: 'Switchgears' }]}
+      />
 
       {/* Main Content */}
       <section className="catalogue-section">

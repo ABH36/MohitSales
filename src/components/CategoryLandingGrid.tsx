@@ -1,10 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
+import BreadcrumbBanner, { type Crumb } from '@/components/BreadcrumbBanner';
 
-export interface LandingCrumb {
-  label: string;
-  href?: string; // last crumb (current page) omits href
-}
+/** @deprecated use `Crumb` from BreadcrumbBanner — kept as an alias for callers. */
+export type LandingCrumb = Crumb;
 export interface LandingItem {
   title: string;
   image: string;
@@ -23,41 +22,13 @@ export default function CategoryLandingGrid({
   buttonLabel = 'Explore More',
 }: {
   title: string;
-  breadcrumbs: LandingCrumb[];
+  breadcrumbs: Crumb[];
   items: LandingItem[];
   buttonLabel?: string;
 }) {
   return (
     <main>
-      {/* Breadcrumb Area */}
-      <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
-        <div
-          className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')" }}
-        ></div>
-        <div className="container">
-          <div className="row">
-            <div className="w-full">
-              <div className="rs-breadcrumb-content-wrapper">
-                <div className="rs-breadcrumb-title-wrapper">
-                  <h1 className="rs-breadcrumb-title">{title}</h1>
-                </div>
-                <div className="rs-breadcrumb-menu">
-                  <nav>
-                    <ul>
-                      {breadcrumbs.map((crumb, i) => (
-                        <li key={i}>
-                          <span>{crumb.href ? <Link href={crumb.href}>{crumb.label}</Link> : crumb.label}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </nav>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <BreadcrumbBanner title={title} crumbs={breadcrumbs} />
 
       {/* Grid Section */}
       <section className="catalogue-section">

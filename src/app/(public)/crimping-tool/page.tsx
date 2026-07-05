@@ -1,7 +1,7 @@
 ﻿'use client';
 
 import React from 'react';
-import Link from 'next/link';
+import BreadcrumbBanner from '@/components/BreadcrumbBanner';
 
 export default function CrimpingToolPage() {
   const products = [
@@ -27,34 +27,10 @@ export default function CrimpingToolPage() {
 
   return (
     <main>
-      {/* breadcrumb area start */}
-      <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
-        <div 
-          className="rs-breadcrumb-bg"
-          style={{ backgroundImage: "url('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')" }}
-        ></div>
-        <div className="container">
-          <div className="row">
-            <div className="w-full">
-              <div className="rs-breadcrumb-content-wrapper">
-                <div className="rs-breadcrumb-title-wrapper">
-                  <h1 className="rs-breadcrumb-title">Crimping Tool</h1>
-                </div>
-                <div className="rs-breadcrumb-menu">
-                  <nav>
-                    <ul>
-                      <li><span><Link href="/">Home</Link></span></li>
-                      <li><span><Link href="/dowells">Dowells</Link></span></li>
-                      <li><span>Crimping Tool</span></li>
-                    </ul>
-                  </nav>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      {/* breadcrumb area end */}
+      <BreadcrumbBanner
+        title="Crimping Tool"
+        crumbs={[{ label: 'Home', href: '/' }, { label: 'Dowells', href: '/dowells' }, { label: 'Crimping Tool' }]}
+      />
 
       <section className="catalogue-section">
         <div className="container">

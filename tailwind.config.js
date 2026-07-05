@@ -18,6 +18,15 @@ module.exports = {
     },
     extend: {
       colors: {
+        // Public-site brand palette — mirrors the CSS custom properties in
+        // globals.css :root so JSX can use e.g. text-brand-navy / bg-brand-orange.
+        brand: {
+          navy: "var(--brand-navy)",
+          red: "var(--brand-red)",
+          orange: "var(--brand-orange)",
+          "orange-hover": "var(--brand-orange-hover)",
+          surface: "var(--brand-surface)",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
