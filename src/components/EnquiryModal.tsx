@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useCaptcha } from '@/components/useCaptcha';
 
 interface EnquiryModalProps {
   productName: string;
@@ -17,8 +18,7 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
     captchaInput: ''
   });
 
-  const [captchaSvg, setCaptchaSvg] = useState('');
-  const [captchaToken, setCaptchaToken] = useState('');
+  const { svg: captchaSvg, token: captchaToken, refresh: generateCaptcha } = useCaptcha();
   const [file, setFile] = useState<File | null>(null);
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -26,26 +26,6 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
 
   const firstInputRef = useRef<HTMLInputElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
-  const captchaAbortRef = useRef<AbortController | null>(null);
-
-  const generateCaptcha = async () => {
-    captchaAbortRef.current?.abort();
-    const ctrl = new AbortController();
-    captchaAbortRef.current = ctrl;
-    
-    try {
-      const res = await fetch('/api/captcha', { signal: ctrl.signal });
-      const data = await res.json();
-      if (data.success) {
-        setCaptchaSvg(data.svg);
-        setCaptchaToken(data.token);
-      }
-    } catch (err) {
-      if (err instanceof Error && err.name !== 'AbortError') {
-        console.error('Failed to generate captcha', err);
-      }
-    }
-  };
 
   const handleClose = () => {
     setIsClosing(true);
@@ -59,7 +39,6 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
   handleCloseRef.current = handleClose;
 
   useEffect(() => {
-    generateCaptcha();
     // Lock body scroll on mount
     document.body.style.overflow = 'hidden';
 

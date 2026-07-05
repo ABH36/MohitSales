@@ -3,23 +3,8 @@ import type { NextRequest } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/prisma';
 import { requireRole } from '@/lib/api/guard';
+import { wouldCreateLoop } from '@/lib/redirects';
 
-// Follow the redirect chain: check if adding fromPath→toPath creates any cycle
-async function wouldCreateLoop(from: string, to: string, excludeId?: string): Promise<boolean> {
-  const visited = new Set<string>([from]);
-  let current = to;
-  for (let i = 0; i < 10; i++) {
-    if (visited.has(current)) return true;
-    visited.add(current);
-    const next = await prisma.redirect.findFirst({
-      where: { fromPath: current, isActive: true, ...(excludeId ? { NOT: { id: excludeId } } : {}) },
-      select: { toPath: true }
-    });
-    if (!next) break;
-    current = next.toPath;
-  }
-  return false;
-}
 
 export async function GET() {
   try {

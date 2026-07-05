@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useCaptcha } from '@/components/useCaptcha';
 import { cld } from '@/lib/cloudinary';
 
 export default function HomeContactForm() {
@@ -13,7 +14,7 @@ export default function HomeContactForm() {
     captchaInput: ''
   });
 
-  const [captcha, setCaptcha] = useState('1234');
+  const { svg: captchaSvg, token: captchaToken, refresh: generateCaptcha } = useCaptcha();
   const [file, setFile] = useState<File | null>(null);
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,15 +41,6 @@ export default function HomeContactForm() {
     return () => observer.disconnect();
   }, []);
 
-  const generateCaptcha = () => {
-    const code = Math.floor(1000 + Math.random() * 9000).toString();
-    setCaptcha(code);
-  };
-
-  useEffect(() => {
-    generateCaptcha();
-  }, []);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -64,8 +56,8 @@ export default function HomeContactForm() {
     e.preventDefault();
     setStatusMessage(null);
 
-    if (formData.captchaInput !== captcha) {
-      setStatusMessage({ type: 'error', text: 'Captcha code mismatch. Please check and try again.' });
+    if (!formData.captchaInput) {
+      setStatusMessage({ type: 'error', text: 'Please enter the captcha code.' });
       return;
     }
 
@@ -78,6 +70,8 @@ export default function HomeContactForm() {
       postData.append('email', formData.email);
       postData.append('mobile', formData.mobile);
       postData.append('message', formData.message);
+      postData.append('captchaInput', formData.captchaInput);
+      postData.append('captchaToken', captchaToken);
       if (file) {
         postData.append('file', file);
       }
@@ -240,20 +234,20 @@ export default function HomeContactForm() {
                     <span
                       className="captcha-box"
                       style={{
-                        display: 'inline-block',
-                        padding: '10px 16px',
-                        background: '#fff',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: 0,
+                        height: '40px',
+                        minWidth: '120px',
+                        background: '#f1f5f9',
                         border: '2px dashed #ccc',
-                        fontWeight: 700,
-                        letterSpacing: '4px',
-                        fontSize: '18px',
-                        color: '#1e2e5e',
                         borderRadius: '6px',
+                        overflow: 'hidden',
                         userSelect: 'none'
                       }}
-                    >
-                      {captcha}
-                    </span>
+                      dangerouslySetInnerHTML={{ __html: captchaSvg || '<span style="font-size:12px;color:#94a3b8;padding:0 12px;">Loading…</span>' }}
+                    />
                     <span
                       className="captcha-refresh"
                       onClick={generateCaptcha}

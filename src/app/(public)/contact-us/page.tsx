@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePublicSettings } from '@/components/PublicSettingsContext';
+import { useCaptcha } from '@/components/useCaptcha';
 import { cld } from '@/lib/cloudinary';
 
 
@@ -17,36 +18,14 @@ export default function ContactUsPage() {
     captchaInput: ''
   });
   
-  const [captchaSvg, setCaptchaSvg] = useState('');
-  const [captchaToken, setCaptchaToken] = useState('');
+  const { svg: captchaSvg, token: captchaToken, refresh: generateCaptcha } = useCaptcha();
   const [file, setFile] = useState<File | null>(null);
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const captchaAbortRef = useRef<AbortController | null>(null);
-
-  const generateCaptcha = async () => {
-    captchaAbortRef.current?.abort();
-    const ctrl = new AbortController();
-    captchaAbortRef.current = ctrl;
-    
-    try {
-      const res = await fetch('/api/captcha', { signal: ctrl.signal });
-      const data = await res.json();
-      if (data.success) {
-        setCaptchaSvg(data.svg);
-        setCaptchaToken(data.token);
-      }
-    } catch (err) {
-      if (err instanceof Error && err.name !== 'AbortError') {
-        console.error('Failed to generate captcha', err);
-      }
-    }
-  };
 
   useEffect(() => {
     setIsMounted(true);
-    generateCaptcha();
 
     // Gap 2: Auto-fill product context from URL
     if (typeof window !== 'undefined') {
