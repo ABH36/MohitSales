@@ -1,12 +1,5 @@
-import SchemaInjector from '@/components/SchemaInjector';
+import { schemaLayout } from '@/components/PageSchema';
 
 export const revalidate = 3600;
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      <SchemaInjector page="/solar" />
-      {children}
-    </>
-  );
-}
+export default schemaLayout('/solar');

@@ -1,6 +1,6 @@
+import { schemaLayout } from '@/components/PageSchema';
 import { getSeoMetadata } from '@/lib/seo';
 import type { Metadata } from 'next';
-import SchemaInjector from '@/components/SchemaInjector';
 
 export const revalidate = 3600;
 
@@ -24,11 +24,4 @@ export async function generateMetadata(): Promise<Metadata> {
 });
 };
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      <SchemaInjector page="/certificates" />
-      {children}
-    </>
-  );
-}
+export default schemaLayout('/certificates');
