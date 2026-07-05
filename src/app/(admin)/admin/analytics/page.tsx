@@ -25,58 +25,12 @@ interface AnalyticsData {
   heaviestMedia: Array<{ id: string; filename: string; url: string; mimeType: string; size: number }>;
 }
 
-function isValidLookerUrl(url: string): boolean {
-  try {
-    const parsedUrl = new URL(url);
-    const allowedDomains = ['lookerstudio.google.com', 'datastudio.google.com'];
-    return parsedUrl.protocol === 'https:' && allowedDomains.includes(parsedUrl.hostname);
-  } catch (err) {
-    return false;
-  }
-}
-
 export default function AdminAnalyticsPage() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // SSR Hydration & Looker Studio states
-  const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<'database' | 'google'>('database');
-  const [lookerUrl, setLookerUrl] = useState<string>('');
-  const [inputLookerUrl, setInputLookerUrl] = useState<string>('');
-  const [showGscGuide, setShowGscGuide] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    const saved = localStorage.getItem('looker_studio_embed_url');
-    if (saved) {
-      setLookerUrl(saved);
-      setInputLookerUrl(saved);
-    }
-  }, []);
-
-  const handleSaveLookerUrl = (e: React.FormEvent) => {
-    e.preventDefault();
-    const url = inputLookerUrl.trim();
-    if (!url) return;
-
-    // Strict URL validation to prevent XSS (Only allow secure Google Looker Studio domains)
-    if (!isValidLookerUrl(url)) {
-      alert('Security Alert: Only secure Google Looker Studio URLs are allowed (https://lookerstudio.google.com/).');
-      return;
-    }
-
-    localStorage.setItem('looker_studio_embed_url', url);
-    setLookerUrl(url);
-    alert('Looker Studio embed URL saved successfully!');
-  };
-
-  const handleClearLookerUrl = () => {
-    localStorage.removeItem('looker_studio_embed_url');
-    setLookerUrl('');
-    setInputLookerUrl('');
-  };
 
   // Google Analytics API states
   const [gaData, setGaData] = useState<any>(null);
@@ -183,25 +137,6 @@ export default function AdminAnalyticsPage() {
     color: d.name.toLowerCase().includes('mobile') ? '#10b981' : d.name.toLowerCase().includes('tablet') ? '#f59e0b' : '#3b82f6'
   })) || defaultDevices;
 
-  const defaultGeoData = [
-    { city: 'Indore', sessions: 312, pct: 38 },
-    { city: 'Mumbai', sessions: 198, pct: 24 },
-    { city: 'Delhi', sessions: 142, pct: 17 },
-    { city: 'Pune', sessions: 89, pct: 11 },
-    { city: 'Ahmedabad', sessions: 67, pct: 8 },
-    { city: 'Others', sessions: 16, pct: 2 },
-  ];
-  const gaGeoData = gaData?.geoData || defaultGeoData;
-
-  const defaultTopPages = [
-    { page: '/', title: 'Homepage', views: 482, avgTime: '3m 12s', bounceRate: '24%' },
-    { page: '/polycab', title: 'Polycab Products', views: 267, avgTime: '2m 45s', bounceRate: '28%' },
-    { page: '/dowells', title: 'Dowells Products', views: 189, avgTime: '2m 20s', bounceRate: '31%' },
-    { page: '/contact-us', title: 'Contact Us', views: 156, avgTime: '4m 05s', bounceRate: '15%' },
-    { page: '/pricelist', title: 'Price List', views: 134, avgTime: '1m 50s', bounceRate: '35%' },
-    { page: '/cable-terminal', title: 'Cable Terminal', views: 98, avgTime: '2m 10s', bounceRate: '29%' },
-  ];
-  const gaTopPages = gaData?.topPages || defaultTopPages;
 
   // Google Analytics Trend Chart calculations
   const gaWidth = 640;
@@ -330,7 +265,6 @@ export default function AdminAnalyticsPage() {
     if (!chartSvgRef.current || points.length === 0) return;
     const rect = chartSvgRef.current.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
 
     // Find the closest point index
     let closestIdx = 0;
@@ -350,33 +284,6 @@ export default function AdminAnalyticsPage() {
   const handleMouseLeave = () => {
     setHoverIndex(null);
   };
-
-  // Top Landing Pages data
-  const topPages = [
-    { page: '/', title: 'Homepage', views: 482, avgTime: '3m 12s', bounceRate: '24%' },
-    { page: '/polycab', title: 'Polycab Products', views: 267, avgTime: '2m 45s', bounceRate: '28%' },
-    { page: '/dowells', title: 'Dowells Products', views: 189, avgTime: '2m 20s', bounceRate: '31%' },
-    { page: '/contact-us', title: 'Contact Us', views: 156, avgTime: '4m 05s', bounceRate: '15%' },
-    { page: '/pricelist', title: 'Price List', views: 134, avgTime: '1m 50s', bounceRate: '35%' },
-    { page: '/cable-terminal', title: 'Cable Terminal', views: 98, avgTime: '2m 10s', bounceRate: '29%' },
-  ];
-
-  const geoData = [
-    { city: 'Indore', sessions: 312, pct: 38 },
-    { city: 'Mumbai', sessions: 198, pct: 24 },
-    { city: 'Delhi', sessions: 142, pct: 17 },
-    { city: 'Pune', sessions: 89, pct: 11 },
-    { city: 'Ahmedabad', sessions: 67, pct: 8 },
-    { city: 'Others', sessions: 16, pct: 2 },
-  ];
-
-  const searchKeywords = [
-    { keyword: 'polycab dealer indore', clicks: 89, impressions: 1240, ctr: '7.2%', position: 3.2 },
-    { keyword: 'mohit sales corporation', clicks: 67, impressions: 820, ctr: '8.2%', position: 1.4 },
-    { keyword: 'dowells cable terminal', clicks: 45, impressions: 680, ctr: '6.6%', position: 5.1 },
-    { keyword: 'polycab price list 2026', clicks: 38, impressions: 560, ctr: '6.8%', position: 4.8 },
-    { keyword: 'cable gland supplier', clicks: 29, impressions: 420, ctr: '6.9%', position: 6.3 },
-  ];
 
   // Render Section
   return (
