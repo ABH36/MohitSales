@@ -14,10 +14,21 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      // Polycab sub-category pages are 0-byte placeholders — redirect to actual content
-      { source: '/polycab/cables-by-application', destination: '/industries/cables-by-application/building-infrastructure', permanent: false },
-      { source: '/polycab/cables-by-standards', destination: '/industries/cables-by-standards/indian-standards', permanent: false },
-      { source: '/polycab/cables-by-type', destination: '/industries/cables-by-type/lv-power-cable', permanent: false },
+      // ── SEO de-duplication ──────────────────────────────────────────────
+      // The 2,122 /polycab/cables-by-* pages are byte-identical duplicates of
+      // the canonical /industries/cables-by-* pages. Permanently redirect the
+      // whole subtree so ranking signals consolidate and duplicates leave the
+      // index. (:path+ = one-or-more segments; bare section pages handled below.)
+      { source: '/polycab/cables-by-application/:path+', destination: '/industries/cables-by-application/:path+', permanent: true },
+      { source: '/polycab/cables-by-type/:path+', destination: '/industries/cables-by-type/:path+', permanent: true },
+      { source: '/polycab/cables-by-standards/:path+', destination: '/industries/cables-by-standards/:path+', permanent: true },
+      // Bare section landings (placeholders) → a known-good canonical sub-page.
+      { source: '/polycab/cables-by-application', destination: '/industries/cables-by-application/building-infrastructure', permanent: true },
+      { source: '/polycab/cables-by-standards', destination: '/industries/cables-by-standards/indian-standards', permanent: true },
+      { source: '/polycab/cables-by-type', destination: '/industries/cables-by-type/lv-power-cable', permanent: true },
+      // Legacy homepage aliases.
+      { source: '/index', destination: '/', permanent: true },
+      { source: '/index-old', destination: '/', permanent: true },
     ];
   },
   async headers() {
