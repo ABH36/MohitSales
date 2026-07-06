@@ -39,7 +39,7 @@ const FALLBACK_ABOUT = {
     'We are a proud Authorised Distributor of Polycab and Dowells, ensuring our customers receive only genuine, certified products that meet the highest industry standards.',
     'Our success is driven by a customer-first approach, technical expertise, timely delivery, and dependable after-sales support. Today, we proudly serve contractors, industries, retailers, and large-scale infrastructure projects, helping power growth and innovation across the region.',
   ],
-  imageUrl: '/assets/images/about/authorized distributor.png',
+  imageUrl: 'https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/about/authorized-distributor.png',
 };
 
 export default async function Page() {

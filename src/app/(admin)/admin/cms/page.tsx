@@ -77,7 +77,7 @@ const SPOTLIGHT_PRESET = `<div style="display: flex; flex-direction: row; flex-w
 const DEFAULT_HOMEPAGE_ABOUT: PageContent = {
   title: 'About Us',
   content: 'Established in 1997, Mohit Sales Corporation Pvt. Ltd. has built a strong reputation as a trusted leader in the electrical distribution industry. With over 27+ years of experience, we deliver reliable, high-quality electrical products and customized solutions to diverse sectors.\n\nWe are a proud Authorised Distributor of Polycab and Dowells, ensuring our customers receive only genuine, certified products that meet the highest industry standards.\n\nOur success is driven by a customer-first approach, technical expertise, timely delivery, and dependable after-sales support. Today, we proudly serve contractors, industries, retailers, and large-scale infrastructure projects, helping power growth and innovation across the region.',
-  imageUrl: '/assets/images/about/authorized distributor.png',
+  imageUrl: 'https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/about/authorized-distributor.png',
   extraField: '',
 };
 
@@ -492,7 +492,7 @@ export default function CmsPage() {
                     value={pageData.homepage.content} placeholder="Company description..."
                     onChange={e => updatePage('homepage', 'content', e.target.value)} />
                 </div>
-                {renderImageField('About Section Image', pageData.homepage.imageUrl, (url) => updatePage('homepage', 'imageUrl', url), 'homepage-img', '/assets/images/about/authorized distributor.png')}
+                {renderImageField('About Section Image', pageData.homepage.imageUrl, (url) => updatePage('homepage', 'imageUrl', url), 'homepage-img', 'https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/about/authorized-distributor.png')}
               </div>
             </div>
           )}
@@ -659,7 +659,7 @@ export default function CmsPage() {
                           promoData.imageUrl,
                           (url) => setPromoData(prev => ({ ...prev, imageUrl: url })),
                           'promo-img',
-                          '/assets/images/about/authorized distributor.png'
+                          'https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/about/authorized-distributor.png'
                         )
                       )}
 
