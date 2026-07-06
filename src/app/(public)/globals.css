@@ -3348,3 +3348,36 @@ header .rs-header-area.rs-header-two .rs-header-left .rs-header-logo img[alt="lo
   height: 24px;
   transform: translate(-50%, -50%);
 }
+
+/* ====================================================
+   A11y / UX polish — purely additive.
+   These change nothing for normal mouse/touch users; they only add a keyboard
+   focus ring (keyboard nav only) and honour the OS "reduce motion" preference.
+   ==================================================== */
+
+/* Visible focus ring for keyboard users only (mouse/touch clicks never trigger
+   :focus-visible, so pointer users see zero change). */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--brand-orange);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Respect users who prefer reduced motion — disables the heavy theme animations
+   only for people who've set that OS preference; everyone else is unaffected. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
