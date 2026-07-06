@@ -1,7 +1,11 @@
 import { MetadataRoute } from 'next';
 import prisma from '@/lib/prisma';
 
-export const dynamic = 'force-dynamic';
+// Metadata routes must live at the app root (not inside the (public) route group)
+// or the [...slug] catch-all shadows them — /robots.txt was falling through to
+// the catch-all and returning the not-found HTML page. Revalidate hourly so an
+// admin-managed robots update is picked up without a redeploy.
+export const revalidate = 3600;
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://mohitscpl.com';
@@ -26,7 +30,7 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
             crawlDelay: r.crawlDelay,
           })),
           sitemap: `${baseUrl}/sitemap.xml`,
-        } as any;
+        } as MetadataRoute.Robots;
       }
     }
   } catch {
