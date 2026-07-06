@@ -33,8 +33,12 @@ const nextConfig = {
   },
   async headers() {
     const isProd = process.env.NODE_ENV === 'production';
-    const cspScriptSrc = isProd ? "'self' 'unsafe-inline'" : "'self' 'unsafe-inline' 'unsafe-eval'";
-    const cspValue = `default-src 'self'; script-src ${cspScriptSrc}; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self'; frame-src https://www.google.com; frame-ancestors 'none';`;
+    // Google Analytics (gtag.js) — the script comes from googletagmanager.com and
+    // beacons go to google-analytics.com; without these the site's own CSP blocks GA.
+    const gaScript = 'https://www.googletagmanager.com';
+    const gaConnect = 'https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com';
+    const cspScriptSrc = isProd ? `'self' 'unsafe-inline' ${gaScript}` : `'self' 'unsafe-inline' 'unsafe-eval' ${gaScript}`;
+    const cspValue = `default-src 'self'; script-src ${cspScriptSrc}; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' ${gaConnect}; frame-src https://www.google.com; frame-ancestors 'none';`;
 
     return [
       {
