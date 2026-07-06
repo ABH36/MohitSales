@@ -73,7 +73,7 @@ export default function IndustriesSlider() {
                 <div key={index} className="swiper-slide">
                   <div className="rs-portfolio-item">
                     <div className="rs-portfolio-thumb">
-                      <img src={cld(ind.image)} alt={ind.name} />
+                      <img src={cld(ind.image, 'f_auto,q_auto,w_500')} alt={ind.name} />
                     </div>
                     <div className="rs-portfolio-content">
                       <h4 className="rs-portfolio-title">

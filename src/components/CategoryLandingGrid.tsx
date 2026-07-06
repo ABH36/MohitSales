@@ -44,7 +44,7 @@ export default function CategoryLandingGrid({
                 {items.map((item, idx) => (
                   <div key={idx} className="product-card">
                     <Link href={item.link}>
-                      <img src={cld(item.image)} alt={item.title} loading="lazy" decoding="async" />
+                      <img src={cld(item.image, 'f_auto,q_auto,w_600')} alt={item.title} loading="lazy" decoding="async" />
                       <h3>{item.title}</h3>
                       <div className="pricelist-button">
                         <span className="pricelist-btn">{buttonLabel}</span>

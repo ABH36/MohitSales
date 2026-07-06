@@ -123,7 +123,7 @@ export default function ProductSlider({ products, prevElSelector, nextElSelector
             <div className="rs-portfolio-item">
               <div className="rs-portfolio-thumb">
                 <img
-                  src={cld(prod.image)}
+                  src={cld(prod.image, 'f_auto,q_auto,w_600')}
                   alt={prod.title}
                   loading="lazy"
                   decoding="async"

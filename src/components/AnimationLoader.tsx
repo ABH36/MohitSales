@@ -61,7 +61,6 @@ export default function AnimationLoader() {
       '/assets/js/vendor/isotope.pkgd.min.js',
       '/assets/js/vendor/imagesloaded.pkgd.min.js',
       '/assets/js/plugins/jarallax.min.js',
-      '/assets/js/plugins/easypie.js',
       '/assets/js/plugins/headding-title.js',
       '/assets/js/plugins/lenis.min.js',
       '/assets/js/plugins/gsap.min.js',
@@ -106,18 +105,21 @@ export default function AnimationLoader() {
 
     const loadAll = async () => {
       try {
-        // Step 1: Load critical scripts sequentially (jQuery → Bootstrap → Swiper)
+        // Step 1: Load critical scripts sequentially (jQuery → Bootstrap → Swiper),
+        // yielding after each so a heavy library's parse+init doesn't chain into
+        // one long main-thread task (lower TBT).
         for (const src of criticalScripts) {
           if (!mounted) return;
           await loadScript(src);
+          await yieldToMain();
         }
 
-        // Step 2: Load deferred scripts in small batches with yields between
-        // Each batch is short enough (<50ms) to avoid Lighthouse long-task penalty
-        const batchSize = 3;
-        for (let i = 0; i < deferredScripts.length; i += batchSize) {
+        // Step 2: Load deferred scripts one at a time, yielding to the main thread
+        // between each. This breaks the plugin init work into many short tasks
+        // instead of a few long ones — directly reduces Total Blocking Time.
+        for (const src of deferredScripts) {
           if (!mounted) return;
-          await Promise.all(deferredScripts.slice(i, i + batchSize).map(src => loadScript(src)));
+          await loadScript(src);
           await yieldToMain();
         }
 
