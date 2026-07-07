@@ -105,6 +105,10 @@ export default async function Page() {
     <>
     <SchemaInjector page="/" />
     <main>
+      {/* Accessible page title (visually hidden) — gives the homepage a single
+          top-level h1 for screen readers + SEO without altering the design. */}
+      <h1 className="sr-only">Mohit Sales Corporation Pvt. Ltd. — Authorized Polycab &amp; Dowells Distributor in Indore</h1>
+
       {/* Banner slider area */}
       <BannerSlider />
 
@@ -128,7 +132,7 @@ export default async function Page() {
                   <div className="about-heading mb-2">
                     <h2>{aboutData.title}</h2>
                   </div>
-                  <h4 className="mb-3">{aboutData.subtitle}</h4>
+                  <h4 className="mb-3" aria-level={3}>{aboutData.subtitle}</h4>
                   {aboutData.paragraphs.map((p, i) => (
                     <p key={i}>{p}</p>
                   ))}
@@ -182,7 +186,7 @@ export default async function Page() {
                       </svg>
                     </div>
                     <div className="rs-why-choose-content">
-                      <h6 className="rs-why-choose-title">Trusted Authorised Brands</h6>
+                      <h6 className="rs-why-choose-title" aria-level={3}>Trusted Authorised Brands</h6>
                       <p className="descrip">
                         We supply only genuine products from authorised brands like Polycab and Dowells, ensuring reliability and long-term performance.
                       </p>
@@ -197,7 +201,7 @@ export default async function Page() {
                       </svg>
                     </div>
                     <div className="rs-why-choose-content">
-                      <h6 className="rs-why-choose-title">Expert Technical Support</h6>
+                      <h6 className="rs-why-choose-title" aria-level={3}>Expert Technical Support</h6>
                       <p className="descrip">
                         Our experienced team provides technical guidance and product recommendations tailored to your project needs.
                       </p>
@@ -213,7 +217,7 @@ export default async function Page() {
                       </svg>
                     </div>
                     <div className="rs-why-choose-content">
-                      <h6 className="rs-why-choose-title">Wide Product Availability</h6>
+                      <h6 className="rs-why-choose-title" aria-level={3}>Wide Product Availability</h6>
                       <p className="descrip">
                         A comprehensive range of cables, accessories, and electrical solutions available under one roof for faster sourcing.
                       </p>

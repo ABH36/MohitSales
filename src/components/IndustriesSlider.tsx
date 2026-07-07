@@ -76,7 +76,7 @@ export default function IndustriesSlider() {
                       <img src={cld(ind.image, 'f_auto,q_auto,w_500')} alt={ind.name} />
                     </div>
                     <div className="rs-portfolio-content">
-                      <h4 className="rs-portfolio-title">
+                      <h4 className="rs-portfolio-title" aria-level={3}>
                         <a href="#">{ind.name}</a>
                       </h4>
                     </div>

@@ -130,7 +130,7 @@ export default function ProductSlider({ products, prevElSelector, nextElSelector
                 />
               </div>
               <div className="rs-portfolio-content">
-                <h4 className="rs-portfolio-title has-white">
+                <h4 className="rs-portfolio-title has-white" aria-level={3}>
                   <Link href={prod.link}>{prod.title}</Link>
                 </h4>
                 <div className="rs-portfolio-btn">

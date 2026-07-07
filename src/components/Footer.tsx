@@ -112,11 +112,11 @@ export default function Footer() {
 
                 <div className="col-xxl-4 col-lg-4 col-md-4 col-sm-6">
                   <div className="rs-footer-widget footer-2-col-2">
-                    <h5 className="rs-footer-widget-title">Our Products</h5>
+                    <h5 className="rs-footer-widget-title" aria-level={3}>Our Products</h5>
                     <div className="rs-footer-widget-content">
                       <div className="product-columns">
                         <div className="product-col">
-                          <h6>Polycab</h6>
+                          <h6 aria-level={4}>Polycab</h6>
                           <ul className="list-unstyled">
                             <li><Link href="/switchgears">Switchgears</Link></li>
                             <li><Link href="/fans">Fans</Link></li>
@@ -126,7 +126,7 @@ export default function Footer() {
                           </ul>
                         </div>
                         <div className="product-col">
-                          <h6>Dowells</h6>
+                          <h6 aria-level={4}>Dowells</h6>
                           <ul className="list-unstyled">
                             <li><Link href="/cable-terminal">Cable Terminal</Link></li>
                             <li><Link href="/gland">Gland</Link></li>
@@ -143,7 +143,7 @@ export default function Footer() {
                     <div className="rs-footer-widget-content">
                       <div className="rs-footer-widget-meta">
                         <div className="mobile-address">
-                          <h5 className="rs-footer-widget-title get-in-touch address">Address</h5>
+                          <h5 className="rs-footer-widget-title get-in-touch address" aria-level={3}>Address</h5>
                           <div className="rs-footer-widget-address">
                             <a target="_blank" rel="noopener noreferrer" href={getSetting('google_maps_embed') || "https://www.google.co.in/maps/place/Siddharth+Farms/@22.7822609,75.9059646,17z/data=!3m1!4b1!4m6!3m5!1s0x39631da62f44dfe1:0xb76224f845182eed!8m2!3d22.7822609!4d75.9085395!16s%2Fg%2F11rw8_q8gf?entry=ttu&g_ep=EgoyMDI2MDYyNC4wIKXMDSoASAFQAw%3D%3D"}>
                               <span 
@@ -157,14 +157,14 @@ export default function Footer() {
                         </div>
 
                         <div className="email mt-3">
-                          <h5 className="rs-footer-widget-title get-in-touch">Email Address</h5>
+                          <h5 className="rs-footer-widget-title get-in-touch" aria-level={3}>Email Address</h5>
                           <div className="rs-footer-widget-email">
                             <a href={`mailto:${getSetting('contact_email', 'info@mohitscpl.com')}`}>{getSetting('contact_email', 'info@mohitscpl.com')}</a>
                           </div>
                         </div>
 
                         <div className="mobile-no mt-3">
-                          <h5 className="rs-footer-widget-title get-in-touch">Contact</h5>
+                          <h5 className="rs-footer-widget-title get-in-touch" aria-level={3}>Contact</h5>
                           <div className="rs-footer-widget-email mobile">
                             <a href={`tel:${getSetting('contact_phone_1', '+919522952267').replace(/[^+\d]/g, '')}`}>{getSetting('contact_phone_1', '+91 9522952267')}</a>
                           </div>
