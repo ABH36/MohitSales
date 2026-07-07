@@ -132,7 +132,12 @@ export default function RootLayout({
         {/* ── Critical CSS (render-blocking — layout depends on these) ── */}
         <link rel="stylesheet" href="/assets/css/vendor/bootstrap.min.css" />
         <link rel="stylesheet" href="/assets/css/plugins/swiper.min.css" />
-        <link rel="stylesheet" href="/assets/css/vendor/fontawesome-pro.css" />
+        {/* FontAwesome (520KB) is icon-only, not layout-critical → load it
+            non-render-blocking. Preload fetches it early; NonCriticalCSS
+            attaches it on mount; <noscript> covers the no-JS case. Cuts the
+            largest render-blocking request without dropping any icon. */}
+        <link rel="preload" as="style" href="/assets/css/vendor/fontawesome-pro.css" />
+        <noscript><link rel="stylesheet" href="/assets/css/vendor/fontawesome-pro.css" /></noscript>
         <link rel="stylesheet" href="/assets/css/vendor/spacing.css" />
         <link rel="stylesheet" href="/assets/css/main.css" />
         <link rel="stylesheet" href="/assets/css/custom.css?v=1.0.4" />

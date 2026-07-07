@@ -8,6 +8,11 @@ import { usePathname } from 'next/navigation';
  * These are animation/plugin stylesheets that don't affect above-the-fold layout.
  */
 const NON_CRITICAL_CSS = [
+  // FontAwesome (~520KB) is icon-only, not layout-critical → deferred so it
+  // never blocks first paint. The layout <head> preloads it, so the bytes are
+  // already cached by the time this attaches. Keeps every icon available
+  // (incl. any used only in admin-editable DB content).
+  '/assets/css/vendor/fontawesome-pro.css',
   '/assets/css/vendor/remixicon.css',
   '/assets/css/vendor/animate.min.css',
   '/assets/css/plugins/nice-select.css',
