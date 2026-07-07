@@ -3369,6 +3369,14 @@ textarea:focus-visible,
   border-radius: 2px;
 }
 
+/* The purchased theme's main.js injects a demo RTL/LTR direction-switcher
+   (.rs-theme-dir) into every page. It's a template demo control, not a real
+   site feature, and its "RTL"/"LTR" labels fail colour-contrast. Hide it —
+   removes the only contrast failure (A11y -> 100) and a stray dev widget. */
+.rs-theme-dir {
+  display: none !important;
+}
+
 /* Screen-reader-only text: visually hidden but exposed to assistive tech. Used
    for the homepage's single top-level <h1> so screen readers + SEO get a proper
    page title without any visual change. (Belt-and-suspenders: Tailwind also

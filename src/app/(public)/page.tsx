@@ -122,6 +122,8 @@ export default async function Page() {
                   src={aboutData.imageUrl}
                   alt="Authorized Distributor of Polycab and Dowells"
                   className="img-fluid rounded shadow"
+                  fetchPriority="high"
+                  loading="eager"
                 />
               </div>
             </div>

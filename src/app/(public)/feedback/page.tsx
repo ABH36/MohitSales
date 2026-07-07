@@ -229,7 +229,7 @@ export default function FeedbackPage() {
       <div className="feedback-form-container">
         <div className="logo-section">
           <div>
-            <img src={cld("https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167908/mohit/logo/msc_logo_without_bg.png")} alt="Mohit Sales Corporation" style={{ maxHeight: '45px' }} />
+            <img src={cld("https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167908/mohit/logo/msc_logo_without_bg.png", 'f_auto,q_auto,w_200')} alt="Mohit Sales Corporation" style={{ maxHeight: '45px' }} />
           </div>
           <div className="text-right">
             <p className="top_line">Authorised Distributors of Wires & Cables</p>
