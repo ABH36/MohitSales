@@ -16,9 +16,11 @@ interface PageItem {
 function PagesContent() {
   const { user } = useAdmin();
   const isReadOnly = user?.role === 'VIEWER';
+  const isAdmin = user?.role === 'ADMIN';
   const [pages, setPages] = useState<PageItem[]>([]);
   const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [editingPage, setEditingPage] = useState<PageItem | null>(null);
@@ -28,7 +30,23 @@ function PagesContent() {
   const [editActive, setEditActive] = useState(true);
   const [saving, setSaving] = useState(false);
   const [loadingContent, setLoadingContent] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
   const limit = 25;
+
+  const showToast = (msg: string, type: 'success' | 'error' = 'success') => {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 3000);
+  };
+
+  // Debounce the search box so we don't fire an API call on every keystroke.
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setSearch(searchInput);
+      setCurrentPage(1);
+    }, 350);
+    return () => clearTimeout(t);
+  }, [searchInput]);
 
   const fetchPages = useCallback(async () => {
     setLoading(true);
@@ -87,26 +105,59 @@ function PagesContent() {
       if (data.success) {
         setEditingPage(null);
         fetchPages();
+        showToast('Page saved successfully.');
       } else {
-        alert(data.message || 'Error saving.');
+        showToast(data.message || 'Error saving.', 'error');
       }
     } catch (err) {
-      alert('Network error.');
+      showToast('Network error.', 'error');
     } finally {
       setSaving(false);
     }
   };
 
+  const deletePage = async (p: PageItem) => {
+    if (!window.confirm(`Delete /${p.slug}? This permanently removes the page and cannot be undone.`)) return;
+    setDeletingId(p.id);
+    try {
+      const res = await fetch(`/api/admin/pages/${p.id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        showToast('Page deleted.');
+        fetchPages();
+      } else {
+        showToast(data.message || 'Failed to delete.', 'error');
+      }
+    } catch (err) {
+      showToast('Network error.', 'error');
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
   const totalPages = Math.ceil(total / limit);
+
+  // Fixed toast shown in both the list and editor views.
+  const toastEl = toast && (
+    <div style={{ position: 'fixed', top: 20, right: 20, zIndex: 1000, padding: '12px 22px', borderRadius: 8, color: '#fff', fontSize: 14, fontWeight: 600, boxShadow: '0 4px 12px rgba(0,0,0,0.15)', background: toast.type === 'error' ? '#ef4444' : '#16a34a' }}>
+      {toast.msg}
+    </div>
+  );
 
   if (editingPage) {
     return (
       <div>
+        {toastEl}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
           <h2 style={{ margin: 0, fontSize: 20 }}>Edit Page: /{editingPage.slug}</h2>
-          <button onClick={() => setEditingPage(null)} style={{ padding: '8px 16px', background: '#e5e7eb', border: 'none', borderRadius: 6, cursor: 'pointer' }}>
-            Back to List
-          </button>
+          <div style={{ display: 'flex', gap: 10 }}>
+            <a href={`/${editingPage.slug}`} target="_blank" rel="noreferrer" style={{ padding: '8px 16px', background: '#eef2ff', color: '#1e2e5e', border: '1px solid #c7d2fe', borderRadius: 6, cursor: 'pointer', fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>
+              View on site ↗
+            </a>
+            <button onClick={() => setEditingPage(null)} style={{ padding: '8px 16px', background: '#e5e7eb', border: 'none', borderRadius: 6, cursor: 'pointer' }}>
+              Back to List
+            </button>
+          </div>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, marginBottom: 20 }}>
@@ -152,13 +203,14 @@ function PagesContent() {
 
   return (
     <div>
+      {toastEl}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
         <h2 style={{ margin: 0, fontSize: 20 }}>Page Content ({total})</h2>
         <input
           type="text"
           placeholder="Search by slug, title..."
-          value={search}
-          onChange={e => { setSearch(e.target.value); setCurrentPage(1); }}
+          value={searchInput}
+          onChange={e => setSearchInput(e.target.value)}
           style={{ padding: '8px 14px', border: '1px solid #d1d5db', borderRadius: 6, width: 300, fontSize: 14 }}
         />
       </div>
@@ -191,9 +243,16 @@ function PagesContent() {
                     {new Date(p.updatedAt).toLocaleDateString()}
                   </td>
                   <td style={{ padding: '10px 12px', textAlign: 'center' }}>
-                    <button onClick={() => openEditor(p)} style={{ padding: '5px 14px', background: '#1e2e5e', color: '#fff', border: 'none', borderRadius: 4, fontSize: 13, cursor: 'pointer' }}>
-                      Edit
-                    </button>
+                    <div style={{ display: 'inline-flex', gap: 8 }}>
+                      <button onClick={() => openEditor(p)} style={{ padding: '5px 14px', background: '#1e2e5e', color: '#fff', border: 'none', borderRadius: 4, fontSize: 13, cursor: 'pointer' }}>
+                        Edit
+                      </button>
+                      {isAdmin && (
+                        <button onClick={() => deletePage(p)} disabled={deletingId === p.id} title="Delete page (admin only)" style={{ padding: '5px 12px', background: deletingId === p.id ? '#fca5a5' : '#fee2e2', color: '#991b1b', border: '1px solid #fecaca', borderRadius: 4, fontSize: 13, fontWeight: 600, cursor: deletingId === p.id ? 'default' : 'pointer' }}>
+                          {deletingId === p.id ? '…' : 'Delete'}
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
