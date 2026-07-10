@@ -81,11 +81,12 @@ interface RowProps {
   cat: Category;
   depth: number;
   isReadOnly: boolean;
+  isAdmin: boolean;
   onEdit: (cat: Category) => void;
   onDelete: (id: string) => void;
 }
 
-function CategoryRow({ cat, depth, isReadOnly, onEdit, onDelete }: RowProps) {
+function CategoryRow({ cat, depth, isReadOnly, isAdmin, onEdit, onDelete }: RowProps) {
   const indent = depth * 24;
   const prefix = depth === 0 ? '📁' : depth === 1 ? '└─' : '  └─';
 
@@ -118,7 +119,9 @@ function CategoryRow({ cat, depth, isReadOnly, onEdit, onDelete }: RowProps) {
             ) : (
               <>
                 <button className="admin-btn admin-btn-outline admin-btn-sm" onClick={() => onEdit(cat)}>Edit</button>
-                <button className="admin-btn admin-btn-danger admin-btn-sm" onClick={() => onDelete(cat.id)}>Delete</button>
+                {isAdmin && (
+                  <button className="admin-btn admin-btn-danger admin-btn-sm" onClick={() => onDelete(cat.id)}>Delete</button>
+                )}
               </>
             )}
           </div>
@@ -130,6 +133,7 @@ function CategoryRow({ cat, depth, isReadOnly, onEdit, onDelete }: RowProps) {
           cat={child}
           depth={depth + 1}
           isReadOnly={isReadOnly}
+          isAdmin={isAdmin}
           onEdit={onEdit}
           onDelete={onDelete}
         />
@@ -153,6 +157,7 @@ function AdminCategoriesPageInner() {
   const { fetchWithCache, invalidate } = useAdminCache();
   const cached = getCached('/api/admin/categories');
   const isReadOnly = user?.role === 'VIEWER';
+  const isAdmin = user?.role === 'ADMIN'; // delete is admin-only
 
   const [categories, setCategories] = useState<Category[]>(cached?.success ? cached.data : []);
   const [loading, setLoading] = useState(!cached?.success);
@@ -340,6 +345,7 @@ function AdminCategoriesPageInner() {
                   cat={cat}
                   depth={0}
                   isReadOnly={isReadOnly}
+                  isAdmin={isAdmin}
                   onEdit={openEdit}
                   onDelete={handleDelete}
                 />

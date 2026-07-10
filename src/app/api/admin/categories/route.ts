@@ -4,6 +4,7 @@
 
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/prisma';
 import { requireRole } from '@/lib/api/guard';
 import { parseBody } from '@/lib/api/validate';
@@ -74,6 +75,18 @@ export async function POST(request: NextRequest) {
         isActive: body.isActive !== undefined ? body.isActive : true
       },
     });
+
+    // Make the new category live immediately: its own page, its parent's listing,
+    // and the nav (rendered from the layout).
+    revalidatePath(`/${category.slug}`);
+    if (category.parentId) {
+      const parent = await prisma.category.findUnique({
+        where: { id: category.parentId },
+        select: { slug: true },
+      });
+      if (parent?.slug) revalidatePath(`/${parent.slug}`);
+    }
+    revalidatePath('/', 'layout');
 
     return NextResponse.json({ success: true, data: category }, { status: 201 });
   } catch (error: any) {

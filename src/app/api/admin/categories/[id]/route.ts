@@ -79,6 +79,8 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     });
 
     // ── Cascade slug rename to descendants + their products ─────────────────
+    // Collect every path whose slug changes so we can revalidate them all below.
+    const changedPaths = new Set<string>();
     if (newSlug) {
       const oldPrefix = current.slug;
       const descendants = await getDescendants(params.id);
@@ -93,10 +95,13 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
         for (const product of products) {
           if (!product.slug) continue;
           if (product.slug === oldCatSlug || product.slug.startsWith(`${oldCatSlug}/`)) {
+            const newProductSlug = newCatSlug + product.slug.slice(oldCatSlug.length);
             await prisma.product.update({
               where: { id: product.id },
-              data: { slug: newCatSlug + product.slug.slice(oldCatSlug.length) },
+              data: { slug: newProductSlug },
             });
+            changedPaths.add(`/${product.slug}`);
+            changedPaths.add(`/${newProductSlug}`);
           }
         }
       };
@@ -112,6 +117,8 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
             where: { id: desc.id },
             data: { slug: updatedDescSlug },
           });
+          changedPaths.add(`/${desc.slug}`);
+          changedPaths.add(`/${updatedDescSlug}`);
           await updateProductSlugs(desc.id, desc.slug, updatedDescSlug);
         }
       }
@@ -122,6 +129,8 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     if (newSlug) {
       revalidatePath(`/${current.slug}`); // also revalidate old slug path
     }
+    // Revalidate every descendant category + product path renamed by the cascade
+    for (const path of changedPaths) revalidatePath(path);
 
     return NextResponse.json({ success: true, data: category });
   } catch (error: any) {
@@ -134,7 +143,9 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const auth = requireRole(request, ['ADMIN', 'EDITOR']);
+    // Destructive delete is ADMIN-only (matches Pages/Products); it unlinks all
+    // products and detaches child categories, so EDITORs shouldn't trigger it.
+    const auth = requireRole(request, ['ADMIN']);
     if (auth instanceof NextResponse) return auth;
 
     const category = await prisma.category.findUnique({ where: { id: params.id }, select: { slug: true } });
