@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import AdminShell, { useAdmin } from '../components/AdminShell';
-import { useAdminCache, getCached } from '../components/AdminCacheProvider';
+import { useAdminCache } from '../components/AdminCacheProvider';
 import SkeletonTable from '../components/SkeletonTable';
 
 const TipTapEditor = dynamic(() => import('../components/TipTapEditor'), {
@@ -41,11 +41,17 @@ export default function AdminBlogsPage() {
 function AdminBlogsPageInner() {
   const { user } = useAdmin();
   const { fetchWithCache, invalidate } = useAdminCache();
-  const cachedBlogs = getCached('/api/admin/blogs');
   const isReadOnly = user?.role === 'VIEWER';
-  const [blogs, setBlogs] = useState<BlogPost[]>(cachedBlogs?.success ? cachedBlogs.data : []);
-  const [categories, setCategories] = useState<{ id: string; name: string }[]>([]);
-  const [loading, setLoading] = useState(!cachedBlogs?.success);
+  const isAdmin = user?.role === 'ADMIN'; // blog-category delete is admin-only
+  const [blogs, setBlogs] = useState<BlogPost[]>([]);
+  const [total, setTotal] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [categories, setCategories] = useState<{ id: string; name: string; _count?: { posts: number } }[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [uploadingCover, setUploadingCover] = useState(false);
+  const [showNewCat, setShowNewCat] = useState(false);
+  const [newCatName, setNewCatName] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editBlog, setEditBlog] = useState<BlogPost | null>(null);
   const [form, setForm] = useState({
@@ -63,14 +69,30 @@ function AdminBlogsPageInner() {
   });
   const [toast, setToast] = useState<{ msg: string; type: string } | null>(null);
 
+  const refreshCategories = async () => {
+    invalidate('/api/admin/blogs/categories');
+    try {
+      const data = await fetch('/api/admin/blogs/categories').then((r) => r.json());
+      if (data.success) setCategories(data.data);
+    } catch (err) {
+      console.error('Failed to refresh categories', err);
+    }
+  };
+
   const fetchBlogs = async () => {
     setLoading(true);
     try {
-      const [blogsData, catsData] = await Promise.all([
-        fetchWithCache('/api/admin/blogs'),
+      const [blogsRes, catsData] = await Promise.all([
+        fetch(`/api/admin/blogs?page=${currentPage}&limit=20`).then((r) => r.json()),
         fetchWithCache('/api/admin/blogs/categories', 120000),
       ]);
-      if (blogsData.success) setBlogs(blogsData.data);
+      if (blogsRes.success) {
+        setBlogs(blogsRes.data);
+        if (blogsRes.pagination) {
+          setTotal(blogsRes.pagination.total ?? blogsRes.data.length);
+          setTotalPages(blogsRes.pagination.totalPages || 1);
+        }
+      }
       if (catsData.success) setCategories(catsData.data);
     } catch (err) {
       console.error('Failed to fetch blogs/categories', err);
@@ -80,7 +102,8 @@ function AdminBlogsPageInner() {
 
   useEffect(() => {
     fetchBlogs();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
 
   const showToast = (msg: string, type: string) => {
     setToast({ msg, type });
@@ -172,6 +195,61 @@ function AdminBlogsPageInner() {
     }
   };
 
+  const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    if (file.size > 1024 * 1024) { showToast('Image must be under 1MB.', 'error'); return; }
+    if (!['image/jpeg', 'image/png', 'image/webp', 'image/gif'].includes(file.type)) {
+      showToast('Only JPG, PNG, WebP, GIF allowed.', 'error'); return;
+    }
+    setUploadingCover(true);
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await fetch('/api/admin/media', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (data.success && data.url) {
+        setForm((f) => ({ ...f, coverImage: data.url }));
+        showToast('Cover image uploaded!', 'success');
+      } else showToast(data.message || 'Upload failed', 'error');
+    } catch { showToast('Upload failed', 'error'); }
+    setUploadingCover(false);
+  };
+
+  const handleCreateCategory = async () => {
+    const name = newCatName.trim();
+    if (!name) return;
+    try {
+      const res = await fetch('/api/admin/blogs/categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast('Category created', 'success');
+        setNewCatName('');
+        setShowNewCat(false);
+        await refreshCategories();
+        setForm((f) => ({ ...f, categoryId: data.data.id }));
+      } else showToast(data.message || 'Failed to create category', 'error');
+    } catch { showToast('Error creating category', 'error'); }
+  };
+
+  const handleDeleteCategory = async (id: string) => {
+    if (!window.confirm('Delete this blog category? Posts in it will be unlinked (not deleted).')) return;
+    try {
+      const res = await fetch(`/api/admin/blogs/categories/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        showToast('Category deleted', 'success');
+        if (form.categoryId === id) setForm((f) => ({ ...f, categoryId: '' }));
+        await refreshCategories();
+      } else showToast(data.message || 'Failed to delete category', 'error');
+    } catch { showToast('Error deleting category', 'error'); }
+  };
+
   return (
     <>
       {toast && (
@@ -182,7 +260,7 @@ function AdminBlogsPageInner() {
 
       <div className="admin-table-wrapper">
         <div className="admin-table-header">
-          <h3 className="admin-table-title">Blog Posts ({blogs.length})</h3>
+          <h3 className="admin-table-title">Blog Posts ({total})</h3>
           {!isReadOnly && (
             <button className="admin-btn admin-btn-primary" onClick={handleOpenCreate}>
               <i className="fa-solid fa-plus"></i> Add Blog Post
@@ -249,6 +327,14 @@ function AdminBlogsPageInner() {
             </tbody>
           </table>
         )}
+
+        {totalPages > 1 && (
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 8, padding: '18px 0' }}>
+            <button disabled={currentPage <= 1} onClick={() => setCurrentPage((p) => p - 1)} className="admin-btn admin-btn-outline admin-btn-sm" style={{ opacity: currentPage <= 1 ? 0.5 : 1 }}>Prev</button>
+            <span style={{ padding: '6px 14px', fontSize: 14 }}>Page {currentPage} of {totalPages}</span>
+            <button disabled={currentPage >= totalPages} onClick={() => setCurrentPage((p) => p + 1)} className="admin-btn admin-btn-outline admin-btn-sm" style={{ opacity: currentPage >= totalPages ? 0.5 : 1 }}>Next</button>
+          </div>
+        )}
       </div>
 
       {showModal && (
@@ -285,7 +371,14 @@ function AdminBlogsPageInner() {
 
                 <div style={{ display: 'flex', gap: '12px' }}>
                   <div className="admin-form-group" style={{ flex: 1 }}>
-                    <label className="admin-form-label">Category</label>
+                    <label className="admin-form-label" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span>Category</span>
+                      {!isReadOnly && (
+                        <button type="button" onClick={() => setShowNewCat((v) => !v)} style={{ background: 'none', border: 'none', color: 'var(--admin-accent)', cursor: 'pointer', fontSize: 12, fontWeight: 600, padding: 0 }}>
+                          {showNewCat ? '× Close' : '+ New / Manage'}
+                        </button>
+                      )}
+                    </label>
                     <select
                       className="admin-form-select"
                       value={form.categoryId}
@@ -296,16 +389,54 @@ function AdminBlogsPageInner() {
                         <option key={cat.id} value={cat.id}>{cat.name}</option>
                       ))}
                     </select>
+                    {showNewCat && !isReadOnly && (
+                      <div style={{ marginTop: 8, padding: 10, background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 8 }}>
+                        <div style={{ display: 'flex', gap: 6 }}>
+                          <input
+                            className="admin-form-input"
+                            type="text"
+                            value={newCatName}
+                            placeholder="New category name"
+                            onChange={(e) => setNewCatName(e.target.value)}
+                            onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleCreateCategory(); } }}
+                            style={{ margin: 0 }}
+                          />
+                          <button type="button" className="admin-btn admin-btn-primary admin-btn-sm" onClick={handleCreateCategory}>Create</button>
+                        </div>
+                        {isAdmin && categories.length > 0 && (
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
+                            {categories.map((cat) => (
+                              <span key={cat.id} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, background: '#fff', border: '1px solid #e2e8f0', borderRadius: 20, padding: '2px 6px 2px 10px' }}>
+                                {cat.name}{cat._count ? ` (${cat._count.posts})` : ''}
+                                <button type="button" title="Delete category" onClick={() => handleDeleteCategory(cat.id)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: 13, lineHeight: 1, padding: '0 2px' }}>×</button>
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                   <div className="admin-form-group" style={{ flex: 1 }}>
-                    <label className="admin-form-label">Cover Image URL</label>
-                    <input 
-                      className="admin-form-input" 
-                      type="text" 
-                      value={form.coverImage} 
-                      onChange={(e) => setForm({ ...form, coverImage: e.target.value })} 
-                      placeholder="/assets/images/blog/..."
-                    />
+                    <label className="admin-form-label">Cover Image</label>
+                    <div style={{ display: 'flex', gap: 6 }}>
+                      <input
+                        className="admin-form-input"
+                        type="text"
+                        value={form.coverImage}
+                        onChange={(e) => setForm({ ...form, coverImage: e.target.value })}
+                        placeholder="Paste URL or upload →"
+                        style={{ margin: 0 }}
+                      />
+                      {!isReadOnly && (
+                        <label className="admin-btn admin-btn-outline admin-btn-sm" style={{ cursor: 'pointer', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center' }}>
+                          {uploadingCover ? '…' : 'Upload'}
+                          <input type="file" accept="image/*" onChange={handleCoverUpload} disabled={uploadingCover} style={{ display: 'none' }} />
+                        </label>
+                      )}
+                    </div>
+                    {form.coverImage && (
+                      <img src={form.coverImage} alt="cover preview" style={{ marginTop: 8, height: 48, borderRadius: 6, objectFit: 'cover', border: '1px solid #e2e8f0' }} />
+                    )}
                   </div>
                 </div>
 

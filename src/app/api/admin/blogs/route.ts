@@ -1,21 +1,45 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import prisma from '@/lib/prisma';
 import { requireRole } from '@/lib/api/guard';
 import { parseBody } from '@/lib/api/validate';
 import { blogCreateSchema } from '@/lib/schemas/blog';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const blogs = await prisma.blogPost.findMany({
-      orderBy: { createdAt: 'desc' },
-      take: 500,
-      include: {
-        category: { select: { id: true, name: true } },
-        author: { select: { name: true } }
-      }
+    const { searchParams } = new URL(request.url);
+    const page = Math.max(parseInt(searchParams.get('page') || '1'), 1);
+    const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 100);
+    const search = searchParams.get('search') || '';
+    const where = search
+      ? {
+          OR: [
+            { title: { contains: search, mode: 'insensitive' as const } },
+            { slug: { contains: search, mode: 'insensitive' as const } },
+          ],
+        }
+      : {};
+
+    const [blogs, total] = await Promise.all([
+      prisma.blogPost.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * limit,
+        take: limit,
+        include: {
+          category: { select: { id: true, name: true } },
+          author: { select: { name: true } },
+        },
+      }),
+      prisma.blogPost.count({ where }),
+    ]);
+
+    return NextResponse.json({
+      success: true,
+      data: blogs,
+      pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
     });
-    return NextResponse.json({ success: true, data: blogs });
   } catch (error) {
     console.error('[Admin Blogs GET]', error);
     return NextResponse.json({ success: false, message: 'Server error.' }, { status: 500 });
@@ -49,6 +73,12 @@ export async function POST(request: NextRequest) {
         ...(authorId && { authorId }),
       },
     });
+
+    // Make it live immediately: the blog index, the post itself (if published),
+    // and the layout (nav / featured widgets).
+    revalidatePath('/blog');
+    if (blog.isPublished) revalidatePath(`/blog/${blog.slug}`);
+    revalidatePath('/', 'layout');
 
     return NextResponse.json({ success: true, data: blog });
   } catch (error: any) {
