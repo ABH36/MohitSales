@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import prisma from '@/lib/prisma';
 import { requireRole } from '@/lib/api/guard';
+import { SEO_META_TAG } from '@/lib/seo';
 
 export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -41,6 +42,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       data,
     });
     if (existing?.page) revalidatePath(existing.page);
+    revalidateTag(SEO_META_TAG);
     return NextResponse.json({ success: true, data: meta });
   } catch (e: any) {
     if (e?.code === 'P2025') return NextResponse.json({ success: false, error: 'Meta not found' }, { status: 404 });
@@ -56,6 +58,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
     const existing = await prisma.seoMeta.findUnique({ where: { id }, select: { page: true } });
     await prisma.seoMeta.delete({ where: { id } });
     if (existing?.page) revalidatePath(existing.page);
+    revalidateTag(SEO_META_TAG);
     return NextResponse.json({ success: true });
   } catch (e: any) {
     if (e?.code === 'P2025') return NextResponse.json({ success: false, error: 'Meta not found' }, { status: 404 });
