@@ -141,6 +141,7 @@ function AdminProductsPageInner() {
   // VIEWER role is read-only; ADMIN and EDITOR can create/edit/delete
   const isReadOnly = user?.role === 'VIEWER';
   const canWrite = user?.role === 'ADMIN' || user?.role === 'EDITOR';
+  const isAdmin = user?.role === 'ADMIN'; // delete is admin-only
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -161,7 +162,7 @@ function AdminProductsPageInner() {
   // Form state
   const [form, setForm] = useState({ 
     slug: '', title: '', description: '', features: '', imageSrc: '', 
-    categoryId: '', newCategoryName: '', datasheetLink: '', isActive: true, 
+    categoryId: '', datasheetLink: '', isActive: true,
     sortOrder: 0, stock: 0,
     metaTitle: '', metaDescription: '', metaKeywords: ''
   });
@@ -320,7 +321,7 @@ function AdminProductsPageInner() {
 
   const handleOpenCreate = () => {
     setEditProduct(null);
-    setForm({ slug: '', title: '', description: '', features: '', imageSrc: '', categoryId: selectedCategoryFilter, newCategoryName: '', datasheetLink: '', isActive: true, sortOrder: 0, stock: 0, metaTitle: '', metaDescription: '', metaKeywords: '' });
+    setForm({ slug: '', title: '', description: '', features: '', imageSrc: '', categoryId: selectedCategoryFilter, datasheetLink: '', isActive: true, sortOrder: 0, stock: 0, metaTitle: '', metaDescription: '', metaKeywords: '' });
     setFeaturesArray([]);
     if (!pdfFetched) { fetchPdfFiles(); setPdfFetched(true); }
     if (selectedCategoryFilter) {
@@ -339,7 +340,6 @@ function AdminProductsPageInner() {
       features: p.features || '',
       imageSrc: p.imageSrc || '',
       categoryId: p.category?.id || '',
-      newCategoryName: '',
       datasheetLink: p.datasheetLink || '',
       isActive: p.isActive,
       sortOrder: p.sortOrder,
@@ -651,7 +651,9 @@ function AdminProductsPageInner() {
                           ) : (
                             <>
                               <button className="admin-btn admin-btn-outline admin-btn-sm" onClick={() => handleOpenEdit(p)}>Edit</button>
-                              <button className="admin-btn admin-btn-danger admin-btn-sm" onClick={() => handleDelete(p.id)}>Delete</button>
+                              {isAdmin && (
+                                <button className="admin-btn admin-btn-danger admin-btn-sm" onClick={() => handleDelete(p.id)}>Delete</button>
+                              )}
                             </>
                           )}
                         </div>

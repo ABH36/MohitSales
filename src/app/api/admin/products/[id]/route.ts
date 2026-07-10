@@ -108,7 +108,9 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const auth = requireRole(request, ['ADMIN', 'EDITOR']);
+    // Destructive delete is ADMIN-only (matches the Pages section); EDITORs can
+    // still create/update products, just not delete them.
+    const auth = requireRole(request, ['ADMIN']);
     if (auth instanceof NextResponse) return auth;
 
     const product = await prisma.product.findUnique({ where: { id: params.id }, select: { slug: true, categoryId: true } });
