@@ -511,6 +511,40 @@
   min-width: 0; /* prevent flex content expansion overflow */
 }
 
+/* ─── Focus mode — hide chrome, view content full-screen ───────────── */
+.admin-panel[data-focus="on"] .admin-sidebar,
+.admin-panel[data-focus="on"] .admin-topbar,
+.admin-panel[data-focus="on"] .admin-sidebar-overlay {
+  display: none !important;
+}
+.admin-panel[data-focus="on"] .admin-main {
+  margin-left: 0 !important;
+}
+.admin-focus-exit {
+  position: fixed;
+  top: 14px;
+  right: 16px;
+  z-index: 1000;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  opacity: 0.85;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.admin-focus-exit:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
 /* ─── Top Bar ────────────────────────────────────── */
 .admin-topbar {
   height: 70px;

@@ -98,6 +98,7 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
   const [loading, setLoading] = useState(true);
   const [fontSize, setFontSize] = useState<'normal' | 'medium' | 'large'>('normal');
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [focusMode, setFocusMode] = useState(false);
   const sidebarRef = useRef<HTMLElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -114,12 +115,25 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
     localStorage.setItem('admin-font-size', size);
   };
 
+  // Focus mode — hide the sidebar + top bar to view content full-screen.
+  // Persisted so it stays as you move between sections.
+  useEffect(() => {
+    setFocusMode(localStorage.getItem('admin-focus-mode') === 'on');
+  }, []);
+
+  const toggleFocus = (on: boolean) => {
+    setFocusMode(on);
+    localStorage.setItem('admin-focus-mode', on ? 'on' : 'off');
+  };
+
   // Close sidebar and profile dropdown on ESC key
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setSidebarOpen(false);
         setDropdownOpen(false);
+        setFocusMode(false);
+        localStorage.setItem('admin-focus-mode', 'off');
       }
     };
     document.addEventListener('keydown', onKeyDown);
@@ -238,7 +252,7 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
   return (
     <AdminCacheProvider>
     <AdminContext.Provider value={{ user, loading }}>
-      <div className="admin-panel" data-font-size={fontSize} dir="ltr">
+      <div className="admin-panel" data-font-size={fontSize} data-focus={focusMode ? 'on' : 'off'} dir="ltr">
         {/* Animated Background */}
         <div className="admin-bg-animation">
           <div className="admin-blob blob-1"></div>
@@ -386,6 +400,17 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                   </button>
                 </div>
 
+                <button
+                  type="button"
+                  onClick={() => toggleFocus(true)}
+                  className="admin-btn admin-btn-outline admin-btn-sm admin-focus-btn"
+                  title="Focus mode — hide the menu &amp; header for a full-screen view (Esc to exit)"
+                  aria-label="Enter focus mode"
+                  style={{ pointerEvents: 'auto', cursor: 'pointer' }}
+                >
+                  ⛶ Focus
+                </button>
+
                 <a
                   href="/"
                   target="_blank"
@@ -452,6 +477,19 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
             onClick={() => setSidebarOpen(false)}
             aria-label="Close sidebar"
           />
+        )}
+
+        {/* Floating exit button — only visible in focus mode */}
+        {focusMode && (
+          <button
+            type="button"
+            onClick={() => toggleFocus(false)}
+            className="admin-focus-exit"
+            title="Exit focus mode (Esc)"
+            aria-label="Exit focus mode"
+          >
+            ⤢ Exit Focus
+          </button>
         )}
       </div>
 
