@@ -3377,6 +3377,25 @@ textarea:focus-visible,
   display: none !important;
 }
 
+/* Hide the main page scrollbar. The OS default rendered as a bright white
+   track against the dark UI (a "white line" down the right edge); since the
+   page mixes light and dark sections no single track colour blends, so hide
+   it — the theme already does this on inner panels like .offcanvas-area.
+   Scoped to the document scroller (html/body) so inner scroll regions
+   (tables, code blocks) keep their scrollbars. Content still scrolls via
+   wheel / touchpad / keyboard. */
+html,
+body {
+  scrollbar-width: none;      /* Firefox */
+  -ms-overflow-style: none;   /* legacy Edge/IE */
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;              /* Chromium / Safari */
+}
+
 /* Screen-reader-only text: visually hidden but exposed to assistive tech. Used
    for the homepage's single top-level <h1> so screen readers + SEO get a proper
    page title without any visual change. (Belt-and-suspenders: Tailwind also
