@@ -51,10 +51,10 @@ export default async function Page() {
   if (cmsAbout?.content) {
     try {
       const parsed = JSON.parse(cmsAbout.content);
-      if (parsed.title || parsed.content || parsed.imageUrl) {
+      if (parsed.title || parsed.subtitle || parsed.content || parsed.imageUrl) {
         aboutData = {
           title: parsed.title || FALLBACK_ABOUT.title,
-          subtitle: FALLBACK_ABOUT.subtitle,
+          subtitle: parsed.subtitle || FALLBACK_ABOUT.subtitle,
           paragraphs: parsed.content
             ? parsed.content.split('\n').map((p: string) => p.trim()).filter(Boolean)
             : FALLBACK_ABOUT.paragraphs,

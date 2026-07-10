@@ -15,6 +15,7 @@ interface BannerItem {
 
 interface PageContent {
   title: string;
+  subtitle?: string; // used by the homepage About section only
   content: string;
   imageUrl: string;
   extraField: string;
@@ -76,6 +77,7 @@ const SPOTLIGHT_PRESET = `<div style="display: flex; flex-direction: row; flex-w
 
 const DEFAULT_HOMEPAGE_ABOUT: PageContent = {
   title: 'About Us',
+  subtitle: 'Mohit Sales Corporation Pvt. Ltd.',
   content: 'Established in 1997, Mohit Sales Corporation Pvt. Ltd. has built a strong reputation as a trusted leader in the electrical distribution industry. With over 27+ years of experience, we deliver reliable, high-quality electrical products and customized solutions to diverse sectors.\n\nWe are a proud Authorised Distributor of Polycab and Dowells, ensuring our customers receive only genuine, certified products that meet the highest industry standards.\n\nOur success is driven by a customer-first approach, technical expertise, timely delivery, and dependable after-sales support. Today, we proudly serve contractors, industries, retailers, and large-scale infrastructure projects, helping power growth and innovation across the region.',
   imageUrl: 'https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/about/authorized-distributor.png',
   extraField: '',
@@ -92,7 +94,9 @@ const DEFAULT_COMPANY_PROFILE: PageContent = {
   title: 'Company Profile',
   content: '<p>Mohit Sales Corporation Pvt. Ltd. is a trusted name in the electrical distribution industry. With over 27+ years of experience, we deliver high-quality electrical products and customized solutions to diverse sectors. As an Authorised Distributor of Polycab and Dowells, we ensure our customers receive only genuine, certified products that meet the highest industry standards.</p>',
   imageUrl: 'https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/inner-banner/products.png',
-  extraField: '/assets/images/pdf/MOHIT CATALOGUE.pdf',
+  // No default PDF — the old path pointed at a missing file, so the download
+  // button 404'd. Left empty so it only appears once an admin sets a real URL.
+  extraField: '',
 };
 
 export default function CmsPage() {
@@ -485,6 +489,11 @@ export default function CmsPage() {
                   <label style={labelStyle}>About Section Title</label>
                   <input style={inputStyle} value={pageData.homepage.title} placeholder="About Us"
                     onChange={e => updatePage('homepage', 'title', e.target.value)} />
+                </div>
+                <div>
+                  <label style={labelStyle}>About Section Subtitle</label>
+                  <input style={inputStyle} value={pageData.homepage.subtitle || ''} placeholder="Mohit Sales Corporation Pvt. Ltd."
+                    onChange={e => updatePage('homepage', 'subtitle', e.target.value)} />
                 </div>
                 <div>
                   <label style={labelStyle}>About Section Content</label>

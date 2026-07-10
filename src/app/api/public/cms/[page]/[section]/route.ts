@@ -16,7 +16,7 @@ export async function GET(_request: Request, { params }: RouteParams) {
       // configured yet. Every consumer already treats a falsy response as "use the
       // built-in fallback", so return 200 with no data rather than a noisy 404.
       const res = NextResponse.json({ success: false, data: null, message: 'Not configured.' });
-      res.headers.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+      res.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
       return res;
     }
 
@@ -28,7 +28,7 @@ export async function GET(_request: Request, { params }: RouteParams) {
     }
 
     const res = NextResponse.json({ success: true, data: { content: parsed } });
-    res.headers.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+    res.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
     return res;
   } catch (error: any) {
     console.error('[Public CMS GET]', error);
