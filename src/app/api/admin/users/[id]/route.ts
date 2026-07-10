@@ -17,9 +17,10 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     if (parsed instanceof NextResponse) return parsed;
     const { name, email, password, roleId, isActive } = parsed.data;
 
-    // Check if user exists
+    // Check if user exists (include role for the admin-lockout guards below)
     const user = await prisma.user.findUnique({
       where: { id: targetUserId },
+      include: { role: { select: { name: true } } },
     });
     if (!user) {
       return NextResponse.json({ success: false, message: 'User not found.' }, { status: 404 });
@@ -28,6 +29,23 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     // Self-deactivation protection
     if (targetUserId === userId && isActive === false) {
       return NextResponse.json({ success: false, message: 'You cannot deactivate your own account.' }, { status: 400 });
+    }
+
+    // Self role-change protection — prevents an admin locking themselves out.
+    if (targetUserId === userId && roleId && roleId !== user.roleId) {
+      return NextResponse.json({ success: false, message: 'You cannot change your own role. Ask another administrator.' }, { status: 400 });
+    }
+
+    // Last-admin protection: don't let this update strip admin access from the
+    // final active administrator (via deactivation or a role change).
+    const removesAdminAccess =
+      user.role?.name === 'ADMIN' && user.isActive &&
+      (isActive === false || (roleId !== undefined && roleId !== user.roleId));
+    if (removesAdminAccess) {
+      const activeAdmins = await prisma.user.count({ where: { isActive: true, role: { name: 'ADMIN' } } });
+      if (activeAdmins <= 1) {
+        return NextResponse.json({ success: false, message: 'Cannot remove the last active administrator.' }, { status: 400 });
+      }
     }
 
     // Email duplication check
@@ -99,12 +117,21 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
       return NextResponse.json({ success: false, message: 'You cannot delete your own account.' }, { status: 400 });
     }
 
-    // Check if user exists
+    // Check if user exists (include role for the last-admin guard)
     const user = await prisma.user.findUnique({
       where: { id: targetUserId },
+      include: { role: { select: { name: true } } },
     });
     if (!user) {
       return NextResponse.json({ success: false, message: 'User not found.' }, { status: 404 });
+    }
+
+    // Last-admin protection — never delete the final active administrator.
+    if (user.role?.name === 'ADMIN' && user.isActive) {
+      const activeAdmins = await prisma.user.count({ where: { isActive: true, role: { name: 'ADMIN' } } });
+      if (activeAdmins <= 1) {
+        return NextResponse.json({ success: false, message: 'Cannot delete the last active administrator.' }, { status: 400 });
+      }
     }
 
     await prisma.user.delete({
