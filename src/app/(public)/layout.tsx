@@ -12,6 +12,11 @@ import OrganizationSchema from '@/components/OrganizationSchema';
 import prisma from '@/lib/prisma';
 import './globals.css';
 
+// GA4 measurement ID is env-driven so staging/other envs can point at their own
+// property (or disable tracking with an empty value) instead of polluting prod.
+// Falls back to the production ID when unset, so prod behaviour is unchanged.
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? 'G-FZF80T7820';
+
 export const dynamic = 'force-dynamic';
 
 export function generateViewport(): Viewport {
@@ -103,19 +108,23 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      {/* Google Analytics (gtag.js) */}
-      <Script
-        src="https://www.googletagmanager.com/gtag/js?id=G-FZF80T7820"
-        strategy="afterInteractive"
-      />
-      <Script id="google-analytics" strategy="afterInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-FZF80T7820');
-        `}
-      </Script>
+      {/* Google Analytics (gtag.js) — only injected when a measurement ID is set */}
+      {GA_MEASUREMENT_ID && (
+        <>
+          <Script
+            src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+            strategy="afterInteractive"
+          />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${GA_MEASUREMENT_ID}');
+            `}
+          </Script>
+        </>
+      )}
       <head>
         <link rel="shortcut icon" type="image/x-icon" href="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167895/mohit/favicon/favicon.png" />
 

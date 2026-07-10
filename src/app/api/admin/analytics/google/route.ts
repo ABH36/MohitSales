@@ -60,13 +60,29 @@ async function getGoogleAccessToken(clientEmail: string, privateKeyPem: string) 
   return data.access_token;
 }
 
+// Short in-memory cache so rapid tab switches / refreshes don't hammer the GA4
+// Data API (6 calls per request) or burn its daily quota. Every admin sees the
+// same property-wide data, so a single global cache is correct.
+let gaCache: { at: number; payload: Record<string, unknown> } | null = null;
+const GA_CACHE_MS = 60_000; // 60s
+
 export async function GET(request: NextRequest) {
   try {
     // 1. Role validation
     const userRole = request.headers.get('x-user-role');
     if (!userRole) return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
-    if (userRole !== 'ADMIN' && userRole !== 'EDITOR') 
+    if (userRole !== 'ADMIN' && userRole !== 'EDITOR')
       return NextResponse.json({ success: false, message: 'Forbidden' }, { status: 403 });
+
+    // Serve a fresh-enough cached payload without re-querying Google.
+    if (gaCache && Date.now() - gaCache.at < GA_CACHE_MS) {
+      return NextResponse.json(gaCache.payload);
+    }
+    // Caches the payload, then returns it — used at every success return below.
+    const respond = (payload: Record<string, unknown>) => {
+      gaCache = { at: Date.now(), payload };
+      return NextResponse.json(payload);
+    };
 
     const propertyId = process.env.GA_PROPERTY_ID;
     const clientEmail = process.env.GA_CLIENT_EMAIL;
@@ -239,7 +255,7 @@ export async function GET(request: NextRequest) {
         return { page: path, title, views, avgTime, bounceRate: bounce };
       });
 
-      return NextResponse.json({
+      return respond({
         success: true,
         isDemo: false,
         data: {
@@ -257,7 +273,7 @@ export async function GET(request: NextRequest) {
     }
 
     // ─── Demo / Fallback Mode with simulated dynamic values ───
-    const currentHour = new Date().getHours();
+    const currentHour = new Date().getHours();
 
     // Fluctuating real-time active users (higher during business hours 9-18)
     const baseActive = (currentHour >= 9 && currentHour <= 18) ? 5 : 2;
@@ -289,7 +305,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    return NextResponse.json({
+    return respond({
       success: true,
       isDemo: true,
       data: {

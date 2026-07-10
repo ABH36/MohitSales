@@ -137,6 +137,31 @@ export default function AdminAnalyticsPage() {
     color: d.name.toLowerCase().includes('mobile') ? '#10b981' : d.name.toLowerCase().includes('tablet') ? '#f59e0b' : '#3b82f6'
   })) || defaultDevices;
 
+  // GA4 measurement id (env-driven, inlined at build; falls back to prod id)
+  const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-FZF80T7820';
+
+  // Top Cities + Top Pages come from the GA API (real when configured, demo
+  // otherwise). These fall back to sensible defaults before the first fetch.
+  const defaultGeo = [
+    { city: 'Indore', sessions: 312, pct: 38 },
+    { city: 'Mumbai', sessions: 198, pct: 24 },
+    { city: 'Delhi', sessions: 142, pct: 17 },
+    { city: 'Pune', sessions: 89, pct: 11 },
+    { city: 'Ahmedabad', sessions: 67, pct: 8 },
+    { city: 'Others', sessions: 16, pct: 2 },
+  ];
+  const gaGeo = gaData?.geoData || defaultGeo;
+
+  const defaultTopPages = [
+    { page: '/', title: 'Homepage', views: 482, avgTime: '3m 12s', bounceRate: '24%' },
+    { page: '/polycab', title: 'Polycab Products', views: 267, avgTime: '2m 45s', bounceRate: '28%' },
+    { page: '/dowells', title: 'Dowells Products', views: 189, avgTime: '2m 20s', bounceRate: '31%' },
+    { page: '/contact-us', title: 'Contact Us', views: 156, avgTime: '4m 05s', bounceRate: '15%' },
+    { page: '/pricelist', title: 'Price List', views: 134, avgTime: '1m 50s', bounceRate: '35%' },
+    { page: '/cable-terminal', title: 'Cable Terminal', views: 98, avgTime: '2m 10s', bounceRate: '29%' },
+  ];
+  const gaTopPages = gaData?.topPages || defaultTopPages;
+
 
   // Google Analytics Trend Chart calculations
   const gaWidth = 640;
@@ -766,6 +791,72 @@ export default function AdminAnalyticsPage() {
                   )}
                 </div>
               </div>
+
+              {/* Inquiry channels + Media breakdown (previously computed, now shown) */}
+              <div className="analytics-row-double" style={{ marginTop: '28px' }}>
+                {/* Inquiry Channels & Languages */}
+                <div className="analytics-card">
+                  <h4>Inquiry Channels &amp; Languages</h4>
+                  <p className="card-subtitle-desc">Where inquiries originate, plus visitor language split.</p>
+                  <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                    {data.inquirySources.length === 0 ? (
+                      <div style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>No inquiries recorded yet.</div>
+                    ) : (
+                      data.inquirySources.map((s, idx) => {
+                        const total = data.inquirySources.reduce((a: number, b) => a + b.count, 0) || 1;
+                        const pct = Math.round((s.count / total) * 100);
+                        const label = s.source === 'website' ? 'Contact Form (Website)'
+                          : s.source === 'feedback' ? 'Feedback Form'
+                          : s.source.charAt(0).toUpperCase() + s.source.slice(1);
+                        return (
+                          <div key={idx} className="category-bar-row">
+                            <div className="category-bar-label-row">
+                              <span className="category-bar-name">{label}</span>
+                              <span className="category-bar-count"><b>{s.count}</b> ({pct}%)</span>
+                            </div>
+                            <div className="category-bar-track">
+                              <div className="category-bar-fill" style={{ width: `${pct}%`, background: 'linear-gradient(90deg, #f59e0b 0%, #d97706 100%)' }}></div>
+                            </div>
+                          </div>
+                        );
+                      })
+                    )}
+                  </div>
+                  {data.inquiryLocales.length > 0 && (
+                    <div style={{ marginTop: '18px', paddingTop: '14px', borderTop: '1px solid #edf2f7', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                      {data.inquiryLocales.map((l, idx) => (
+                        <span key={idx} style={{ fontSize: '11px', color: '#475569', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '20px', padding: '3px 10px' }}>
+                          🌐 {l.locale.toUpperCase()}: <b>{l.count}</b>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Media Library Breakdown */}
+                <div className="analytics-card">
+                  <h4>Media Library Breakdown</h4>
+                  <p className="card-subtitle-desc">Uploaded assets grouped by file type.</p>
+                  <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column' }}>
+                    {data.mediaTypes.length === 0 ? (
+                      <div style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>No media uploaded.</div>
+                    ) : (
+                      data.mediaTypes.map((m, idx) => (
+                        <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderBottom: idx < data.mediaTypes.length - 1 ? '1px solid #f1f5f9' : 'none' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+                            <span style={{ fontSize: '16px' }}>{m.type.startsWith('image') ? '🖼️' : m.type.includes('pdf') ? '📄' : '📁'}</span>
+                            <span style={{ fontSize: '13px', fontWeight: 600, color: '#334155', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={m.type}>{m.type}</span>
+                          </div>
+                          <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexShrink: 0 }}>
+                            <span style={{ fontSize: '12px', color: '#64748b' }}><b>{m.count}</b> files</span>
+                            <span style={{ fontSize: '11px', color: '#e53e3e', fontWeight: 600 }}>{formatBytes(m.size)}</span>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </>
@@ -881,22 +972,29 @@ export default function AdminAnalyticsPage() {
                 </div>
                 <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', padding: '10px 16px', borderRadius: '12px', fontSize: '13px' }}>
                   <span style={{ color: '#64748b', marginRight: '6px' }}>Measurement ID:</span>
-                  <span style={{ fontWeight: 600, color: '#0f172a' }}>G-FZF80T7820</span>
+                  <span style={{ fontWeight: 600, color: '#0f172a' }}>{GA_MEASUREMENT_ID}</span>
                 </div>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  background: 'rgba(16, 185, 129, 0.08)',
-                  color: '#059669',
-                  border: '1px solid rgba(16, 185, 129, 0.15)',
-                  padding: '10px 16px',
-                  borderRadius: '12px',
-                  fontSize: '13px',
-                  fontWeight: 600
-                }}>
-                  <span className="live-dot" style={{ marginRight: '8px' }}></span>
-                  Active & Tracking
-                </div>
+                {gaData && !gaData.isDemo ? (
+                  <div style={{
+                    display: 'flex', alignItems: 'center',
+                    background: 'rgba(16, 185, 129, 0.08)', color: '#059669',
+                    border: '1px solid rgba(16, 185, 129, 0.15)',
+                    padding: '10px 16px', borderRadius: '12px', fontSize: '13px', fontWeight: 600
+                  }}>
+                    <span className="live-dot" style={{ marginRight: '8px' }}></span>
+                    Live &amp; Connected
+                  </div>
+                ) : (
+                  <div style={{
+                    display: 'flex', alignItems: 'center',
+                    background: 'rgba(37, 99, 235, 0.08)', color: '#2563eb',
+                    border: '1px solid rgba(37, 99, 235, 0.15)',
+                    padding: '10px 16px', borderRadius: '12px', fontSize: '13px', fontWeight: 600
+                  }}>
+                    <span style={{ marginRight: '8px' }}>ℹ️</span>
+                    Demo Mode — add GA API keys
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -1178,6 +1276,49 @@ export default function AdminAnalyticsPage() {
                       <div className="category-bar-track" style={{ height: '6px', background: '#f1f5f9', borderRadius: '4px', overflow: 'hidden' }}>
                         <div className="category-bar-fill" style={{ height: '100%', borderRadius: '4px', width: `${device.pct}%`, backgroundColor: device.color }}></div>
                       </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Top Cities + Top Pages (previously fetched from GA but never shown) */}
+          <div className="analytics-row-double">
+            {/* Top Cities */}
+            <div className="analytics-card" style={{ border: '1px solid #e2e8f0', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.01)' }}>
+              <h4>Top Cities</h4>
+              <p className="card-subtitle-desc">Where your visitors are located (by sessions).</p>
+              <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {gaGeo.map((c: any, idx: number) => (
+                  <div key={idx} className="category-bar-row">
+                    <div className="category-bar-label-row">
+                      <span className="category-bar-name" style={{ fontWeight: 600, color: '#334155', fontSize: '13px' }}>📍 {c.city}</span>
+                      <span className="category-bar-count" style={{ fontSize: '12px', color: '#64748b' }}><b>{c.sessions}</b> sessions ({c.pct}%)</span>
+                    </div>
+                    <div className="category-bar-track" style={{ height: '8px', background: '#f1f5f9', borderRadius: '4px', overflow: 'hidden' }}>
+                      <div className="category-bar-fill" style={{ height: '100%', borderRadius: '4px', width: `${c.pct}%`, background: 'linear-gradient(90deg, #6366f1 0%, #4f46e5 100%)' }}></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Top Pages */}
+            <div className="analytics-card" style={{ border: '1px solid #e2e8f0', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.01)' }}>
+              <h4>Top Pages</h4>
+              <p className="card-subtitle-desc">Most-viewed pages in the last 30 days.</p>
+              <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column' }}>
+                {gaTopPages.map((pg: any, idx: number) => (
+                  <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 0', borderBottom: idx < gaTopPages.length - 1 ? '1px solid #f1f5f9' : 'none' }}>
+                    <div style={{ width: '22px', height: '22px', background: '#eef2ff', color: '#4f46e5', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, flexShrink: 0 }}>{idx + 1}</div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: '13px', fontWeight: 600, color: '#1e293b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={pg.title}>{pg.title}</div>
+                      <div style={{ fontSize: '11px', color: '#94a3b8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{pg.page}</div>
+                    </div>
+                    <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                      <div style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a' }}>{pg.views.toLocaleString()}</div>
+                      <div style={{ fontSize: '10px', color: '#94a3b8' }}>views</div>
                     </div>
                   </div>
                 ))}
