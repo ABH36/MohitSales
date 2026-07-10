@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import AdminShell, { useAdmin } from '../components/AdminShell';
-import { useAdminCache, getCached } from '../components/AdminCacheProvider';
 import SkeletonTable from '../components/SkeletonTable';
 
 interface Inquiry {
@@ -13,8 +12,23 @@ interface Inquiry {
   company: string | null;
   message: string;
   status: string;
+  source?: string;
   createdAt: string;
 }
+
+const LIMIT = 25;
+
+function statusBadge(status: string): string {
+  switch (status) {
+    case 'new': return 'admin-badge-info';
+    case 'replied': return 'admin-badge-success';
+    case 'closed': return 'admin-badge-danger';
+    default: return 'admin-badge-warning'; // read
+  }
+}
+const sourceLabel = (s?: string) => (s === 'feedback' ? 'Feedback Form' : 'Contact Form');
+const fmtDate = (iso: string) => new Date(iso).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+const fmtDateTime = (iso: string) => new Date(iso).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 
 export default function AdminInquiriesPage() {
   return (
@@ -26,41 +40,50 @@ export default function AdminInquiriesPage() {
 
 function AdminInquiriesPageInner() {
   const { user } = useAdmin();
-  const { fetchWithCache, invalidate } = useAdminCache();
   const isReadOnly = user?.role === 'VIEWER';
-  const cached = getCached('/api/admin/inquiries');
-  const [inquiries, setInquiries] = useState<Inquiry[]>(cached?.success ? cached.data : []);
-  const [loading, setLoading] = useState(!cached?.success);
-  const [toast, setToast] = useState<{ msg: string; type: string } | null>(null);
+  const isAdmin = user?.role === 'ADMIN'; // clear-all is admin-only
+
+  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
+  const [counts, setCounts] = useState({ total: 0, new: 0, replied: 0 });
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [sourceFilter, setSourceFilter] = useState<'all' | 'website' | 'feedback'>('all');
+  const [loading, setLoading] = useState(true);
+  const [toast, setToast] = useState<{ msg: string; type: string } | null>(null);
+  const [selected, setSelected] = useState<Inquiry | null>(null);
 
-  const filteredInquiries = inquiries.filter(inq => {
-    if (sourceFilter === 'all') return true;
-    const src = (inq as any).source || 'website';
-    return src.toLowerCase() === sourceFilter;
-  });
+  const showToast = (msg: string, type: string = 'success') => {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 3000);
+  };
 
-  const fetchInquiries = async () => {
+  const fetchInquiries = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await fetchWithCache('/api/admin/inquiries');
+      const params = new URLSearchParams({ page: String(currentPage), limit: String(LIMIT), source: sourceFilter });
+      const res = await fetch(`/api/admin/inquiries?${params}`);
+      const data = await res.json();
       if (data.success) {
         setInquiries(data.data);
+        if (data.counts) setCounts(data.counts);
+        if (data.pagination) setTotalPages(data.pagination.totalPages || 1);
       }
     } catch (err) {
       console.error('Failed to fetch inquiries', err);
     }
     setLoading(false);
-  };
+  }, [currentPage, sourceFilter]);
 
+  useEffect(() => { fetchInquiries(); }, [fetchInquiries]);
+  // Reset to the first page whenever the source filter changes.
+  useEffect(() => { setCurrentPage(1); }, [sourceFilter]);
+  // Close the modal on Escape.
   useEffect(() => {
-    fetchInquiries();
-  }, []);
-
-  const showToast = (msg: string, type: string) => {
-    setToast({ msg, type });
-    setTimeout(() => setToast(null), 3000);
-  };
+    if (!selected) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setSelected(null); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [selected]);
 
   const handleStatusChange = async (id: string, newStatus: string) => {
     try {
@@ -71,53 +94,37 @@ function AdminInquiriesPageInner() {
       });
       const data = await res.json();
       if (data.success) {
-        setInquiries(inquiries.map(inq => inq.id === id ? { ...inq, status: newStatus } : inq));
-        invalidate('/api/admin/inquiries');
-        showToast('Status updated successfully', 'success');
-      } else {
-        showToast('Failed to update status', 'error');
-      }
-    } catch (error) {
-      showToast('Error updating status', 'error');
-    }
+        showToast('Status updated successfully');
+        setSelected((s) => (s && s.id === id ? { ...s, status: newStatus } : s));
+        fetchInquiries();
+      } else showToast('Failed to update status', 'error');
+    } catch { showToast('Error updating status', 'error'); }
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm('Are you sure you want to delete this inquiry? This action cannot be undone.')) return;
+    if (!window.confirm('Delete this inquiry? This action cannot be undone.')) return;
     try {
-      const res = await fetch(`/api/admin/inquiries/${id}`, {
-        method: 'DELETE',
-      });
+      const res = await fetch(`/api/admin/inquiries/${id}`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) {
-        setInquiries(inquiries.filter(inq => inq.id !== id));
-        invalidate('/api/admin/inquiries');
-        showToast('Inquiry deleted successfully', 'success');
-      } else {
-        showToast(data.message || 'Failed to delete inquiry', 'error');
-      }
-    } catch (error) {
-      showToast('Error deleting inquiry', 'error');
-    }
+        showToast('Inquiry deleted successfully');
+        setSelected(null);
+        fetchInquiries();
+      } else showToast(data.message || 'Failed to delete inquiry', 'error');
+    } catch { showToast('Error deleting inquiry', 'error'); }
   };
 
   const handleClearAll = async () => {
-    if (!window.confirm('WARNING: Are you sure you want to delete ALL inquiries? This will permanently wipe all inquiry logs from the database.')) return;
+    if (!window.confirm('WARNING: Delete ALL inquiries? This permanently wipes every inquiry log from the database.')) return;
     try {
-      const res = await fetch('/api/admin/inquiries', {
-        method: 'DELETE',
-      });
+      const res = await fetch('/api/admin/inquiries', { method: 'DELETE' });
       const data = await res.json();
       if (data.success) {
-        setInquiries([]);
-        invalidate('/api/admin/inquiries');
-        showToast('All inquiries cleared successfully', 'success');
-      } else {
-        showToast(data.message || 'Failed to clear inquiries', 'error');
-      }
-    } catch (error) {
-      showToast('Error clearing inquiries', 'error');
-    }
+        showToast('All inquiries cleared successfully');
+        setCurrentPage(1);
+        fetchInquiries();
+      } else showToast(data.message || 'Failed to clear inquiries', 'error');
+    } catch { showToast('Error clearing inquiries', 'error'); }
   };
 
   return (
@@ -131,21 +138,21 @@ function AdminInquiriesPageInner() {
       <div className="admin-stats-grid" style={{ marginBottom: '24px' }}>
         <div className="admin-stat-card">
           <div>
-            <div className="admin-stat-value">{inquiries.length}</div>
+            <div className="admin-stat-value">{counts.total}</div>
             <div className="admin-stat-label">Total Inquiries</div>
           </div>
           <div className="admin-stat-icon green">📩</div>
         </div>
         <div className="admin-stat-card">
           <div>
-            <div className="admin-stat-value">{inquiries.filter(i => i.status === 'new').length}</div>
+            <div className="admin-stat-value">{counts.new}</div>
             <div className="admin-stat-label">New (Unread)</div>
           </div>
           <div className="admin-stat-icon blue">🔵</div>
         </div>
         <div className="admin-stat-card">
           <div>
-            <div className="admin-stat-value">{inquiries.filter(i => i.status === 'replied').length}</div>
+            <div className="admin-stat-value">{counts.replied}</div>
             <div className="admin-stat-label">Replied</div>
           </div>
           <div className="admin-stat-icon green">✅</div>
@@ -156,33 +163,20 @@ function AdminInquiriesPageInner() {
         <div className="admin-table-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h3 className="admin-table-title">All Inquiries</h3>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            {!isReadOnly && inquiries.length > 0 && (
-              <button 
+            {isAdmin && counts.total > 0 && (
+              <button
                 onClick={handleClearAll}
                 className="admin-btn"
-                style={{ 
-                  padding: '6px 14px', 
-                  fontSize: '13px', 
-                  background: '#ef4444', 
-                  color: 'white', 
-                  border: 'none', 
-                  borderRadius: '6px', 
-                  cursor: 'pointer', 
-                  fontWeight: 600,
-                  transition: 'background 0.2s',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px'
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.background = '#dc2626'}
-                onMouseLeave={(e) => e.currentTarget.style.background = '#ef4444'}
+                style={{ padding: '6px 14px', fontSize: '13px', background: '#ef4444', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = '#dc2626')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = '#ef4444')}
               >
                 🗑️ Clear All
               </button>
             )}
             <label style={{ fontSize: '14px', color: '#4a5568', fontWeight: 600 }}>Source:</label>
-            <select 
-              value={sourceFilter} 
+            <select
+              value={sourceFilter}
               onChange={(e: any) => setSourceFilter(e.target.value)}
               className="admin-form-select"
               style={{ width: '160px', display: 'inline-block', padding: '6px 12px', fontSize: '13px', margin: 0 }}
@@ -193,7 +187,7 @@ function AdminInquiriesPageInner() {
             </select>
           </div>
         </div>
-        
+
         {loading ? (
           <SkeletonTable rows={6} cols={5} />
         ) : (
@@ -211,35 +205,26 @@ function AdminInquiriesPageInner() {
               </tr>
             </thead>
             <tbody>
-              {filteredInquiries.length === 0 ? (
+              {inquiries.length === 0 ? (
                 <tr><td colSpan={8} style={{ textAlign: 'center', padding: '40px', color: '#718096' }}>No inquiries matching this filter.</td></tr>
               ) : (
-                filteredInquiries.map((inq) => (
-                  <tr key={inq.id}>
+                inquiries.map((inq) => (
+                  <tr key={inq.id} className="admin-row-clickable" onClick={() => setSelected(inq)} title="Click to read the full query">
                     <td style={{ fontWeight: 600 }}>{inq.name}</td>
-                    <td>{inq.company}</td>
-                    <td><a href={`mailto:${inq.email}`} style={{ color: '#F7931E' }}>{inq.email}</a></td>
+                    <td>{inq.company || '—'}</td>
+                    <td onClick={(e) => e.stopPropagation()}><a href={`mailto:${inq.email}`} style={{ color: '#F7931E' }}>{inq.email}</a></td>
                     <td>{inq.mobile}</td>
-                    <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    <td style={{ maxWidth: '220px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {inq.message}
                     </td>
                     <td>
-                      <span className={`admin-badge ${
-                        inq.status === 'new' ? 'admin-badge-info' :
-                        inq.status === 'replied' ? 'admin-badge-success' :
-                        inq.status === 'closed' ? 'admin-badge-secondary' :
-                        'admin-badge-warning' // read
-                      }`}>
-                        {inq.status.toUpperCase()}
-                      </span>
+                      <span className={`admin-badge ${statusBadge(inq.status)}`}>{inq.status.toUpperCase()}</span>
                     </td>
-                    <td style={{ color: '#718096', fontSize: '12px', whiteSpace: 'nowrap' }}>
-                      {new Date(inq.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-                    </td>
-                    <td>
+                    <td style={{ color: '#718096', fontSize: '12px', whiteSpace: 'nowrap' }}>{fmtDate(inq.createdAt)}</td>
+                    <td onClick={(e) => e.stopPropagation()}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <select 
-                          value={inq.status} 
+                        <select
+                          value={inq.status}
                           onChange={(e) => handleStatusChange(inq.id, e.target.value)}
                           disabled={isReadOnly}
                           className="admin-form-select"
@@ -254,20 +239,9 @@ function AdminInquiriesPageInner() {
                           <button
                             onClick={() => handleDelete(inq.id)}
                             title="Delete Inquiry"
-                            style={{
-                              background: 'none',
-                              border: 'none',
-                              cursor: 'pointer',
-                              fontSize: '16px',
-                              padding: '4px 8px',
-                              borderRadius: '4px',
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              transition: 'background 0.2s',
-                            }}
-                            onMouseEnter={(e) => e.currentTarget.style.background = '#fed7d7'}
-                            onMouseLeave={(e) => e.currentTarget.style.background = 'none'}
+                            style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px', padding: '4px 8px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                            onMouseEnter={(e) => (e.currentTarget.style.background = '#fed7d7')}
+                            onMouseLeave={(e) => (e.currentTarget.style.background = 'none')}
                           >
                             🗑️
                           </button>
@@ -280,7 +254,54 @@ function AdminInquiriesPageInner() {
             </tbody>
           </table>
         )}
+
+        {totalPages > 1 && (
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 8, padding: '18px 0' }}>
+            <button disabled={currentPage <= 1} onClick={() => setCurrentPage((p) => p - 1)} className="admin-btn admin-btn-outline admin-btn-sm" style={{ opacity: currentPage <= 1 ? 0.5 : 1 }}>Prev</button>
+            <span style={{ padding: '6px 14px', fontSize: 14 }}>Page {currentPage} of {totalPages}</span>
+            <button disabled={currentPage >= totalPages} onClick={() => setCurrentPage((p) => p + 1)} className="admin-btn admin-btn-outline admin-btn-sm" style={{ opacity: currentPage >= totalPages ? 0.5 : 1 }}>Next</button>
+          </div>
+        )}
       </div>
+
+      {selected && (
+        <div className="admin-modal-overlay" onClick={() => setSelected(null)}>
+          <div className="admin-modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+            <div className="admin-modal-header">
+              <h3 className="admin-modal-title">Inquiry from {selected.name}</h3>
+              <button className="admin-modal-close" onClick={() => setSelected(null)} aria-label="Close">✕</button>
+            </div>
+            <div className="admin-modal-body">
+              <div className="admin-inq-grid">
+                <div className="admin-inq-field"><span className="admin-inq-k">Company</span><span className="admin-inq-v">{selected.company || '—'}</span></div>
+                <div className="admin-inq-field"><span className="admin-inq-k">Status</span><span className="admin-inq-v"><span className={`admin-badge ${statusBadge(selected.status)}`}>{selected.status.toUpperCase()}</span></span></div>
+                <div className="admin-inq-field"><span className="admin-inq-k">Email</span><span className="admin-inq-v"><a href={`mailto:${selected.email}`} style={{ color: 'var(--admin-accent)' }}>{selected.email}</a></span></div>
+                <div className="admin-inq-field"><span className="admin-inq-k">Mobile</span><span className="admin-inq-v"><a href={`tel:${selected.mobile}`} style={{ color: 'var(--admin-accent)' }}>{selected.mobile}</a></span></div>
+                <div className="admin-inq-field"><span className="admin-inq-k">Source</span><span className="admin-inq-v">{sourceLabel(selected.source)}</span></div>
+                <div className="admin-inq-field"><span className="admin-inq-k">Received</span><span className="admin-inq-v">{fmtDateTime(selected.createdAt)}</span></div>
+              </div>
+              <div className="admin-inq-message-label">Message / Query</div>
+              <div className="admin-inq-message">{selected.message}</div>
+            </div>
+            <div className="admin-modal-footer">
+              {!isReadOnly && (
+                <select
+                  value={selected.status}
+                  onChange={(e) => handleStatusChange(selected.id, e.target.value)}
+                  className="admin-form-select"
+                  style={{ width: 'auto', minWidth: 120, margin: 0 }}
+                >
+                  <option value="new">New</option>
+                  <option value="read">Read</option>
+                  <option value="replied">Replied</option>
+                  <option value="closed">Closed</option>
+                </select>
+              )}
+              <a href={`mailto:${selected.email}`} className="admin-btn admin-btn-primary admin-btn-sm">Reply via Email</a>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
