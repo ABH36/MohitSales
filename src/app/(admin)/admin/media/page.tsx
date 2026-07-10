@@ -1,8 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import AdminShell, { useAdmin } from '../components/AdminShell';
-import { useAdminCache, getCached } from '../components/AdminCacheProvider';
 import { SkeletonCards } from '../components/SkeletonTable';
 
 interface MediaFile {
@@ -24,41 +23,52 @@ export default function AdminMediaPage() {
 
 function AdminMediaPageInner() {
   const { user } = useAdmin();
-  const { fetchWithCache, invalidate } = useAdminCache();
-  const cached = getCached('/api/admin/media');
   const isReadOnly = user?.role === 'VIEWER';
-  const [media, setMedia] = useState<MediaFile[]>(cached?.success ? cached.data : []);
-  const [loading, setLoading] = useState(!cached?.success);
+  const [media, setMedia] = useState<MediaFile[]>([]);
+  const [counts, setCounts] = useState({ total: 0, images: 0, pdfs: 0 });
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchInput, setSearchInput] = useState('');
+  const [search, setSearch] = useState('');
+  const [typeFilter, setTypeFilter] = useState<'all' | 'image' | 'pdf'>('all');
+  const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [toast, setToast] = useState<{ msg: string; type: string } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const fetchMedia = async () => {
+  const showToast = (msg: string, type: string = 'success') => {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 3000);
+  };
+
+  const fetchMedia = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await fetchWithCache('/api/admin/media');
+      const params = new URLSearchParams({ page: String(currentPage), limit: '24', search, type: typeFilter });
+      const data = await fetch(`/api/admin/media?${params}`).then((r) => r.json());
       if (data.success) {
         setMedia(data.data);
+        if (data.counts) setCounts(data.counts);
+        if (data.pagination) setTotalPages(data.pagination.totalPages || 1);
       } else {
         showToast(data.message || 'Failed to load media files', 'error');
       }
     } catch (err) {
       console.error('Failed to fetch media', err);
       showToast('Error loading media files', 'error');
-    } finally {
-      setLoading(false);
     }
-  };
+    setLoading(false);
+  }, [currentPage, search, typeFilter]);
 
+  useEffect(() => { fetchMedia(); }, [fetchMedia]);
+  // Debounce the search box.
   useEffect(() => {
-    fetchMedia();
-  }, []);
-
-  const showToast = (msg: string, type: string) => {
-    setToast({ msg, type });
-    setTimeout(() => setToast(null), 3000);
-  };
+    const t = setTimeout(() => { setSearch(searchInput); setCurrentPage(1); }, 350);
+    return () => clearTimeout(t);
+  }, [searchInput]);
+  // Reset to page 1 when the type filter changes.
+  useEffect(() => { setCurrentPage(1); }, [typeFilter]);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (isReadOnly) return;
@@ -68,16 +78,12 @@ function AdminMediaPageInner() {
     setUploading(true);
     const formData = new FormData();
     formData.append('file', file);
-
     try {
-      const res = await fetch('/api/admin/media', {
-        method: 'POST',
-        body: formData,
-      });
+      const res = await fetch('/api/admin/media', { method: 'POST', body: formData });
       const data = await res.json();
       if (data.success) {
-        invalidate('/api/admin/media');
         showToast('File uploaded successfully', 'success');
+        setCurrentPage(1);
         fetchMedia();
       } else {
         showToast(data.message || 'Upload failed', 'error');
@@ -90,20 +96,23 @@ function AdminMediaPageInner() {
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: string, force = false) => {
     if (isReadOnly || deletingId) return;
-    if (!confirm('Are you sure you want to delete this file?')) return;
+    if (!force && !confirm('Are you sure you want to delete this file?')) return;
 
     setDeletingId(id);
     try {
-      const res = await fetch(`/api/admin/media?id=${id}`, {
-        method: 'DELETE',
-      });
+      const res = await fetch(`/api/admin/media?id=${id}${force ? '&force=true' : ''}`, { method: 'DELETE' });
       const data = await res.json();
       if (data.success) {
-        invalidate('/api/admin/media');
         showToast('File deleted successfully', 'success');
         fetchMedia();
+      } else if (res.status === 409 && data.inUse) {
+        setDeletingId(null);
+        if (window.confirm(`⚠️ ${data.message}\n\nDelete it anyway?`)) {
+          handleDelete(id, true);
+        }
+        return;
       } else {
         showToast(data.message || 'Failed to delete file', 'error');
       }
@@ -125,25 +134,21 @@ function AdminMediaPageInner() {
       <div className="admin-stats-grid" style={{ marginBottom: '24px' }}>
         <div className="admin-stat-card">
           <div>
-            <div className="admin-stat-value">{media.length}</div>
+            <div className="admin-stat-value">{counts.total}</div>
             <div className="admin-stat-label">Total Files</div>
           </div>
           <div className="admin-stat-icon red">🖼️</div>
         </div>
         <div className="admin-stat-card">
           <div>
-            <div className="admin-stat-value">
-              {media.filter(m => m.mimeType.startsWith('image/')).length}
-            </div>
+            <div className="admin-stat-value">{counts.images}</div>
             <div className="admin-stat-label">Images</div>
           </div>
           <div className="admin-stat-icon blue">📸</div>
         </div>
         <div className="admin-stat-card">
           <div>
-            <div className="admin-stat-value">
-              {media.filter(m => m.mimeType === 'application/pdf').length}
-            </div>
+            <div className="admin-stat-value">{counts.pdfs}</div>
             <div className="admin-stat-label">PDFs</div>
           </div>
           <div className="admin-stat-icon orange">📄</div>
@@ -151,27 +156,37 @@ function AdminMediaPageInner() {
       </div>
 
       <div className="admin-table-wrapper">
-        <div className="admin-table-header">
+        <div className="admin-table-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
           <h3 className="admin-table-title">All Media Files</h3>
-          {!isReadOnly ? (
-            <div>
-              <input
-                type="file"
-                ref={fileInputRef}
-                style={{ display: 'none' }}
-                onChange={handleFileUpload}
-              />
-              <button
-                className="admin-btn admin-btn-primary"
-                onClick={() => fileInputRef.current?.click()}
-                disabled={uploading}
-              >
-                {uploading ? 'Uploading...' : 'Upload File'}
-              </button>
-            </div>
-          ) : (
-            <span style={{ fontSize: '13px', color: '#718096', fontStyle: 'italic' }}>Read Only</span>
-          )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+            <input
+              type="text"
+              placeholder="Search filename…"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              style={{ padding: '7px 12px', border: '1px solid #d1d5db', borderRadius: 6, fontSize: 13, width: 200 }}
+            />
+            <select
+              value={typeFilter}
+              onChange={(e: any) => setTypeFilter(e.target.value)}
+              className="admin-form-select"
+              style={{ width: 130, padding: '7px 10px', fontSize: 13, margin: 0 }}
+            >
+              <option value="all">All Types</option>
+              <option value="image">Images</option>
+              <option value="pdf">PDFs</option>
+            </select>
+            {!isReadOnly ? (
+              <>
+                <input type="file" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileUpload} />
+                <button className="admin-btn admin-btn-primary" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
+                  {uploading ? 'Uploading...' : 'Upload File'}
+                </button>
+              </>
+            ) : (
+              <span style={{ fontSize: '13px', color: '#718096', fontStyle: 'italic' }}>Read Only</span>
+            )}
+          </div>
         </div>
 
         {loading ? (
@@ -193,7 +208,7 @@ function AdminMediaPageInner() {
                 <tr><td colSpan={6} style={{ textAlign: 'center', padding: '60px', color: '#718096' }}>
                   <div className="admin-empty">
                     <div className="admin-empty-icon">🖼️</div>
-                    <div className="admin-empty-text">No media files uploaded yet.</div>
+                    <div className="admin-empty-text">{search || typeFilter !== 'all' ? 'No media matches this filter.' : 'No media files uploaded yet.'}</div>
                   </div>
                 </td></tr>
               ) : (
@@ -216,10 +231,7 @@ function AdminMediaPageInner() {
                       <div style={{ display: 'flex', gap: '8px' }}>
                         <button
                           className="admin-btn admin-btn-outline admin-btn-sm"
-                          onClick={() => {
-                            navigator.clipboard.writeText(m.url);
-                            showToast('URL copied!', 'success');
-                          }}
+                          onClick={() => { navigator.clipboard.writeText(m.url); showToast('URL copied!', 'success'); }}
                         >
                           Copy URL
                         </button>
@@ -239,6 +251,14 @@ function AdminMediaPageInner() {
               )}
             </tbody>
           </table>
+        )}
+
+        {totalPages > 1 && (
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 8, padding: '18px 0' }}>
+            <button disabled={currentPage <= 1} onClick={() => setCurrentPage((p) => p - 1)} className="admin-btn admin-btn-outline admin-btn-sm" style={{ opacity: currentPage <= 1 ? 0.5 : 1 }}>Prev</button>
+            <span style={{ padding: '6px 14px', fontSize: 14 }}>Page {currentPage} of {totalPages}</span>
+            <button disabled={currentPage >= totalPages} onClick={() => setCurrentPage((p) => p + 1)} className="admin-btn admin-btn-outline admin-btn-sm" style={{ opacity: currentPage >= totalPages ? 0.5 : 1 }}>Next</button>
+          </div>
         )}
       </div>
     </>

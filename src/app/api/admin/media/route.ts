@@ -94,11 +94,31 @@ export async function GET(request: Request) {
       return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
     }
 
-    const media = await prisma.media.findMany({
-      orderBy: { createdAt: 'desc' },
-      take: 100,
+    const { searchParams } = new URL(request.url);
+    const page = Math.max(parseInt(searchParams.get('page') || '1'), 1);
+    const limit = Math.min(parseInt(searchParams.get('limit') || '24'), 100);
+    const search = searchParams.get('search') || '';
+    const type = searchParams.get('type') || 'all'; // all | image | pdf
+
+    const where: any = {};
+    if (search) where.filename = { contains: search, mode: 'insensitive' };
+    if (type === 'image') where.mimeType = { startsWith: 'image/' };
+    else if (type === 'pdf') where.mimeType = 'application/pdf';
+
+    const [media, filteredTotal, allCount, imageCount, pdfCount] = await Promise.all([
+      prisma.media.findMany({ where, orderBy: { createdAt: 'desc' }, skip: (page - 1) * limit, take: limit }),
+      prisma.media.count({ where }),
+      prisma.media.count(),
+      prisma.media.count({ where: { mimeType: { startsWith: 'image/' } } }),
+      prisma.media.count({ where: { mimeType: 'application/pdf' } }),
+    ]);
+
+    return NextResponse.json({
+      success: true,
+      data: media,
+      pagination: { page, limit, total: filteredTotal, totalPages: Math.ceil(filteredTotal / limit) },
+      counts: { total: allCount, images: imageCount, pdfs: pdfCount },
     });
-    return NextResponse.json({ success: true, data: media });
   } catch (error) {
     console.error('[Admin Media GET]', error);
     return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
@@ -112,6 +132,7 @@ export async function DELETE(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
+    const force = searchParams.get('force') === 'true';
 
     if (!id) {
       return NextResponse.json({ success: false, message: 'Media ID is required' }, { status: 400 });
@@ -124,6 +145,36 @@ export async function DELETE(request: NextRequest) {
 
     if (!mediaItem) {
       return NextResponse.json({ success: false, message: 'Media not found' }, { status: 404 });
+    }
+
+    // In-use safeguard: block deleting a file that's referenced by structured
+    // fields (product image/datasheet, blog cover, category image) unless the
+    // caller explicitly forces it. Prevents silently breaking live images.
+    if (!force) {
+      const url = mediaItem.url;
+      const [prodImg, prodDatasheet, blogCover, catImg] = await Promise.all([
+        prisma.product.count({ where: { imageSrc: url } }),
+        prisma.product.count({ where: { datasheetLink: url } }),
+        prisma.blogPost.count({ where: { coverImage: url } }),
+        prisma.category.count({ where: { image: url } }),
+      ]);
+      const products = prodImg + prodDatasheet;
+      const usageTotal = products + blogCover + catImg;
+      if (usageTotal > 0) {
+        const parts: string[] = [];
+        if (products) parts.push(`${products} product${products > 1 ? 's' : ''}`);
+        if (blogCover) parts.push(`${blogCover} blog post${blogCover > 1 ? 's' : ''}`);
+        if (catImg) parts.push(`${catImg} categor${catImg > 1 ? 'ies' : 'y'}`);
+        return NextResponse.json(
+          {
+            success: false,
+            inUse: true,
+            message: `This file is used by ${parts.join(', ')}. Deleting it will break those images.`,
+            usage: { products, blogPosts: blogCover, categories: catImg },
+          },
+          { status: 409 },
+        );
+      }
     }
 
     // Delete from Cloudinary
