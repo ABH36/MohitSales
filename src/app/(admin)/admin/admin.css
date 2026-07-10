@@ -194,6 +194,12 @@
   box-shadow: 10px 0 40px rgba(0, 0, 0, 0.25);
   overflow-y: auto;
   overflow-x: hidden;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.admin-sidebar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 .admin-sidebar-close-btn {
@@ -226,6 +232,12 @@
   flex: 1;
   padding: 24px 16px;
   overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.admin-sidebar-nav::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 .admin-nav-section {
@@ -807,6 +819,103 @@
 .admin-stat-icon.green { background: #f0fff4; color: var(--admin-success); }
 .admin-stat-icon.red { background: #fff5f5; color: var(--admin-danger); }
 .admin-stat-icon.purple { background: #faf5ff; color: #805ad5; }
+
+/* ─── Dashboard: clickable stat cards ─────────────── */
+.admin-stat-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.admin-stat-card-clickable {
+  position: relative;
+  cursor: pointer;
+}
+.admin-stat-go {
+  position: absolute;
+  right: 18px;
+  bottom: 16px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--admin-accent);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.admin-stat-card-clickable:hover .admin-stat-go {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ─── Dashboard: clickable inquiry rows ───────────── */
+.admin-row-clickable {
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+.admin-row-clickable:hover {
+  background: var(--admin-card-hover);
+}
+.admin-row-cta {
+  text-align: right;
+  white-space: nowrap;
+  font-weight: 600;
+  color: var(--admin-accent);
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+.admin-row-clickable:hover .admin-row-cta {
+  opacity: 1;
+}
+
+/* ─── Inquiry detail modal ────────────────────────── */
+.admin-inq-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px 24px;
+  margin-bottom: 22px;
+}
+.admin-inq-field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.admin-inq-k {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--admin-text-muted);
+}
+.admin-inq-v {
+  font-size: 13px;
+  color: var(--admin-primary);
+  font-weight: 400;
+  word-break: break-word;
+}
+.admin-inq-message-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--admin-text-muted);
+  margin-bottom: 8px;
+}
+.admin-inq-message {
+  background: var(--admin-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--admin-primary);
+  font-weight: 400;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 40vh;
+  overflow-y: auto;
+}
+@media (max-width: 560px) {
+  .admin-inq-grid { grid-template-columns: 1fr; }
+}
 
 /* ─── Data Table ─────────────────────────────────── */
 .admin-table-wrapper {

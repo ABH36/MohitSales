@@ -2,6 +2,7 @@ import Link from 'next/link';
 import AdminShell from '../components/AdminShell';
 import prisma from '@/lib/prisma';
 import { cld } from '@/lib/cloudinary';
+import RecentInquiries, { type DashInquiry } from './RecentInquiries';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,7 +15,6 @@ async function getDashboardStats() {
       blogCount,
       mediaCount,
       userCount,
-      settingCount,
       recentInquiries,
     ] = await Promise.all([
       prisma.product.count(),
@@ -23,40 +23,44 @@ async function getDashboardStats() {
       prisma.blogPost.count(),
       prisma.media.count(),
       prisma.user.count(),
-      prisma.setting.count(),
-      prisma.inquiry.findMany({
-        orderBy: { createdAt: 'desc' },
-        take: 5,
-      }),
+      prisma.inquiry.findMany({ orderBy: { createdAt: 'desc' }, take: 5 }),
     ]);
 
-    return {
-      productCount,
-      categoryCount,
-      inquiryCount,
-      blogCount,
-      mediaCount,
-      userCount,
-      settingCount,
-      recentInquiries,
-    };
+    // Serialize for the client component (Date -> ISO string).
+    const inquiries: DashInquiry[] = recentInquiries.map((i) => ({
+      id: i.id,
+      name: i.name,
+      company: i.company,
+      email: i.email,
+      mobile: i.mobile,
+      message: i.message,
+      status: i.status,
+      source: i.source,
+      createdAt: i.createdAt.toISOString(),
+    }));
+
+    return { productCount, categoryCount, inquiryCount, blogCount, mediaCount, userCount, inquiries };
   } catch (error) {
     console.error('[Dashboard] Error fetching stats:', error);
     return {
-      productCount: 0,
-      categoryCount: 0,
-      inquiryCount: 0,
-      blogCount: 0,
-      mediaCount: 0,
-      userCount: 0,
-      settingCount: 0,
-      recentInquiries: [],
+      productCount: 0, categoryCount: 0, inquiryCount: 0,
+      blogCount: 0, mediaCount: 0, userCount: 0, inquiries: [] as DashInquiry[],
     };
   }
 }
 
 export default async function AdminDashboardPage() {
   const stats = await getDashboardStats();
+
+  // Each stat card links to the section it summarises.
+  const cards = [
+    { value: stats.productCount, label: 'Products', icon: '📦', cls: 'blue', href: '/admin/products' },
+    { value: stats.categoryCount, label: 'Categories', icon: '📁', cls: 'orange', href: '/admin/categories' },
+    { value: stats.inquiryCount, label: 'Inquiries', icon: '📩', cls: 'green', href: '/admin/inquiries' },
+    { value: stats.blogCount, label: 'Blog Posts', icon: '📝', cls: 'purple', href: '/admin/blogs' },
+    { value: stats.mediaCount, label: 'Media Files', icon: '🖼️', cls: 'red', href: '/admin/media' },
+    { value: stats.userCount, label: 'Users', icon: '👥', cls: 'blue', href: '/admin/users' },
+  ];
 
   return (
     <AdminShell pageTitle="Dashboard">
@@ -69,103 +73,24 @@ export default async function AdminDashboardPage() {
         />
       </div>
 
-      {/* Stats Cards */}
+      {/* Stats Cards — each links to its section */}
       <div className="admin-stats-grid">
-        <div className="admin-stat-card">
-          <div>
-            <div className="admin-stat-value">{stats.productCount}</div>
-            <div className="admin-stat-label">Products</div>
-          </div>
-          <div className="admin-stat-icon blue">📦</div>
-        </div>
-        <div className="admin-stat-card">
-          <div>
-            <div className="admin-stat-value">{stats.categoryCount}</div>
-            <div className="admin-stat-label">Categories</div>
-          </div>
-          <div className="admin-stat-icon orange">📁</div>
-        </div>
-        <div className="admin-stat-card">
-          <div>
-            <div className="admin-stat-value">{stats.inquiryCount}</div>
-            <div className="admin-stat-label">Inquiries</div>
-          </div>
-          <div className="admin-stat-icon green">📩</div>
-        </div>
-        <div className="admin-stat-card">
-          <div>
-            <div className="admin-stat-value">{stats.blogCount}</div>
-            <div className="admin-stat-label">Blog Posts</div>
-          </div>
-          <div className="admin-stat-icon purple">📝</div>
-        </div>
-        <div className="admin-stat-card">
-          <div>
-            <div className="admin-stat-value">{stats.mediaCount}</div>
-            <div className="admin-stat-label">Media Files</div>
-          </div>
-          <div className="admin-stat-icon red">🖼️</div>
-        </div>
-        <div className="admin-stat-card">
-          <div>
-            <div className="admin-stat-value">{stats.userCount}</div>
-            <div className="admin-stat-label">Users</div>
-          </div>
-          <div className="admin-stat-icon blue">👥</div>
-        </div>
+        {cards.map((c) => (
+          <Link key={c.label} href={c.href} className="admin-stat-link" aria-label={`Open ${c.label}`}>
+            <div className="admin-stat-card admin-stat-card-clickable">
+              <div>
+                <div className="admin-stat-value">{c.value}</div>
+                <div className="admin-stat-label">{c.label}</div>
+              </div>
+              <div className={`admin-stat-icon ${c.cls}`}>{c.icon}</div>
+              <span className="admin-stat-go" aria-hidden="true">→</span>
+            </div>
+          </Link>
+        ))}
       </div>
 
-      {/* Recent Inquiries */}
-      <div className="admin-table-wrapper">
-        <div className="admin-table-header">
-          <h3 className="admin-table-title">Recent Inquiries</h3>
-          <Link href="/admin/inquiries" className="admin-btn admin-btn-outline admin-btn-sm">
-            View All →
-          </Link>
-        </div>
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Company</th>
-              <th>Email</th>
-              <th>Status</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {stats.recentInquiries.length === 0 ? (
-              <tr>
-                <td colSpan={5} style={{ textAlign: 'center', padding: '40px', color: '#718096' }}>
-                  No inquiries yet.
-                </td>
-              </tr>
-            ) : (
-              stats.recentInquiries.map((inq) => (
-                <tr key={inq.id}>
-                  <td style={{ fontWeight: 600 }}>{inq.name}</td>
-                  <td>{inq.company}</td>
-                  <td>{inq.email}</td>
-                  <td>
-                    <span className={`admin-badge ${inq.status === 'new' ? 'admin-badge-info' :
-                      inq.status === 'read' ? 'admin-badge-warning' :
-                        inq.status === 'replied' ? 'admin-badge-success' :
-                          'admin-badge-danger'
-                      }`}>
-                      {inq.status.toUpperCase()}
-                    </span>
-                  </td>
-                  <td style={{ color: '#718096', fontSize: '12px' }}>
-                    {new Date(inq.createdAt).toLocaleDateString('en-IN', {
-                      day: '2-digit', month: 'short', year: 'numeric'
-                    })}
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      {/* Recent Inquiries — click a row to read the full query */}
+      <RecentInquiries inquiries={stats.inquiries} />
     </AdminShell>
   );
 }
