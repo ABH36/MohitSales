@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { FaFacebookF, FaWhatsapp, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 import { usePublicSettings } from '@/components/PublicSettingsContext';
 import { cld } from '@/lib/cloudinary';
 
@@ -34,7 +35,7 @@ export default function StickySocialMedia() {
       }}
     >
       <a href={getSetting('social_facebook', '#') || '#'} className="Facebook" target="_blank" rel="noopener noreferrer">
-        <i className="fab fa-facebook-f icon"></i> Facebook
+        <i className="social-facebook"><FaFacebookF /></i> Facebook
       </a>
       <a
         href="https://api.whatsapp.com/send?phone=919522952267&text=Hi,%20I%20would%20like%20to%20do%20enquire%20about%20your%20products."
@@ -42,13 +43,13 @@ export default function StickySocialMedia() {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <i className="fab fa-whatsapp icon"></i> WhatsApp
+        <i className="social-whatsapp"><FaWhatsapp /></i> WhatsApp
       </a>
       <a href={getSetting('social_instagram', '#') || '#'} className="Instagram" target="_blank" rel="noopener noreferrer">
-        <i className="fab fa-instagram icon"></i> Instagram
+        <i className="social-instagram"><FaInstagram /></i> Instagram
       </a>
       <a href={getSetting('social_linkedin', '#') || '#'} className="LinkedIn linkedin" target="_blank" rel="noopener noreferrer">
-        <i className="fa-brands fa-linkedin-in icon"></i> LinkedIn
+        <i className="social-linkedin"><FaLinkedinIn /></i> LinkedIn
       </a>
       <a href="/contact-us#contact-us-form" className="Quote">
         <div className="social_icon" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
