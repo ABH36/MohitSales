@@ -507,35 +507,7 @@ function AdminProductsPageInner() {
     <>
       {toast && <div className={`admin-toast admin-toast-${toast.type}`}>{toast.msg}</div>}
 
-      <div className="admin-catalog-container">
-        {/* Left Sidebar: Categories Navigation */}
-        <aside className="admin-category-sidebar">
-          <div className="category-sidebar-header">
-            <h4>Categories</h4>
-          </div>
-          <div className="category-sidebar-list">
-            <button
-              onClick={() => { setSelectedCategoryFilter(''); setPage(1); }}
-              className={`category-sidebar-btn ${selectedCategoryFilter === '' ? 'active' : ''}`}
-            >
-              <span className="bullet">•</span> All Products
-            </button>
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => { setSelectedCategoryFilter(cat.id); setPage(1); }}
-                className={`category-sidebar-btn depth-${cat.depth} ${selectedCategoryFilter === cat.id ? 'active' : ''}`}
-                title={cat.label}
-              >
-                {cat.depth > 0 && <span className="bullet">↳</span>}
-                <span className="label-text">{cat.label.split(' > ').pop()}</span>
-              </button>
-            ))}
-          </div>
-        </aside>
-
-        {/* Right Content Area: Products List */}
-        <div className="admin-catalog-content">
+      <div className="admin-catalog-content">
           <div className="admin-table-wrapper" style={{ margin: 0 }}>
             <div className="admin-table-header">
               <h3 className="admin-table-title">
@@ -576,6 +548,28 @@ function AdminProductsPageInner() {
                   <button className="admin-btn admin-btn-primary" onClick={handleOpenCreate}>+ Add Product</button>
                 )}
               </div>
+            </div>
+
+            {/* Category sub-section: horizontal filter chips (frees full width
+                for the products table — replaces the old left sidebar). */}
+            <div className="admin-category-chipbar">
+              <button
+                onClick={() => { setSelectedCategoryFilter(''); setPage(1); }}
+                className={`cat-chip ${selectedCategoryFilter === '' ? 'active' : ''}`}
+              >
+                All Products
+              </button>
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => { setSelectedCategoryFilter(cat.id); setPage(1); }}
+                  className={`cat-chip depth-${cat.depth} ${selectedCategoryFilter === cat.id ? 'active' : ''}`}
+                  title={cat.label}
+                >
+                  {cat.depth > 0 && <span className="cat-chip-arrow">↳</span>}
+                  {cat.label.split(' > ').pop()}
+                </button>
+              ))}
             </div>
 
             <table className="admin-table">
@@ -698,7 +692,6 @@ function AdminProductsPageInner() {
               </div>
             )}
           </div>
-        </div>
       </div>
 
       {/* Modal */}
@@ -1028,96 +1021,60 @@ function AdminProductsPageInner() {
       {/* Dynamic CSS Styles for form layout & features templates */}
       <style dangerouslySetInnerHTML={{
         __html: `
-        .admin-catalog-container {
-          display: flex;
-          gap: 24px;
-          align-items: flex-start;
-          width: 100%;
-        }
-        .admin-category-sidebar {
-          width: 175px;
-          background: #ffffff;
-          border-radius: 12px;
-          border: 1px solid #edf2f7;
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-          flex-shrink: 0;
-          padding: 16px;
-          /* Stay in view while the products table scrolls, and never grow taller
-             than the viewport (so the whole category list is always reachable). */
-          position: sticky;
-          top: 12px;
-          align-self: flex-start;
-          max-height: calc(100vh - 100px);
-          display: flex;
-          flex-direction: column;
-        }
-        .category-sidebar-header h4 {
-          font-size: 13px;
-          font-weight: 700;
-          color: #1e2e5e;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          border-bottom: 2px solid #edf2f7;
-          padding-bottom: 10px;
-          margin-top: 0;
-          margin-bottom: 12px;
-        }
-        .category-sidebar-list {
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-          flex: 1;
-          min-height: 0;
-          overflow-y: auto;
-          padding-right: 4px;
-        }
-        .category-sidebar-btn {
-          display: flex;
-          align-items: center;
-          width: 100%;
-          text-align: left;
-          padding: 8px 12px;
-          background: none;
-          border: none;
-          color: #4a5568;
-          border-radius: 8px;
-          font-size: 13px;
-          font-weight: 500;
-          cursor: pointer;
-          transition: all 0.2s;
-          gap: 8px;
-        }
-        .category-sidebar-btn:hover {
-          background: #f7fafc;
-          color: #1e2e5e;
-        }
-        .category-sidebar-btn.active {
-          background: #edf2f7;
-          color: #1e2e5e;
-          font-weight: 600;
-        }
-        .category-sidebar-btn.depth-1 {
-          padding-left: 24px;
-        }
-        .category-sidebar-btn.depth-2 {
-          padding-left: 36px;
-        }
-        .category-sidebar-btn .bullet {
-          font-size: 14px;
-          color: #a0aec0;
-          flex-shrink: 0;
-        }
-        .category-sidebar-btn.active .bullet {
-          color: #f7931e;
-        }
-        .category-sidebar-btn .label-text {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
         .admin-catalog-content {
-          flex: 1;
+          width: 100%;
           min-width: 0;
+        }
+        /* Category sub-section: horizontal scrollable filter chips. Replaces the
+           old left sidebar so the products table can use the full width. */
+        .admin-category-chipbar {
+          display: flex;
+          gap: 8px;
+          overflow-x: auto;
+          padding: 4px 2px 16px;
+          margin-bottom: 8px;
+          border-bottom: 1px solid #edf2f7;
+          scrollbar-width: thin;
+        }
+        .admin-category-chipbar::-webkit-scrollbar {
+          height: 6px;
+        }
+        .admin-category-chipbar::-webkit-scrollbar-thumb {
+          background: #cbd5e1;
+          border-radius: 3px;
+        }
+        .admin-category-chipbar .cat-chip {
+          flex-shrink: 0;
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          padding: 7px 15px;
+          border-radius: 20px;
+          border: 1px solid #e2e8f0;
+          background: #ffffff;
+          color: #475569;
+          font-size: 13px;
+          font-weight: 600;
+          white-space: nowrap;
+          cursor: pointer;
+          transition: all 0.18s;
+        }
+        .admin-category-chipbar .cat-chip:hover {
+          border-color: #f7931e;
+          color: #c2410c;
+          background: #fff7ed;
+        }
+        .admin-category-chipbar .cat-chip.active {
+          background: #1e2e5e;
+          border-color: #1e2e5e;
+          color: #ffffff;
+        }
+        .admin-category-chipbar .cat-chip .cat-chip-arrow {
+          color: #a0aec0;
+          font-size: 12px;
+        }
+        .admin-category-chipbar .cat-chip.active .cat-chip-arrow {
+          color: #f7931e;
         }
         /* Products table fills its panel; only the two wide text columns
            (Product name, Slug) truncate — compact columns size to content so
