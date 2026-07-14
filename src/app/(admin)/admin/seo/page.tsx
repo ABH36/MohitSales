@@ -1,8 +1,13 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'next/navigation';
 import AdminShell, { useAdmin } from '../components/AdminShell';
 import { useAdminCache } from '../components/AdminCacheProvider';
+
+// The SEO views are driven by the sidebar sub-nav (?tab=<key>).
+type SeoTab = 'webmaster' | 'meta' | 'redirects' | 'schema' | 'sitemap' | 'robots' | 'logs404';
+const SEO_TAB_KEYS: SeoTab[] = ['webmaster', 'meta', 'redirects', 'schema', 'sitemap', 'robots', 'logs404'];
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -94,7 +99,11 @@ function SeoPageInner() {
   const isReadOnly = user?.role === 'VIEWER';
   const isAdmin = user?.role === 'ADMIN';
 
-  const [activeTab, setActiveTab] = useState<'webmaster' | 'meta' | 'redirects' | 'schema' | 'sitemap' | 'robots' | 'logs404'>('webmaster');
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get('tab') as SeoTab | null;
+  const validTab: SeoTab = tabParam && SEO_TAB_KEYS.includes(tabParam) ? tabParam : 'webmaster';
+  const [activeTab, setActiveTab] = useState<SeoTab>(validTab);
+  useEffect(() => { setActiveTab(validTab); }, [validTab]);
 
   // ── Shared state ──
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
@@ -623,16 +632,6 @@ function SeoPageInner() {
 
   // ── Render ─────────────────────────────────────────────────────────────
 
-  const tabs = [
-    { key: 'webmaster', label: 'Webmaster Tools', icon: '🔍' },
-    { key: 'meta', label: 'Page Meta Tags', icon: '🏷️' },
-    { key: 'redirects', label: 'Redirects', icon: '↪️' },
-    { key: 'schema', label: 'Schema Markup', icon: '🔗' },
-    { key: 'sitemap', label: 'Sitemap', icon: '🗺️' },
-    { key: 'robots', label: 'Robots.txt', icon: '🤖' },
-    { key: 'logs404', label: '404 Logs', icon: '⚠️' },
-  ] as const;
-
   return (
     <>
       {/* Toast */}
@@ -641,26 +640,6 @@ function SeoPageInner() {
           {toast.msg}
         </div>
       )}
-
-      {/* Tab Bar */}
-      <div style={{ display: 'flex', gap: 4, marginBottom: 24, borderBottom: '2px solid #e2e8f0', paddingBottom: 0, overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
-        {tabs.map(tab => (
-          <button
-            key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
-            style={{
-              padding: '10px 18px', border: 'none', background: 'none', cursor: 'pointer', fontSize: 14,
-              fontWeight: activeTab === tab.key ? 700 : 400,
-              color: activeTab === tab.key ? '#1e2e5e' : '#718096',
-              borderBottom: activeTab === tab.key ? '2px solid #1e2e5e' : '2px solid transparent',
-              marginBottom: -2, transition: 'all 0.15s',
-              whiteSpace: 'nowrap'
-            }}
-          >
-            {tab.icon} {tab.label}
-          </button>
-        ))}
-      </div>
 
       {/* ── TAB: WEBMASTER TOOLS ── */}
       {activeTab === 'webmaster' && (

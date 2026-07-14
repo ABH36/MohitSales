@@ -80,6 +80,17 @@ const CMS_TABS: { key: string; label: string }[] = [
   { key: 'company-profile', label: 'Company Profile' },
 ];
 
+// SEO Manager tabs, shown as a sidebar sub-nav (driven by ?tab=<key>).
+const SEO_TABS: { key: string; label: string }[] = [
+  { key: 'webmaster', label: 'Webmaster Tools' },
+  { key: 'meta', label: 'Page Meta Tags' },
+  { key: 'redirects', label: 'Redirects' },
+  { key: 'schema', label: 'Schema Markup' },
+  { key: 'sitemap', label: 'Sitemap' },
+  { key: 'robots', label: 'Robots.txt' },
+  { key: 'logs404', label: '404 Logs' },
+];
+
 const navItems = [
   {
     section: 'Main', items: [
@@ -121,10 +132,13 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
   const activeAnalyticsTab = searchParams.get('tab') === 'google' ? 'google' : 'database';
   const onCms = pathname === '/admin/cms';
   const activeCmsTab = searchParams.get('tab') || 'banners';
+  const onSeo = pathname === '/admin/seo';
+  const activeSeoTab = searchParams.get('tab') || 'webmaster';
   const [categories, setCategories] = useState<FlatCat[]>([]);
   const [productsOpen, setProductsOpen] = useState(false);
   const [analyticsOpen, setAnalyticsOpen] = useState(false);
   const [cmsOpen, setCmsOpen] = useState(false);
+  const [seoOpen, setSeoOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState<UserInfo | null>(null);
   const [loading, setLoading] = useState(true);
@@ -161,6 +175,11 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
   useEffect(() => {
     if (onCms) setCmsOpen(true);
   }, [onCms]);
+
+  // Auto-expand the SEO Manager sub-nav whenever we're on that page.
+  useEffect(() => {
+    if (onSeo) setSeoOpen(true);
+  }, [onSeo]);
 
   // Load categories once (session-cached) to populate the Products sub-nav.
   useEffect(() => {
@@ -385,6 +404,47 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                       const apis = PAGE_API_MAP[item.href];
                       if (apis) apis.forEach(url => prefetchUrl(url));
                     };
+
+                    // SEO Manager is an expandable group: its tabs render as a
+                    // sub-nav instead of an in-page tab bar.
+                    if (item.href === '/admin/seo') {
+                      return (
+                        <div key={item.href} className="admin-nav-group">
+                          <div className="admin-nav-item-row">
+                            <Link
+                              href="/admin/seo"
+                              className={`admin-nav-link ${onSeo ? 'active' : ''}`}
+                              onMouseEnter={handlePrefetch}
+                            >
+                              <span className="admin-nav-icon"><IconComponent size={20} strokeWidth={2} /></span>
+                              {item.label}
+                            </Link>
+                            <button
+                              type="button"
+                              className={`admin-nav-expand ${seoOpen ? 'open' : ''}`}
+                              onClick={() => setSeoOpen(o => !o)}
+                              aria-label={seoOpen ? 'Collapse SEO tabs' : 'Expand SEO tabs'}
+                              aria-expanded={seoOpen}
+                            >
+                              <ChevronDown size={16} />
+                            </button>
+                          </div>
+                          {seoOpen && (
+                            <div className="admin-nav-sublist">
+                              {SEO_TABS.map(t => (
+                                <Link
+                                  key={t.key}
+                                  href={t.key === 'webmaster' ? '/admin/seo' : `/admin/seo?tab=${t.key}`}
+                                  className={`admin-nav-sublink depth-0 ${onSeo && activeSeoTab === t.key ? 'active' : ''}`}
+                                >
+                                  {t.label}
+                                </Link>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    }
 
                     // CMS Pages is an expandable group: its tabs render as a
                     // sub-nav instead of an in-page tab bar.
