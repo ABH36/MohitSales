@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import AdminShell, { useAdmin } from '../components/AdminShell';
 import { useAdminCache, getCached } from '../components/AdminCacheProvider';
 import SkeletonTable from '../components/SkeletonTable';
@@ -29,7 +30,13 @@ function AdminSettingsPageInner() {
   const { fetchWithCache, invalidate } = useAdminCache();
   const cachedSettings = getCached('/api/admin/settings');
   const isAdmin = user?.role === 'ADMIN';
-  const [activeTab, setActiveTab] = useState<'site' | 'webmaster' | 'account'>('site');
+  // The tabs are driven by the sidebar sub-nav (?tab=<key>).
+  const searchParams = useSearchParams();
+  const settingsTabParam = searchParams.get('tab');
+  const validSettingsTab: 'site' | 'webmaster' | 'account' =
+    settingsTabParam === 'webmaster' || settingsTabParam === 'account' ? settingsTabParam : 'site';
+  const [activeTab, setActiveTab] = useState<'site' | 'webmaster' | 'account'>(validSettingsTab);
+  useEffect(() => { setActiveTab(validSettingsTab); }, [validSettingsTab]);
   const [settings, setSettings] = useState<Setting[]>(cachedSettings?.success ? cachedSettings.data : []);
   const [loading, setLoading] = useState(!cachedSettings?.success);
   const [saving, setSaving] = useState<string | null>(null);
@@ -252,31 +259,6 @@ function AdminSettingsPageInner() {
   return (
     <>
       {toast && <div className={`admin-toast admin-toast-${toast.type}`}>{toast.msg}</div>}
-
-      {/* Tabs Menu */}
-      <div style={{ display: 'flex', gap: '12px', marginBottom: '28px', borderBottom: '1px solid var(--admin-border)', paddingBottom: '12px' }}>
-        <button
-          className={`admin-btn ${activeTab === 'site' ? 'admin-btn-primary' : 'admin-btn-outline'}`}
-          onClick={() => setActiveTab('site')}
-          style={{ borderRadius: '10px' }}
-        >
-          ⚙️ Site Config
-        </button>
-        <button
-          className={`admin-btn ${activeTab === 'webmaster' ? 'admin-btn-primary' : 'admin-btn-outline'}`}
-          onClick={() => setActiveTab('webmaster')}
-          style={{ borderRadius: '10px' }}
-        >
-          🔍 Webmaster Tools
-        </button>
-        <button
-          className={`admin-btn ${activeTab === 'account' ? 'admin-btn-primary' : 'admin-btn-outline'}`}
-          onClick={() => setActiveTab('account')}
-          style={{ borderRadius: '10px' }}
-        >
-          👤 My Account
-        </button>
-      </div>
 
       {loading ? (
         <SkeletonTable rows={6} cols={3} />

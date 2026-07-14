@@ -91,6 +91,13 @@ const SEO_TABS: { key: string; label: string }[] = [
   { key: 'logs404', label: '404 Logs' },
 ];
 
+// Settings tabs, shown as a sidebar sub-nav (driven by ?tab=<key>).
+const SETTINGS_TABS: { key: string; label: string }[] = [
+  { key: 'site', label: 'Site Config' },
+  { key: 'webmaster', label: 'Webmaster Tools' },
+  { key: 'account', label: 'My Account' },
+];
+
 const navItems = [
   {
     section: 'Main', items: [
@@ -134,11 +141,14 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
   const activeCmsTab = searchParams.get('tab') || 'banners';
   const onSeo = pathname === '/admin/seo';
   const activeSeoTab = searchParams.get('tab') || 'webmaster';
+  const onSettings = pathname === '/admin/settings';
+  const activeSettingsTab = searchParams.get('tab') || 'site';
   const [categories, setCategories] = useState<FlatCat[]>([]);
   const [productsOpen, setProductsOpen] = useState(false);
   const [analyticsOpen, setAnalyticsOpen] = useState(false);
   const [cmsOpen, setCmsOpen] = useState(false);
   const [seoOpen, setSeoOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState<UserInfo | null>(null);
   const [loading, setLoading] = useState(true);
@@ -180,6 +190,11 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
   useEffect(() => {
     if (onSeo) setSeoOpen(true);
   }, [onSeo]);
+
+  // Auto-expand the Settings sub-nav whenever we're on that page.
+  useEffect(() => {
+    if (onSettings) setSettingsOpen(true);
+  }, [onSettings]);
 
   // Load categories once (session-cached) to populate the Products sub-nav.
   useEffect(() => {
@@ -404,6 +419,47 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                       const apis = PAGE_API_MAP[item.href];
                       if (apis) apis.forEach(url => prefetchUrl(url));
                     };
+
+                    // Settings is an expandable group: its tabs render as a
+                    // sub-nav instead of an in-page tab bar.
+                    if (item.href === '/admin/settings') {
+                      return (
+                        <div key={item.href} className="admin-nav-group">
+                          <div className="admin-nav-item-row">
+                            <Link
+                              href="/admin/settings"
+                              className={`admin-nav-link ${onSettings ? 'active' : ''}`}
+                              onMouseEnter={handlePrefetch}
+                            >
+                              <span className="admin-nav-icon"><IconComponent size={20} strokeWidth={2} /></span>
+                              {item.label}
+                            </Link>
+                            <button
+                              type="button"
+                              className={`admin-nav-expand ${settingsOpen ? 'open' : ''}`}
+                              onClick={() => setSettingsOpen(o => !o)}
+                              aria-label={settingsOpen ? 'Collapse settings tabs' : 'Expand settings tabs'}
+                              aria-expanded={settingsOpen}
+                            >
+                              <ChevronDown size={16} />
+                            </button>
+                          </div>
+                          {settingsOpen && (
+                            <div className="admin-nav-sublist">
+                              {SETTINGS_TABS.map(t => (
+                                <Link
+                                  key={t.key}
+                                  href={t.key === 'site' ? '/admin/settings' : `/admin/settings?tab=${t.key}`}
+                                  className={`admin-nav-sublink depth-0 ${onSettings && activeSettingsTab === t.key ? 'active' : ''}`}
+                                >
+                                  {t.label}
+                                </Link>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    }
 
                     // SEO Manager is an expandable group: its tabs render as a
                     // sub-nav instead of an in-page tab bar.
