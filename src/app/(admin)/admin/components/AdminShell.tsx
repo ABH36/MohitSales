@@ -71,6 +71,15 @@ interface AdminShellProps {
   pageTitle: string;
 }
 
+// CMS Pages tabs, shown as a sidebar sub-nav (driven by ?tab=<key>).
+const CMS_TABS: { key: string; label: string }[] = [
+  { key: 'banners', label: 'Banners' },
+  { key: 'homepage', label: 'Homepage' },
+  { key: 'promotions', label: 'Promotions & Popups' },
+  { key: 'about-us', label: 'About Us' },
+  { key: 'company-profile', label: 'Company Profile' },
+];
+
 const navItems = [
   {
     section: 'Main', items: [
@@ -110,9 +119,12 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
   const onProducts = pathname === '/admin/products';
   const onAnalytics = pathname === '/admin/analytics';
   const activeAnalyticsTab = searchParams.get('tab') === 'google' ? 'google' : 'database';
+  const onCms = pathname === '/admin/cms';
+  const activeCmsTab = searchParams.get('tab') || 'banners';
   const [categories, setCategories] = useState<FlatCat[]>([]);
   const [productsOpen, setProductsOpen] = useState(false);
   const [analyticsOpen, setAnalyticsOpen] = useState(false);
+  const [cmsOpen, setCmsOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState<UserInfo | null>(null);
   const [loading, setLoading] = useState(true);
@@ -144,6 +156,11 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
   useEffect(() => {
     if (onAnalytics) setAnalyticsOpen(true);
   }, [onAnalytics]);
+
+  // Auto-expand the CMS Pages sub-nav whenever we're on that page.
+  useEffect(() => {
+    if (onCms) setCmsOpen(true);
+  }, [onCms]);
 
   // Load categories once (session-cached) to populate the Products sub-nav.
   useEffect(() => {
@@ -368,6 +385,47 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                       const apis = PAGE_API_MAP[item.href];
                       if (apis) apis.forEach(url => prefetchUrl(url));
                     };
+
+                    // CMS Pages is an expandable group: its tabs render as a
+                    // sub-nav instead of an in-page tab bar.
+                    if (item.href === '/admin/cms') {
+                      return (
+                        <div key={item.href} className="admin-nav-group">
+                          <div className="admin-nav-item-row">
+                            <Link
+                              href="/admin/cms"
+                              className={`admin-nav-link ${onCms ? 'active' : ''}`}
+                              onMouseEnter={handlePrefetch}
+                            >
+                              <span className="admin-nav-icon"><IconComponent size={20} strokeWidth={2} /></span>
+                              {item.label}
+                            </Link>
+                            <button
+                              type="button"
+                              className={`admin-nav-expand ${cmsOpen ? 'open' : ''}`}
+                              onClick={() => setCmsOpen(o => !o)}
+                              aria-label={cmsOpen ? 'Collapse CMS tabs' : 'Expand CMS tabs'}
+                              aria-expanded={cmsOpen}
+                            >
+                              <ChevronDown size={16} />
+                            </button>
+                          </div>
+                          {cmsOpen && (
+                            <div className="admin-nav-sublist">
+                              {CMS_TABS.map(t => (
+                                <Link
+                                  key={t.key}
+                                  href={t.key === 'banners' ? '/admin/cms' : `/admin/cms?tab=${t.key}`}
+                                  className={`admin-nav-sublink depth-0 ${onCms && activeCmsTab === t.key ? 'active' : ''}`}
+                                >
+                                  {t.label}
+                                </Link>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    }
 
                     // Analytics is an expandable group: its two views render as
                     // a sub-nav instead of an in-page tab bar.

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import AdminShell from '../components/AdminShell';
 
 interface BannerItem {
@@ -100,7 +101,12 @@ const DEFAULT_COMPANY_PROFILE: PageContent = {
 };
 
 export default function CmsPage() {
-  const [tab, setTab] = useState<TabKey>('banners');
+  // The tabs are driven by the sidebar sub-nav (?tab=<key>).
+  const searchParams = useSearchParams();
+  const tabParam = (searchParams.get('tab') || 'banners') as TabKey;
+  const validTab: TabKey = TABS.some(t => t.key === tabParam) ? tabParam : 'banners';
+  const [tab, setTab] = useState<TabKey>(validTab);
+  useEffect(() => { setTab(validTab); }, [validTab]);
   const [banners, setBanners] = useState<BannerItem[]>([]);
   const [pageData, setPageData] = useState<Record<string, PageContent>>({
     homepage: DEFAULT_HOMEPAGE_ABOUT,
@@ -359,26 +365,6 @@ export default function CmsPage() {
           {toast.msg}
         </div>
       )}
-
-      {/* Tabs */}
-      <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', borderBottom: '1px solid #e2e8f0', marginBottom: '28px' }}>
-        {TABS.map(t => (
-          <button
-            key={t.key}
-            onClick={() => setTab(t.key)}
-            style={{
-              padding: '11px 20px', fontSize: '14px', fontWeight: 600, cursor: 'pointer',
-              border: 'none', borderRadius: '10px 10px 0 0',
-              background: tab === t.key ? 'rgba(59,130,246,0.08)' : 'transparent',
-              color: tab === t.key ? '#2563eb' : '#64748b',
-              borderBottom: tab === t.key ? '3px solid #3b82f6' : '3px solid transparent',
-              marginBottom: '-1px', transition: 'all 0.2s',
-            }}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
 
       {loading ? (
         <div style={{ textAlign: 'center', padding: '60px 0', color: '#6b7280' }}>Loading CMS data...</div>
