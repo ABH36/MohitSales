@@ -360,12 +360,6 @@ export default function CmsPage() {
         </div>
       )}
 
-      {/* Intro */}
-      <p style={{ margin: '0 0 20px', fontSize: '14px', color: '#64748b', lineHeight: 1.5, maxWidth: '760px' }}>
-        Control everything visitors see on the public website — homepage banners, page content,
-        promotional popups and company info. Changes go live instantly after you save.
-      </p>
-
       {/* Tabs */}
       <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', borderBottom: '1px solid #e2e8f0', marginBottom: '28px' }}>
         {TABS.map(t => (
