@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'next/navigation';
 import AdminShell, { useAdmin } from '../components/AdminShell';
 import { useAdminCache, getCached } from '../components/AdminCacheProvider';
 import SkeletonTable from '../components/SkeletonTable';
@@ -137,6 +138,8 @@ export default function AdminProductsPage() {
 function AdminProductsPageInner() {
   const { user } = useAdmin();
   const { fetchWithCache, invalidate } = useAdminCache();
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams.get('category') || '';
   const cachedCats = getCached('/api/admin/categories', 120000);
   // VIEWER role is read-only; ADMIN and EDITOR can create/edit/delete
   const isReadOnly = user?.role === 'VIEWER';
@@ -154,7 +157,7 @@ function AdminProductsPageInner() {
   const [toast, setToast] = useState<{ msg: string; type: string } | null>(null);
   const [statusFilter, setStatusFilter] = useState('all'); // 'all' | 'active' | 'inactive'
   const [stockFilter, setStockFilter] = useState('');      // '' | 'outofstock'
-  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string>('');
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string>(categoryParam);
 
   const [activeFeatureTab, setActiveFeatureTab] = useState<keyof typeof FEATURE_TEMPLATES>('Cables');
   const [featuresArray, setFeaturesArray] = useState<string[]>([]);
@@ -241,6 +244,14 @@ function AdminProductsPageInner() {
       setLoading(false);
     }
   }, [page, search, statusFilter, stockFilter, selectedCategoryFilter]);
+
+  // Keep the category filter in sync with the sidebar sub-nav links
+  // (?category=<id>). Changing categories in the sidebar navigates the same
+  // route, so this reacts without a remount.
+  useEffect(() => {
+    setSelectedCategoryFilter(categoryParam);
+    setPage(1);
+  }, [categoryParam]);
 
   // Debounce search: wait 350ms after last keystroke before fetching
   useEffect(() => {
@@ -548,28 +559,6 @@ function AdminProductsPageInner() {
                   <button className="admin-btn admin-btn-primary" onClick={handleOpenCreate}>+ Add Product</button>
                 )}
               </div>
-            </div>
-
-            {/* Category sub-section: horizontal filter chips (frees full width
-                for the products table — replaces the old left sidebar). */}
-            <div className="admin-category-chipbar">
-              <button
-                onClick={() => { setSelectedCategoryFilter(''); setPage(1); }}
-                className={`cat-chip ${selectedCategoryFilter === '' ? 'active' : ''}`}
-              >
-                All Products
-              </button>
-              {categories.map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => { setSelectedCategoryFilter(cat.id); setPage(1); }}
-                  className={`cat-chip depth-${cat.depth} ${selectedCategoryFilter === cat.id ? 'active' : ''}`}
-                  title={cat.label}
-                >
-                  {cat.depth > 0 && <span className="cat-chip-arrow">↳</span>}
-                  {cat.label.split(' > ').pop()}
-                </button>
-              ))}
             </div>
 
             <table className="admin-table">
@@ -1024,57 +1013,6 @@ function AdminProductsPageInner() {
         .admin-catalog-content {
           width: 100%;
           min-width: 0;
-        }
-        /* Category sub-section: horizontal scrollable filter chips. Replaces the
-           old left sidebar so the products table can use the full width. */
-        .admin-category-chipbar {
-          display: flex;
-          gap: 8px;
-          overflow-x: auto;
-          padding: 4px 2px 16px;
-          margin-bottom: 8px;
-          border-bottom: 1px solid #edf2f7;
-          scrollbar-width: thin;
-        }
-        .admin-category-chipbar::-webkit-scrollbar {
-          height: 6px;
-        }
-        .admin-category-chipbar::-webkit-scrollbar-thumb {
-          background: #cbd5e1;
-          border-radius: 3px;
-        }
-        .admin-category-chipbar .cat-chip {
-          flex-shrink: 0;
-          display: inline-flex;
-          align-items: center;
-          gap: 5px;
-          padding: 7px 15px;
-          border-radius: 20px;
-          border: 1px solid #e2e8f0;
-          background: #ffffff;
-          color: #475569;
-          font-size: 13px;
-          font-weight: 600;
-          white-space: nowrap;
-          cursor: pointer;
-          transition: all 0.18s;
-        }
-        .admin-category-chipbar .cat-chip:hover {
-          border-color: #f7931e;
-          color: #c2410c;
-          background: #fff7ed;
-        }
-        .admin-category-chipbar .cat-chip.active {
-          background: #1e2e5e;
-          border-color: #1e2e5e;
-          color: #ffffff;
-        }
-        .admin-category-chipbar .cat-chip .cat-chip-arrow {
-          color: #a0aec0;
-          font-size: 12px;
-        }
-        .admin-category-chipbar .cat-chip.active .cat-chip-arrow {
-          color: #f7931e;
         }
         /* Products table fills its panel; only the two wide text columns
            (Product name, Slug) truncate — compact columns size to content so

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, createContext, useContext } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import {
   LayoutDashboard,
@@ -41,6 +41,18 @@ interface UserInfo {
   name: string;
   email: string;
   role?: string;
+}
+
+// Categories shown as a sub-nav under "Products" in the sidebar.
+interface FlatCat { id: string; slug: string; label: string; depth: number; }
+function flattenCats(cats: any[], parentLabel = '', depth = 0): FlatCat[] {
+  const out: FlatCat[] = [];
+  for (const c of cats || []) {
+    const label = parentLabel ? `${parentLabel} > ${c.name}` : c.name;
+    out.push({ id: c.id, slug: c.slug, label, depth });
+    if (c.children?.length) out.push(...flattenCats(c.children, label, depth + 1));
+  }
+  return out;
 }
 
 interface AdminContextType {
@@ -93,6 +105,11 @@ const navItems = [
 export default function AdminShell({ children, pageTitle }: AdminShellProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const activeCategory = searchParams.get('category') || '';
+  const onProducts = pathname === '/admin/products';
+  const [categories, setCategories] = useState<FlatCat[]>([]);
+  const [productsOpen, setProductsOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState<UserInfo | null>(null);
   const [loading, setLoading] = useState(true);
@@ -114,6 +131,35 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
     setFontSize(size);
     localStorage.setItem('admin-font-size', size);
   };
+
+  // Auto-expand the Products sub-nav whenever we're on the products page.
+  useEffect(() => {
+    if (onProducts) setProductsOpen(true);
+  }, [onProducts]);
+
+  // Load categories once (session-cached) to populate the Products sub-nav.
+  useEffect(() => {
+    try {
+      const cached = sessionStorage.getItem('admin_cats_cache');
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Date.now() - parsed.timestamp < 5 * 60 * 1000 && Array.isArray(parsed.cats)) {
+          setCategories(parsed.cats);
+          return;
+        }
+      }
+    } catch { /* ignore cache errors */ }
+    fetch('/api/admin/categories')
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          const flat = flattenCats(data.data);
+          setCategories(flat);
+          try { sessionStorage.setItem('admin_cats_cache', JSON.stringify({ cats: flat, timestamp: Date.now() })); } catch {}
+        }
+      })
+      .catch(() => { /* sidebar sub-nav is optional; ignore */ });
+  }, []);
 
   // Focus mode — hide the sidebar + top bar to view content full-screen.
   // Persisted so it stays as you move between sections.
@@ -314,6 +360,55 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                       const apis = PAGE_API_MAP[item.href];
                       if (apis) apis.forEach(url => prefetchUrl(url));
                     };
+
+                    // Products is an expandable group: its categories render as
+                    // a sub-nav so they don't take horizontal space on the page.
+                    if (item.href === '/admin/products') {
+                      return (
+                        <div key={item.href} className="admin-nav-group">
+                          <div className="admin-nav-item-row">
+                            <Link
+                              href="/admin/products"
+                              className={`admin-nav-link ${onProducts ? 'active' : ''}`}
+                              onMouseEnter={handlePrefetch}
+                            >
+                              <span className="admin-nav-icon"><IconComponent size={20} strokeWidth={2} /></span>
+                              {item.label}
+                            </Link>
+                            <button
+                              type="button"
+                              className={`admin-nav-expand ${productsOpen ? 'open' : ''}`}
+                              onClick={() => setProductsOpen(o => !o)}
+                              aria-label={productsOpen ? 'Collapse categories' : 'Expand categories'}
+                              aria-expanded={productsOpen}
+                            >
+                              <ChevronDown size={16} />
+                            </button>
+                          </div>
+                          {productsOpen && (
+                            <div className="admin-nav-sublist">
+                              <Link
+                                href="/admin/products"
+                                className={`admin-nav-sublink ${onProducts && !activeCategory ? 'active' : ''}`}
+                              >
+                                All Products
+                              </Link>
+                              {categories.map(cat => (
+                                <Link
+                                  key={cat.id}
+                                  href={`/admin/products?category=${cat.id}`}
+                                  className={`admin-nav-sublink depth-${cat.depth} ${onProducts && activeCategory === cat.id ? 'active' : ''}`}
+                                  title={cat.label}
+                                >
+                                  {cat.depth > 0 ? '↳ ' : ''}{cat.label.split(' > ').pop()}
+                                </Link>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    }
+
                     return (
                       <Link
                         key={item.href}
