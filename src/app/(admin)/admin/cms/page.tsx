@@ -283,30 +283,35 @@ export default function CmsPage() {
   };
 
   const inputStyle: React.CSSProperties = {
-    width: '100%', padding: '10px 14px', border: '1px solid #d1d5db',
-    borderRadius: '8px', fontSize: '14px', fontFamily: 'Inter, sans-serif',
-    outline: 'none', transition: 'border-color 0.2s',
+    width: '100%', padding: '11px 14px', border: '1px solid #e2e8f0',
+    borderRadius: '10px', fontSize: '14px', fontFamily: 'inherit',
+    outline: 'none', transition: 'border-color 0.2s, box-shadow 0.2s',
+    color: '#1e293b', background: '#fff',
   };
   const labelStyle: React.CSSProperties = {
-    display: 'block', fontSize: '13px', fontWeight: 600, color: '#374151',
-    marginBottom: '6px',
+    display: 'block', fontSize: '13px', fontWeight: 600, color: '#334155',
+    marginBottom: '7px',
   };
   const btnPrimary: React.CSSProperties = {
-    background: '#4f46e5', color: '#fff', border: 'none', padding: '10px 24px',
-    borderRadius: '8px', cursor: 'pointer', fontWeight: 600, fontSize: '14px',
+    background: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)', color: '#fff',
+    border: 'none', padding: '11px 24px', borderRadius: '10px', cursor: 'pointer',
+    fontWeight: 600, fontSize: '14px', boxShadow: '0 4px 12px rgba(29,78,216,0.25)',
+    transition: 'transform 0.2s, box-shadow 0.2s',
   };
   const btnDanger: React.CSSProperties = {
-    background: '#ef4444', color: '#fff', border: 'none', padding: '8px 16px',
-    borderRadius: '8px', cursor: 'pointer', fontWeight: 500, fontSize: '13px',
+    background: '#fff', color: '#dc2626', border: '1px solid #fecaca', padding: '8px 16px',
+    borderRadius: '9px', cursor: 'pointer', fontWeight: 600, fontSize: '13px',
+    transition: 'all 0.2s',
   };
   const btnOutline: React.CSSProperties = {
-    background: '#fff', color: '#4f46e5', border: '2px solid #4f46e5',
-    padding: '10px 24px', borderRadius: '8px', cursor: 'pointer',
-    fontWeight: 600, fontSize: '14px',
+    background: '#fff', color: '#3b82f6', border: '1.5px solid #bfdbfe',
+    padding: '11px 22px', borderRadius: '10px', cursor: 'pointer',
+    fontWeight: 600, fontSize: '14px', transition: 'all 0.2s',
   };
   const btnUpload: React.CSSProperties = {
-    background: '#6366f1', color: '#fff', border: 'none', padding: '10px 16px',
-    borderRadius: '0 8px 8px 0', cursor: 'pointer', fontWeight: 500, fontSize: '13px',
+    background: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)', color: '#fff',
+    border: 'none', padding: '11px 18px',
+    borderRadius: '0 10px 10px 0', cursor: 'pointer', fontWeight: 600, fontSize: '13px',
     whiteSpace: 'nowrap',
   };
 
@@ -315,7 +320,7 @@ export default function CmsPage() {
       <label style={labelStyle}>{label}</label>
       <div style={{ display: 'flex', gap: '0' }}>
         <input
-          style={{ ...inputStyle, borderRadius: '8px 0 0 8px', flex: 1 }}
+          style={{ ...inputStyle, borderRadius: '10px 0 0 10px', flex: 1 }}
           value={value}
           placeholder={placeholder || '/assets/images/...'}
           onChange={e => onChange(e.target.value)}
@@ -355,18 +360,25 @@ export default function CmsPage() {
         </div>
       )}
 
+      {/* Intro */}
+      <p style={{ margin: '0 0 20px', fontSize: '14px', color: '#64748b', lineHeight: 1.5, maxWidth: '760px' }}>
+        Control everything visitors see on the public website — homepage banners, page content,
+        promotional popups and company info. Changes go live instantly after you save.
+      </p>
+
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: '0', borderBottom: '2px solid #e5e7eb', marginBottom: '24px' }}>
+      <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', borderBottom: '1px solid #e2e8f0', marginBottom: '28px' }}>
         {TABS.map(t => (
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
             style={{
-              padding: '12px 24px', fontSize: '14px', fontWeight: 600, cursor: 'pointer',
-              border: 'none', background: 'transparent',
-              color: tab === t.key ? '#4f46e5' : '#6b7280',
-              borderBottom: tab === t.key ? '3px solid #4f46e5' : '3px solid transparent',
-              marginBottom: '-2px', transition: 'all 0.2s',
+              padding: '11px 20px', fontSize: '14px', fontWeight: 600, cursor: 'pointer',
+              border: 'none', borderRadius: '10px 10px 0 0',
+              background: tab === t.key ? 'rgba(59,130,246,0.08)' : 'transparent',
+              color: tab === t.key ? '#2563eb' : '#64748b',
+              borderBottom: tab === t.key ? '3px solid #3b82f6' : '3px solid transparent',
+              marginBottom: '-1px', transition: 'all 0.2s',
             }}
           >
             {t.label}
@@ -396,8 +408,8 @@ export default function CmsPage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 {banners.map((banner, idx) => (
                   <div key={banner.id} style={{
-                    background: '#fff', borderRadius: '12px', padding: '20px',
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.08)', border: '1px solid #e5e7eb',
+                    background: '#fff', borderRadius: '16px', padding: '20px',
+                    boxShadow: '0 4px 20px rgba(15,23,42,0.05)', border: '1px solid #e5e7eb',
                   }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -438,7 +450,7 @@ export default function CmsPage() {
                         <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '14px' }}>
                           <input type="checkbox" checked={banner.isActive}
                             onChange={e => updateBanner(banner.id, 'isActive', e.target.checked)}
-                            style={{ width: '18px', height: '18px', accentColor: '#4f46e5' }} />
+                            style={{ width: '18px', height: '18px', accentColor: '#3b82f6' }} />
                           <span style={{ fontWeight: 500, color: '#374151' }}>Active</span>
                         </label>
                       </div>
@@ -476,7 +488,7 @@ export default function CmsPage() {
 
           {/* HOMEPAGE TAB */}
           {tab === 'homepage' && (
-            <div style={{ background: '#fff', borderRadius: '12px', padding: '24px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}>
+            <div style={{ background: '#fff', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 20px rgba(15,23,42,0.05)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                 <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 700, color: '#111827' }}>Homepage Content</h3>
                 <button onClick={() => savePageContent('homepage')} disabled={savingKey === 'homepage'}
@@ -511,7 +523,7 @@ export default function CmsPage() {
             <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '32px', alignItems: 'start' }}>
               
               {/* Settings Form */}
-              <div style={{ background: '#fff', borderRadius: '12px', padding: '24px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)', border: '1px solid #e5e7eb' }}>
+              <div style={{ background: '#fff', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 20px rgba(15,23,42,0.05)', border: '1px solid #e5e7eb' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                   <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 700, color: '#111827' }}>Promotion & Ads Popup Settings</h3>
                   <button onClick={savePromo} disabled={savingKey === 'promo_popup'}
@@ -529,7 +541,7 @@ export default function CmsPage() {
                         type="checkbox"
                         checked={promoData.showPopup}
                         onChange={e => setPromoData(prev => ({ ...prev, showPopup: e.target.checked }))}
-                        style={{ width: '20px', height: '20px', accentColor: '#4f46e5', cursor: 'pointer' }}
+                        style={{ width: '20px', height: '20px', accentColor: '#3b82f6', cursor: 'pointer' }}
                       />
                       <div>
                         <span style={{ fontSize: '15px', fontWeight: 700, color: '#111827' }}>Enable Home Page Promotional Popup</span>
@@ -555,13 +567,13 @@ export default function CmsPage() {
                           key={t.key}
                           onClick={() => setPromoData(prev => ({ ...prev, template: t.key as any }))}
                           style={{
-                            border: promoData.template === t.key ? '2px solid #4f46e5' : '1px solid #d1d5db',
-                            background: promoData.template === t.key ? '#f5f3ff' : '#fff',
+                            border: promoData.template === t.key ? '2px solid #3b82f6' : '1px solid #d1d5db',
+                            background: promoData.template === t.key ? '#eff6ff' : '#fff',
                             borderRadius: '10px', padding: '12px', textAlign: 'center', cursor: 'pointer',
                             transition: 'all 0.2s'
                           }}
                         >
-                          <div style={{ fontWeight: 700, fontSize: '13px', color: promoData.template === t.key ? '#4f46e5' : '#374151' }}>{t.name}</div>
+                          <div style={{ fontWeight: 700, fontSize: '13px', color: promoData.template === t.key ? '#3b82f6' : '#374151' }}>{t.name}</div>
                           <div style={{ fontSize: '10px', color: '#6b7280', marginTop: '2px' }}>{t.desc}</div>
                         </div>
                       ))}
@@ -873,7 +885,7 @@ export default function CmsPage() {
 
           {/* ABOUT US TAB */}
           {tab === 'about-us' && (
-            <div style={{ background: '#fff', borderRadius: '12px', padding: '24px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}>
+            <div style={{ background: '#fff', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 20px rgba(15,23,42,0.05)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                 <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 700, color: '#111827' }}>About Us Page</h3>
                 <button onClick={() => savePageContent('about-us')} disabled={savingKey === 'about-us'}
@@ -900,7 +912,7 @@ export default function CmsPage() {
 
           {/* COMPANY PROFILE TAB */}
           {tab === 'company-profile' && (
-            <div style={{ background: '#fff', borderRadius: '12px', padding: '24px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}>
+            <div style={{ background: '#fff', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 20px rgba(15,23,42,0.05)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                 <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 700, color: '#111827' }}>Company Profile Page</h3>
                 <button onClick={() => savePageContent('company-profile')} disabled={savingKey === 'company-profile'}
