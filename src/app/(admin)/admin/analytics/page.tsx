@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 import AdminShell from '../components/AdminShell';
 
 interface AnalyticsData {
@@ -30,7 +31,11 @@ export default function AdminAnalyticsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [activeTab, setActiveTab] = useState<'database' | 'google'>('database');
+  // The two analytics views are driven by the sidebar sub-nav (?tab=google).
+  const searchParams = useSearchParams();
+  const tabParam: 'database' | 'google' = searchParams.get('tab') === 'google' ? 'google' : 'database';
+  const [activeTab, setActiveTab] = useState<'database' | 'google'>(tabParam);
+  useEffect(() => { setActiveTab(tabParam); }, [tabParam]);
 
   // Google Analytics API states
   const [gaData, setGaData] = useState<any>(null);
@@ -313,58 +318,6 @@ export default function AdminAnalyticsPage() {
   // Render Section
   return (
     <AdminShell pageTitle="Analytics Dashboard">
-      {/* Tab Switcher */}
-      <div className="analytics-tabs-bar" style={{
-        display: 'flex',
-        gap: '24px',
-        borderBottom: '1px solid #e2e8f0',
-        marginBottom: '28px',
-        paddingBottom: '2px'
-      }}>
-        <button
-          onClick={() => setActiveTab('database')}
-          className={`analytics-tab-btn ${activeTab === 'database' ? 'active' : ''}`}
-          style={{
-            padding: '12px 8px',
-            fontSize: '14px',
-            fontWeight: 600,
-            color: activeTab === 'database' ? '#3b82f6' : '#64748b',
-            borderBottom: activeTab === 'database' ? '2px solid #3b82f6' : '2px solid transparent',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            transition: 'all 0.2s',
-            outline: 'none',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}
-        >
-          📁 Database Metrics
-        </button>
-        <button
-          onClick={() => setActiveTab('google')}
-          className={`analytics-tab-btn ${activeTab === 'google' ? 'active' : ''}`}
-          style={{
-            padding: '12px 8px',
-            fontSize: '14px',
-            fontWeight: 600,
-            color: activeTab === 'google' ? '#3b82f6' : '#64748b',
-            borderBottom: activeTab === 'google' ? '2px solid #3b82f6' : '2px solid transparent',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            transition: 'all 0.2s',
-            outline: 'none',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}
-        >
-          📈 Google Analytics
-        </button>
-      </div>
-
       {activeTab === 'database' && (
         <>
           <div className="analytics-header">

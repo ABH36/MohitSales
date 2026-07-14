@@ -108,8 +108,11 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
   const searchParams = useSearchParams();
   const activeCategory = searchParams.get('category') || '';
   const onProducts = pathname === '/admin/products';
+  const onAnalytics = pathname === '/admin/analytics';
+  const activeAnalyticsTab = searchParams.get('tab') === 'google' ? 'google' : 'database';
   const [categories, setCategories] = useState<FlatCat[]>([]);
   const [productsOpen, setProductsOpen] = useState(false);
+  const [analyticsOpen, setAnalyticsOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState<UserInfo | null>(null);
   const [loading, setLoading] = useState(true);
@@ -136,6 +139,11 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
   useEffect(() => {
     if (onProducts) setProductsOpen(true);
   }, [onProducts]);
+
+  // Auto-expand the Analytics sub-nav whenever we're on the analytics page.
+  useEffect(() => {
+    if (onAnalytics) setAnalyticsOpen(true);
+  }, [onAnalytics]);
 
   // Load categories once (session-cached) to populate the Products sub-nav.
   useEffect(() => {
@@ -360,6 +368,50 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                       const apis = PAGE_API_MAP[item.href];
                       if (apis) apis.forEach(url => prefetchUrl(url));
                     };
+
+                    // Analytics is an expandable group: its two views render as
+                    // a sub-nav instead of an in-page tab bar.
+                    if (item.href === '/admin/analytics') {
+                      return (
+                        <div key={item.href} className="admin-nav-group">
+                          <div className="admin-nav-item-row">
+                            <Link
+                              href="/admin/analytics"
+                              className={`admin-nav-link ${onAnalytics ? 'active' : ''}`}
+                              onMouseEnter={handlePrefetch}
+                            >
+                              <span className="admin-nav-icon"><IconComponent size={20} strokeWidth={2} /></span>
+                              {item.label}
+                            </Link>
+                            <button
+                              type="button"
+                              className={`admin-nav-expand ${analyticsOpen ? 'open' : ''}`}
+                              onClick={() => setAnalyticsOpen(o => !o)}
+                              aria-label={analyticsOpen ? 'Collapse analytics views' : 'Expand analytics views'}
+                              aria-expanded={analyticsOpen}
+                            >
+                              <ChevronDown size={16} />
+                            </button>
+                          </div>
+                          {analyticsOpen && (
+                            <div className="admin-nav-sublist">
+                              <Link
+                                href="/admin/analytics"
+                                className={`admin-nav-sublink depth-0 ${onAnalytics && activeAnalyticsTab === 'database' ? 'active' : ''}`}
+                              >
+                                Database Metrics
+                              </Link>
+                              <Link
+                                href="/admin/analytics?tab=google"
+                                className={`admin-nav-sublink depth-0 ${onAnalytics && activeAnalyticsTab === 'google' ? 'active' : ''}`}
+                              >
+                                Google Analytics
+                              </Link>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    }
 
                     // Products is an expandable group: its categories render as
                     // a sub-nav so they don't take horizontal space on the page.
