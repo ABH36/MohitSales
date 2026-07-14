@@ -867,17 +867,17 @@ export default function AdminAnalyticsPage() {
           {/* Status Banner: Loading / Error / Live / Demo */}
           {gaLoading ? (
             <div style={{
-              background: 'rgba(15, 23, 42, 0.6)',
-              border: '1px solid #334155',
+              background: '#f8fafc',
+              border: '1px solid #e2e8f0',
               borderRadius: '12px',
               padding: '14px 20px',
               display: 'flex',
               alignItems: 'center',
               gap: '12px',
               fontSize: '13px',
-              color: '#94a3b8',
+              color: '#64748b',
             }}>
-              <div style={{ width: '18px', height: '18px', borderRadius: '50%', border: '2px solid #334155', borderTopColor: '#3b82f6', animation: 'adminSpinner 0.8s linear infinite', flexShrink: 0 }} />
+              <div style={{ width: '18px', height: '18px', borderRadius: '50%', border: '2px solid #e2e8f0', borderTopColor: '#3b82f6', animation: 'adminSpinner 0.8s linear infinite', flexShrink: 0 }} />
               <span>Fetching live Google Analytics data...</span>
             </div>
           ) : gaError ? (
@@ -891,7 +891,7 @@ export default function AdminAnalyticsPage() {
               justifyContent: 'space-between',
               gap: '12px',
               fontSize: '13px',
-              color: '#fca5a5',
+              color: '#dc2626',
             }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{ fontSize: '18px' }}>⚠️</span>
@@ -1314,11 +1314,11 @@ export default function AdminAnalyticsPage() {
                     <div style={{ width: '22px', height: '22px', background: '#eef2ff', color: '#4f46e5', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, flexShrink: 0 }}>{idx + 1}</div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontSize: '13px', fontWeight: 600, color: '#1e293b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={pg.title}>{pg.title}</div>
-                      <div style={{ fontSize: '11px', color: '#94a3b8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{pg.page}</div>
+                      <div style={{ fontSize: '11px', color: '#64748b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{pg.page}</div>
                     </div>
                     <div style={{ textAlign: 'right', flexShrink: 0 }}>
                       <div style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a' }}>{pg.views.toLocaleString()}</div>
-                      <div style={{ fontSize: '10px', color: '#94a3b8' }}>views</div>
+                      <div style={{ fontSize: '10px', color: '#64748b' }}>views</div>
                     </div>
                   </div>
                 ))}
@@ -1616,139 +1616,17 @@ export default function AdminAnalyticsPage() {
           margin-bottom: 12px;
         }
 
-        /* Dark override for GA container & cards */
-        .google-analytics-container {
-          background: #0b1120;
-          margin: -24px;
-          padding: 28px;
-          border-radius: 16px;
-        }
-        .google-analytics-container .glass-card,
-        .google-analytics-container .kpi-card {
-          background: #0f172a !important;
-          border-color: #1e293b !important;
-        }
-        .google-analytics-container .glass-card:hover {
-          background: #162032 !important;
-          box-shadow: 0 16px 40px rgba(0,0,0,0.3) !important;
-        }
-        .google-analytics-container .kpi-value {
-          color: #f1f5f9 !important;
-        }
-        .google-analytics-container .kpi-label {
-          color: #94a3b8 !important;
-        }
-        .google-analytics-container .kpi-footer-metric {
-          border-top-color: #1e293b !important;
-        }
-        .google-analytics-container .small-detail-text {
-          color: #64748b !important;
-        }
-        .google-analytics-container .kpi-icon.blue { background: rgba(59,130,246,0.15) !important; }
-        .google-analytics-container .kpi-icon.orange { background: rgba(249,115,22,0.15) !important; }
-        .google-analytics-container .kpi-icon.purple { background: rgba(139,92,246,0.15) !important; }
-        .google-analytics-container .kpi-icon.red { background: rgba(239,68,68,0.15) !important; }
-
-        .google-analytics-container .analytics-card,
-        .google-analytics-container .trend-chart-card {
-          background: #0f172a !important;
-          border-color: #1e293b !important;
-          box-shadow: 0 4px 24px rgba(0,0,0,0.25) !important;
-        }
-        .google-analytics-container .analytics-card h4 {
-          color: #f1f5f9 !important;
-        }
-        .google-analytics-container .card-subtitle-desc {
-          color: #64748b !important;
-        }
-        .google-analytics-container .category-bar-name {
-          color: #e2e8f0 !important;
-        }
-        .google-analytics-container .category-bar-count {
-          color: #94a3b8 !important;
-        }
-        .google-analytics-container .category-bar-track {
-          background: #1e293b !important;
-        }
-
-        /* GA Stream Info Dark */
-        .google-analytics-container .ga-stream-info-card {
-          background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
-          border-color: #334155 !important;
-        }
-        .google-analytics-container .ga-stream-info-card h3 {
-          color: #f1f5f9 !important;
-        }
-        .google-analytics-container .ga-stream-info-card p {
-          color: #94a3b8 !important;
-        }
-        .google-analytics-container .ga-stream-info-card div[style*="background: #f8fafc"] {
-          background: #1e293b !important;
-          border-color: #334155 !important;
-        }
-
-        /* SVG chart grid lines dark */
-        .google-analytics-container .custom-svg-chart line[stroke="#e2e8f0"] {
-          stroke: #1e293b !important;
-        }
-        .google-analytics-container .custom-svg-chart text[fill="#64748b"] {
-          fill: #475569 !important;
-        }
-
-        /* Database tab dark */
+        /* Light container layout for GA + Database tabs (matches admin light theme) */
+        .google-analytics-container,
         .analytics-dashboard-container {
-          background: #0b1120;
+          background: transparent;
           margin: -24px;
           padding: 28px;
-          border-radius: 16px;
         }
-        .analytics-dashboard-container .glass-card,
-        .analytics-dashboard-container .kpi-card {
-          background: #0f172a !important;
-          border-color: #1e293b !important;
-        }
-        .analytics-dashboard-container .glass-card:hover {
-          background: #162032 !important;
-        }
-        .analytics-dashboard-container .kpi-value { color: #f1f5f9 !important; }
-        .analytics-dashboard-container .kpi-label { color: #94a3b8 !important; }
-        .analytics-dashboard-container .kpi-footer-metric { border-top-color: #1e293b !important; }
-        .analytics-dashboard-container .small-detail-text { color: #64748b !important; }
-        .analytics-dashboard-container .kpi-icon.orange { background: rgba(249,115,22,0.15) !important; }
-        .analytics-dashboard-container .kpi-icon.blue { background: rgba(59,130,246,0.15) !important; }
-        .analytics-dashboard-container .kpi-icon.purple { background: rgba(139,92,246,0.15) !important; }
-        .analytics-dashboard-container .kpi-icon.red { background: rgba(239,68,68,0.15) !important; }
-        .analytics-dashboard-container .analytics-card {
-          background: #0f172a !important;
-          border-color: #1e293b !important;
-          box-shadow: 0 4px 24px rgba(0,0,0,0.25) !important;
-        }
-        .analytics-dashboard-container .analytics-card h4 { color: #f1f5f9 !important; }
-        .analytics-dashboard-container .card-subtitle-desc { color: #64748b !important; }
-        .analytics-dashboard-container .category-bar-name { color: #e2e8f0 !important; }
-        .analytics-dashboard-container .category-bar-count { color: #94a3b8 !important; }
-        .analytics-dashboard-container .category-bar-track { background: #1e293b !important; }
-        .analytics-dashboard-container .stock-all-good-box {
-          background: rgba(16,185,129,0.1) !important;
-          border-color: rgba(16,185,129,0.2) !important;
-        }
-        .analytics-dashboard-container .stock-all-good-box p { color: #34d399 !important; }
-        .analytics-dashboard-container .reply-rate-track { background: #1e293b !important; }
-        .analytics-dashboard-container .reply-rate-label { color: #94a3b8 !important; }
-        .analytics-dashboard-container .custom-svg-chart line[stroke="#e2e8f0"] { stroke: #1e293b !important; }
-        .analytics-dashboard-container .custom-svg-chart text[fill="#64748b"] { fill: #475569 !important; }
-        .analytics-dashboard-container table th { color: #64748b !important; }
-        .analytics-dashboard-container table td { color: #e2e8f0 !important; }
-        .analytics-dashboard-container table tr { border-bottom-color: #1e293b !important; }
-        .analytics-dashboard-container .heavy-media-card {
-          background: #1e293b !important;
-          border-color: #334155 !important;
-        }
-        .analytics-dashboard-container .heavy-media-card p { color: #e2e8f0 !important; }
 
-        /* Tab bar dark */
+        /* Tab bar */
         .analytics-tabs-bar {
-          border-bottom-color: #1e293b !important;
+          border-bottom-color: #e2e8f0 !important;
         }
         .analytics-header { margin-bottom: 24px !important; }
         .analytics-subtitle { color: #64748b !important; }
