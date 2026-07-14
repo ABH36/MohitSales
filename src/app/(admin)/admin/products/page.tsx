@@ -598,15 +598,19 @@ function AdminProductsPageInner() {
                 ) : (
                   products.map((p) => (
                     <tr key={p.id}>
-                      <td style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        {p.imageSrc && <img src={p.imageSrc} alt="" style={{ width: 36, height: 36, borderRadius: 6, objectFit: 'cover' }} />}
-                        {p.title}
+                      <td style={{ fontWeight: 600 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+                          {p.imageSrc && <img src={p.imageSrc} alt="" style={{ width: 36, height: 36, borderRadius: 6, objectFit: 'cover', flexShrink: 0 }} />}
+                          <span className="prod-title" title={p.title} style={{ flex: 1 }}>{p.title}</span>
+                        </div>
                       </td>
                       <td>
-                        <span style={{ fontSize: '12px', color: '#718096' }}>{p.slug}</span>
-                        <a href={`/${p.slug}`} target="_blank" rel="noreferrer" style={{ marginLeft: 8, fontSize: 11, color: '#f7931e', textDecoration: 'none', fontWeight: 600 }} title="View on site">
-                          ↗ View
-                        </a>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
+                          <span className="prod-slug" title={p.slug} style={{ fontSize: '12px', color: '#718096', flex: 1 }}>{p.slug}</span>
+                          <a href={`/${p.slug}`} target="_blank" rel="noreferrer" style={{ fontSize: 11, color: '#f7931e', textDecoration: 'none', fontWeight: 600, flexShrink: 0, whiteSpace: 'nowrap' }} title="View on site">
+                            ↗ View
+                          </a>
+                        </div>
                       </td>
                       <td>{p.category?.name || '—'}</td>
                       <td>
@@ -1011,7 +1015,7 @@ function AdminProductsPageInner() {
           width: 100%;
         }
         .admin-category-sidebar {
-          width: 260px;
+          width: 175px;
           background: #ffffff;
           border-radius: 12px;
           border: 1px solid #edf2f7;
@@ -1085,6 +1089,50 @@ function AdminProductsPageInner() {
         .admin-catalog-content {
           flex: 1;
           min-width: 0;
+        }
+        /* Products table fills its panel; only the two wide text columns
+           (Product name, Slug) truncate — compact columns size to content so
+           Stock / Status / Actions are never clipped. */
+        .admin-catalog-content .admin-table {
+          width: 100%;
+          table-layout: fixed;
+        }
+        .admin-catalog-content .admin-table th,
+        .admin-catalog-content .admin-table td {
+          white-space: nowrap;
+          vertical-align: middle;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          padding-left: 8px;
+          padding-right: 8px;
+        }
+        /* Fixed column widths (sum 100%) so all 7 columns fit the panel and the
+           Actions column never scrolls off; wide text columns truncate. */
+        .admin-catalog-content .admin-table th:nth-child(1) { width: 22%; } /* Product */
+        .admin-catalog-content .admin-table th:nth-child(2) { width: 16%; } /* Slug */
+        .admin-catalog-content .admin-table th:nth-child(3) { width: 12%; } /* Category */
+        .admin-catalog-content .admin-table th:nth-child(4) { width: 11%; } /* Position */
+        .admin-catalog-content .admin-table th:nth-child(5) { width: 13%; } /* Stock */
+        .admin-catalog-content .admin-table th:nth-child(6) { width: 10%; } /* Status */
+        .admin-catalog-content .admin-table th:nth-child(7) { width: 16%; } /* Actions */
+        /* Position cell holds a fixed-width number input — let it show fully. */
+        .admin-catalog-content .admin-table td:nth-child(4) { overflow: visible; }
+        .prod-title,
+        .prod-slug {
+          display: block;
+          max-width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        /* Compact, single-row filter controls (they were stretching full-width
+           and stacking, which left big empty gaps). */
+        .admin-catalog-content .admin-table-header .admin-search-box {
+          width: 210px;
+        }
+        .admin-catalog-content .admin-table-header .admin-form-select {
+          width: auto;
+          min-width: 120px;
         }
         .form-section-card {
           background: #ffffff;
