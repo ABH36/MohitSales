@@ -26,8 +26,10 @@ export default function ProductSlider({ products, prevElSelector, nextElSelector
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    let swiperInstance: unknown = null;
+    let swiperInstance: any = null;
+    let cancelled = false;
     const intervalId = setInterval(() => {
+      if (cancelled) { clearInterval(intervalId); return; }
       const Swiper = (window as unknown as { Swiper: any }).Swiper;
       if (Swiper && swiperRef.current) {
         clearInterval(intervalId);
@@ -59,7 +61,9 @@ export default function ProductSlider({ products, prevElSelector, nextElSelector
           autoplay: {
             delay: 2500,             // data-delay="2500"
             disableOnInteraction: false,
-            pauseOnMouseEnter: true, // data-hover-pause="true"
+            // Hover-pause is handled manually below. Swiper's built-in
+            // pauseOnMouseEnter can fire after the instance is destroyed
+            // (HMR / tab switch / unmount) and throw "reading 'autoplay'".
           },
           direction: 'horizontal',
           slidesPerView: 3,          // 3 items per row matching the mockup
@@ -101,13 +105,18 @@ export default function ProductSlider({ products, prevElSelector, nextElSelector
     }, 100);
 
     return () => {
+      cancelled = true;
       clearInterval(intervalId);
       if (swiperInstance) {
         const sliderEl = swiperRef.current as SwiperElement | null;
         if (sliderEl && sliderEl._cleanupSwiper) {
           sliderEl._cleanupSwiper();
         }
-        (swiperInstance as any).destroy(true, true);
+        try {
+          swiperInstance.autoplay?.stop?.();
+          swiperInstance.destroy(true, true);
+        } catch { /* instance already torn down */ }
+        swiperInstance = null;
       }
     };
   }, [products, prevElSelector, nextElSelector]);

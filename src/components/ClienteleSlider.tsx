@@ -15,8 +15,10 @@ export default function ClienteleSlider() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    let swiperInstance: unknown = null;
+    let swiperInstance: any = null;
+    let cancelled = false;
     const intervalId = setInterval(() => {
+      if (cancelled) { clearInterval(intervalId); return; }
       const Swiper = (window as unknown as { Swiper: any }).Swiper;
       if (Swiper && swiperRef.current) {
         clearInterval(intervalId);
@@ -45,9 +47,14 @@ export default function ClienteleSlider() {
     }, 100);
 
     return () => {
+      cancelled = true;
       clearInterval(intervalId);
       if (swiperInstance) {
-        (swiperInstance as any).destroy(true, true);
+        try {
+          swiperInstance.autoplay?.stop?.();
+          swiperInstance.destroy(true, true);
+        } catch { /* instance already torn down */ }
+        swiperInstance = null;
       }
     };
   }, []);

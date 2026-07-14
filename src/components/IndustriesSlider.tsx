@@ -24,7 +24,9 @@ export default function IndustriesSlider() {
     const uniquePagId = `ind-pag-${Math.random().toString(36).substring(2, 8)}`;
     if (paginationRef.current) paginationRef.current.classList.add(uniquePagId);
 
+    let cancelled = false;
     const intervalId = setInterval(() => {
+      if (cancelled) { clearInterval(intervalId); return; }
       const Swiper = (window as any).Swiper;
       if (Swiper && swiperRef.current) {
         clearInterval(intervalId);
@@ -57,8 +59,15 @@ export default function IndustriesSlider() {
     }, 100);
 
     return () => {
+      cancelled = true;
       clearInterval(intervalId);
-      if (swiperInstance) swiperInstance.destroy(true, true);
+      if (swiperInstance) {
+        try {
+          swiperInstance.autoplay?.stop?.();
+          swiperInstance.destroy(true, true);
+        } catch { /* instance already torn down */ }
+        swiperInstance = null;
+      }
     };
   }, []);
 
