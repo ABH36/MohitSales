@@ -359,22 +359,17 @@
 .admin-nav-sublist {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
   margin: 8px 0 14px 26px;
   padding-left: 14px;
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
-  max-height: 360px;
-  overflow-y: auto;
+  /* Continuous tree guide line — the whole sidebar nav scrolls, so the
+     sub-list has NO inner max-height/overflow that would clip this line. */
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
   animation: navSubIn 0.2s ease;
 }
 @keyframes navSubIn {
   from { opacity: 0; transform: translateY(-4px); }
   to { opacity: 1; transform: translateY(0); }
-}
-.admin-nav-sublist::-webkit-scrollbar { width: 5px; }
-.admin-nav-sublist::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 3px;
 }
 .admin-nav-sublink {
   position: relative;
@@ -413,11 +408,14 @@
   background: #ff8c42;
   box-shadow: 0 0 8px #ff5e14;
 }
-/* Top-level categories read a touch brighter; sub-categories indent under them */
+/* Top-level categories (folders) read brighter and get extra space above so
+   each folder + its indented sub-categories reads as one clear group. */
 .admin-nav-sublink.depth-0 {
   color: rgba(255, 255, 255, 0.85);
   font-weight: 600;
+  margin-top: 14px;
 }
+.admin-nav-sublist > .admin-nav-sublink:first-child { margin-top: 0; }
 .admin-nav-sublink.depth-1 { padding-left: 30px; }
 .admin-nav-sublink.depth-2 { padding-left: 44px; }
 
