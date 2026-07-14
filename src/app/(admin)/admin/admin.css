@@ -109,7 +109,7 @@
   background: #fff;
   color: var(--admin-primary);
   box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-  border-bottom: 2px solid #ff5e14;
+  border-bottom: 2px solid #3B82F6;
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
 }
@@ -180,8 +180,8 @@
 /* ─── Sidebar ──────────────────────────────────── */
 .admin-sidebar {
   width: 290px;
-  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, #0b1324 0%, #101a30 50%, #16213a 100%);
+  border-right: 1px solid rgba(96, 165, 250, 0.10);
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -241,16 +241,16 @@
 }
 
 .admin-nav-section {
-  margin-bottom: 28px;
+  margin-bottom: 30px;
 }
 
 .admin-nav-section-title {
-  font-size: calc(var(--admin-fs-sm) - 0.5px);
+  font-size: calc(var(--admin-fs-sm) - 1.5px);
   text-transform: uppercase;
-  letter-spacing: 2px;
-  color: rgba(255, 255, 255, 0.45);
-  padding: 0 12px;
-  margin-bottom: 12px;
+  letter-spacing: 1.6px;
+  color: rgba(148, 163, 184, 0.7);
+  padding: 0 14px;
+  margin-bottom: 14px;
   font-weight: 700;
 }
 
@@ -278,45 +278,47 @@
   top: 0;
   bottom: 0;
   width: 0;
-  background: #ff5e14;
-  box-shadow: 0 0 10px #ff5e14;
-  transition: width 0.2s ease;
+  background: linear-gradient(180deg, #60A5FA 0%, #3B82F6 60%, #6366F1 100%);
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.65);
+  transition: width 0.22s ease;
 }
 
 .admin-nav-link:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.05);
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.12) 0%, rgba(99, 102, 241, 0.04) 100%);
+  border-color: rgba(59, 130, 246, 0.16);
   color: #fff;
   transform: translateX(4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
 }
 
 .admin-nav-link:hover .admin-nav-icon {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(59, 130, 246, 0.18);
+  border-color: rgba(96, 165, 250, 0.3);
   color: #fff;
   transform: scale(1.08);
 }
 
 .admin-nav-link.active {
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 100%);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.22) 0%, rgba(99, 102, 241, 0.06) 100%);
+  border-color: rgba(59, 130, 246, 0.30);
   color: #fff;
-  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.1), 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 1px 0 0 rgba(96, 165, 250, 0.25), 0 6px 20px rgba(37, 99, 235, 0.20);
 }
 
 .admin-nav-link.active::before {
-  width: 3.5px;
+  width: 4px;
 }
 
 .admin-nav-icon {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: 9px;
   background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.72);
   flex-shrink: 0;
   transition: all 0.2s ease;
 }
@@ -347,7 +349,7 @@
   transition: all 0.2s ease;
 }
 .admin-nav-expand:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(59, 130, 246, 0.16);
   color: #fff;
 }
 .admin-nav-expand svg {
@@ -387,12 +389,12 @@
   transition: all 0.18s ease;
 }
 .admin-nav-sublink:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(59, 130, 246, 0.10);
   color: #fff;
   transform: translateX(2px);
 }
 .admin-nav-sublink.active {
-  background: rgba(255, 94, 20, 0.16);
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.20) 0%, rgba(99, 102, 241, 0.05) 100%);
   color: #fff;
   font-weight: 600;
 }
@@ -405,8 +407,8 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #ff8c42;
-  box-shadow: 0 0 8px #ff5e14;
+  background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%);
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.85);
 }
 /* Top-level categories (folders) read brighter and get extra space above so
    each folder + its indented sub-categories reads as one clear group. */
@@ -420,9 +422,10 @@
 .admin-nav-sublink.depth-2 { padding-left: 44px; }
 
 .admin-nav-link.active .admin-nav-icon {
-  background: linear-gradient(135deg, #ff5e14 0%, #ff8c42 100%);
+  background: linear-gradient(135deg, #3B82F6 0%, #6366F1 100%);
+  border-color: rgba(96, 165, 250, 0.5);
   color: #fff;
-  box-shadow: 0 4px 10px rgba(255, 94, 20, 0.3);
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.45);
 }
 
 .admin-sidebar-footer {
@@ -462,14 +465,14 @@
   width: 36px;
   height: 36px;
   border-radius: 8px;
-  background: linear-gradient(135deg, #ff5e14 0%, #ff8c42 100%);
+  background: linear-gradient(135deg, #3B82F6 0%, #6366F1 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 800;
   font-size: 15px;
   color: #fff;
-  box-shadow: 0 3px 8px rgba(255, 94, 20, 0.25);
+  box-shadow: 0 3px 10px rgba(59, 130, 246, 0.35);
   flex-shrink: 0;
 }
 
@@ -553,8 +556,8 @@
   align-self: flex-start;
   font-size: 10px;
   font-weight: 700;
-  background: rgba(255, 94, 20, 0.1);
-  color: #ff5e14;
+  background: rgba(59, 130, 246, 0.12);
+  color: #3B82F6;
   padding: 2px 8px;
   border-radius: 6px;
   margin-top: 4px;
