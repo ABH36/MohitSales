@@ -669,12 +669,32 @@ function AdminProductsPageInner() {
             </table>
 
             {totalPages > 1 && (
-              <div className="admin-pagination">
-                {Array.from({ length: totalPages }, (_, i) => (
-                  <button key={i} className={`admin-page-btn ${page === i + 1 ? 'active' : ''}`} onClick={() => setPage(i + 1)}>
-                    {i + 1}
-                  </button>
-                ))}
+              <div className="admin-products-pager">
+                <button
+                  className="pager-btn"
+                  disabled={page <= 1}
+                  onClick={() => setPage(1)}
+                  title="First page"
+                >« First</button>
+                <button
+                  className="pager-btn"
+                  disabled={page <= 1}
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                >‹ Prev</button>
+                <span className="pager-info">
+                  Page <strong>{page}</strong> of {totalPages}
+                </span>
+                <button
+                  className="pager-btn"
+                  disabled={page >= totalPages}
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                >Next ›</button>
+                <button
+                  className="pager-btn"
+                  disabled={page >= totalPages}
+                  onClick={() => setPage(totalPages)}
+                  title="Last page"
+                >Last »</button>
               </div>
             )}
           </div>
@@ -1022,6 +1042,14 @@ function AdminProductsPageInner() {
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
           flex-shrink: 0;
           padding: 16px;
+          /* Stay in view while the products table scrolls, and never grow taller
+             than the viewport (so the whole category list is always reachable). */
+          position: sticky;
+          top: 12px;
+          align-self: flex-start;
+          max-height: calc(100vh - 100px);
+          display: flex;
+          flex-direction: column;
         }
         .category-sidebar-header h4 {
           font-size: 13px;
@@ -1038,7 +1066,8 @@ function AdminProductsPageInner() {
           display: flex;
           flex-direction: column;
           gap: 6px;
-          max-height: 70vh;
+          flex: 1;
+          min-height: 0;
           overflow-y: auto;
           padding-right: 4px;
         }
@@ -1361,6 +1390,49 @@ function AdminProductsPageInner() {
           background: #f8fafc !important;
           border-color: #94a3b8 !important;
           color: #0f172a !important;
+        }
+
+        /* Professional, fixed-width pager (replaces the long page-number strip
+           that used to overflow horizontally and shift the whole page). */
+        .admin-products-pager {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-wrap: wrap;
+          gap: 8px;
+          margin-top: 22px;
+          padding-top: 18px;
+          border-top: 1px solid #edf2f7;
+        }
+        .admin-products-pager .pager-btn {
+          padding: 7px 14px;
+          font-size: 13px;
+          font-weight: 600;
+          color: #334155;
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: all 0.18s;
+        }
+        .admin-products-pager .pager-btn:hover:not(:disabled) {
+          border-color: #3b82f6;
+          color: #2563eb;
+          background: #eff6ff;
+        }
+        .admin-products-pager .pager-btn:disabled {
+          opacity: 0.45;
+          cursor: not-allowed;
+        }
+        .admin-products-pager .pager-info {
+          padding: 0 10px;
+          font-size: 13px;
+          color: #64748b;
+          white-space: nowrap;
+        }
+        .admin-products-pager .pager-info strong {
+          color: #1e2e5e;
+          font-weight: 700;
         }
       `}} />
     </>
