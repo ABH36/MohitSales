@@ -389,7 +389,7 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                             <div className="admin-nav-sublist">
                               <Link
                                 href="/admin/products"
-                                className={`admin-nav-sublink ${onProducts && !activeCategory ? 'active' : ''}`}
+                                className={`admin-nav-sublink depth-0 ${onProducts && !activeCategory ? 'active' : ''}`}
                               >
                                 All Products
                               </Link>
@@ -400,7 +400,7 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                                   className={`admin-nav-sublink depth-${cat.depth} ${onProducts && activeCategory === cat.id ? 'active' : ''}`}
                                   title={cat.label}
                                 >
-                                  {cat.depth > 0 ? '↳ ' : ''}{cat.label.split(' > ').pop()}
+                                  {cat.label.split(' > ').pop()}
                                 </Link>
                               ))}
                             </div>
