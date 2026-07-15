@@ -614,7 +614,6 @@
 
 /* ─── Focus mode — hide chrome, view content full-screen ───────────── */
 .admin-panel[data-focus="on"] .admin-sidebar,
-.admin-panel[data-focus="on"] .admin-topbar,
 .admin-panel[data-focus="on"] .admin-sidebar-overlay {
   display: none !important;
 }
@@ -649,10 +648,10 @@
 /* ─── Top Bar ────────────────────────────────────── */
 .admin-topbar {
   height: 70px;
-  background: var(--admin-card);
+  background: linear-gradient(100deg, #e9f2fc 0%, #ffffff 52%, #fdefdc 100%);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
-  border-bottom: 1px solid var(--admin-border);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -667,6 +666,18 @@
   font-size: var(--admin-fs-title);
   font-weight: 700;
   color: var(--admin-primary);
+}
+
+.admin-refresh-icon {
+  display: inline-block;
+  font-size: 15px;
+  line-height: 1;
+}
+.admin-refresh-icon.spinning {
+  animation: refreshSpin 0.7s linear infinite;
+}
+@keyframes refreshSpin {
+  to { transform: rotate(360deg); }
 }
 
 .admin-topbar-actions {

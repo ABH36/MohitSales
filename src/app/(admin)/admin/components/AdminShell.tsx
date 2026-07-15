@@ -161,6 +161,7 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
   const [fontSize, setFontSize] = useState<'normal' | 'medium' | 'large'>('normal');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const sidebarRef = useRef<HTMLElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -358,6 +359,15 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
       revalidate();
     }
   }, []);
+
+  // Refresh the current page's server data (works on whatever admin page
+  // the user is on) without a jarring full reload.
+  const handleRefresh = () => {
+    if (refreshing) return;
+    setRefreshing(true);
+    router.refresh();
+    setTimeout(() => setRefreshing(false), 800);
+  };
 
   const handleLogout = async () => {
     try {
@@ -757,13 +767,25 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
 
                 <button
                   type="button"
-                  onClick={() => toggleFocus(true)}
-                  className="admin-btn admin-btn-outline admin-btn-sm admin-focus-btn"
-                  title="Focus mode — hide the menu &amp; header for a full-screen view (Esc to exit)"
-                  aria-label="Enter focus mode"
+                  onClick={handleRefresh}
+                  className="admin-btn admin-btn-outline admin-btn-sm admin-refresh-btn"
+                  title="Refresh this page"
+                  aria-label="Refresh current page"
                   style={{ pointerEvents: 'auto', cursor: 'pointer' }}
                 >
-                  ⛶ Focus
+                  <span className={`admin-refresh-icon${refreshing ? ' spinning' : ''}`} aria-hidden="true">⟳</span> Refresh
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => toggleFocus(!focusMode)}
+                  className="admin-btn admin-btn-outline admin-btn-sm admin-focus-btn"
+                  title="Focus mode — hide the sidebar for a wider view (Esc to exit)"
+                  aria-label={focusMode ? 'Exit focus mode' : 'Enter focus mode'}
+                  aria-pressed={focusMode}
+                  style={{ pointerEvents: 'auto', cursor: 'pointer' }}
+                >
+                  {focusMode ? '⤢ Exit Focus' : '⛶ Focus'}
                 </button>
 
                 <a
@@ -834,18 +856,6 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
           />
         )}
 
-        {/* Floating exit button — only visible in focus mode */}
-        {focusMode && (
-          <button
-            type="button"
-            onClick={() => toggleFocus(false)}
-            className="admin-focus-exit"
-            title="Exit focus mode (Esc)"
-            aria-label="Exit focus mode"
-          >
-            ⤢ Exit Focus
-          </button>
-        )}
       </div>
 
     </AdminContext.Provider>
