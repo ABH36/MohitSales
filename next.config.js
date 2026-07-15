@@ -4,6 +4,12 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   images: {
+    // Cloudinary already delivers optimized formats/sizes (f_auto,q_auto via
+    // the cld() helper), so we skip Next's own image optimizer. This also
+    // avoids the common self-hosted/Docker breakage where /_next/image fails
+    // (missing sharp / can't reach the origin behind a reverse proxy), which
+    // makes <Image> render nothing on the server.
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
