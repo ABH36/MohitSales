@@ -1154,6 +1154,23 @@
   resize: vertical;
 }
 
+/* Shared form layout helpers */
+.admin-form-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.admin-form-row > * {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+.admin-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 /* ─── Modal ──────────────────────────────────────── */
 .admin-modal-overlay {
   position: fixed;
