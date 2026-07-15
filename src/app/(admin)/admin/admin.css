@@ -45,9 +45,12 @@
 
 /* Reset */
 .admin-panel * { box-sizing: border-box; margin: 0; padding: 0; }
-.admin-panel { 
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
-  color: var(--admin-text); 
+.admin-panel {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01em;
+  color: var(--admin-text);
   background-color: var(--admin-bg);
   min-height: 100vh;
   position: relative;
@@ -620,30 +623,6 @@
 .admin-panel[data-focus="on"] .admin-main {
   margin-left: 0 !important;
 }
-.admin-focus-exit {
-  position: fixed;
-  top: 14px;
-  right: 16px;
-  z-index: 1000;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #fff;
-  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 8px;
-  cursor: pointer;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
-  opacity: 0.85;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-.admin-focus-exit:hover {
-  opacity: 1;
-  transform: translateY(-1px);
-}
 
 /* ─── Top Bar ────────────────────────────────────── */
 .admin-topbar {
@@ -666,18 +645,6 @@
   font-size: var(--admin-fs-title);
   font-weight: 700;
   color: var(--admin-primary);
-}
-
-.admin-refresh-icon {
-  display: inline-block;
-  font-size: 15px;
-  line-height: 1;
-}
-.admin-refresh-icon.spinning {
-  animation: refreshSpin 0.7s linear infinite;
-}
-@keyframes refreshSpin {
-  to { transform: rotate(360deg); }
 }
 
 .admin-topbar-actions {
@@ -829,119 +796,6 @@
   background: linear-gradient(115deg, #cfe4fc 0%, #eaeef3 45%, #fbe4c6 78%, #fcdcb4 100%);
 }
 
-/* ─── Welcome Banner ─────────────────────────────── */
-.admin-welcome-banner {
-  position: relative;
-  background: radial-gradient(circle at 88% 15%, rgba(247, 147, 30, 0.18), transparent 42%),
-              radial-gradient(circle at 12% 85%, rgba(59, 130, 246, 0.18), transparent 42%),
-              linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  border-radius: 18px;
-  padding: 22px 32px;
-  margin-bottom: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  animation: dashFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.admin-welcome-banner::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 20px 20px;
-  pointer-events: none;
-  opacity: 0.8;
-}
-
-.admin-welcome-banner::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.05) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  transform: skewX(-25deg);
-  transition: none;
-  pointer-events: none;
-}
-
-.admin-welcome-banner:hover {
-  border-color: rgba(247, 147, 30, 0.25);
-  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.34);
-}
-
-/* Shimmer sweeps on its own for an always-alive premium feel */
-.admin-welcome-banner::after {
-  animation: bannerShimmer 5.5s ease-in-out 1s infinite;
-}
-
-@keyframes bannerShimmer {
-  0% { left: -100%; }
-  55%, 100% { left: 150%; }
-}
-
-/* Greeting text (left side of the compact banner) */
-.admin-welcome-text { z-index: 2; min-width: 0; }
-.admin-welcome-title {
-  margin: 0;
-  font-size: calc(var(--admin-fs-title) + 2px);
-  font-weight: 800;
-  color: #f8fafc;
-  letter-spacing: 0.2px;
-}
-.admin-welcome-wave {
-  display: inline-block;
-  transform-origin: 70% 70%;
-  animation: waveHand 2.4s ease-in-out 0.6s infinite;
-}
-@keyframes waveHand {
-  0%, 60%, 100% { transform: rotate(0deg); }
-  10%, 30% { transform: rotate(14deg); }
-  20%, 40% { transform: rotate(-8deg); }
-}
-.admin-welcome-sub {
-  margin: 6px 0 0;
-  font-size: calc(var(--admin-fs) - 0.5px);
-  color: rgba(226, 232, 240, 0.7);
-  font-weight: 500;
-}
-
-.admin-welcome-logo {
-  height: 62px;
-  width: auto;
-  object-fit: contain;
-  max-width: 100%;
-  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.4));
-  transition: transform 0.3s ease;
-  z-index: 2;
-  animation: logoFloat 4s ease-in-out infinite;
-}
-@keyframes logoFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
-.admin-welcome-logo:hover {
-  transform: scale(1.05);
-}
-
 /* Shared dashboard entrance */
 @keyframes dashFadeUp {
   from { opacity: 0; transform: translateY(14px); }
@@ -1049,10 +903,6 @@
 
 /* Accessibility: honor reduced-motion — drop the looping/entrance animations */
 @media (prefers-reduced-motion: reduce) {
-  .admin-welcome-banner,
-  .admin-welcome-banner::after,
-  .admin-welcome-logo,
-  .admin-welcome-wave,
   .admin-stats-grid .admin-stat-link,
   .admin-stats-grid + .admin-table-wrapper {
     animation: none !important;
@@ -1624,17 +1474,6 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  /* Welcome banner on tablet */
-  .admin-welcome-banner {
-    padding: 28px 20px;
-    border-radius: 16px;
-    margin-bottom: 20px;
-  }
-
-  .admin-welcome-logo {
-    height: 80px;
-  }
-
   /* Topbar: tighter padding, allow wrapping on very small screens */
   .admin-topbar {
     padding: 0 16px;
@@ -1668,17 +1507,6 @@
   .admin-stats-grid {
     grid-template-columns: 1fr;
     gap: 12px;
-  }
-
-  /* Welcome banner on mobile */
-  .admin-welcome-banner {
-    padding: 20px 16px;
-    border-radius: 14px;
-    margin-bottom: 16px;
-  }
-
-  .admin-welcome-logo {
-    height: 60px;
   }
 
   .admin-table-header {
