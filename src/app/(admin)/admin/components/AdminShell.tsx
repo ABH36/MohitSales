@@ -1,8 +1,14 @@
 'use client';
 
-import { useState, useEffect, useRef, createContext, useContext } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef, createContext, useContext } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+
+// AdminShell is rendered per-page (each page wraps itself in it), so it
+// remounts on every navigation — which resets the sidebar scroll back to the
+// top. Persisting/restoring the scroll keeps the clicked item in view.
+// useLayoutEffect on the client avoids a visible scroll flash.
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 import {
   LayoutDashboard,
   LineChart,
@@ -157,6 +163,21 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
   const [focusMode, setFocusMode] = useState(false);
   const sidebarRef = useRef<HTMLElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Keep the sidebar scrolled to where the user left it across navigations
+  // (AdminShell remounts per page, so without this it snaps back to the top).
+  // The scrollable element is the sidebar aside itself.
+  useIsomorphicLayoutEffect(() => {
+    const el = sidebarRef.current;
+    if (!el) return;
+    const saved = sessionStorage.getItem('admin-sidebar-scroll');
+    if (saved) el.scrollTop = parseInt(saved, 10) || 0;
+    const onScroll = () => {
+      try { sessionStorage.setItem('admin-sidebar-scroll', String(el.scrollTop)); } catch {}
+    };
+    el.addEventListener('scroll', onScroll, { passive: true });
+    return () => el.removeEventListener('scroll', onScroll);
+  }, []);
 
   // Load font size preference from localStorage
   useEffect(() => {
