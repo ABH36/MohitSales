@@ -278,8 +278,8 @@ function AdminUsersPageInner() {
 
       {/* Edit/Create User Modal */}
       {showModal && (
-        <div className="admin-modal-overlay">
-          <div className="admin-modal-container">
+        <div className="admin-modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="admin-modal" onClick={(e) => e.stopPropagation()}>
             <div className="admin-modal-header">
               <h3 className="admin-modal-title">{editUser ? 'Edit User Profile' : 'Create System User'}</h3>
               <button className="admin-modal-close" onClick={() => setShowModal(false)}>
