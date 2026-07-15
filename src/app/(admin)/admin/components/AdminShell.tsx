@@ -406,7 +406,7 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                 borderRadius: 8,
                 width: 32,
                 height: 32,
-                fontSize: 16,
+                fontSize: 'calc(var(--admin-fs) + 1px)',
                 cursor: 'pointer',
                 alignItems: 'center',
                 justifyContent: 'center',

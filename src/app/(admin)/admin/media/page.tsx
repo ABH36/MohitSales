@@ -164,13 +164,13 @@ function AdminMediaPageInner() {
               placeholder="Search filename…"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              style={{ padding: '7px 12px', border: '1px solid #d1d5db', borderRadius: 6, fontSize: 13, width: 200 }}
+              style={{ padding: '7px 12px', border: '1px solid #d1d5db', borderRadius: 6, fontSize: 'calc(var(--admin-fs) - 2px)', width: 200 }}
             />
             <select
               value={typeFilter}
               onChange={(e: any) => setTypeFilter(e.target.value)}
               className="admin-form-select"
-              style={{ width: 130, padding: '7px 10px', fontSize: 13, margin: 0 }}
+              style={{ width: 130, padding: '7px 10px', fontSize: 'calc(var(--admin-fs) - 2px)', margin: 0 }}
             >
               <option value="all">All Types</option>
               <option value="image">Images</option>
@@ -256,7 +256,7 @@ function AdminMediaPageInner() {
         {totalPages > 1 && (
           <div style={{ display: 'flex', justifyContent: 'center', gap: 8, padding: '18px 0' }}>
             <button disabled={currentPage <= 1} onClick={() => setCurrentPage((p) => p - 1)} className="admin-btn admin-btn-outline admin-btn-sm" style={{ opacity: currentPage <= 1 ? 0.5 : 1 }}>Prev</button>
-            <span style={{ padding: '6px 14px', fontSize: 14 }}>Page {currentPage} of {totalPages}</span>
+            <span style={{ padding: '6px 14px', fontSize: 'calc(var(--admin-fs) - 1px)' }}>Page {currentPage} of {totalPages}</span>
             <button disabled={currentPage >= totalPages} onClick={() => setCurrentPage((p) => p + 1)} className="admin-btn admin-btn-outline admin-btn-sm" style={{ opacity: currentPage >= totalPages ? 0.5 : 1 }}>Next</button>
           </div>
         )}

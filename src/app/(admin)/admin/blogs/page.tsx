@@ -331,7 +331,7 @@ function AdminBlogsPageInner() {
         {totalPages > 1 && (
           <div style={{ display: 'flex', justifyContent: 'center', gap: 8, padding: '18px 0' }}>
             <button disabled={currentPage <= 1} onClick={() => setCurrentPage((p) => p - 1)} className="admin-btn admin-btn-outline admin-btn-sm" style={{ opacity: currentPage <= 1 ? 0.5 : 1 }}>Prev</button>
-            <span style={{ padding: '6px 14px', fontSize: 14 }}>Page {currentPage} of {totalPages}</span>
+            <span style={{ padding: '6px 14px', fontSize: 'calc(var(--admin-fs) - 1px)' }}>Page {currentPage} of {totalPages}</span>
             <button disabled={currentPage >= totalPages} onClick={() => setCurrentPage((p) => p + 1)} className="admin-btn admin-btn-outline admin-btn-sm" style={{ opacity: currentPage >= totalPages ? 0.5 : 1 }}>Next</button>
           </div>
         )}
@@ -374,7 +374,7 @@ function AdminBlogsPageInner() {
                     <label className="admin-form-label" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span>Category</span>
                       {!isReadOnly && (
-                        <button type="button" onClick={() => setShowNewCat((v) => !v)} style={{ background: 'none', border: 'none', color: 'var(--admin-accent)', cursor: 'pointer', fontSize: 12, fontWeight: 600, padding: 0 }}>
+                        <button type="button" onClick={() => setShowNewCat((v) => !v)} style={{ background: 'none', border: 'none', color: 'var(--admin-accent)', cursor: 'pointer', fontSize: 'calc(var(--admin-fs) - 3px)', fontWeight: 600, padding: 0 }}>
                           {showNewCat ? '× Close' : '+ New / Manage'}
                         </button>
                       )}
@@ -406,9 +406,9 @@ function AdminBlogsPageInner() {
                         {isAdmin && categories.length > 0 && (
                           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
                             {categories.map((cat) => (
-                              <span key={cat.id} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, background: '#fff', border: '1px solid #e2e8f0', borderRadius: 20, padding: '2px 6px 2px 10px' }}>
+                              <span key={cat.id} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 'calc(var(--admin-fs) - 4px)', background: '#fff', border: '1px solid #e2e8f0', borderRadius: 20, padding: '2px 6px 2px 10px' }}>
                                 {cat.name}{cat._count ? ` (${cat._count.posts})` : ''}
-                                <button type="button" title="Delete category" onClick={() => handleDeleteCategory(cat.id)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: 13, lineHeight: 1, padding: '0 2px' }}>×</button>
+                                <button type="button" title="Delete category" onClick={() => handleDeleteCategory(cat.id)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: 'calc(var(--admin-fs) - 2px)', lineHeight: 1, padding: '0 2px' }}>×</button>
                               </span>
                             ))}
                           </div>

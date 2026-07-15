@@ -258,7 +258,7 @@ function AdminInquiriesPageInner() {
         {totalPages > 1 && (
           <div style={{ display: 'flex', justifyContent: 'center', gap: 8, padding: '18px 0' }}>
             <button disabled={currentPage <= 1} onClick={() => setCurrentPage((p) => p - 1)} className="admin-btn admin-btn-outline admin-btn-sm" style={{ opacity: currentPage <= 1 ? 0.5 : 1 }}>Prev</button>
-            <span style={{ padding: '6px 14px', fontSize: 14 }}>Page {currentPage} of {totalPages}</span>
+            <span style={{ padding: '6px 14px', fontSize: 'calc(var(--admin-fs) - 1px)' }}>Page {currentPage} of {totalPages}</span>
             <button disabled={currentPage >= totalPages} onClick={() => setCurrentPage((p) => p + 1)} className="admin-btn admin-btn-outline admin-btn-sm" style={{ opacity: currentPage >= totalPages ? 0.5 : 1 }}>Next</button>
           </div>
         )}

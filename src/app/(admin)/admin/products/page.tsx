@@ -538,7 +538,7 @@ function AdminProductsPageInner() {
                 </div>
                 <select
                   className="admin-form-select"
-                  style={{ minWidth: 130, fontSize: 13 }}
+                  style={{ minWidth: 130, fontSize: 'calc(var(--admin-fs) - 2px)' }}
                   value={statusFilter}
                   onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
                 >
@@ -548,7 +548,7 @@ function AdminProductsPageInner() {
                 </select>
                 <select
                   className="admin-form-select"
-                  style={{ minWidth: 150, fontSize: 13 }}
+                  style={{ minWidth: 150, fontSize: 'calc(var(--admin-fs) - 2px)' }}
                   value={stockFilter}
                   onChange={(e) => { setStockFilter(e.target.value); setPage(1); }}
                 >
@@ -590,7 +590,7 @@ function AdminProductsPageInner() {
                       <td>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
                           <span className="prod-slug" title={p.slug} style={{ fontSize: 'calc(var(--admin-fs) - 3px)', color: '#718096', flex: 1 }}>{p.slug}</span>
-                          <a href={`/${p.slug}`} target="_blank" rel="noreferrer" style={{ fontSize: 11, color: '#f7931e', textDecoration: 'none', fontWeight: 600, flexShrink: 0, whiteSpace: 'nowrap' }} title="View on site">
+                          <a href={`/${p.slug}`} target="_blank" rel="noreferrer" style={{ fontSize: 'calc(var(--admin-fs) - 4px)', color: '#f7931e', textDecoration: 'none', fontWeight: 600, flexShrink: 0, whiteSpace: 'nowrap' }} title="View on site">
                             ↗ View
                           </a>
                         </div>
@@ -621,9 +621,9 @@ function AdminProductsPageInner() {
                       </td>
                       <td>
                         {p.stock > 0 ? (
-                          <span style={{ fontWeight: 'bold', color: '#38a169', fontSize: 13 }}>✅ {p.stock}</span>
+                          <span style={{ fontWeight: 'bold', color: '#38a169', fontSize: 'calc(var(--admin-fs) - 2px)' }}>✅ {p.stock}</span>
                         ) : (
-                          <span style={{ fontWeight: 'bold', color: '#e53e3e', fontSize: 12, background: '#fff5f5', border: '1px solid #fed7d7', padding: '2px 8px', borderRadius: 12 }}>🔴 Out of Stock</span>
+                          <span style={{ fontWeight: 'bold', color: '#e53e3e', fontSize: 'calc(var(--admin-fs) - 3px)', background: '#fff5f5', border: '1px solid #fed7d7', padding: '2px 8px', borderRadius: 12 }}>🔴 Out of Stock</span>
                         )}
                       </td>
                       <td>

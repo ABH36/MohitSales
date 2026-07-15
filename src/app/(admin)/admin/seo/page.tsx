@@ -503,9 +503,9 @@ function SeoPageInner() {
           <title>Mohit Sales Corporation Pvt. Ltd. - Sitemap URL Catalog</title>
           <style>
             body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 30px; color: #2d3748; }
-            h1 { color: #1e2e5e; border-bottom: 2px solid #1e2e5e; padding-bottom: 10px; margin-bottom: 5px; font-size: calc(var(--admin-fs) + 9px); }
-            p.meta { color: #718096; font-size: calc(var(--admin-fs) - 2px); margin-bottom: 25px; }
-            table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: calc(var(--admin-fs) - 2px); }
+            h1 { color: #1e2e5e; border-bottom: 2px solid #1e2e5e; padding-bottom: 10px; margin-bottom: 5px; font-size: 24px; }
+            p.meta { color: #718096; font-size: 13px; margin-bottom: 25px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
             th { background-color: #1e2e5e; color: white; text-align: left; padding: 10px; }
             td { padding: 10px; border-bottom: 1px solid #e2e8f0; }
             tr:nth-child(even) { background-color: #f7fafc; }
@@ -529,7 +529,7 @@ function SeoPageInner() {
             <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
           </div>
           
-          <div style="margin-bottom: 20px; font-size: calc(var(--admin-fs) - 1px);">
+          <div style="margin-bottom: 20px; font-size: 14px;">
             <strong>Summary:</strong> 
             Static: ${sitemapPreview.stats.static} | 
             Categories: ${sitemapPreview.stats.categories} | 
@@ -554,7 +554,7 @@ function SeoPageInner() {
                   <td class="type">${u.type}</td>
                   <td>
                     <div style="font-weight: 500;">${u.title}</div>
-                    <div style="color: #718096; font-size: calc(var(--admin-fs) - 4px);">${u.url}</div>
+                    <div style="color: #718096; font-size: 11px;">${u.url}</div>
                   </td>
                   <td class="priority">${u.priority.toFixed(1)}</td>
                   <td class="changefreq">${u.changefreq}</td>
@@ -636,7 +636,7 @@ function SeoPageInner() {
     <>
       {/* Toast */}
       {toast && (
-        <div style={{ position: 'fixed', top: 24, right: 24, zIndex: 9999, background: toast.type === 'success' ? '#38a169' : '#e53e3e', color: '#fff', padding: '12px 20px', borderRadius: 8, boxShadow: '0 4px 16px rgba(0,0,0,0.15)', fontWeight: 500, fontSize: 14 }}>
+        <div style={{ position: 'fixed', top: 24, right: 24, zIndex: 9999, background: toast.type === 'success' ? '#38a169' : '#e53e3e', color: '#fff', padding: '12px 20px', borderRadius: 8, boxShadow: '0 4px 16px rgba(0,0,0,0.15)', fontWeight: 500, fontSize: 'calc(var(--admin-fs) - 1px)' }}>
           {toast.msg}
         </div>
       )}
@@ -645,9 +645,9 @@ function SeoPageInner() {
       {activeTab === 'webmaster' && (
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: '#1a202c' }}>Webmaster Tools</h2>
+            <h2 style={{ fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 700, color: '#1a202c' }}>Webmaster Tools</h2>
           </div>
-          <p style={{ fontSize: 13, color: '#718096', marginBottom: 20 }}>
+          <p style={{ fontSize: 'calc(var(--admin-fs) - 2px)', color: '#718096', marginBottom: 20 }}>
             Optimize your site's indexing status and search visibility by configuring search engine verification codes. Paste only the <strong>content</strong> value (e.g. key/ID) rather than the whole meta tag.
           </p>
           {webmasterLoading ? (
@@ -678,7 +678,7 @@ function SeoPageInner() {
                       )}
                     </div>
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: 14, fontWeight: 600, color: '#2d3748', marginBottom: 4 }}>{tool.label}</div>
+                      <div style={{ fontSize: 'calc(var(--admin-fs) - 1px)', fontWeight: 600, color: '#2d3748', marginBottom: 4 }}>{tool.label}</div>
                       <input
                         value={webmasterValues[setting.id] || ''}
                         onChange={(e) => setWebmasterValues({ ...webmasterValues, [setting.id]: e.target.value })}
@@ -691,7 +691,7 @@ function SeoPageInner() {
                       <button
                         onClick={() => handleSaveSettingClick(setting)}
                         disabled={webmasterSaving === setting.id}
-                        style={{ ...saveBtn, padding: '8px 16px', fontSize: 13, alignSelf: 'flex-end', minWidth: 80 }}
+                        style={{ ...saveBtn, padding: '8px 16px', fontSize: 'calc(var(--admin-fs) - 2px)', alignSelf: 'flex-end', minWidth: 80 }}
                       >
                         {webmasterSaving === setting.id ? '...' : 'Save'}
                       </button>
@@ -707,11 +707,11 @@ function SeoPageInner() {
       {/* ── TAB 1: Page Meta Tags ── */}
       {activeTab === 'meta' && (
         <div>
-          <p style={{ fontSize: 13, color: '#718096', marginBottom: 16, lineHeight: 1.6, background: '#f0fff4', border: '1px solid #c6f6d5', borderRadius: 8, padding: '10px 14px' }}>
+          <p style={{ fontSize: 'calc(var(--admin-fs) - 2px)', color: '#718096', marginBottom: 16, lineHeight: 1.6, background: '#f0fff4', border: '1px solid #c6f6d5', borderRadius: 8, padding: '10px 14px' }}>
             <strong>How to use:</strong> Add custom title, description & keywords for any page. Enter the page path like <code style={{ background: '#e2e8f0', padding: '1px 6px', borderRadius: 4 }}>/about-us</code> or <code style={{ background: '#e2e8f0', padding: '1px 6px', borderRadius: 4 }}>/polycab/fans</code>. These override the default meta tags on that page for better SEO ranking.
           </p>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: '#1a202c' }}>Page Meta Tags</h2>
+            <h2 style={{ fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 700, color: '#1a202c' }}>Page Meta Tags</h2>
             {!isReadOnly && (
               <button className="admin-btn" onClick={() => openMetaModal()} style={{ background: '#1e2e5e', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 6, cursor: 'pointer', fontWeight: 600 }}>
                 + Add Meta
@@ -728,7 +728,7 @@ function SeoPageInner() {
             <div style={{ overflowX: 'auto' }}>
               <table className="admin-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
-                  <tr style={{ background: '#f7fafc', fontSize: 13, color: '#4a5568' }}>
+                  <tr style={{ background: '#f7fafc', fontSize: 'calc(var(--admin-fs) - 2px)', color: '#4a5568' }}>
                     <th style={th}>Page Path</th>
                     <th style={th}>Title</th>
                     <th style={th}>Description</th>
@@ -740,9 +740,9 @@ function SeoPageInner() {
                 <tbody>
                   {metas.map(meta => (
                     <tr key={meta.id} style={{ borderBottom: '1px solid #e2e8f0' }}>
-                      <td style={td}><code style={{ background: '#edf2f7', padding: '2px 6px', borderRadius: 4, fontSize: 12 }}>{meta.page}</code></td>
+                      <td style={td}><code style={{ background: '#edf2f7', padding: '2px 6px', borderRadius: 4, fontSize: 'calc(var(--admin-fs) - 3px)' }}>{meta.page}</code></td>
                       <td style={td}><span style={{ maxWidth: 200, display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{meta.title || <span style={{ color: '#a0aec0' }}>—</span>}</span></td>
-                      <td style={td}><span style={{ maxWidth: 220, display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: 12, color: '#718096' }}>{meta.description || '—'}</span></td>
+                      <td style={td}><span style={{ maxWidth: 220, display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: 'calc(var(--admin-fs) - 3px)', color: '#718096' }}>{meta.description || '—'}</span></td>
                       <td style={{ ...td, textAlign: 'center' }}>{meta.noIndex ? <Badge color="#e53e3e">Yes</Badge> : <Badge color="#38a169">No</Badge>}</td>
                       <td style={{ ...td, textAlign: 'center' }}>{meta.noFollow ? <Badge color="#e53e3e">Yes</Badge> : <Badge color="#38a169">No</Badge>}</td>
                       <td style={td}>
@@ -765,11 +765,11 @@ function SeoPageInner() {
       {/* ── TAB 2: REDIRECTS ── */}
       {activeTab === 'redirects' && (
         <div>
-          <p style={{ fontSize: 13, color: '#718096', marginBottom: 16, lineHeight: 1.6, background: '#f0fff4', border: '1px solid #c6f6d5', borderRadius: 8, padding: '10px 14px' }}>
+          <p style={{ fontSize: 'calc(var(--admin-fs) - 2px)', color: '#718096', marginBottom: 16, lineHeight: 1.6, background: '#f0fff4', border: '1px solid #c6f6d5', borderRadius: 8, padding: '10px 14px' }}>
             <strong>How to use:</strong> Redirect old URLs to new ones. Example: From <code style={{ background: '#e2e8f0', padding: '1px 6px', borderRadius: 4 }}>/old-product</code> → To <code style={{ background: '#e2e8f0', padding: '1px 6px', borderRadius: 4 }}>/new-product</code>. Use 301 for permanent redirects (SEO value transfers) or 302 for temporary.
           </p>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: '#1a202c' }}>URL Redirects</h2>
+            <h2 style={{ fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 700, color: '#1a202c' }}>URL Redirects</h2>
             {!isReadOnly && (
               <button onClick={() => openRedirectModal()} style={{ background: '#1e2e5e', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 6, cursor: 'pointer', fontWeight: 600 }}>
                 + Add Redirect
@@ -786,7 +786,7 @@ function SeoPageInner() {
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
-                  <tr style={{ background: '#f7fafc', fontSize: 13, color: '#4a5568' }}>
+                  <tr style={{ background: '#f7fafc', fontSize: 'calc(var(--admin-fs) - 2px)', color: '#4a5568' }}>
                     <th style={th}>From Path</th>
                     <th style={th}>To Path</th>
                     <th style={th}>Type</th>
@@ -798,11 +798,11 @@ function SeoPageInner() {
                 <tbody>
                   {redirects.map(r => (
                     <tr key={r.id} style={{ borderBottom: '1px solid #e2e8f0' }}>
-                      <td style={td}><code style={{ background: '#edf2f7', padding: '2px 6px', borderRadius: 4, fontSize: 12 }}>{r.fromPath}</code></td>
-                      <td style={td}><code style={{ background: '#ebf8ff', padding: '2px 6px', borderRadius: 4, fontSize: 12, color: '#2b6cb0' }}>{r.toPath}</code></td>
+                      <td style={td}><code style={{ background: '#edf2f7', padding: '2px 6px', borderRadius: 4, fontSize: 'calc(var(--admin-fs) - 3px)' }}>{r.fromPath}</code></td>
+                      <td style={td}><code style={{ background: '#ebf8ff', padding: '2px 6px', borderRadius: 4, fontSize: 'calc(var(--admin-fs) - 3px)', color: '#2b6cb0' }}>{r.toPath}</code></td>
                       <td style={{ ...td, textAlign: 'center' }}><Badge color={r.type === 301 ? '#38a169' : '#d69e2e'}>{r.type}</Badge></td>
                       <td style={{ ...td, textAlign: 'center' }}>{r.isActive ? <Badge color="#38a169">Active</Badge> : <Badge color="#718096">Off</Badge>}</td>
-                      <td style={{ ...td, textAlign: 'center', color: '#718096', fontSize: 13 }}>{r.hitCount}</td>
+                      <td style={{ ...td, textAlign: 'center', color: '#718096', fontSize: 'calc(var(--admin-fs) - 2px)' }}>{r.hitCount}</td>
                       <td style={td}>
                         {!isReadOnly && (
                           <div style={{ display: 'flex', gap: 6 }}>
@@ -823,11 +823,11 @@ function SeoPageInner() {
       {/* ── TAB 3: SCHEMA MARKUP ── */}
       {activeTab === 'schema' && (
         <div>
-          <p style={{ fontSize: 13, color: '#718096', marginBottom: 16, lineHeight: 1.6, background: '#f0fff4', border: '1px solid #c6f6d5', borderRadius: 8, padding: '10px 14px' }}>
+          <p style={{ fontSize: 'calc(var(--admin-fs) - 2px)', color: '#718096', marginBottom: 16, lineHeight: 1.6, background: '#f0fff4', border: '1px solid #c6f6d5', borderRadius: 8, padding: '10px 14px' }}>
             <strong>How to use:</strong> Add structured data (JSON-LD) for rich snippets in Google. Select page path, schema type (e.g. Organization, Product), and paste valid JSON-LD. Example: <code style={{ background: '#e2e8f0', padding: '1px 6px', borderRadius: 4 }}>{`{"@type":"Organization","name":"Mohit Sales"}`}</code>
           </p>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: '#1a202c' }}>Schema Markup (JSON-LD)</h2>
+            <h2 style={{ fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 700, color: '#1a202c' }}>Schema Markup (JSON-LD)</h2>
             {!isReadOnly && (
               <button onClick={() => openSchemaModal()} style={{ background: '#1e2e5e', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 6, cursor: 'pointer', fontWeight: 600 }}>
                 + Add Schema
@@ -844,7 +844,7 @@ function SeoPageInner() {
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
-                  <tr style={{ background: '#f7fafc', fontSize: 13, color: '#4a5568' }}>
+                  <tr style={{ background: '#f7fafc', fontSize: 'calc(var(--admin-fs) - 2px)', color: '#4a5568' }}>
                     <th style={th}>Page</th>
                     <th style={th}>Schema Type</th>
                     <th style={th}>Active</th>
@@ -854,7 +854,7 @@ function SeoPageInner() {
                 <tbody>
                   {schemas.map(s => (
                     <tr key={s.id} style={{ borderBottom: '1px solid #e2e8f0' }}>
-                      <td style={td}><code style={{ background: '#edf2f7', padding: '2px 6px', borderRadius: 4, fontSize: 12 }}>{s.page}</code></td>
+                      <td style={td}><code style={{ background: '#edf2f7', padding: '2px 6px', borderRadius: 4, fontSize: 'calc(var(--admin-fs) - 3px)' }}>{s.page}</code></td>
                       <td style={td}><Badge color="#7c3aed">{s.schemaType}</Badge></td>
                       <td style={{ ...td, textAlign: 'center' }}>{s.isActive ? <Badge color="#38a169">Active</Badge> : <Badge color="#718096">Off</Badge>}</td>
                       <td style={td}>
@@ -879,8 +879,8 @@ function SeoPageInner() {
         <div>
           {/* Sitemap Generator Card */}
           <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 24, marginBottom: 24, boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-            <h3 style={{ fontSize: 16, fontWeight: 700, color: '#1e2e5e', marginBottom: 8 }}>Sitemap Generator & XML/PDF Export</h3>
-            <p style={{ fontSize: 13, color: '#718096', marginBottom: 16 }}>
+            <h3 style={{ fontSize: 'calc(var(--admin-fs) + 1px)', fontWeight: 700, color: '#1e2e5e', marginBottom: 8 }}>Sitemap Generator & XML/PDF Export</h3>
+            <p style={{ fontSize: 'calc(var(--admin-fs) - 2px)', color: '#718096', marginBottom: 16 }}>
               Generate complete URLs for all products, categories, blogs, and static pages. You can preview all links and download them directly as a standard XML sitemap or format it as a PDF catalog.
             </p>
             
@@ -888,7 +888,7 @@ function SeoPageInner() {
               <button 
                 onClick={generateSitemapUrls} 
                 disabled={generatingSitemap}
-                style={{ background: '#1e2e5e', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 14 }}
+                style={{ background: '#1e2e5e', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 'calc(var(--admin-fs) - 1px)' }}
               >
                 {generatingSitemap ? 'Generating...' : '🔍 Generate sitemap URLs'}
               </button>
@@ -898,14 +898,14 @@ function SeoPageInner() {
                   <a 
                     href="/api/admin/seo/sitemap/generate?format=xml" 
                     download="sitemap.xml"
-                    style={{ background: '#2b6cb0', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 14, textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}
+                    style={{ background: '#2b6cb0', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 'calc(var(--admin-fs) - 1px)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}
                   >
                     💾 Download XML
                   </a>
                   
                   <button 
                     onClick={downloadPdf} 
-                    style={{ background: '#c53030', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 14 }}
+                    style={{ background: '#c53030', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 'calc(var(--admin-fs) - 1px)' }}
                   >
                     📄 Download PDF Report
                   </button>
@@ -915,27 +915,27 @@ function SeoPageInner() {
 
             {sitemapPreview && (
               <div style={{ background: '#f7fafc', borderRadius: 8, padding: 16, border: '1px solid #e2e8f0', marginBottom: 20 }}>
-                <h4 style={{ fontSize: 14, fontWeight: 700, color: '#4a5568', marginBottom: 12 }}>Generation Stats:</h4>
+                <h4 style={{ fontSize: 'calc(var(--admin-fs) - 1px)', fontWeight: 700, color: '#4a5568', marginBottom: 12 }}>Generation Stats:</h4>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 12 }}>
                   <div style={{ background: '#fff', padding: 12, borderRadius: 6, border: '1px solid #edf2f7', textAlign: 'center' }}>
-                    <div style={{ fontSize: 12, color: '#718096' }}>Total URLs</div>
-                    <div style={{ fontSize: 18, fontWeight: 800, color: '#1e2e5e' }}>{sitemapPreview.totalUrls}</div>
+                    <div style={{ fontSize: 'calc(var(--admin-fs) - 3px)', color: '#718096' }}>Total URLs</div>
+                    <div style={{ fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 800, color: '#1e2e5e' }}>{sitemapPreview.totalUrls}</div>
                   </div>
                   <div style={{ background: '#fff', padding: 12, borderRadius: 6, border: '1px solid #edf2f7', textAlign: 'center' }}>
-                    <div style={{ fontSize: 12, color: '#718096' }}>Products</div>
-                    <div style={{ fontSize: 18, fontWeight: 800, color: '#48bb78' }}>{sitemapPreview.stats.products}</div>
+                    <div style={{ fontSize: 'calc(var(--admin-fs) - 3px)', color: '#718096' }}>Products</div>
+                    <div style={{ fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 800, color: '#48bb78' }}>{sitemapPreview.stats.products}</div>
                   </div>
                   <div style={{ background: '#fff', padding: 12, borderRadius: 6, border: '1px solid #edf2f7', textAlign: 'center' }}>
-                    <div style={{ fontSize: 12, color: '#718096' }}>Categories</div>
-                    <div style={{ fontSize: 18, fontWeight: 800, color: '#3182ce' }}>{sitemapPreview.stats.categories}</div>
+                    <div style={{ fontSize: 'calc(var(--admin-fs) - 3px)', color: '#718096' }}>Categories</div>
+                    <div style={{ fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 800, color: '#3182ce' }}>{sitemapPreview.stats.categories}</div>
                   </div>
                   <div style={{ background: '#fff', padding: 12, borderRadius: 6, border: '1px solid #edf2f7', textAlign: 'center' }}>
-                    <div style={{ fontSize: 12, color: '#718096' }}>Static Pages</div>
-                    <div style={{ fontSize: 18, fontWeight: 800, color: '#dd6b20' }}>{sitemapPreview.stats.static}</div>
+                    <div style={{ fontSize: 'calc(var(--admin-fs) - 3px)', color: '#718096' }}>Static Pages</div>
+                    <div style={{ fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 800, color: '#dd6b20' }}>{sitemapPreview.stats.static}</div>
                   </div>
                   <div style={{ background: '#fff', padding: 12, borderRadius: 6, border: '1px solid #edf2f7', textAlign: 'center' }}>
-                    <div style={{ fontSize: 12, color: '#718096' }}>Blogs</div>
-                    <div style={{ fontSize: 18, fontWeight: 800, color: '#805ad5' }}>{sitemapPreview.stats.blogs}</div>
+                    <div style={{ fontSize: 'calc(var(--admin-fs) - 3px)', color: '#718096' }}>Blogs</div>
+                    <div style={{ fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 800, color: '#805ad5' }}>{sitemapPreview.stats.blogs}</div>
                   </div>
                 </div>
               </div>
@@ -946,23 +946,23 @@ function SeoPageInner() {
           <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 24, marginBottom: 24, boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, flexWrap: 'wrap', gap: 12 }}>
               <div>
-                <h3 style={{ fontSize: 16, fontWeight: 700, color: '#1e2e5e', marginBottom: 4 }}>Sitemap Overrides</h3>
-                <p style={{ fontSize: 13, color: '#718096', margin: 0 }}>
+                <h3 style={{ fontSize: 'calc(var(--admin-fs) + 1px)', fontWeight: 700, color: '#1e2e5e', marginBottom: 4 }}>Sitemap Overrides</h3>
+                <p style={{ fontSize: 'calc(var(--admin-fs) - 2px)', color: '#718096', margin: 0 }}>
                   Set a custom priority / change frequency for a specific URL, or exclude it from the sitemap. These apply on top of the auto-generated links.
                 </p>
               </div>
-              <button onClick={() => openOverrideModal()} style={{ background: '#1e2e5e', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 14, whiteSpace: 'nowrap' }}>
+              <button onClick={() => openOverrideModal()} style={{ background: '#1e2e5e', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 'calc(var(--admin-fs) - 1px)', whiteSpace: 'nowrap' }}>
                 + Add Override
               </button>
             </div>
 
             {sitemapLoading ? (
-              <p style={{ fontSize: 13, color: '#718096', padding: '16px 0', margin: 0 }}>Loading overrides…</p>
+              <p style={{ fontSize: 'calc(var(--admin-fs) - 2px)', color: '#718096', padding: '16px 0', margin: 0 }}>Loading overrides…</p>
             ) : overrides.length === 0 ? (
-              <p style={{ fontSize: 13, color: '#718096', padding: '16px 0', margin: 0 }}>No overrides yet. Add one to customise a URL&apos;s sitemap entry.</p>
+              <p style={{ fontSize: 'calc(var(--admin-fs) - 2px)', color: '#718096', padding: '16px 0', margin: 0 }}>No overrides yet. Add one to customise a URL&apos;s sitemap entry.</p>
             ) : (
               <div style={{ overflowX: 'auto', marginTop: 12 }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 'calc(var(--admin-fs) - 2px)' }}>
                   <thead>
                     <tr style={{ textAlign: 'left', color: '#718096', borderBottom: '1px solid #e2e8f0' }}>
                       <th style={{ padding: '8px 10px' }}>URL Path</th>
@@ -980,8 +980,8 @@ function SeoPageInner() {
                         <td style={{ padding: '8px 10px' }}>{o.changeFreq}</td>
                         <td style={{ padding: '8px 10px' }}>{o.isExcluded ? 'Yes' : 'No'}</td>
                         <td style={{ padding: '8px 10px', textAlign: 'right', whiteSpace: 'nowrap' }}>
-                          <button onClick={() => openOverrideModal(o)} style={{ background: 'transparent', border: '1px solid #cbd5e0', color: '#2b6cb0', padding: '4px 12px', borderRadius: 6, cursor: 'pointer', fontSize: 12, marginRight: 8 }}>Edit</button>
-                          <button onClick={() => deleteOverride(o.id)} style={{ background: 'transparent', border: '1px solid #fbb6b6', color: '#c53030', padding: '4px 12px', borderRadius: 6, cursor: 'pointer', fontSize: 12 }}>Delete</button>
+                          <button onClick={() => openOverrideModal(o)} style={{ background: 'transparent', border: '1px solid #cbd5e0', color: '#2b6cb0', padding: '4px 12px', borderRadius: 6, cursor: 'pointer', fontSize: 'calc(var(--admin-fs) - 3px)', marginRight: 8 }}>Edit</button>
+                          <button onClick={() => deleteOverride(o.id)} style={{ background: 'transparent', border: '1px solid #fbb6b6', color: '#c53030', padding: '4px 12px', borderRadius: 6, cursor: 'pointer', fontSize: 'calc(var(--admin-fs) - 3px)' }}>Delete</button>
                         </td>
                       </tr>
                     ))}
@@ -995,7 +995,7 @@ function SeoPageInner() {
           {sitemapPreview && (
             <div style={{ marginTop: 24, background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 20 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 12 }}>
-                <h4 style={{ fontSize: 15, fontWeight: 700, color: '#1e2e5e', margin: 0 }}>Generated URLs List ({sitemapPreview.totalUrls} links)</h4>
+                <h4 style={{ fontSize: 'var(--admin-fs)', fontWeight: 700, color: '#1e2e5e', margin: 0 }}>Generated URLs List ({sitemapPreview.totalUrls} links)</h4>
                 <div style={{ position: 'relative', width: '100%', maxWidth: '300px' }}>
                   <input 
                     type="text" 
@@ -1020,7 +1020,7 @@ function SeoPageInner() {
               <div style={{ overflowY: 'auto', maxHeight: '450px', border: '1px solid #edf2f7', borderRadius: 8 }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                   <thead>
-                    <tr style={{ background: '#f7fafc', fontSize: 13, color: '#4a5568', borderBottom: '1px solid #edf2f7', position: 'sticky', top: 0, zIndex: 1 }}>
+                    <tr style={{ background: '#f7fafc', fontSize: 'calc(var(--admin-fs) - 2px)', color: '#4a5568', borderBottom: '1px solid #edf2f7', position: 'sticky', top: 0, zIndex: 1 }}>
                       <th style={{ ...th, padding: '10px 14px' }}>Type</th>
                       <th style={th}>Page Title / URL Path</th>
                       <th style={{ ...th, textAlign: 'center' }}>Priority</th>
@@ -1035,7 +1035,7 @@ function SeoPageInner() {
                           <span style={{ 
                             padding: '2px 8px', 
                             borderRadius: 4, 
-                            fontSize: 11, 
+                            fontSize: 'calc(var(--admin-fs) - 4px)', 
                             fontWeight: 600,
                             background: u.type === 'Product' ? '#def7ec' : u.type === 'Category' ? '#e1f5fe' : u.type === 'Static Page' ? '#feecdc' : '#f3e8ff',
                             color: u.type === 'Product' ? '#03543f' : u.type === 'Category' ? '#0288d1' : u.type === 'Static Page' ? '#b45309' : '#6b21a8'
@@ -1045,11 +1045,11 @@ function SeoPageInner() {
                         </td>
                         <td style={td}>
                           <div style={{ fontWeight: 600, color: '#2d3748' }}>{u.title}</div>
-                          <div style={{ fontSize: 11, color: '#718096' }}>{u.url.replace(process.env.NEXT_PUBLIC_BASE_URL || 'https://mohitscpl.com', '') || '/'}</div>
+                          <div style={{ fontSize: 'calc(var(--admin-fs) - 4px)', color: '#718096' }}>{u.url.replace(process.env.NEXT_PUBLIC_BASE_URL || 'https://mohitscpl.com', '') || '/'}</div>
                         </td>
                         <td style={{ ...td, textAlign: 'center', fontWeight: 600, color: '#4a5568' }}>{u.priority.toFixed(1)}</td>
                         <td style={{ ...td, textAlign: 'center', color: '#4a5568' }}>{u.changefreq}</td>
-                        <td style={{ ...td, fontSize: 12, color: '#718096' }}>{u.lastmod}</td>
+                        <td style={{ ...td, fontSize: 'calc(var(--admin-fs) - 3px)', color: '#718096' }}>{u.lastmod}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -1063,11 +1063,11 @@ function SeoPageInner() {
       {/* ── TAB 5: ROBOTS.TXT ── */}
       {activeTab === 'robots' && (
         <div>
-          <p style={{ fontSize: 13, color: '#718096', marginBottom: 16, lineHeight: 1.6, background: '#f0fff4', border: '1px solid #c6f6d5', borderRadius: 8, padding: '10px 14px' }}>
+          <p style={{ fontSize: 'calc(var(--admin-fs) - 2px)', color: '#718096', marginBottom: 16, lineHeight: 1.6, background: '#f0fff4', border: '1px solid #c6f6d5', borderRadius: 8, padding: '10px 14px' }}>
             <strong>How to use:</strong> Control which pages search engines can crawl. Disallow paths like <code style={{ background: '#e2e8f0', padding: '1px 6px', borderRadius: 4 }}>/admin</code> to block crawlers. Allow paths like <code style={{ background: '#e2e8f0', padding: '1px 6px', borderRadius: 4 }}>/</code> to permit crawling. Set crawl delay (seconds) to limit bot speed.
           </p>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: '#1a202c' }}>Robots.txt Rules</h2>
+            <h2 style={{ fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 700, color: '#1a202c' }}>Robots.txt Rules</h2>
             {!isReadOnly && (
               <div style={{ display: 'flex', gap: 8 }}>
                 <button onClick={addRobotsRule} style={{ background: '#e2e8f0', color: '#2d3748', border: 'none', padding: '8px 14px', borderRadius: 6, cursor: 'pointer', fontWeight: 600 }}>
@@ -1079,7 +1079,7 @@ function SeoPageInner() {
               </div>
             )}
           </div>
-          <p style={{ fontSize: 13, color: '#718096', marginBottom: 20 }}>
+          <p style={{ fontSize: 'calc(var(--admin-fs) - 2px)', color: '#718096', marginBottom: 20 }}>
             These rules generate the live <code>/robots.txt</code> served to crawlers.
           </p>
           {robotsLoading ? (
@@ -1089,9 +1089,9 @@ function SeoPageInner() {
               {robotsRules.map((rule, i) => (
                 <div key={i} style={{ background: '#f7fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: 20 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-                    <strong style={{ color: '#1a202c', fontSize: 14 }}>Rule #{i + 1}</strong>
+                    <strong style={{ color: '#1a202c', fontSize: 'calc(var(--admin-fs) - 1px)' }}>Rule #{i + 1}</strong>
                     {!isReadOnly && (
-                      <button onClick={() => removeRobotsRule(i)} style={{ ...delBtn, padding: '4px 10px', fontSize: 12 }}>Remove</button>
+                      <button onClick={() => removeRobotsRule(i)} style={{ ...delBtn, padding: '4px 10px', fontSize: 'calc(var(--admin-fs) - 3px)' }}>Remove</button>
                     )}
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14 }}>
@@ -1112,7 +1112,7 @@ function SeoPageInner() {
                         onChange={e => updateRobotsRuleArray(i, 'disallow', e.target.value)}
                         disabled={isReadOnly}
                         rows={3}
-                        style={{ ...inputStyle, resize: 'vertical', fontFamily: 'monospace', fontSize: 12 }}
+                        style={{ ...inputStyle, resize: 'vertical', fontFamily: 'monospace', fontSize: 'calc(var(--admin-fs) - 3px)' }}
                         placeholder="/admin&#10;/api"
                       />
                     </div>
@@ -1123,7 +1123,7 @@ function SeoPageInner() {
                         onChange={e => updateRobotsRuleArray(i, 'allow', e.target.value)}
                         disabled={isReadOnly}
                         rows={3}
-                        style={{ ...inputStyle, resize: 'vertical', fontFamily: 'monospace', fontSize: 12 }}
+                        style={{ ...inputStyle, resize: 'vertical', fontFamily: 'monospace', fontSize: 'calc(var(--admin-fs) - 3px)' }}
                         placeholder="/"
                       />
                     </div>
@@ -1155,18 +1155,18 @@ function SeoPageInner() {
       {/* ── TAB: 404 DETECTED LOGS ── */}
       {activeTab === 'logs404' && (
         <div>
-          <p style={{ fontSize: 13, color: '#718096', marginBottom: 16, lineHeight: 1.6, background: '#f0fff4', border: '1px solid #c6f6d5', borderRadius: 8, padding: '10px 14px' }}>
+          <p style={{ fontSize: 'calc(var(--admin-fs) - 2px)', color: '#718096', marginBottom: 16, lineHeight: 1.6, background: '#f0fff4', border: '1px solid #c6f6d5', borderRadius: 8, padding: '10px 14px' }}>
             <strong>How to use:</strong> Monitor broken links visitors are hitting. Review URLs, create redirects for important ones, and delete irrelevant entries. High hit-count URLs should be redirected to prevent SEO loss.
           </p>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: '#1a202c' }}>404 Detection Logs</h2>
+            <h2 style={{ fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 700, color: '#1a202c' }}>404 Detection Logs</h2>
             {!isReadOnly && logs404.length > 0 && (
-              <button onClick={clearAllLogs404} style={{ background: '#fff5f5', color: '#c53030', border: '1px solid #fed7d7', padding: '8px 16px', borderRadius: 6, cursor: 'pointer', fontWeight: 600, fontSize: 13 }}>
+              <button onClick={clearAllLogs404} style={{ background: '#fff5f5', color: '#c53030', border: '1px solid #fed7d7', padding: '8px 16px', borderRadius: 6, cursor: 'pointer', fontWeight: 600, fontSize: 'calc(var(--admin-fs) - 2px)' }}>
                 🗑️ Clear All Logs
               </button>
             )}
           </div>
-          <p style={{ fontSize: 13, color: '#718096', marginBottom: 16 }}>
+          <p style={{ fontSize: 'calc(var(--admin-fs) - 2px)', color: '#718096', marginBottom: 16 }}>
             Track broken links and pages that users or search crawlers tried to access but could not find. Use the redirect option to map them to working pages.
           </p>
           {logs404Loading ? (
@@ -1179,7 +1179,7 @@ function SeoPageInner() {
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
-                  <tr style={{ background: '#f7fafc', fontSize: 13, color: '#4a5568' }}>
+                  <tr style={{ background: '#f7fafc', fontSize: 'calc(var(--admin-fs) - 2px)', color: '#4a5568' }}>
                     <th style={th}>Path</th>
                     <th style={th}>Referrer</th>
                     <th style={{ ...th, textAlign: 'center' }}>Hits</th>
@@ -1190,14 +1190,14 @@ function SeoPageInner() {
                 <tbody>
                   {logs404.map(log => (
                     <tr key={log.id} style={{ borderBottom: '1px solid #e2e8f0' }}>
-                      <td style={td}><code style={{ background: '#edf2f7', padding: '2px 6px', borderRadius: 4, fontSize: 12 }}>{log.path}</code></td>
+                      <td style={td}><code style={{ background: '#edf2f7', padding: '2px 6px', borderRadius: 4, fontSize: 'calc(var(--admin-fs) - 3px)' }}>{log.path}</code></td>
                       <td style={td}>
-                        <span style={{ maxWidth: 200, display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: 12, color: log.referrer ? '#4a5568' : '#a0aec0' }}>
+                        <span style={{ maxWidth: 200, display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: 'calc(var(--admin-fs) - 3px)', color: log.referrer ? '#4a5568' : '#a0aec0' }}>
                           {log.referrer || 'Direct / Unknown'}
                         </span>
                       </td>
                       <td style={{ ...td, textAlign: 'center', fontWeight: 'bold' }}>{log.hitCount}</td>
-                      <td style={{ ...td, fontSize: 12, color: '#718096' }}>{new Date(log.updatedAt).toLocaleString()}</td>
+                      <td style={{ ...td, fontSize: 'calc(var(--admin-fs) - 3px)', color: '#718096' }}>{new Date(log.updatedAt).toLocaleString()}</td>
                       <td style={td}>
                         {!isReadOnly && (
                           <div style={{ display: 'flex', gap: 6 }}>
@@ -1226,7 +1226,7 @@ function SeoPageInner() {
             <div style={{ gridColumn: '1 / -1' }}>
               <label style={labelStyle}>Page Path <span style={{ color: '#e53e3e' }}>*</span></label>
               <input value={metaForm.page} onChange={e => setMetaForm({ ...metaForm, page: e.target.value })} style={inputStyle} placeholder="/about-us" />
-              <span style={{ fontSize: 11, color: '#a0aec0' }}>Exact path, e.g. / or /about-us or /industries/cables</span>
+              <span style={{ fontSize: 'calc(var(--admin-fs) - 4px)', color: '#a0aec0' }}>Exact path, e.g. / or /about-us or /industries/cables</span>
             </div>
             <div style={{ gridColumn: '1 / -1' }}>
               <label style={labelStyle}>Meta Title</label>
@@ -1254,11 +1254,11 @@ function SeoPageInner() {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <input type="checkbox" id="noIndex" checked={metaForm.noIndex} onChange={e => setMetaForm({ ...metaForm, noIndex: e.target.checked })} />
-              <label htmlFor="noIndex" style={{ fontSize: 14, fontWeight: 500 }}>noindex (hide from search engines)</label>
+              <label htmlFor="noIndex" style={{ fontSize: 'calc(var(--admin-fs) - 1px)', fontWeight: 500 }}>noindex (hide from search engines)</label>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <input type="checkbox" id="noFollow" checked={metaForm.noFollow} onChange={e => setMetaForm({ ...metaForm, noFollow: e.target.checked })} />
-              <label htmlFor="noFollow" style={{ fontSize: 14, fontWeight: 500 }}>nofollow (don&apos;t follow links)</label>
+              <label htmlFor="noFollow" style={{ fontSize: 'calc(var(--admin-fs) - 1px)', fontWeight: 500 }}>nofollow (don&apos;t follow links)</label>
             </div>
           </div>
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 20 }}>
@@ -1291,7 +1291,7 @@ function SeoPageInner() {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingTop: 24 }}>
                 <input type="checkbox" id="isActive" checked={redirectForm.isActive} onChange={e => setRedirectForm({ ...redirectForm, isActive: e.target.checked })} />
-                <label htmlFor="isActive" style={{ fontSize: 14, fontWeight: 500 }}>Active</label>
+                <label htmlFor="isActive" style={{ fontSize: 'calc(var(--admin-fs) - 1px)', fontWeight: 500 }}>Active</label>
               </div>
             </div>
           </div>
@@ -1327,14 +1327,14 @@ function SeoPageInner() {
                   try { JSON.parse(e.target.value); setJsonError(''); } catch { setJsonError('Invalid JSON'); }
                 }}
                 rows={10}
-                style={{ ...inputStyle, resize: 'vertical', fontFamily: 'monospace', fontSize: 12 }}
+                style={{ ...inputStyle, resize: 'vertical', fontFamily: 'monospace', fontSize: 'calc(var(--admin-fs) - 3px)' }}
                 placeholder='{"@context":"https://schema.org","@type":"Organization",...}'
               />
-              {jsonError && <span style={{ color: '#e53e3e', fontSize: 12 }}>{jsonError}</span>}
+              {jsonError && <span style={{ color: '#e53e3e', fontSize: 'calc(var(--admin-fs) - 3px)' }}>{jsonError}</span>}
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <input type="checkbox" id="schemaActive" checked={schemaForm.isActive} onChange={e => setSchemaForm({ ...schemaForm, isActive: e.target.checked })} />
-              <label htmlFor="schemaActive" style={{ fontSize: 14, fontWeight: 500 }}>Active (inject into page)</label>
+              <label htmlFor="schemaActive" style={{ fontSize: 'calc(var(--admin-fs) - 1px)', fontWeight: 500 }}>Active (inject into page)</label>
             </div>
           </div>
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 20 }}>
@@ -1373,7 +1373,7 @@ function SeoPageInner() {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <input type="checkbox" id="isExcluded" checked={overrideForm.isExcluded} onChange={e => setOverrideForm({ ...overrideForm, isExcluded: e.target.checked })} />
-              <label htmlFor="isExcluded" style={{ fontSize: 14, fontWeight: 500 }}>Exclude from sitemap</label>
+              <label htmlFor="isExcluded" style={{ fontSize: 'calc(var(--admin-fs) - 1px)', fontWeight: 500 }}>Exclude from sitemap</label>
             </div>
           </div>
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 20 }}>
@@ -1388,11 +1388,11 @@ function SeoPageInner() {
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
           <div style={{ background: '#fff', borderRadius: 12, padding: 28, width: '100%', maxWidth: 450, boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <h3 style={{ fontSize: 18, fontWeight: 700, color: '#1a202c' }}>🔐 Verify Administrator Password</h3>
-              <button onClick={() => setConfirmSetting(null)} style={{ background: 'none', border: 'none', fontSize: 22, cursor: 'pointer', color: '#718096', lineHeight: 1 }}>×</button>
+              <h3 style={{ fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 700, color: '#1a202c' }}>🔐 Verify Administrator Password</h3>
+              <button onClick={() => setConfirmSetting(null)} style={{ background: 'none', border: 'none', fontSize: 'calc(var(--admin-fs) + 7px)', cursor: 'pointer', color: '#718096', lineHeight: 1 }}>×</button>
             </div>
             <form onSubmit={handleConfirmSave}>
-              <p style={{ fontSize: 14, color: '#4a5568', marginBottom: 16, lineHeight: 1.5 }}>
+              <p style={{ fontSize: 'calc(var(--admin-fs) - 1px)', color: '#4a5568', marginBottom: 16, lineHeight: 1.5 }}>
                 You are saving changes to <strong>{confirmSetting.label || confirmSetting.key}</strong>. For security, please enter your password to authorize this update.
               </p>
               <div style={{ marginBottom: 16 }}>
@@ -1428,8 +1428,8 @@ function Modal({ title, children, onClose }: { title: string; children: React.Re
     <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
       <div style={{ background: '#fff', borderRadius: 12, padding: 28, width: '100%', maxWidth: 640, maxHeight: '90vh', overflowY: 'auto', boxShadow: '0 20px 60px rgba(0,0,0,0.2)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-          <h3 style={{ fontSize: 18, fontWeight: 700, color: '#1a202c' }}>{title}</h3>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: 22, cursor: 'pointer', color: '#718096', lineHeight: 1 }}>×</button>
+          <h3 style={{ fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 700, color: '#1a202c' }}>{title}</h3>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: 'calc(var(--admin-fs) + 7px)', cursor: 'pointer', color: '#718096', lineHeight: 1 }}>×</button>
         </div>
         {children}
       </div>
@@ -1439,7 +1439,7 @@ function Modal({ title, children, onClose }: { title: string; children: React.Re
 
 function Badge({ children, color }: { children: React.ReactNode; color: string }) {
   return (
-    <span style={{ background: color, color: '#fff', fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 12, display: 'inline-block' }}>
+    <span style={{ background: color, color: '#fff', fontSize: 'calc(var(--admin-fs) - 4px)', fontWeight: 700, padding: '2px 8px', borderRadius: 12, display: 'inline-block' }}>
       {children}
     </span>
   );
@@ -1447,11 +1447,11 @@ function Badge({ children, color }: { children: React.ReactNode; color: string }
 
 // ── Shared styles ──────────────────────────────────────────────────────────
 
-const th: React.CSSProperties = { padding: '10px 12px', textAlign: 'left', fontWeight: 600, fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.05em', whiteSpace: 'nowrap' };
-const td: React.CSSProperties = { padding: '12px 12px', fontSize: 14, verticalAlign: 'middle' };
-const editBtn: React.CSSProperties = { background: '#ebf8ff', color: '#2b6cb0', border: 'none', padding: '5px 12px', borderRadius: 5, cursor: 'pointer', fontSize: 13, fontWeight: 600 };
-const delBtn: React.CSSProperties = { background: '#fff5f5', color: '#c53030', border: 'none', padding: '5px 12px', borderRadius: 5, cursor: 'pointer', fontSize: 13, fontWeight: 600 };
-const saveBtn: React.CSSProperties = { background: '#1e2e5e', color: '#fff', border: 'none', padding: '10px 24px', borderRadius: 6, cursor: 'pointer', fontWeight: 600, fontSize: 14 };
-const cancelBtn: React.CSSProperties = { background: '#e2e8f0', color: '#2d3748', border: 'none', padding: '10px 20px', borderRadius: 6, cursor: 'pointer', fontWeight: 600, fontSize: 14 };
-const inputStyle: React.CSSProperties = { width: '100%', padding: '9px 12px', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 14, outline: 'none', boxSizing: 'border-box', background: '#fff' };
-const labelStyle: React.CSSProperties = { display: 'block', fontSize: 13, fontWeight: 600, color: '#4a5568', marginBottom: 5 };
+const th: React.CSSProperties = { padding: '10px 12px', textAlign: 'left', fontWeight: 600, fontSize: 'calc(var(--admin-fs) - 3px)', textTransform: 'uppercase', letterSpacing: '0.05em', whiteSpace: 'nowrap' };
+const td: React.CSSProperties = { padding: '12px 12px', fontSize: 'calc(var(--admin-fs) - 1px)', verticalAlign: 'middle' };
+const editBtn: React.CSSProperties = { background: '#ebf8ff', color: '#2b6cb0', border: 'none', padding: '5px 12px', borderRadius: 5, cursor: 'pointer', fontSize: 'calc(var(--admin-fs) - 2px)', fontWeight: 600 };
+const delBtn: React.CSSProperties = { background: '#fff5f5', color: '#c53030', border: 'none', padding: '5px 12px', borderRadius: 5, cursor: 'pointer', fontSize: 'calc(var(--admin-fs) - 2px)', fontWeight: 600 };
+const saveBtn: React.CSSProperties = { background: '#1e2e5e', color: '#fff', border: 'none', padding: '10px 24px', borderRadius: 6, cursor: 'pointer', fontWeight: 600, fontSize: 'calc(var(--admin-fs) - 1px)' };
+const cancelBtn: React.CSSProperties = { background: '#e2e8f0', color: '#2d3748', border: 'none', padding: '10px 20px', borderRadius: 6, cursor: 'pointer', fontWeight: 600, fontSize: 'calc(var(--admin-fs) - 1px)' };
+const inputStyle: React.CSSProperties = { width: '100%', padding: '9px 12px', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 'calc(var(--admin-fs) - 1px)', outline: 'none', boxSizing: 'border-box', background: '#fff' };
+const labelStyle: React.CSSProperties = { display: 'block', fontSize: 'calc(var(--admin-fs) - 2px)', fontWeight: 600, color: '#4a5568', marginBottom: 5 };
