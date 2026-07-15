@@ -101,7 +101,7 @@ body.ltr .rs-breadcrumb-title {
   --brand-red: #c1272d;         /* brand red (accents, CTAs) */
   --brand-orange: #f7931e;      /* theme orange (buttons, highlights) */
   --brand-orange-hover: #e07b0e;/* orange hover state */
-  --brand-surface: #f8f9fb;     /* light section background */
+  --brand-surface: transparent; /* light sections reveal the page gradient below */
 
   --brand-text: #333333;        /* default body text */
   --brand-text-muted: #555555;  /* secondary/muted text */
@@ -109,6 +109,14 @@ body.ltr .rs-breadcrumb-title {
 
   --brand-radius: 14px;         /* card corner radius */
   --brand-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* card elevation */
+}
+
+/* ── Public page canvas — light red↔blue gradient (replaces the plain white
+   background), centralized in one place. Sections/cards sit on top; opaque
+   white cards pop against it just like the admin panel. Fixed so it stays
+   put while the page scrolls. ── */
+body {
+  background: linear-gradient(125deg, #fbdede 0%, #f1ecf1 42%, #dde8fb 100%) fixed !important;
 }
 
 /* ====================================================
@@ -1001,7 +1009,7 @@ body.ltr .rs-breadcrumb-title {
 
 .rs-cta-wrapper.footer {
   background: linear-gradient(to right, #b83c7a, #357ca5) !important;
-  padding: 45px 50px;
+  padding: 26px 45px;
   border-radius: 4px;
   position: relative;
   overflow: hidden;
@@ -1014,25 +1022,27 @@ body.ltr .rs-breadcrumb-title {
 
 .rs-cta-wrapper.footer .rs-cta-content-wrapper {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  text-align: center;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 14px;
 }
 
 .rs-cta-wrapper.footer .rs-cta-title {
   color: #ffffff;
   font-family: "Outfit", sans-serif;
-  font-size: 32px;
+  font-size: 26px;
   font-weight: 700;
   margin: 0;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 .rs-cta-wrapper.footer .contact-btn .rs-btn {
   background: #111111 !important;
   color: #ffffff !important;
-  padding: 15px 35px;
+  padding: 12px 30px;
   border-radius: 4px;
   text-decoration: none;
   font-family: "Outfit", sans-serif;
@@ -1203,12 +1213,12 @@ body.ltr .rs-breadcrumb-title {
   color: #e2e8f0;
   font-family: "Outfit", sans-serif;
   position: relative;
-  padding-top: 140px;
+  padding-top: 85px;
 }
 
 /* Footer top content area padding — matches PHP rs-footer-two .rs-footer-top */
 .rs-footer-area .rs-footer-top {
-  padding: 60px 0 70px;
+  padding: 36px 0 40px;
 }
 
 .rs-footer-bg-thumb {
@@ -1335,7 +1345,7 @@ body.ltr .rs-breadcrumb-title {
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px 24px;
-  padding: 20px 0 16px;
+  padding: 12px 0 10px;
   list-style: none;
   margin: 0;
   border-top: none;
