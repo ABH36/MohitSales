@@ -161,7 +161,6 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
   const [fontSize, setFontSize] = useState<'normal' | 'medium' | 'large'>('normal');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
   const sidebarRef = useRef<HTMLElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -359,15 +358,6 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
       revalidate();
     }
   }, []);
-
-  // Refresh the current page's server data (works on whatever admin page
-  // the user is on) without a jarring full reload.
-  const handleRefresh = () => {
-    if (refreshing) return;
-    setRefreshing(true);
-    router.refresh();
-    setTimeout(() => setRefreshing(false), 800);
-  };
 
   const handleLogout = async () => {
     try {
@@ -764,17 +754,6 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                     A++
                   </button>
                 </div>
-
-                <button
-                  type="button"
-                  onClick={handleRefresh}
-                  className="admin-btn admin-btn-outline admin-btn-sm admin-refresh-btn"
-                  title="Refresh this page"
-                  aria-label="Refresh current page"
-                  style={{ pointerEvents: 'auto', cursor: 'pointer' }}
-                >
-                  <span className={`admin-refresh-icon${refreshing ? ' spinning' : ''}`} aria-hidden="true">⟳</span> Refresh
-                </button>
 
                 <button
                   type="button"
