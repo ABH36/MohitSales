@@ -815,7 +815,7 @@
   padding: 28px;
   flex: 1;
   min-width: 0; /* prevent overflow */
-  background: linear-gradient(90deg, #f6cccc 0%, #fbe3e3 50%, #fef6f6 100%);
+  background: linear-gradient(105deg, #e97b7b 0%, #f0a0a0 48%, #f8caca 100%);
 }
 
 /* ─── Welcome Banner ─────────────────────────────── */
