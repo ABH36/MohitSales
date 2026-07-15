@@ -18,8 +18,8 @@
   --admin-sidebar-blur: blur(20px);
   
   --admin-card: #ffffff; /* Opaque white so cards pop on the red page bg */
-  --admin-card-hover: rgba(255, 255, 255, 0.95);
-  --admin-border: rgba(255, 255, 255, 0.5); /* Semi-transparent border */
+  --admin-card-hover: #f1f5f9; /* Visible light hover (was translucent white) */
+  --admin-border: #e2e8f0; /* Visible light slate border/divider (was translucent white, invisible on white cards) */
   --admin-glass-shadow: 0 10px 30px rgba(15, 23, 42, 0.13);
   
   /* Typography */

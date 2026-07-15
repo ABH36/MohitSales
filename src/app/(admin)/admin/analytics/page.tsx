@@ -820,7 +820,7 @@ export default function AdminAnalyticsPage() {
           {/* Header Stream Info Bar */}
           <div className="ga-stream-info-card glass-card" style={{
             padding: '24px',
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%)',
+            background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
             border: '1px solid rgba(226, 232, 240, 0.8)',
             boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.02), 0 8px 10px -6px rgba(0, 0, 0, 0.02)'
           }}>
@@ -894,7 +894,7 @@ export default function AdminAnalyticsPage() {
           {/* Quick Metrics Cards */}
           <div className="analytics-kpi-grid">
             {/* Live Active Users Widget */}
-            <div className="kpi-card glass-card" style={{ background: 'rgba(255,255,255,0.8)' }}>
+            <div className="kpi-card glass-card" style={{ background: '#fff' }}>
               <div className="kpi-icon-row">
                 <span className="kpi-icon blue" style={{ background: '#e0f2fe', color: '#0284c7' }}>⚡</span>
                 <span className="kpi-trend success" style={{
@@ -927,7 +927,7 @@ export default function AdminAnalyticsPage() {
             </div>
 
             {/* Total Pageviews */}
-            <div className="kpi-card glass-card" style={{ background: 'rgba(255,255,255,0.8)' }}>
+            <div className="kpi-card glass-card" style={{ background: '#fff' }}>
               <div className="kpi-icon-row">
                 <span className="kpi-icon orange" style={{ background: '#ffedd5', color: '#ea580c' }}>📈</span>
                 <span className="kpi-trend success" style={{ background: '#ecfdf5', color: '#059669' }}>
@@ -944,7 +944,7 @@ export default function AdminAnalyticsPage() {
             </div>
 
             {/* Average Session Duration */}
-            <div className="kpi-card glass-card" style={{ background: 'rgba(255,255,255,0.8)' }}>
+            <div className="kpi-card glass-card" style={{ background: '#fff' }}>
               <div className="kpi-icon-row">
                 <span className="kpi-icon purple" style={{ background: '#f3e8ff', color: '#7c3aed' }}>⏱️</span>
                 <span className="kpi-trend success" style={{ background: '#ecfdf5', color: '#059669' }}>Good engagement</span>
@@ -959,7 +959,7 @@ export default function AdminAnalyticsPage() {
             </div>
 
             {/* Bounce Rate */}
-            <div className="kpi-card glass-card" style={{ background: 'rgba(255,255,255,0.8)' }}>
+            <div className="kpi-card glass-card" style={{ background: '#fff' }}>
               <div className="kpi-icon-row">
                 <span className="kpi-icon red" style={{ background: '#fee2e2', color: '#dc2626' }}>📉</span>
                 <span className="kpi-trend success" style={{ background: '#ecfdf5', color: '#059669' }}>Bounce tracked</span>
@@ -1244,10 +1244,10 @@ export default function AdminAnalyticsPage() {
           margin-bottom: 28px;
         }
         .glass-card {
-          background: rgba(255, 255, 255, 0.7);
+          background: #ffffff;
           backdrop-filter: blur(12px);
           -webkit-backdrop-filter: blur(12px);
-          border: 1px solid rgba(255, 255, 255, 0.6);
+          border: 1px solid #e2e8f0;
           border-radius: 16px;
           padding: 22px;
           box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
@@ -1258,7 +1258,7 @@ export default function AdminAnalyticsPage() {
         .glass-card:hover {
           transform: translateY(-4px);
           box-shadow: 0 16px 36px rgba(0,0,0,0.06);
-          background: rgba(255, 255, 255, 0.85);
+          background: #ffffff;
         }
         .kpi-icon-row {
           display: flex;
