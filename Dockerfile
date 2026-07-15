@@ -12,12 +12,17 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y openssl libssl-dev ca-certificates && rm -rf /var/lib/apt/lists/*
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NEXT_TELEMETRY_DISABLED=1
 # Provide dummy env vars for Next.js build verification and Prisma schema validation
-ENV DATABASE_URL="postgresql://dummy:dummy@187.127.146.111:5432/dummy"
-ENV DIRECT_URL="postgresql://dummy:dummy@187.127.146.111:5432/dummy"
-ENV JWT_SECRET="dummy_secret_for_build_only"
-ENV CAPTCHA_SECRET="dummy_secret_for_build_only"
+ARG DATABASE_URL
+ARG DIRECT_URL
+ARG JWT_SECRET
+ARG CAPTCHA_SECRET
+
+ENV DATABASE_URL=${DATABASE_URL}
+ENV DIRECT_URL=${DIRECT_URL}
+ENV JWT_SECRET=${JWT_SECRET}
+ENV CAPTCHA_SECRET=${CAPTCHA_SECRET}
 # Generate Prisma client for the correct platform (linux-slim)
 RUN npx prisma generate
 # Build the application
@@ -26,8 +31,8 @@ RUN npm run build
 # Stage 3: Production runner
 FROM node:20-slim AS runner
 WORKDIR /app
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 RUN apt-get update && apt-get install -y openssl libssl-dev ca-certificates && rm -rf /var/lib/apt/lists/*
 
 # Copy package files, prisma schema, scripts, and build outputs
@@ -37,13 +42,12 @@ COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/scripts ./scripts
-COPY --from=builder /app/content-export.json ./content-export.json
 
 EXPOSE 3005
-ENV PORT 3005
-ENV HOSTNAME "0.0.0.0"
+ENV PORT=3005
+ENV HOSTNAME="0.0.0.0"
 
 # Startup command: sync schema (additive only, no data loss) then start app
 # NOTE: Seeding is intentionally removed from here — run deploy-seed.sh manually
 #       to seed initial data only once. Never seed on every restart (overwrites real data).
-CMD ["sh", "-c", "npx prisma db push && npm run start"]
+CMD ["sh", "-c", "npx prisma db push --accept-data-loss && npm run start"]
