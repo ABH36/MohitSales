@@ -100,7 +100,7 @@ function CategoryRow({ cat, depth, isReadOnly, isAdmin, onEdit, onDelete }: RowP
           {prefix} {cat.name}
         </td>
         <td>
-          <span style={{ fontSize: '12px', color: '#718096' }}>{cat.slug}</span>
+          <span style={{ fontSize: 'calc(var(--admin-fs) - 3px)', color: '#718096' }}>{cat.slug}</span>
           <a href={`/${cat.slug}`} target="_blank" rel="noreferrer" style={{ marginLeft: 8, fontSize: 11, color: '#f7931e', textDecoration: 'none', fontWeight: 600 }}>
             ↗ View
           </a>
@@ -115,7 +115,7 @@ function CategoryRow({ cat, depth, isReadOnly, isAdmin, onEdit, onDelete }: RowP
         <td>
           <div className="admin-table-actions">
             {isReadOnly ? (
-              <span style={{ fontSize: '12px', color: '#718096', fontStyle: 'italic' }}>Read Only</span>
+              <span style={{ fontSize: 'calc(var(--admin-fs) - 3px)', color: '#718096', fontStyle: 'italic' }}>Read Only</span>
             ) : (
               <>
                 <button className="admin-btn admin-btn-outline admin-btn-sm" onClick={() => onEdit(cat)}>Edit</button>

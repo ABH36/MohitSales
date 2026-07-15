@@ -167,19 +167,19 @@ function AdminInquiriesPageInner() {
               <button
                 onClick={handleClearAll}
                 className="admin-btn"
-                style={{ padding: '6px 14px', fontSize: '13px', background: '#ef4444', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}
+                style={{ padding: '6px 14px', fontSize: 'calc(var(--admin-fs) - 2px)', background: '#ef4444', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}
                 onMouseEnter={(e) => (e.currentTarget.style.background = '#dc2626')}
                 onMouseLeave={(e) => (e.currentTarget.style.background = '#ef4444')}
               >
                 🗑️ Clear All
               </button>
             )}
-            <label style={{ fontSize: '14px', color: '#4a5568', fontWeight: 600 }}>Source:</label>
+            <label style={{ fontSize: 'calc(var(--admin-fs) - 1px)', color: '#4a5568', fontWeight: 600 }}>Source:</label>
             <select
               value={sourceFilter}
               onChange={(e: any) => setSourceFilter(e.target.value)}
               className="admin-form-select"
-              style={{ width: '160px', display: 'inline-block', padding: '6px 12px', fontSize: '13px', margin: 0 }}
+              style={{ width: '160px', display: 'inline-block', padding: '6px 12px', fontSize: 'calc(var(--admin-fs) - 2px)', margin: 0 }}
             >
               <option value="all">All Sources</option>
               <option value="website">Contact Form</option>
@@ -220,7 +220,7 @@ function AdminInquiriesPageInner() {
                     <td>
                       <span className={`admin-badge ${statusBadge(inq.status)}`}>{inq.status.toUpperCase()}</span>
                     </td>
-                    <td style={{ color: '#718096', fontSize: '12px', whiteSpace: 'nowrap' }}>{fmtDate(inq.createdAt)}</td>
+                    <td style={{ color: '#718096', fontSize: 'calc(var(--admin-fs) - 3px)', whiteSpace: 'nowrap' }}>{fmtDate(inq.createdAt)}</td>
                     <td onClick={(e) => e.stopPropagation()}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <select
@@ -228,7 +228,7 @@ function AdminInquiriesPageInner() {
                           onChange={(e) => handleStatusChange(inq.id, e.target.value)}
                           disabled={isReadOnly}
                           className="admin-form-select"
-                          style={{ padding: '4px 8px', fontSize: '12px', width: 'auto', display: 'inline-block', minWidth: '100px', margin: 0 }}
+                          style={{ padding: '4px 8px', fontSize: 'calc(var(--admin-fs) - 3px)', width: 'auto', display: 'inline-block', minWidth: '100px', margin: 0 }}
                         >
                           <option value="new">New</option>
                           <option value="read">Read</option>
@@ -239,7 +239,7 @@ function AdminInquiriesPageInner() {
                           <button
                             onClick={() => handleDelete(inq.id)}
                             title="Delete Inquiry"
-                            style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px', padding: '4px 8px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                            style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 'calc(var(--admin-fs) + 1px)', padding: '4px 8px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
                             onMouseEnter={(e) => (e.currentTarget.style.background = '#fed7d7')}
                             onMouseLeave={(e) => (e.currentTarget.style.background = 'none')}
                           >

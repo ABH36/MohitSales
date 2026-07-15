@@ -91,7 +91,7 @@ export default function RecentInquiries({ inquiries }: { inquiries: DashInquiry[
                       {inq.status.toUpperCase()}
                     </span>
                   </td>
-                  <td style={{ color: 'var(--admin-text-muted)', fontSize: '12px', whiteSpace: 'nowrap' }}>
+                  <td style={{ color: 'var(--admin-text-muted)', fontSize: 'calc(var(--admin-fs) - 3px)', whiteSpace: 'nowrap' }}>
                     {fmtDate(inq.createdAt)}
                   </td>
                   <td className="admin-row-cta">View →</td>

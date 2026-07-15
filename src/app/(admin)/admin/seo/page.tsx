@@ -503,9 +503,9 @@ function SeoPageInner() {
           <title>Mohit Sales Corporation Pvt. Ltd. - Sitemap URL Catalog</title>
           <style>
             body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 30px; color: #2d3748; }
-            h1 { color: #1e2e5e; border-bottom: 2px solid #1e2e5e; padding-bottom: 10px; margin-bottom: 5px; font-size: 24px; }
-            p.meta { color: #718096; font-size: 13px; margin-bottom: 25px; }
-            table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
+            h1 { color: #1e2e5e; border-bottom: 2px solid #1e2e5e; padding-bottom: 10px; margin-bottom: 5px; font-size: calc(var(--admin-fs) + 9px); }
+            p.meta { color: #718096; font-size: calc(var(--admin-fs) - 2px); margin-bottom: 25px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: calc(var(--admin-fs) - 2px); }
             th { background-color: #1e2e5e; color: white; text-align: left; padding: 10px; }
             td { padding: 10px; border-bottom: 1px solid #e2e8f0; }
             tr:nth-child(even) { background-color: #f7fafc; }
@@ -529,7 +529,7 @@ function SeoPageInner() {
             <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
           </div>
           
-          <div style="margin-bottom: 20px; font-size: 14px;">
+          <div style="margin-bottom: 20px; font-size: calc(var(--admin-fs) - 1px);">
             <strong>Summary:</strong> 
             Static: ${sitemapPreview.stats.static} | 
             Categories: ${sitemapPreview.stats.categories} | 
@@ -554,7 +554,7 @@ function SeoPageInner() {
                   <td class="type">${u.type}</td>
                   <td>
                     <div style="font-weight: 500;">${u.title}</div>
-                    <div style="color: #718096; font-size: 11px;">${u.url}</div>
+                    <div style="color: #718096; font-size: calc(var(--admin-fs) - 4px);">${u.url}</div>
                   </td>
                   <td class="priority">${u.priority.toFixed(1)}</td>
                   <td class="changefreq">${u.changefreq}</td>

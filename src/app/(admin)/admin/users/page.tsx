@@ -229,7 +229,7 @@ function AdminUsersPageInner() {
                     <div style={{
                       width: 36, height: 36, borderRadius: '50%', background: '#F7931E',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      color: '#fff', fontWeight: 700, fontSize: '14px', flexShrink: 0,
+                      color: '#fff', fontWeight: 700, fontSize: 'calc(var(--admin-fs) - 1px)', flexShrink: 0,
                     }}>
                       {(u.name || u.email)[0].toUpperCase()}
                     </div>
@@ -250,7 +250,7 @@ function AdminUsersPageInner() {
                       {u.isActive ? 'ACTIVE' : 'INACTIVE'}
                     </span>
                   </td>
-                  <td style={{ color: '#718096', fontSize: '12px' }}>
+                  <td style={{ color: '#718096', fontSize: 'calc(var(--admin-fs) - 3px)' }}>
                     {new Date(u.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
                   </td>
                   <td>

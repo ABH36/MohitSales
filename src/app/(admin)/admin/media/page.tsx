@@ -184,7 +184,7 @@ function AdminMediaPageInner() {
                 </button>
               </>
             ) : (
-              <span style={{ fontSize: '13px', color: '#718096', fontStyle: 'italic' }}>Read Only</span>
+              <span style={{ fontSize: 'calc(var(--admin-fs) - 2px)', color: '#718096', fontStyle: 'italic' }}>Read Only</span>
             )}
           </div>
         </div>
@@ -218,13 +218,13 @@ function AdminMediaPageInner() {
                       {m.mimeType.startsWith('image/') ? (
                         <img src={m.url} alt={m.filename} style={{ width: 48, height: 48, borderRadius: 8, objectFit: 'cover', border: '1px solid #e2e8f0' }} />
                       ) : (
-                        <div style={{ width: 48, height: 48, borderRadius: 8, background: '#f0f2f5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>📄</div>
+                        <div style={{ width: 48, height: 48, borderRadius: 8, background: '#f0f2f5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 'calc(var(--admin-fs) + 5px)' }}>📄</div>
                       )}
                     </td>
                     <td style={{ fontWeight: 600 }}>{m.filename}</td>
                     <td><span className="admin-badge admin-badge-info">{m.mimeType.split('/')[1]?.toUpperCase()}</span></td>
                     <td style={{ color: '#718096' }}>{(m.size / 1024).toFixed(1)} KB</td>
-                    <td style={{ color: '#718096', fontSize: '12px', whiteSpace: 'nowrap' }}>
+                    <td style={{ color: '#718096', fontSize: 'calc(var(--admin-fs) - 3px)', whiteSpace: 'nowrap' }}>
                       {new Date(m.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </td>
                     <td>

@@ -304,7 +304,7 @@ function AdminBlogsPageInner() {
                         {blog.isPublished ? 'PUBLISHED' : 'DRAFT'}
                       </span>
                     </td>
-                    <td style={{ color: '#718096', fontSize: '12px' }}>
+                    <td style={{ color: '#718096', fontSize: 'calc(var(--admin-fs) - 3px)' }}>
                       {blog.publishedAt
                         ? new Date(blog.publishedAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
                         : '—'}
@@ -312,7 +312,7 @@ function AdminBlogsPageInner() {
                     <td>
                       <div className="admin-table-actions">
                         {isReadOnly ? (
-                          <span style={{ fontSize: '12px', color: '#718096', fontStyle: 'italic' }}>Read Only</span>
+                          <span style={{ fontSize: 'calc(var(--admin-fs) - 3px)', color: '#718096', fontStyle: 'italic' }}>Read Only</span>
                         ) : (
                           <>
                             <button className="admin-btn admin-btn-outline admin-btn-sm" onClick={() => handleOpenEdit(blog)}>Edit</button>

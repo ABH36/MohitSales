@@ -231,7 +231,7 @@ export default function TipTapEditor({ value, onChange, placeholder, disabled }:
             color: '#334155',
             cursor: 'pointer',
             fontFamily: 'serif',
-            fontSize: '16px',
+            fontSize: 'calc(var(--admin-fs) + 1px)',
             lineHeight: 1,
           }}
         >

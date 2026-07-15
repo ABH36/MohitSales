@@ -270,7 +270,7 @@ function AdminSettingsPageInner() {
             </div>
             <div style={{ padding: '16px 24px 8px', fontSize: 'var(--admin-fs-sm)', color: 'var(--admin-text-muted)', lineHeight: 1.6 }}>
               Paste only the <strong>content</strong> value from the verification meta tag. Example: if Google gives you<br />
-              <code style={{ background: '#f1f5f9', padding: '2px 8px', borderRadius: 4, fontSize: '12px' }}>&lt;meta name=&quot;google-site-verification&quot; content=&quot;<strong>abc123xyz</strong>&quot; /&gt;</code><br />
+              <code style={{ background: '#f1f5f9', padding: '2px 8px', borderRadius: 4, fontSize: 'calc(var(--admin-fs) - 3px)' }}>&lt;meta name=&quot;google-site-verification&quot; content=&quot;<strong>abc123xyz</strong>&quot; /&gt;</code><br />
               then paste only <strong>abc123xyz</strong>.
             </div>
             <div style={{ padding: '12px 24px 24px' }}>
@@ -305,7 +305,7 @@ function AdminSettingsPageInner() {
                         onChange={(e) => setEditValues({ ...editValues, [setting.id]: e.target.value })}
                         placeholder={tool.placeholder}
                         disabled={!isAdmin}
-                        style={{ borderRadius: '10px', fontSize: '13px' }}
+                        style={{ borderRadius: '10px', fontSize: 'calc(var(--admin-fs) - 2px)' }}
                       />
                     </div>
                     {isAdmin && (

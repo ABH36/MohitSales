@@ -290,34 +290,34 @@ export default function CmsPage() {
 
   const inputStyle: React.CSSProperties = {
     width: '100%', padding: '11px 14px', border: '1px solid #e2e8f0',
-    borderRadius: '10px', fontSize: '14px', fontFamily: 'inherit',
+    borderRadius: '10px', fontSize: 'calc(var(--admin-fs) - 1px)', fontFamily: 'inherit',
     outline: 'none', transition: 'border-color 0.2s, box-shadow 0.2s',
     color: '#1e293b', background: '#fff',
   };
   const labelStyle: React.CSSProperties = {
-    display: 'block', fontSize: '13px', fontWeight: 600, color: '#334155',
+    display: 'block', fontSize: 'calc(var(--admin-fs) - 2px)', fontWeight: 600, color: '#334155',
     marginBottom: '7px',
   };
   const btnPrimary: React.CSSProperties = {
     background: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)', color: '#fff',
     border: 'none', padding: '11px 24px', borderRadius: '10px', cursor: 'pointer',
-    fontWeight: 600, fontSize: '14px', boxShadow: '0 4px 12px rgba(29,78,216,0.25)',
+    fontWeight: 600, fontSize: 'calc(var(--admin-fs) - 1px)', boxShadow: '0 4px 12px rgba(29,78,216,0.25)',
     transition: 'transform 0.2s, box-shadow 0.2s',
   };
   const btnDanger: React.CSSProperties = {
     background: '#fff', color: '#dc2626', border: '1px solid #fecaca', padding: '8px 16px',
-    borderRadius: '9px', cursor: 'pointer', fontWeight: 600, fontSize: '13px',
+    borderRadius: '9px', cursor: 'pointer', fontWeight: 600, fontSize: 'calc(var(--admin-fs) - 2px)',
     transition: 'all 0.2s',
   };
   const btnOutline: React.CSSProperties = {
     background: '#fff', color: '#3b82f6', border: '1.5px solid #bfdbfe',
     padding: '11px 22px', borderRadius: '10px', cursor: 'pointer',
-    fontWeight: 600, fontSize: '14px', transition: 'all 0.2s',
+    fontWeight: 600, fontSize: 'calc(var(--admin-fs) - 1px)', transition: 'all 0.2s',
   };
   const btnUpload: React.CSSProperties = {
     background: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)', color: '#fff',
     border: 'none', padding: '11px 18px',
-    borderRadius: '0 10px 10px 0', cursor: 'pointer', fontWeight: 600, fontSize: '13px',
+    borderRadius: '0 10px 10px 0', cursor: 'pointer', fontWeight: 600, fontSize: 'calc(var(--admin-fs) - 2px)',
     whiteSpace: 'nowrap',
   };
 
@@ -349,7 +349,7 @@ export default function CmsPage() {
       {value && (
         <div style={{ marginTop: '6px', height: '60px', width: '120px', borderRadius: '6px', overflow: 'hidden', border: '1px solid #e5e7eb', backgroundImage: `url('${value}')`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
       )}
-      <span style={{ fontSize: '11px', color: '#9ca3af', marginTop: '2px', display: 'block' }}>Max 1MB. JPG, PNG, WebP, GIF</span>
+      <span style={{ fontSize: 'calc(var(--admin-fs) - 4px)', color: '#9ca3af', marginTop: '2px', display: 'block' }}>Max 1MB. JPG, PNG, WebP, GIF</span>
     </div>
   );
 
@@ -358,7 +358,7 @@ export default function CmsPage() {
       {toast && (
         <div style={{
           position: 'fixed', top: 24, right: 24, zIndex: 9999, padding: '14px 24px',
-          borderRadius: '10px', color: '#fff', fontSize: '14px', fontWeight: 500,
+          borderRadius: '10px', color: '#fff', fontSize: 'calc(var(--admin-fs) - 1px)', fontWeight: 500,
           background: toast.type === 'success' ? '#22c55e' : '#ef4444',
           boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
         }}>
@@ -374,7 +374,7 @@ export default function CmsPage() {
           {tab === 'banners' && (
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 700, color: '#111827' }}>
+                <h3 style={{ margin: 0, fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 700, color: '#111827' }}>
                   Homepage Banners ({banners.length})
                 </h3>
                 <div style={{ display: 'flex', gap: '12px' }}>
@@ -393,14 +393,14 @@ export default function CmsPage() {
                   }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <span style={{ background: '#f3f4f6', padding: '4px 12px', borderRadius: '6px', fontSize: '13px', fontWeight: 600, color: '#6b7280' }}>
+                        <span style={{ background: '#f3f4f6', padding: '4px 12px', borderRadius: '6px', fontSize: 'calc(var(--admin-fs) - 2px)', fontWeight: 600, color: '#6b7280' }}>
                           #{idx + 1}
                         </span>
-                        <span style={{ fontSize: '15px', fontWeight: 600, color: '#111827' }}>
+                        <span style={{ fontSize: 'var(--admin-fs)', fontWeight: 600, color: '#111827' }}>
                           {banner.title || 'Untitled Banner'}
                         </span>
                         {!banner.isActive && (
-                          <span style={{ background: '#fef2f2', color: '#dc2626', padding: '2px 8px', borderRadius: '4px', fontSize: '12px', fontWeight: 500 }}>
+                          <span style={{ background: '#fef2f2', color: '#dc2626', padding: '2px 8px', borderRadius: '4px', fontSize: 'calc(var(--admin-fs) - 3px)', fontWeight: 500 }}>
                             Inactive
                           </span>
                         )}
@@ -427,7 +427,7 @@ export default function CmsPage() {
                           onChange={e => updateBanner(banner.id, 'sortOrder', parseInt(e.target.value) || 0)} />
                       </div>
                       <div style={{ display: 'flex', alignItems: 'end', paddingBottom: '4px' }}>
-                        <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '14px' }}>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: 'calc(var(--admin-fs) - 1px)' }}>
                           <input type="checkbox" checked={banner.isActive}
                             onChange={e => updateBanner(banner.id, 'isActive', e.target.checked)}
                             style={{ width: '18px', height: '18px', accentColor: '#3b82f6' }} />
@@ -439,7 +439,7 @@ export default function CmsPage() {
                     {banner.desktopImage && (
                       <div style={{ marginTop: '12px', display: 'flex', gap: '12px' }}>
                         <div style={{ flex: 1 }}>
-                          <span style={{ fontSize: '11px', color: '#9ca3af', fontWeight: 500 }}>Desktop Preview</span>
+                          <span style={{ fontSize: 'calc(var(--admin-fs) - 4px)', color: '#9ca3af', fontWeight: 500 }}>Desktop Preview</span>
                           <div style={{
                             marginTop: '4px', height: '80px', borderRadius: '6px', overflow: 'hidden',
                             backgroundImage: `url('${banner.desktopImage}')`,
@@ -449,7 +449,7 @@ export default function CmsPage() {
                         </div>
                         {banner.mobileImage && (
                           <div style={{ width: '80px' }}>
-                            <span style={{ fontSize: '11px', color: '#9ca3af', fontWeight: 500 }}>Mobile</span>
+                            <span style={{ fontSize: 'calc(var(--admin-fs) - 4px)', color: '#9ca3af', fontWeight: 500 }}>Mobile</span>
                             <div style={{
                               marginTop: '4px', height: '80px', borderRadius: '6px', overflow: 'hidden',
                               backgroundImage: `url('${banner.mobileImage}')`,
@@ -470,7 +470,7 @@ export default function CmsPage() {
           {tab === 'homepage' && (
             <div style={{ background: '#fff', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 20px rgba(15,23,42,0.05)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-                <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 700, color: '#111827' }}>Homepage Content</h3>
+                <h3 style={{ margin: 0, fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 700, color: '#111827' }}>Homepage Content</h3>
                 <button onClick={() => savePageContent('homepage')} disabled={savingKey === 'homepage'}
                   style={{ ...btnPrimary, opacity: savingKey === 'homepage' ? 0.6 : 1 }}>
                   {savingKey === 'homepage' ? 'Saving...' : 'Save Homepage'}
@@ -505,7 +505,7 @@ export default function CmsPage() {
               {/* Settings Form */}
               <div style={{ background: '#fff', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 20px rgba(15,23,42,0.05)', border: '1px solid #e5e7eb' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-                  <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 700, color: '#111827' }}>Promotion & Ads Popup Settings</h3>
+                  <h3 style={{ margin: 0, fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 700, color: '#111827' }}>Promotion & Ads Popup Settings</h3>
                   <button onClick={savePromo} disabled={savingKey === 'promo_popup'}
                     style={{ ...btnPrimary, opacity: savingKey === 'promo_popup' ? 0.6 : 1 }}>
                     {savingKey === 'promo_popup' ? 'Saving...' : 'Save Settings'}
@@ -524,8 +524,8 @@ export default function CmsPage() {
                         style={{ width: '20px', height: '20px', accentColor: '#3b82f6', cursor: 'pointer' }}
                       />
                       <div>
-                        <span style={{ fontSize: '15px', fontWeight: 700, color: '#111827' }}>Enable Home Page Promotional Popup</span>
-                        <span style={{ display: 'block', fontSize: '12px', color: '#6b7280', marginTop: '2px' }}>
+                        <span style={{ fontSize: 'var(--admin-fs)', fontWeight: 700, color: '#111827' }}>Enable Home Page Promotional Popup</span>
+                        <span style={{ display: 'block', fontSize: 'calc(var(--admin-fs) - 3px)', color: '#6b7280', marginTop: '2px' }}>
                           Toggle the popup ad overlay on/off on the main website homepage.
                         </span>
                       </div>
@@ -553,8 +553,8 @@ export default function CmsPage() {
                             transition: 'all 0.2s'
                           }}
                         >
-                          <div style={{ fontWeight: 700, fontSize: '13px', color: promoData.template === t.key ? '#3b82f6' : '#374151' }}>{t.name}</div>
-                          <div style={{ fontSize: '10px', color: '#6b7280', marginTop: '2px' }}>{t.desc}</div>
+                          <div style={{ fontWeight: 700, fontSize: 'calc(var(--admin-fs) - 2px)', color: promoData.template === t.key ? '#3b82f6' : '#374151' }}>{t.name}</div>
+                          <div style={{ fontSize: 'calc(var(--admin-fs) - 5px)', color: '#6b7280', marginTop: '2px' }}>{t.desc}</div>
                         </div>
                       ))}
                     </div>
@@ -570,21 +570,21 @@ export default function CmsPage() {
                           <button
                             type="button"
                             onClick={() => setPromoData(prev => ({ ...prev, customHtml: DISCOUNT_PRESET, themeColor: '#f59e0b' }))}
-                            style={{ ...btnOutline, padding: '8px 16px', fontSize: '12.5px', height: 'auto', borderWidth: '1px' }}
+                            style={{ ...btnOutline, padding: '8px 16px', fontSize: 'calc(var(--admin-fs) - 2.5px)', height: 'auto', borderWidth: '1px' }}
                           >
                             🏷️ Load Discount Preset
                           </button>
                           <button
                             type="button"
                             onClick={() => setPromoData(prev => ({ ...prev, customHtml: FESTIVE_PRESET, themeColor: '#ef4444' }))}
-                            style={{ ...btnOutline, padding: '8px 16px', fontSize: '12.5px', height: 'auto', borderWidth: '1px' }}
+                            style={{ ...btnOutline, padding: '8px 16px', fontSize: 'calc(var(--admin-fs) - 2.5px)', height: 'auto', borderWidth: '1px' }}
                           >
                             🎆 Load Festival Preset
                           </button>
                           <button
                             type="button"
                             onClick={() => setPromoData(prev => ({ ...prev, customHtml: SPOTLIGHT_PRESET, themeColor: '#38bdf8' }))}
-                            style={{ ...btnOutline, padding: '8px 16px', fontSize: '12.5px', height: 'auto', borderWidth: '1px' }}
+                            style={{ ...btnOutline, padding: '8px 16px', fontSize: 'calc(var(--admin-fs) - 2.5px)', height: 'auto', borderWidth: '1px' }}
                           >
                             🚀 Load Spotlight Preset
                           </button>
@@ -595,12 +595,12 @@ export default function CmsPage() {
                       <div>
                         <label style={labelStyle}>Custom HTML & Inline CSS Code</label>
                         <textarea
-                          style={{ ...inputStyle, minHeight: '250px', resize: 'vertical', fontFamily: 'monospace', fontSize: '12.5px', background: '#1e293b', color: '#f8fafc', padding: '14px' }}
+                          style={{ ...inputStyle, minHeight: '250px', resize: 'vertical', fontFamily: 'monospace', fontSize: 'calc(var(--admin-fs) - 2.5px)', background: '#1e293b', color: '#f8fafc', padding: '14px' }}
                           value={promoData.customHtml}
                           placeholder="<div style='padding: 20px;'><h3>Custom Ad</h3></div>"
                           onChange={e => setPromoData(prev => ({ ...prev, customHtml: e.target.value }))}
                         />
-                        <span style={{ fontSize: '11px', color: '#6b7280', marginTop: '4px', display: 'block' }}>
+                        <span style={{ fontSize: 'calc(var(--admin-fs) - 4px)', color: '#6b7280', marginTop: '4px', display: 'block' }}>
                           Write custom HTML with inline styles. Avoid using scripts or external stylesheets. The standard dismiss/close triggers are handled automatically.
                         </span>
                       </div>
@@ -737,7 +737,7 @@ export default function CmsPage() {
                 boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
                 minHeight: '450px'
               }}>
-                <span style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: '#64748b', letterSpacing: '1px', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontSize: 'calc(var(--admin-fs) - 4px)', fontWeight: 800, textTransform: 'uppercase', color: '#64748b', letterSpacing: '1px', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   ✨ Live Sandbox Screen Preview
                 </span>
 
@@ -763,15 +763,15 @@ export default function CmsPage() {
                         <div style={{ height: '40px', background: `${promoData.themeColor}1a` }} />
                       )}
                       <div style={{ padding: '16px', textAlign: 'center' }}>
-                        <div style={{ fontSize: '20px', marginBottom: '8px' }}>
+                        <div style={{ fontSize: 'calc(var(--admin-fs) + 5px)', marginBottom: '8px' }}>
                           {promoData.popupType === 'festival' ? '🎆' : promoData.popupType === 'discount' ? '🏷️' : promoData.popupType === 'new_product' ? '🆕' : '📢'}
                         </div>
-                        <h5 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: 800, color: '#0f172a' }}>{promoData.title || 'Title Headline'}</h5>
+                        <h5 style={{ margin: '0 0 4px 0', fontSize: 'calc(var(--admin-fs) - 1px)', fontWeight: 800, color: '#0f172a' }}>{promoData.title || 'Title Headline'}</h5>
                         {promoData.subtitle && (
-                          <div style={{ fontSize: '11px', fontWeight: 700, color: promoData.themeColor, marginBottom: '8px' }}>{promoData.subtitle}</div>
+                          <div style={{ fontSize: 'calc(var(--admin-fs) - 4px)', fontWeight: 700, color: promoData.themeColor, marginBottom: '8px' }}>{promoData.subtitle}</div>
                         )}
-                        <p style={{ margin: '0 0 16px 0', fontSize: '11px', color: '#64748b', lineHeight: '1.4' }}>{promoData.description || 'Description message body'}</p>
-                        <button style={{ background: promoData.themeColor, color: '#fff', border: 'none', padding: '6px 14px', borderRadius: '6px', fontSize: '11px', fontWeight: 'bold' }}>
+                        <p style={{ margin: '0 0 16px 0', fontSize: 'calc(var(--admin-fs) - 4px)', color: '#64748b', lineHeight: '1.4' }}>{promoData.description || 'Description message body'}</p>
+                        <button style={{ background: promoData.themeColor, color: '#fff', border: 'none', padding: '6px 14px', borderRadius: '6px', fontSize: 'calc(var(--admin-fs) - 4px)', fontWeight: 'bold' }}>
                           {promoData.buttonText || 'Button Text'}
                         </button>
                       </div>
@@ -785,15 +785,15 @@ export default function CmsPage() {
                         <div style={{ flex: '1', backgroundImage: `url('${promoData.imageUrl}')`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
                       )}
                       <div style={{ flex: '1.2', padding: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <span style={{ fontSize: '9px', fontWeight: 800, color: promoData.themeColor, textTransform: 'uppercase', marginBottom: '4px' }}>
+                        <span style={{ fontSize: 'calc(var(--admin-fs) - 6px)', fontWeight: 800, color: promoData.themeColor, textTransform: 'uppercase', marginBottom: '4px' }}>
                           {promoData.popupType === 'festival' ? '🎆' : promoData.popupType === 'discount' ? '🏷️' : promoData.popupType === 'new_product' ? '🆕' : '📢'} Special
                         </span>
-                        <h5 style={{ margin: '0 0 2px 0', fontSize: '13px', fontWeight: 800, color: '#0f172a' }}>{promoData.title || 'Title Headline'}</h5>
+                        <h5 style={{ margin: '0 0 2px 0', fontSize: 'calc(var(--admin-fs) - 2px)', fontWeight: 800, color: '#0f172a' }}>{promoData.title || 'Title Headline'}</h5>
                         {promoData.subtitle && (
-                          <div style={{ fontSize: '10px', fontWeight: 700, color: promoData.themeColor, marginBottom: '6px' }}>{promoData.subtitle}</div>
+                          <div style={{ fontSize: 'calc(var(--admin-fs) - 5px)', fontWeight: 700, color: promoData.themeColor, marginBottom: '6px' }}>{promoData.subtitle}</div>
                         )}
-                        <p style={{ margin: '0 0 12px 0', fontSize: '10px', color: '#64748b', lineHeight: '1.3' }}>{promoData.description || 'Description message body'}</p>
-                        <button style={{ width: 'fit-content', background: promoData.themeColor, color: '#fff', border: 'none', padding: '5px 12px', borderRadius: '6px', fontSize: '10px', fontWeight: 'bold' }}>
+                        <p style={{ margin: '0 0 12px 0', fontSize: 'calc(var(--admin-fs) - 5px)', color: '#64748b', lineHeight: '1.3' }}>{promoData.description || 'Description message body'}</p>
+                        <button style={{ width: 'fit-content', background: promoData.themeColor, color: '#fff', border: 'none', padding: '5px 12px', borderRadius: '6px', fontSize: 'calc(var(--admin-fs) - 5px)', fontWeight: 'bold' }}>
                           {promoData.buttonText || 'Button Text'}
                         </button>
                       </div>
@@ -817,12 +817,12 @@ export default function CmsPage() {
                       boxSizing: 'border-box',
                       color: '#fff'
                     }}>
-                      <span style={{ fontSize: '9px', width: 'fit-content', background: 'rgba(255,255,255,0.2)', padding: '2px 6px', borderRadius: '10px', fontWeight: 'bold', marginBottom: '6px' }}>
+                      <span style={{ fontSize: 'calc(var(--admin-fs) - 6px)', width: 'fit-content', background: 'rgba(255,255,255,0.2)', padding: '2px 6px', borderRadius: '10px', fontWeight: 'bold', marginBottom: '6px' }}>
                         {promoData.popupType === 'festival' ? '🎆' : promoData.popupType === 'discount' ? '🏷️' : promoData.popupType === 'new_product' ? '🆕' : '📢'} {promoData.subtitle || 'Promo'}
                       </span>
-                      <h5 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: 800 }}>{promoData.title || 'Title Headline'}</h5>
-                      <p style={{ margin: '0 0 12px 0', fontSize: '10px', color: 'rgba(255,255,255,0.8)', lineHeight: '1.3' }}>{promoData.description || 'Description message body'}</p>
-                      <button style={{ width: 'fit-content', background: '#fff', color: '#0f172a', border: 'none', padding: '6px 14px', borderRadius: '6px', fontSize: '10px', fontWeight: 'bold' }}>
+                      <h5 style={{ margin: '0 0 4px 0', fontSize: 'calc(var(--admin-fs) - 1px)', fontWeight: 800 }}>{promoData.title || 'Title Headline'}</h5>
+                      <p style={{ margin: '0 0 12px 0', fontSize: 'calc(var(--admin-fs) - 5px)', color: 'rgba(255,255,255,0.8)', lineHeight: '1.3' }}>{promoData.description || 'Description message body'}</p>
+                      <button style={{ width: 'fit-content', background: '#fff', color: '#0f172a', border: 'none', padding: '6px 14px', borderRadius: '6px', fontSize: 'calc(var(--admin-fs) - 5px)', fontWeight: 'bold' }}>
                         {promoData.buttonText || 'Button Text'}
                       </button>
                     </div>
@@ -831,15 +831,15 @@ export default function CmsPage() {
                   {/* Text-Only Preview Card */}
                   {promoData.template === 'text_only' && (
                     <div style={{ background: '#fff', borderRadius: '16px', boxShadow: '0 10px 25px rgba(0,0,0,0.1)', border: '1px solid #e2e8f0', borderLeft: `5px solid ${promoData.themeColor}`, width: '100%', maxWidth: '260px', padding: '16px' }}>
-                      <span style={{ fontSize: '9px', fontWeight: 800, color: promoData.themeColor, textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '3px', marginBottom: '6px' }}>
+                      <span style={{ fontSize: 'calc(var(--admin-fs) - 6px)', fontWeight: 800, color: promoData.themeColor, textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '3px', marginBottom: '6px' }}>
                         {promoData.popupType === 'festival' ? '🎆' : promoData.popupType === 'discount' ? '🏷️' : promoData.popupType === 'new_product' ? '🆕' : '📢'} Announcement
                       </span>
-                      <h5 style={{ margin: '0 0 4px 0', fontSize: '13px', fontWeight: 800, color: '#0f172a' }}>{promoData.title || 'Title Headline'}</h5>
+                      <h5 style={{ margin: '0 0 4px 0', fontSize: 'calc(var(--admin-fs) - 2px)', fontWeight: 800, color: '#0f172a' }}>{promoData.title || 'Title Headline'}</h5>
                       {promoData.subtitle && (
-                        <div style={{ fontSize: '10px', fontWeight: 700, color: '#64748b', marginBottom: '6px' }}>{promoData.subtitle}</div>
+                        <div style={{ fontSize: 'calc(var(--admin-fs) - 5px)', fontWeight: 700, color: '#64748b', marginBottom: '6px' }}>{promoData.subtitle}</div>
                       )}
-                      <p style={{ margin: '0 0 16px 0', fontSize: '10.5px', color: '#475569', lineHeight: '1.4' }}>{promoData.description || 'Description message body'}</p>
-                      <button style={{ background: promoData.themeColor, color: '#fff', border: 'none', padding: '5px 12px', borderRadius: '6px', fontSize: '10px', fontWeight: 'bold' }}>
+                      <p style={{ margin: '0 0 16px 0', fontSize: 'calc(var(--admin-fs) - 4.5px)', color: '#475569', lineHeight: '1.4' }}>{promoData.description || 'Description message body'}</p>
+                      <button style={{ background: promoData.themeColor, color: '#fff', border: 'none', padding: '5px 12px', borderRadius: '6px', fontSize: 'calc(var(--admin-fs) - 5px)', fontWeight: 'bold' }}>
                         {promoData.buttonText || 'Button Text'}
                       </button>
                     </div>
@@ -851,7 +851,7 @@ export default function CmsPage() {
                       {promoData.customHtml ? (
                         <div dangerouslySetInnerHTML={{ __html: promoData.customHtml }} />
                       ) : (
-                        <div style={{ padding: '24px', textAlign: 'center', color: '#94a3b8', fontSize: '12px' }}>
+                        <div style={{ padding: '24px', textAlign: 'center', color: '#94a3b8', fontSize: 'calc(var(--admin-fs) - 3px)' }}>
                           Preset or custom code not loaded yet.
                         </div>
                       )}
@@ -867,7 +867,7 @@ export default function CmsPage() {
           {tab === 'about-us' && (
             <div style={{ background: '#fff', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 20px rgba(15,23,42,0.05)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-                <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 700, color: '#111827' }}>About Us Page</h3>
+                <h3 style={{ margin: 0, fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 700, color: '#111827' }}>About Us Page</h3>
                 <button onClick={() => savePageContent('about-us')} disabled={savingKey === 'about-us'}
                   style={{ ...btnPrimary, opacity: savingKey === 'about-us' ? 0.6 : 1 }}>
                   {savingKey === 'about-us' ? 'Saving...' : 'Save About Us'}
@@ -894,7 +894,7 @@ export default function CmsPage() {
           {tab === 'company-profile' && (
             <div style={{ background: '#fff', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 20px rgba(15,23,42,0.05)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-                <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 700, color: '#111827' }}>Company Profile Page</h3>
+                <h3 style={{ margin: 0, fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 700, color: '#111827' }}>Company Profile Page</h3>
                 <button onClick={() => savePageContent('company-profile')} disabled={savingKey === 'company-profile'}
                   style={{ ...btnPrimary, opacity: savingKey === 'company-profile' ? 0.6 : 1 }}>
                   {savingKey === 'company-profile' ? 'Saving...' : 'Save Company Profile'}

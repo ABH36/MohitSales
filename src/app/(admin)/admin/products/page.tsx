@@ -589,7 +589,7 @@ function AdminProductsPageInner() {
                       </td>
                       <td>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
-                          <span className="prod-slug" title={p.slug} style={{ fontSize: '12px', color: '#718096', flex: 1 }}>{p.slug}</span>
+                          <span className="prod-slug" title={p.slug} style={{ fontSize: 'calc(var(--admin-fs) - 3px)', color: '#718096', flex: 1 }}>{p.slug}</span>
                           <a href={`/${p.slug}`} target="_blank" rel="noreferrer" style={{ fontSize: 11, color: '#f7931e', textDecoration: 'none', fontWeight: 600, flexShrink: 0, whiteSpace: 'nowrap' }} title="View on site">
                             ↗ View
                           </a>
@@ -610,7 +610,7 @@ function AdminProductsPageInner() {
                             padding: '4px 6px',
                             border: '1px solid #cbd5e1',
                             borderRadius: '6px',
-                            fontSize: '12px',
+                            fontSize: 'calc(var(--admin-fs) - 3px)',
                             textAlign: 'center',
                             fontWeight: 600,
                             color: '#1e2e5e',
@@ -634,7 +634,7 @@ function AdminProductsPageInner() {
                       <td>
                         <div className="admin-table-actions">
                           {isReadOnly ? (
-                            <span style={{ fontSize: '12px', color: '#718096', fontStyle: 'italic' }}>Read Only</span>
+                            <span style={{ fontSize: 'calc(var(--admin-fs) - 3px)', color: '#718096', fontStyle: 'italic' }}>Read Only</span>
                           ) : (
                             <>
                               <button className="admin-btn admin-btn-outline admin-btn-sm" onClick={() => handleOpenEdit(p)}>Edit</button>
@@ -787,10 +787,10 @@ function AdminProductsPageInner() {
                         </div>
                         {pdfFiles.length > 0 && (
                           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                            <span style={{ fontSize: '11px', fontWeight: 600, color: '#718096', whiteSpace: 'nowrap' }}>Select Existing PDF:</span>
+                            <span style={{ fontSize: 'calc(var(--admin-fs) - 4px)', fontWeight: 600, color: '#718096', whiteSpace: 'nowrap' }}>Select Existing PDF:</span>
                             <select
                               className="admin-form-select"
-                              style={{ flex: 1, fontSize: '12px', padding: '6px' }}
+                              style={{ flex: 1, fontSize: 'calc(var(--admin-fs) - 3px)', padding: '6px' }}
                               value={pdfFiles.some(p => p.url === form.datasheetLink) ? form.datasheetLink : ''}
                               onChange={(e) => setForm({ ...form, datasheetLink: e.target.value })}
                             >
@@ -1074,10 +1074,10 @@ function AdminProductsPageInner() {
           margin-bottom: 14px;
         }
         .form-section-icon {
-          font-size: 18px;
+          font-size: calc(var(--admin-fs) + 3px);
         }
         .form-section-header h4 {
-          font-size: 13px;
+          font-size: calc(var(--admin-fs) - 2px);
           font-weight: 700;
           color: #1e2e5e;
           margin: 0;
@@ -1096,7 +1096,7 @@ function AdminProductsPageInner() {
           padding: 12px;
         }
         .category-cascade-title {
-          font-size: 11px;
+          font-size: calc(var(--admin-fs) - 4px);
           font-weight: 700;
           color: #718096;
           text-transform: uppercase;
@@ -1105,7 +1105,7 @@ function AdminProductsPageInner() {
         }
         .admin-form-help {
           display: block;
-          font-size: 11px;
+          font-size: calc(var(--admin-fs) - 4px);
           color: #718096;
           margin-top: 4px;
         }
@@ -1128,7 +1128,7 @@ function AdminProductsPageInner() {
           background: none;
           border: none;
           padding: 4px 10px;
-          font-size: 12px;
+          font-size: calc(var(--admin-fs) - 3px);
           font-weight: 600;
           color: #718096;
           cursor: pointer;
@@ -1153,7 +1153,7 @@ function AdminProductsPageInner() {
           color: #334155;
           padding: 4px 10px;
           border-radius: 20px;
-          font-size: 11px;
+          font-size: calc(var(--admin-fs) - 4px);
           font-weight: 500;
           cursor: pointer;
           display: inline-flex;
@@ -1180,7 +1180,7 @@ function AdminProductsPageInner() {
           margin-bottom: 8px;
         }
         .admin-features-empty {
-          font-size: 12px;
+          font-size: calc(var(--admin-fs) - 3px);
           color: #94a3b8;
           text-align: center;
           padding: 16px;
@@ -1213,11 +1213,11 @@ function AdminProductsPageInner() {
         .feature-drag-handle {
           color: #94a3b8;
           cursor: grab;
-          font-size: 14px;
+          font-size: calc(var(--admin-fs) - 1px);
           user-select: none;
         }
         .feature-index {
-          font-size: 12px;
+          font-size: calc(var(--admin-fs) - 3px);
           font-weight: 600;
           color: #64748b;
           min-width: 20px;
@@ -1227,7 +1227,7 @@ function AdminProductsPageInner() {
           border: none !important;
           outline: none !important;
           padding: 4px 0 !important;
-          font-size: 13px !important;
+          font-size: calc(var(--admin-fs) - 2px) !important;
           background: transparent !important;
           height: auto !important;
           margin: 0 !important;
@@ -1251,7 +1251,7 @@ function AdminProductsPageInner() {
           background: #f1f5f9;
           color: #64748b;
           border-radius: 4px;
-          font-size: 10px;
+          font-size: calc(var(--admin-fs) - 5px);
           cursor: pointer;
           transition: all 0.15s;
         }
@@ -1266,14 +1266,14 @@ function AdminProductsPageInner() {
         .feature-action-btn.delete-btn {
           background: #fee2e2;
           color: #ef4444;
-          font-size: 11px;
+          font-size: calc(var(--admin-fs) - 4px);
         }
         .feature-action-btn.delete-btn:hover {
           background: #fecaca;
           color: #dc2626;
         }
         .add-feature-btn {
-          font-size: 13px !important;
+          font-size: calc(var(--admin-fs) - 2px) !important;
           padding: 8px 16px !important;
           font-weight: 500 !important;
           background: #ffffff !important;
@@ -1301,7 +1301,7 @@ function AdminProductsPageInner() {
         }
         .admin-products-pager .pager-btn {
           padding: 7px 14px;
-          font-size: 13px;
+          font-size: calc(var(--admin-fs) - 2px);
           font-weight: 600;
           color: #334155;
           background: #ffffff;
@@ -1321,7 +1321,7 @@ function AdminProductsPageInner() {
         }
         .admin-products-pager .pager-info {
           padding: 0 10px;
-          font-size: 13px;
+          font-size: calc(var(--admin-fs) - 2px);
           color: #64748b;
           white-space: nowrap;
         }
