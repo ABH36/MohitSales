@@ -17,10 +17,10 @@
   --admin-sidebar: rgba(15, 23, 42, 0.85); /* Dark Glass */
   --admin-sidebar-blur: blur(20px);
   
-  --admin-card: rgba(255, 255, 255, 0.75); /* White Glass */
+  --admin-card: #ffffff; /* Opaque white so cards pop on the red page bg */
   --admin-card-hover: rgba(255, 255, 255, 0.95);
   --admin-border: rgba(255, 255, 255, 0.5); /* Semi-transparent border */
-  --admin-glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  --admin-glass-shadow: 0 10px 30px rgba(138, 22, 22, 0.14);
   
   /* Typography */
   --admin-text: #1E293B;
@@ -138,7 +138,7 @@
 .blob-1 {
   width: 600px;
   height: 600px;
-  background: #E0E7FF;
+  background: #F8D7D7;
   top: -100px;
   left: -100px;
   animation-delay: 0s;
@@ -147,7 +147,7 @@
 .blob-2 {
   width: 500px;
   height: 500px;
-  background: #EDE9FE;
+  background: #FADEDE;
   bottom: -150px;
   right: -50px;
   animation-delay: -5s;
@@ -156,7 +156,7 @@
 .blob-3 {
   width: 400px;
   height: 400px;
-  background: #DBEAFE;
+  background: #F6D6D6;
   top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -815,6 +815,7 @@
   padding: 28px;
   flex: 1;
   min-width: 0; /* prevent overflow */
+  background: linear-gradient(90deg, #f6cccc 0%, #fbe3e3 50%, #fef6f6 100%);
 }
 
 /* ─── Welcome Banner ─────────────────────────────── */
