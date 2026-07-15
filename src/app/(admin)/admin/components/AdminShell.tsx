@@ -449,6 +449,7 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                           <div className="admin-nav-item-row">
                             <Link
                               href="/admin/settings"
+                              scroll={false}
                               className={`admin-nav-link ${onSettings ? 'active' : ''}`}
                               onMouseEnter={handlePrefetch}
                             >
@@ -471,6 +472,7 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                                 <Link
                                   key={t.key}
                                   href={t.key === 'site' ? '/admin/settings' : `/admin/settings?tab=${t.key}`}
+                                  scroll={false}
                                   className={`admin-nav-sublink depth-0 ${onSettings && activeSettingsTab === t.key ? 'active' : ''}`}
                                 >
                                   {t.label}
@@ -490,6 +492,7 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                           <div className="admin-nav-item-row">
                             <Link
                               href="/admin/seo"
+                              scroll={false}
                               className={`admin-nav-link ${onSeo ? 'active' : ''}`}
                               onMouseEnter={handlePrefetch}
                             >
@@ -512,6 +515,7 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                                 <Link
                                   key={t.key}
                                   href={t.key === 'webmaster' ? '/admin/seo' : `/admin/seo?tab=${t.key}`}
+                                  scroll={false}
                                   className={`admin-nav-sublink depth-0 ${onSeo && activeSeoTab === t.key ? 'active' : ''}`}
                                 >
                                   {t.label}
@@ -531,6 +535,7 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                           <div className="admin-nav-item-row">
                             <Link
                               href="/admin/cms"
+                              scroll={false}
                               className={`admin-nav-link ${onCms ? 'active' : ''}`}
                               onMouseEnter={handlePrefetch}
                             >
@@ -553,6 +558,7 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                                 <Link
                                   key={t.key}
                                   href={t.key === 'banners' ? '/admin/cms' : `/admin/cms?tab=${t.key}`}
+                                  scroll={false}
                                   className={`admin-nav-sublink depth-0 ${onCms && activeCmsTab === t.key ? 'active' : ''}`}
                                 >
                                   {t.label}
@@ -572,6 +578,7 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                           <div className="admin-nav-item-row">
                             <Link
                               href="/admin/analytics"
+                              scroll={false}
                               className={`admin-nav-link ${onAnalytics ? 'active' : ''}`}
                               onMouseEnter={handlePrefetch}
                             >
@@ -592,12 +599,14 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                             <div className="admin-nav-sublist">
                               <Link
                                 href="/admin/analytics"
+                                scroll={false}
                                 className={`admin-nav-sublink depth-0 ${onAnalytics && activeAnalyticsTab === 'database' ? 'active' : ''}`}
                               >
                                 Database Metrics
                               </Link>
                               <Link
                                 href="/admin/analytics?tab=google"
+                                scroll={false}
                                 className={`admin-nav-sublink depth-0 ${onAnalytics && activeAnalyticsTab === 'google' ? 'active' : ''}`}
                               >
                                 Google Analytics
@@ -616,6 +625,7 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                           <div className="admin-nav-item-row">
                             <Link
                               href="/admin/products"
+                              scroll={false}
                               className={`admin-nav-link ${onProducts ? 'active' : ''}`}
                               onMouseEnter={handlePrefetch}
                             >
@@ -636,6 +646,7 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                             <div className="admin-nav-sublist">
                               <Link
                                 href="/admin/products"
+                                scroll={false}
                                 className={`admin-nav-sublink depth-0 ${onProducts && !activeCategory ? 'active' : ''}`}
                               >
                                 All Products
@@ -644,6 +655,7 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                                 <Link
                                   key={cat.id}
                                   href={`/admin/products?category=${cat.id}`}
+                                  scroll={false}
                                   className={`admin-nav-sublink depth-${cat.depth} ${onProducts && activeCategory === cat.id ? 'active' : ''}`}
                                   title={cat.label}
                                 >
@@ -660,6 +672,7 @@ export default function AdminShell({ children, pageTitle }: AdminShellProps) {
                       <Link
                         key={item.href}
                         href={item.href}
+                        scroll={false}
                         className={`admin-nav-link ${pathname === item.href ? 'active' : ''}`}
                         onMouseEnter={handlePrefetch}
                       >
