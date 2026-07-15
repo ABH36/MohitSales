@@ -212,7 +212,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
+  background: linear-gradient(180deg, #0b1324 0%, #16213a 100%);
 }
 
 .admin-sidebar-logo-large {
@@ -248,7 +248,7 @@
   font-size: calc(var(--admin-fs-sm) - 1.5px);
   text-transform: uppercase;
   letter-spacing: 1.6px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.82);
   padding: 0 14px;
   margin-bottom: 14px;
   font-weight: 700;
@@ -260,7 +260,7 @@
   gap: 14px;
   padding: 12px 16px;
   border-radius: 10px;
-  color: rgba(255, 255, 255, 0.7);
+  color: #ffffff;
   text-decoration: none;
   font-size: calc(var(--admin-fs) + 1px);
   font-weight: 600;
@@ -318,7 +318,7 @@
   border-radius: 9px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(255, 255, 255, 0.92);
   flex-shrink: 0;
   transition: all 0.2s ease;
 }
@@ -378,7 +378,7 @@
   display: block;
   padding: 9px 14px;
   border-radius: 8px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
   font-size: calc(var(--admin-fs) - 1px);
   font-weight: 500;
@@ -413,7 +413,7 @@
 /* Top-level categories (folders) read brighter and get extra space above so
    each folder + its indented sub-categories reads as one clear group. */
 .admin-nav-sublink.depth-0 {
-  color: rgba(255, 255, 255, 0.85);
+  color: #ffffff;
   font-weight: 600;
   margin-top: 14px;
 }
