@@ -821,19 +821,22 @@
 /* ─── Welcome Banner ─────────────────────────────── */
 .admin-welcome-banner {
   position: relative;
-  background: radial-gradient(circle at 80% 20%, rgba(255, 94, 20, 0.15), transparent 40%),
-              radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.15), transparent 40%),
+  background: radial-gradient(circle at 88% 15%, rgba(247, 147, 30, 0.18), transparent 42%),
+              radial-gradient(circle at 12% 85%, rgba(59, 130, 246, 0.18), transparent 42%),
               linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  border-radius: 20px;
-  padding: 48px 32px;
-  margin-bottom: 28px;
+  border-radius: 18px;
+  padding: 22px 32px;
+  margin-bottom: 24px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  transition: border-color 0.3s ease;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  animation: dashFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .admin-welcome-banner::before {
@@ -870,31 +873,68 @@
 }
 
 .admin-welcome-banner:hover {
-  border-color: rgba(255, 94, 20, 0.2);
+  border-color: rgba(247, 147, 30, 0.25);
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.34);
 }
 
-.admin-welcome-banner:hover::after {
-  animation: bannerShimmer 1.5s ease-in-out infinite;
+/* Shimmer sweeps on its own for an always-alive premium feel */
+.admin-welcome-banner::after {
+  animation: bannerShimmer 5.5s ease-in-out 1s infinite;
 }
 
 @keyframes bannerShimmer {
-  100% {
-    left: 150%;
-  }
+  0% { left: -100%; }
+  55%, 100% { left: 150%; }
+}
+
+/* Greeting text (left side of the compact banner) */
+.admin-welcome-text { z-index: 2; min-width: 0; }
+.admin-welcome-title {
+  margin: 0;
+  font-size: calc(var(--admin-fs-title) + 2px);
+  font-weight: 800;
+  color: #f8fafc;
+  letter-spacing: 0.2px;
+}
+.admin-welcome-wave {
+  display: inline-block;
+  transform-origin: 70% 70%;
+  animation: waveHand 2.4s ease-in-out 0.6s infinite;
+}
+@keyframes waveHand {
+  0%, 60%, 100% { transform: rotate(0deg); }
+  10%, 30% { transform: rotate(14deg); }
+  20%, 40% { transform: rotate(-8deg); }
+}
+.admin-welcome-sub {
+  margin: 6px 0 0;
+  font-size: calc(var(--admin-fs) - 0.5px);
+  color: rgba(226, 232, 240, 0.7);
+  font-weight: 500;
 }
 
 .admin-welcome-logo {
-  height: 110px;
+  height: 62px;
   width: auto;
   object-fit: contain;
   max-width: 100%;
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.4));
   transition: transform 0.3s ease;
   z-index: 2;
+  animation: logoFloat 4s ease-in-out infinite;
 }
-
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
 .admin-welcome-logo:hover {
   transform: scale(1.05);
+}
+
+/* Shared dashboard entrance */
+@keyframes dashFadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ─── Stats Cards ────────────────────────────────── */
@@ -980,6 +1020,32 @@
 .admin-stat-card-clickable:hover .admin-stat-go {
   opacity: 1;
   transform: translateX(0);
+}
+
+/* Staggered entrance for the dashboard stat cards + recent inquiries panel */
+.admin-stats-grid .admin-stat-link {
+  animation: dashFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.admin-stats-grid .admin-stat-link:nth-child(1) { animation-delay: 0.05s; }
+.admin-stats-grid .admin-stat-link:nth-child(2) { animation-delay: 0.11s; }
+.admin-stats-grid .admin-stat-link:nth-child(3) { animation-delay: 0.17s; }
+.admin-stats-grid .admin-stat-link:nth-child(4) { animation-delay: 0.23s; }
+.admin-stats-grid .admin-stat-link:nth-child(5) { animation-delay: 0.29s; }
+.admin-stats-grid .admin-stat-link:nth-child(6) { animation-delay: 0.35s; }
+.admin-stats-grid + .admin-table-wrapper {
+  animation: dashFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.42s both;
+}
+
+/* Accessibility: honor reduced-motion — drop the looping/entrance animations */
+@media (prefers-reduced-motion: reduce) {
+  .admin-welcome-banner,
+  .admin-welcome-banner::after,
+  .admin-welcome-logo,
+  .admin-welcome-wave,
+  .admin-stats-grid .admin-stat-link,
+  .admin-stats-grid + .admin-table-wrapper {
+    animation: none !important;
+  }
 }
 
 /* ─── Dashboard: clickable inquiry rows ───────────── */
