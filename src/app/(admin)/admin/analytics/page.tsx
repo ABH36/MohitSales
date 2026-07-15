@@ -817,80 +817,6 @@ export default function AdminAnalyticsPage() {
 
       {activeTab === 'google' && (
         <div className="google-analytics-container" style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
-          {/* Status Banner: Loading / Error / Live / Demo */}
-          {gaLoading ? (
-            <div style={{
-              background: '#f8fafc',
-              border: '1px solid #e2e8f0',
-              borderRadius: '12px',
-              padding: '14px 20px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              fontSize: 'calc(var(--admin-fs) - 2px)',
-              color: '#64748b',
-            }}>
-              <div style={{ width: '18px', height: '18px', borderRadius: '50%', border: '2px solid #e2e8f0', borderTopColor: '#3b82f6', animation: 'adminSpinner 0.8s linear infinite', flexShrink: 0 }} />
-              <span>Fetching live Google Analytics data...</span>
-            </div>
-          ) : gaError ? (
-            <div style={{
-              background: 'rgba(239, 68, 68, 0.08)',
-              border: '1px solid rgba(239, 68, 68, 0.2)',
-              borderRadius: '12px',
-              padding: '14px 20px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: '12px',
-              fontSize: 'calc(var(--admin-fs) - 2px)',
-              color: '#dc2626',
-            }}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ fontSize: 'calc(var(--admin-fs) + 3px)' }}>⚠️</span>
-                <span><strong>GA4 API Error:</strong> {gaError} — Showing demo data below.</span>
-              </span>
-              <button onClick={fetchGoogleAnalytics} style={{ background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.25)', color: '#fca5a5', padding: '4px 12px', borderRadius: '8px', fontSize: 'calc(var(--admin-fs) - 4px)', cursor: 'pointer', fontWeight: 600 }}>Retry</button>
-            </div>
-          ) : gaData && !gaData.isDemo ? (
-            <div style={{
-              background: 'rgba(16, 185, 129, 0.08)',
-              border: '1px solid rgba(16, 185, 129, 0.2)',
-              borderRadius: '12px',
-              padding: '14px 20px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: '12px',
-              fontSize: 'calc(var(--admin-fs) - 2px)',
-              color: '#6ee7b7',
-            }}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span className="live-dot" />
-                <span><strong>Live GA4 Data</strong> — All metrics below are fetched in real-time from your Google Analytics property via the Data API.</span>
-              </span>
-              <button onClick={fetchGoogleAnalytics} style={{ background: 'rgba(16,185,129,0.15)', border: '1px solid rgba(16,185,129,0.25)', color: '#6ee7b7', padding: '4px 12px', borderRadius: '8px', fontSize: 'calc(var(--admin-fs) - 4px)', cursor: 'pointer', fontWeight: 600 }}>🔄 Refresh</button>
-            </div>
-          ) : (
-            <div style={{
-              background: 'rgba(37, 99, 235, 0.08)',
-              border: '1px solid rgba(37, 99, 235, 0.2)',
-              borderRadius: '12px',
-              padding: '14px 20px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: '12px',
-              fontSize: 'calc(var(--admin-fs) - 2px)',
-              color: '#93c5fd',
-            }}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ fontSize: 'calc(var(--admin-fs) + 3px)' }}>ℹ️</span>
-                <span><strong>Demo Preview Mode</strong> — Add <code style={{ background: 'rgba(0,0,0,0.3)', padding: '1px 6px', borderRadius: '4px' }}>GA_PROPERTY_ID</code>, <code style={{ background: 'rgba(0,0,0,0.3)', padding: '1px 6px', borderRadius: '4px' }}>GA_CLIENT_EMAIL</code>, and <code style={{ background: 'rgba(0,0,0,0.3)', padding: '1px 6px', borderRadius: '4px' }}>GA_PRIVATE_KEY</code> to your <code style={{ background: 'rgba(0,0,0,0.3)', padding: '1px 6px', borderRadius: '4px' }}>.env</code> file to show real data.</span>
-              </span>
-              <button onClick={fetchGoogleAnalytics} style={{ background: 'rgba(37,99,235,0.15)', border: '1px solid rgba(37,99,235,0.25)', color: '#93c5fd', padding: '4px 12px', borderRadius: '8px', fontSize: 'calc(var(--admin-fs) - 4px)', cursor: 'pointer', fontWeight: 600 }}>🔄 Refresh</button>
-            </div>
-          )}
           {/* Header Stream Info Bar */}
           <div className="ga-stream-info-card glass-card" style={{
             padding: '24px',
@@ -947,6 +873,19 @@ export default function AdminAnalyticsPage() {
                     <span style={{ marginRight: '8px' }}>ℹ️</span>
                     Demo Mode — add GA API keys
                   </div>
+                )}
+                <button
+                  onClick={fetchGoogleAnalytics}
+                  disabled={gaLoading}
+                  title="Refresh Google Analytics data"
+                  style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#eff6ff', border: '1px solid #dbeafe', color: '#2563eb', padding: '10px 16px', borderRadius: '12px', fontSize: 'calc(var(--admin-fs) - 2px)', fontWeight: 600, cursor: gaLoading ? 'default' : 'pointer', opacity: gaLoading ? 0.6 : 1 }}
+                >
+                  <span style={{ display: 'inline-block', animation: gaLoading ? 'adminSpinner 0.8s linear infinite' : 'none' }}>🔄</span> {gaLoading ? 'Refreshing…' : 'Refresh'}
+                </button>
+                {gaError && (
+                  <span title={gaError} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', color: '#dc2626', padding: '10px 14px', borderRadius: '12px', fontSize: 'calc(var(--admin-fs) - 3px)', fontWeight: 600 }}>
+                    ⚠️ API error — showing demo
+                  </span>
                 )}
               </div>
             </div>
