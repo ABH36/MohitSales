@@ -554,7 +554,7 @@ export default function AdminAnalyticsPage() {
                           color: '#fff',
                           padding: '8px 12px',
                           borderRadius: '8px',
-                          fontSize: '11px',
+                          fontSize: 'calc(var(--admin-fs) - 4px)',
                           boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
                           pointerEvents: 'none',
                           whiteSpace: 'nowrap',
@@ -625,15 +625,15 @@ export default function AdminAnalyticsPage() {
                       <table className="alerts-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
                           <tr style={{ textAlign: 'left', borderBottom: '1px solid #e2e8f0' }}>
-                            <th style={{ padding: '8px 4px', fontSize: '11px', color: '#64748b', textTransform: 'uppercase' }}>Product</th>
-                            <th style={{ padding: '8px 4px', fontSize: '11px', color: '#64748b', textTransform: 'uppercase', textAlign: 'center' }}>Stock</th>
-                            <th style={{ padding: '8px 4px', fontSize: '11px', color: '#64748b', textTransform: 'uppercase', textAlign: 'right' }}>Actions</th>
+                            <th style={{ padding: '8px 4px', fontSize: 'calc(var(--admin-fs) - 4px)', color: '#64748b', textTransform: 'uppercase' }}>Product</th>
+                            <th style={{ padding: '8px 4px', fontSize: 'calc(var(--admin-fs) - 4px)', color: '#64748b', textTransform: 'uppercase', textAlign: 'center' }}>Stock</th>
+                            <th style={{ padding: '8px 4px', fontSize: 'calc(var(--admin-fs) - 4px)', color: '#64748b', textTransform: 'uppercase', textAlign: 'right' }}>Actions</th>
                           </tr>
                         </thead>
                         <tbody>
                           {data.inventory.alerts.map(prod => (
                             <tr key={prod.id} style={{ borderBottom: '1px solid #edf2f7' }}>
-                              <td style={{ padding: '10px 4px', fontSize: '13px', fontWeight: 600, maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              <td style={{ padding: '10px 4px', fontSize: 'calc(var(--admin-fs) - 2px)', fontWeight: 600, maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                 {prod.title}
                               </td>
                               <td style={{ padding: '10px 4px', textAlign: 'center' }}>
@@ -642,7 +642,7 @@ export default function AdminAnalyticsPage() {
                                 </span>
                               </td>
                               <td style={{ padding: '10px 4px', textAlign: 'right' }}>
-                                <a href={`/admin/products?search=${encodeURIComponent(prod.title)}`} className="admin-btn admin-btn-outline admin-btn-sm" style={{ padding: '4px 8px', fontSize: '11px' }}>
+                                <a href={`/admin/products?search=${encodeURIComponent(prod.title)}`} className="admin-btn admin-btn-outline admin-btn-sm" style={{ padding: '4px 8px', fontSize: 'calc(var(--admin-fs) - 4px)' }}>
                                   Edit Stock
                                 </a>
                               </td>
@@ -668,18 +668,18 @@ export default function AdminAnalyticsPage() {
                         const viewPct = Math.round((blog.views / maxViews) * 100);
                         return (
                           <div key={blog.id} className="blog-views-row" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                            <div style={{ width: '24px', height: '24px', background: '#f1f5f9', borderRadius: '50%', display: 'flex', alignItems: 'center', fontSize: '11px', fontWeight: 'bold', color: '#475569', flexShrink: 0, justifyContent: 'center' }}>
+                            <div style={{ width: '24px', height: '24px', background: '#f1f5f9', borderRadius: '50%', display: 'flex', alignItems: 'center', fontSize: 'calc(var(--admin-fs) - 4px)', fontWeight: 'bold', color: '#475569', flexShrink: 0, justifyContent: 'center' }}>
                               {index + 1}
                             </div>
                             <div style={{ flex: 1, minWidth: 0 }}>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2px', fontSize: '13px' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2px', fontSize: 'calc(var(--admin-fs) - 2px)' }}>
                                 <span style={{ fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={blog.title}>
                                   {blog.title}
                                 </span>
                                 <span style={{ fontWeight: 700, color: '#8b5cf6', flexShrink: 0, marginLeft: '6px' }}>{blog.views.toLocaleString()} views</span>
                               </div>
                               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <span style={{ fontSize: '10px', color: '#64748b', background: '#f8fafc', padding: '1px 6px', borderRadius: '4px', border: '1px solid #cbd5e1' }}>
+                                <span style={{ fontSize: 'calc(var(--admin-fs) - 5px)', color: '#64748b', background: '#f8fafc', padding: '1px 6px', borderRadius: '4px', border: '1px solid #cbd5e1' }}>
                                   {blog.category}
                                 </span>
                                 <div style={{ flex: 1, height: '4px', background: '#f1f5f9', borderRadius: '2px' }}>
@@ -707,30 +707,30 @@ export default function AdminAnalyticsPage() {
                     data.heaviestMedia.map((m, idx) => (
                       <div key={m.id} className="heavy-media-card" style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '14px', display: 'flex', flexDirection: 'column', gap: '8px', position: 'relative' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                          <span className="admin-badge admin-badge-danger" style={{ fontSize: '10px', padding: '2px 8px', fontWeight: 'bold' }}>
+                          <span className="admin-badge admin-badge-danger" style={{ fontSize: 'calc(var(--admin-fs) - 5px)', padding: '2px 8px', fontWeight: 'bold' }}>
                             Rank #{idx + 1}
                           </span>
-                          <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#e53e3e' }}>
+                          <span style={{ fontSize: 'calc(var(--admin-fs) - 3px)', fontWeight: 'bold', color: '#e53e3e' }}>
                             {formatBytes(m.size)}
                           </span>
                         </div>
 
                         <div style={{ minWidth: 0, marginTop: '4px' }}>
-                          <p style={{ fontSize: '13px', fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', margin: 0, color: '#1e293b' }} title={m.filename}>
+                          <p style={{ fontSize: 'calc(var(--admin-fs) - 2px)', fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', margin: 0, color: '#1e293b' }} title={m.filename}>
                             {m.filename}
                           </p>
-                          <span style={{ fontSize: '11px', color: '#64748b' }}>
+                          <span style={{ fontSize: 'calc(var(--admin-fs) - 4px)', color: '#64748b' }}>
                             MIME: {m.mimeType}
                           </span>
                         </div>
 
                         <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
-                          <a href={m.url} target="_blank" rel="noreferrer" className="admin-btn admin-btn-outline admin-btn-sm" style={{ padding: '6px 12px', fontSize: '11px', flex: 1, background: '#fff' }}>
+                          <a href={m.url} target="_blank" rel="noreferrer" className="admin-btn admin-btn-outline admin-btn-sm" style={{ padding: '6px 12px', fontSize: 'calc(var(--admin-fs) - 4px)', flex: 1, background: '#fff' }}>
                             🔗 Open File
                           </a>
                           <button
                             className="admin-btn admin-btn-outline admin-btn-sm"
-                            style={{ padding: '6px 12px', fontSize: '11px', flex: 1, background: '#fff' }}
+                            style={{ padding: '6px 12px', fontSize: 'calc(var(--admin-fs) - 4px)', flex: 1, background: '#fff' }}
                             onClick={() => {
                               navigator.clipboard.writeText(m.url);
                               alert('URL copied to clipboard!');
@@ -778,7 +778,7 @@ export default function AdminAnalyticsPage() {
                   {data.inquiryLocales.length > 0 && (
                     <div style={{ marginTop: '18px', paddingTop: '14px', borderTop: '1px solid #edf2f7', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                       {data.inquiryLocales.map((l, idx) => (
-                        <span key={idx} style={{ fontSize: '11px', color: '#475569', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '20px', padding: '3px 10px' }}>
+                        <span key={idx} style={{ fontSize: 'calc(var(--admin-fs) - 4px)', color: '#475569', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '20px', padding: '3px 10px' }}>
                           🌐 {l.locale.toUpperCase()}: <b>{l.count}</b>
                         </span>
                       ))}
@@ -797,12 +797,12 @@ export default function AdminAnalyticsPage() {
                       data.mediaTypes.map((m, idx) => (
                         <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderBottom: idx < data.mediaTypes.length - 1 ? '1px solid #f1f5f9' : 'none' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
-                            <span style={{ fontSize: '16px' }}>{m.type.startsWith('image') ? '🖼️' : m.type.includes('pdf') ? '📄' : '📁'}</span>
-                            <span style={{ fontSize: '13px', fontWeight: 600, color: '#334155', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={m.type}>{m.type}</span>
+                            <span style={{ fontSize: 'calc(var(--admin-fs) + 1px)' }}>{m.type.startsWith('image') ? '🖼️' : m.type.includes('pdf') ? '📄' : '📁'}</span>
+                            <span style={{ fontSize: 'calc(var(--admin-fs) - 2px)', fontWeight: 600, color: '#334155', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={m.type}>{m.type}</span>
                           </div>
                           <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexShrink: 0 }}>
-                            <span style={{ fontSize: '12px', color: '#64748b' }}><b>{m.count}</b> files</span>
-                            <span style={{ fontSize: '11px', color: '#e53e3e', fontWeight: 600 }}>{formatBytes(m.size)}</span>
+                            <span style={{ fontSize: 'calc(var(--admin-fs) - 3px)', color: '#64748b' }}><b>{m.count}</b> files</span>
+                            <span style={{ fontSize: 'calc(var(--admin-fs) - 4px)', color: '#e53e3e', fontWeight: 600 }}>{formatBytes(m.size)}</span>
                           </div>
                         </div>
                       ))
@@ -827,7 +827,7 @@ export default function AdminAnalyticsPage() {
               display: 'flex',
               alignItems: 'center',
               gap: '12px',
-              fontSize: '13px',
+              fontSize: 'calc(var(--admin-fs) - 2px)',
               color: '#64748b',
             }}>
               <div style={{ width: '18px', height: '18px', borderRadius: '50%', border: '2px solid #e2e8f0', borderTopColor: '#3b82f6', animation: 'adminSpinner 0.8s linear infinite', flexShrink: 0 }} />
@@ -843,14 +843,14 @@ export default function AdminAnalyticsPage() {
               alignItems: 'center',
               justifyContent: 'space-between',
               gap: '12px',
-              fontSize: '13px',
+              fontSize: 'calc(var(--admin-fs) - 2px)',
               color: '#dc2626',
             }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ fontSize: '18px' }}>⚠️</span>
+                <span style={{ fontSize: 'calc(var(--admin-fs) + 3px)' }}>⚠️</span>
                 <span><strong>GA4 API Error:</strong> {gaError} — Showing demo data below.</span>
               </span>
-              <button onClick={fetchGoogleAnalytics} style={{ background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.25)', color: '#fca5a5', padding: '4px 12px', borderRadius: '8px', fontSize: '11px', cursor: 'pointer', fontWeight: 600 }}>Retry</button>
+              <button onClick={fetchGoogleAnalytics} style={{ background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.25)', color: '#fca5a5', padding: '4px 12px', borderRadius: '8px', fontSize: 'calc(var(--admin-fs) - 4px)', cursor: 'pointer', fontWeight: 600 }}>Retry</button>
             </div>
           ) : gaData && !gaData.isDemo ? (
             <div style={{
@@ -862,14 +862,14 @@ export default function AdminAnalyticsPage() {
               alignItems: 'center',
               justifyContent: 'space-between',
               gap: '12px',
-              fontSize: '13px',
+              fontSize: 'calc(var(--admin-fs) - 2px)',
               color: '#6ee7b7',
             }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span className="live-dot" />
                 <span><strong>Live GA4 Data</strong> — All metrics below are fetched in real-time from your Google Analytics property via the Data API.</span>
               </span>
-              <button onClick={fetchGoogleAnalytics} style={{ background: 'rgba(16,185,129,0.15)', border: '1px solid rgba(16,185,129,0.25)', color: '#6ee7b7', padding: '4px 12px', borderRadius: '8px', fontSize: '11px', cursor: 'pointer', fontWeight: 600 }}>🔄 Refresh</button>
+              <button onClick={fetchGoogleAnalytics} style={{ background: 'rgba(16,185,129,0.15)', border: '1px solid rgba(16,185,129,0.25)', color: '#6ee7b7', padding: '4px 12px', borderRadius: '8px', fontSize: 'calc(var(--admin-fs) - 4px)', cursor: 'pointer', fontWeight: 600 }}>🔄 Refresh</button>
             </div>
           ) : (
             <div style={{
@@ -881,14 +881,14 @@ export default function AdminAnalyticsPage() {
               alignItems: 'center',
               justifyContent: 'space-between',
               gap: '12px',
-              fontSize: '13px',
+              fontSize: 'calc(var(--admin-fs) - 2px)',
               color: '#93c5fd',
             }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ fontSize: '18px' }}>ℹ️</span>
+                <span style={{ fontSize: 'calc(var(--admin-fs) + 3px)' }}>ℹ️</span>
                 <span><strong>Demo Preview Mode</strong> — Add <code style={{ background: 'rgba(0,0,0,0.3)', padding: '1px 6px', borderRadius: '4px' }}>GA_PROPERTY_ID</code>, <code style={{ background: 'rgba(0,0,0,0.3)', padding: '1px 6px', borderRadius: '4px' }}>GA_CLIENT_EMAIL</code>, and <code style={{ background: 'rgba(0,0,0,0.3)', padding: '1px 6px', borderRadius: '4px' }}>GA_PRIVATE_KEY</code> to your <code style={{ background: 'rgba(0,0,0,0.3)', padding: '1px 6px', borderRadius: '4px' }}>.env</code> file to show real data.</span>
               </span>
-              <button onClick={fetchGoogleAnalytics} style={{ background: 'rgba(37,99,235,0.15)', border: '1px solid rgba(37,99,235,0.25)', color: '#93c5fd', padding: '4px 12px', borderRadius: '8px', fontSize: '11px', cursor: 'pointer', fontWeight: 600 }}>🔄 Refresh</button>
+              <button onClick={fetchGoogleAnalytics} style={{ background: 'rgba(37,99,235,0.15)', border: '1px solid rgba(37,99,235,0.25)', color: '#93c5fd', padding: '4px 12px', borderRadius: '8px', fontSize: 'calc(var(--admin-fs) - 4px)', cursor: 'pointer', fontWeight: 600 }}>🔄 Refresh</button>
             </div>
           )}
           {/* Header Stream Info Bar */}
@@ -908,22 +908,22 @@ export default function AdminAnalyticsPage() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: '26px',
+                  fontSize: 'calc(var(--admin-fs) + 11px)',
                   boxShadow: '0 4px 12px rgba(59, 130, 246, 0.1)'
                 }}>
                   📊
                 </div>
                 <div>
-                  <h3 style={{ margin: '0 0 4px 0', fontSize: '18px', fontWeight: 800, color: '#0f172a' }}>Google Analytics (GA4) Stream</h3>
-                  <p style={{ margin: 0, fontSize: '13px', color: '#64748b' }}>Connected Property: <b>Mohit Sales Corporation Web</b></p>
+                  <h3 style={{ margin: '0 0 4px 0', fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 800, color: '#0f172a' }}>Google Analytics (GA4) Stream</h3>
+                  <p style={{ margin: 0, fontSize: 'calc(var(--admin-fs) - 2px)', color: '#64748b' }}>Connected Property: <b>Mohit Sales Corporation Web</b></p>
                 </div>
               </div>
               <div style={{ display: 'flex', gap: '14px', alignItems: 'center', flexWrap: 'wrap' }}>
-                <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', padding: '10px 16px', borderRadius: '12px', fontSize: '13px' }}>
+                <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', padding: '10px 16px', borderRadius: '12px', fontSize: 'calc(var(--admin-fs) - 2px)' }}>
                   <span style={{ color: '#64748b', marginRight: '6px' }}>Stream ID:</span>
                   <span style={{ fontWeight: 600, color: '#0f172a' }}>15108794799</span>
                 </div>
-                <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', padding: '10px 16px', borderRadius: '12px', fontSize: '13px' }}>
+                <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', padding: '10px 16px', borderRadius: '12px', fontSize: 'calc(var(--admin-fs) - 2px)' }}>
                   <span style={{ color: '#64748b', marginRight: '6px' }}>Measurement ID:</span>
                   <span style={{ fontWeight: 600, color: '#0f172a' }}>{GA_MEASUREMENT_ID}</span>
                 </div>
@@ -932,7 +932,7 @@ export default function AdminAnalyticsPage() {
                     display: 'flex', alignItems: 'center',
                     background: 'rgba(16, 185, 129, 0.08)', color: '#059669',
                     border: '1px solid rgba(16, 185, 129, 0.15)',
-                    padding: '10px 16px', borderRadius: '12px', fontSize: '13px', fontWeight: 600
+                    padding: '10px 16px', borderRadius: '12px', fontSize: 'calc(var(--admin-fs) - 2px)', fontWeight: 600
                   }}>
                     <span className="live-dot" style={{ marginRight: '8px' }}></span>
                     Live &amp; Connected
@@ -942,7 +942,7 @@ export default function AdminAnalyticsPage() {
                     display: 'flex', alignItems: 'center',
                     background: 'rgba(37, 99, 235, 0.08)', color: '#2563eb',
                     border: '1px solid rgba(37, 99, 235, 0.15)',
-                    padding: '10px 16px', borderRadius: '12px', fontSize: '13px', fontWeight: 600
+                    padding: '10px 16px', borderRadius: '12px', fontSize: 'calc(var(--admin-fs) - 2px)', fontWeight: 600
                   }}>
                     <span style={{ marginRight: '8px' }}>ℹ️</span>
                     Demo Mode — add GA API keys
@@ -965,10 +965,10 @@ export default function AdminAnalyticsPage() {
                   {gaData && !gaData.isDemo ? 'Real-time' : 'Demo Mode'}
                 </span>
               </div>
-              <div className="kpi-value" style={{ display: 'flex', alignItems: 'baseline', gap: '8px', fontSize: '32px', fontWeight: 800 }}>
-                {activeVisitors} <span style={{ fontSize: '13px', fontWeight: 500, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Active Visitors</span>
+              <div className="kpi-value" style={{ display: 'flex', alignItems: 'baseline', gap: '8px', fontSize: 'calc(var(--admin-fs) + 17px)', fontWeight: 800 }}>
+                {activeVisitors} <span style={{ fontSize: 'calc(var(--admin-fs) - 2px)', fontWeight: 500, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Active Visitors</span>
               </div>
-              <div className="kpi-label" style={{ fontSize: '13px', color: '#64748b', fontWeight: 600 }}>Users in last 30 minutes</div>
+              <div className="kpi-label" style={{ fontSize: 'calc(var(--admin-fs) - 2px)', color: '#64748b', fontWeight: 600 }}>Users in last 30 minutes</div>
 
               {/* Animated Live Bars */}
               <div className="kpi-footer-metric" style={{ marginTop: '16px', borderTop: '1px solid #edf2f7', paddingTop: '12px' }}>
@@ -995,8 +995,8 @@ export default function AdminAnalyticsPage() {
                   {gaData && !gaData.isDemo ? 'GA4 Active' : 'Fallback Demo'}
                 </span>
               </div>
-              <div className="kpi-value" style={{ fontSize: '32px', fontWeight: 800 }}>{weeklyPageviews.toLocaleString()}</div>
-              <div className="kpi-label" style={{ fontSize: '13px', color: '#64748b', fontWeight: 600 }}>Weekly Pageviews</div>
+              <div className="kpi-value" style={{ fontSize: 'calc(var(--admin-fs) + 17px)', fontWeight: 800 }}>{weeklyPageviews.toLocaleString()}</div>
+              <div className="kpi-label" style={{ fontSize: 'calc(var(--admin-fs) - 2px)', color: '#64748b', fontWeight: 600 }}>Weekly Pageviews</div>
               <div className="kpi-footer-metric" style={{ marginTop: '16px', borderTop: '1px solid #edf2f7', paddingTop: '12px' }}>
                 <span className="small-detail-text">
                   Aggregated pageviews across all products.
@@ -1010,8 +1010,8 @@ export default function AdminAnalyticsPage() {
                 <span className="kpi-icon purple" style={{ background: '#f3e8ff', color: '#7c3aed' }}>⏱️</span>
                 <span className="kpi-trend success" style={{ background: '#ecfdf5', color: '#059669' }}>Good engagement</span>
               </div>
-              <div className="kpi-value" style={{ fontSize: '32px', fontWeight: 800 }}>{avgEngagementTime}</div>
-              <div className="kpi-label" style={{ fontSize: '13px', color: '#64748b', fontWeight: 600 }}>Avg. Engagement Time</div>
+              <div className="kpi-value" style={{ fontSize: 'calc(var(--admin-fs) + 17px)', fontWeight: 800 }}>{avgEngagementTime}</div>
+              <div className="kpi-label" style={{ fontSize: 'calc(var(--admin-fs) - 2px)', color: '#64748b', fontWeight: 600 }}>Avg. Engagement Time</div>
               <div className="kpi-footer-metric" style={{ marginTop: '16px', borderTop: '1px solid #edf2f7', paddingTop: '12px' }}>
                 <span className="small-detail-text">
                   Average time a visitor spends on the site.
@@ -1025,8 +1025,8 @@ export default function AdminAnalyticsPage() {
                 <span className="kpi-icon red" style={{ background: '#fee2e2', color: '#dc2626' }}>📉</span>
                 <span className="kpi-trend success" style={{ background: '#ecfdf5', color: '#059669' }}>Bounce tracked</span>
               </div>
-              <div className="kpi-value" style={{ fontSize: '32px', fontWeight: 800 }}>{bounceRate}</div>
-              <div className="kpi-label" style={{ fontSize: '13px', color: '#64748b', fontWeight: 600 }}>Bounce Rate</div>
+              <div className="kpi-value" style={{ fontSize: 'calc(var(--admin-fs) + 17px)', fontWeight: 800 }}>{bounceRate}</div>
+              <div className="kpi-label" style={{ fontSize: 'calc(var(--admin-fs) - 2px)', color: '#64748b', fontWeight: 600 }}>Bounce Rate</div>
               <div className="kpi-footer-metric" style={{ marginTop: '16px', borderTop: '1px solid #edf2f7', paddingTop: '12px' }}>
                 <span className="small-detail-text">
                   Percentage of single-page visits.
@@ -1161,7 +1161,7 @@ export default function AdminAnalyticsPage() {
                     color: '#fff',
                     padding: '8px 12px',
                     borderRadius: '8px',
-                    fontSize: '11px',
+                    fontSize: 'calc(var(--admin-fs) - 4px)',
                     boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
                     pointerEvents: 'none',
                     whiteSpace: 'nowrap',
@@ -1189,8 +1189,8 @@ export default function AdminAnalyticsPage() {
                 {gaChannels.map((channel: any, idx: number) => (
                   <div key={idx} className="category-bar-row">
                     <div className="category-bar-label-row">
-                      <span className="category-bar-name" style={{ fontWeight: 600, color: '#334155', fontSize: '13px' }}>{channel.name}</span>
-                      <span className="category-bar-count" style={{ fontSize: '12px', color: '#64748b' }}><b>{channel.count}</b> ({channel.pct}%)</span>
+                      <span className="category-bar-name" style={{ fontWeight: 600, color: '#334155', fontSize: 'calc(var(--admin-fs) - 2px)' }}>{channel.name}</span>
+                      <span className="category-bar-count" style={{ fontSize: 'calc(var(--admin-fs) - 3px)', color: '#64748b' }}><b>{channel.count}</b> ({channel.pct}%)</span>
                     </div>
                     <div className="category-bar-track" style={{ height: '8px', background: '#f1f5f9', borderRadius: '4px', overflow: 'hidden' }}>
                       <div className="category-bar-fill" style={{ height: '100%', borderRadius: '4px', width: `${channel.pct}%`, background: channel.color }}></div>
@@ -1217,12 +1217,12 @@ export default function AdminAnalyticsPage() {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: '18px'
+                      fontSize: 'calc(var(--admin-fs) + 3px)'
                     }}>
                       {device.icon}
                     </div>
                     <div style={{ flex: 1 }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 600, color: '#334155', marginBottom: '6px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'calc(var(--admin-fs) - 2px)', fontWeight: 600, color: '#334155', marginBottom: '6px' }}>
                         <span>{device.name}</span>
                         <span style={{ color: '#0f172a' }}>{device.pct}%</span>
                       </div>
@@ -1246,8 +1246,8 @@ export default function AdminAnalyticsPage() {
                 {gaGeo.map((c: any, idx: number) => (
                   <div key={idx} className="category-bar-row">
                     <div className="category-bar-label-row">
-                      <span className="category-bar-name" style={{ fontWeight: 600, color: '#334155', fontSize: '13px' }}>📍 {c.city}</span>
-                      <span className="category-bar-count" style={{ fontSize: '12px', color: '#64748b' }}><b>{c.sessions}</b> sessions ({c.pct}%)</span>
+                      <span className="category-bar-name" style={{ fontWeight: 600, color: '#334155', fontSize: 'calc(var(--admin-fs) - 2px)' }}>📍 {c.city}</span>
+                      <span className="category-bar-count" style={{ fontSize: 'calc(var(--admin-fs) - 3px)', color: '#64748b' }}><b>{c.sessions}</b> sessions ({c.pct}%)</span>
                     </div>
                     <div className="category-bar-track" style={{ height: '8px', background: '#f1f5f9', borderRadius: '4px', overflow: 'hidden' }}>
                       <div className="category-bar-fill" style={{ height: '100%', borderRadius: '4px', width: `${c.pct}%`, background: 'linear-gradient(90deg, #6366f1 0%, #4f46e5 100%)' }}></div>
@@ -1264,14 +1264,14 @@ export default function AdminAnalyticsPage() {
               <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column' }}>
                 {gaTopPages.map((pg: any, idx: number) => (
                   <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 0', borderBottom: idx < gaTopPages.length - 1 ? '1px solid #f1f5f9' : 'none' }}>
-                    <div style={{ width: '22px', height: '22px', background: '#eef2ff', color: '#4f46e5', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, flexShrink: 0 }}>{idx + 1}</div>
+                    <div style={{ width: '22px', height: '22px', background: '#eef2ff', color: '#4f46e5', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 'calc(var(--admin-fs) - 4px)', fontWeight: 700, flexShrink: 0 }}>{idx + 1}</div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: '13px', fontWeight: 600, color: '#1e293b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={pg.title}>{pg.title}</div>
-                      <div style={{ fontSize: '11px', color: '#64748b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{pg.page}</div>
+                      <div style={{ fontSize: 'calc(var(--admin-fs) - 2px)', fontWeight: 600, color: '#1e293b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={pg.title}>{pg.title}</div>
+                      <div style={{ fontSize: 'calc(var(--admin-fs) - 4px)', color: '#64748b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{pg.page}</div>
                     </div>
                     <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                      <div style={{ fontSize: '13px', fontWeight: 700, color: '#0f172a' }}>{pg.views.toLocaleString()}</div>
-                      <div style={{ fontSize: '10px', color: '#64748b' }}>views</div>
+                      <div style={{ fontSize: 'calc(var(--admin-fs) - 2px)', fontWeight: 700, color: '#0f172a' }}>{pg.views.toLocaleString()}</div>
+                      <div style={{ fontSize: 'calc(var(--admin-fs) - 5px)', color: '#64748b' }}>views</div>
                     </div>
                   </div>
                 ))}
@@ -1294,7 +1294,7 @@ export default function AdminAnalyticsPage() {
           gap: 12px;
         }
         .analytics-subtitle {
-          font-size: 14px;
+          font-size: calc(var(--admin-fs) - 1px);
           color: #64748b;
           font-weight: 500;
         }
@@ -1328,7 +1328,7 @@ export default function AdminAnalyticsPage() {
           margin-bottom: 12px;
         }
         .kpi-icon {
-          font-size: 20px;
+          font-size: calc(var(--admin-fs) + 5px);
           width: 40px;
           height: 40px;
           border-radius: 10px;
@@ -1342,7 +1342,7 @@ export default function AdminAnalyticsPage() {
         .kpi-icon.red { background: #fff5f5; color: #ef4444; }
         
         .kpi-trend {
-          font-size: 10.5px;
+          font-size: calc(var(--admin-fs) - 4.5px);
           font-weight: 700;
           padding: 2px 8px;
           border-radius: 20px;
@@ -1353,13 +1353,13 @@ export default function AdminAnalyticsPage() {
         .kpi-trend.info { background: #f0f9ff; color: #0369a1; }
         
         .kpi-value {
-          font-size: 28px;
+          font-size: calc(var(--admin-fs) + 13px);
           font-weight: 800;
           color: #0f172a;
           margin-bottom: 4px;
         }
         .kpi-label {
-          font-size: 13px;
+          font-size: calc(var(--admin-fs) - 2px);
           color: #64748b;
           font-weight: 600;
           margin-bottom: 14px;
@@ -1370,7 +1370,7 @@ export default function AdminAnalyticsPage() {
           padding-top: 10px;
         }
         .small-detail-text {
-          font-size: 11px;
+          font-size: calc(var(--admin-fs) - 4px);
           color: #64748b;
         }
         .reply-rate-bar-container {
@@ -1381,7 +1381,7 @@ export default function AdminAnalyticsPage() {
         .reply-rate-label {
           display: flex;
           justify-content: space-between;
-          font-size: 11px;
+          font-size: calc(var(--admin-fs) - 4px);
           font-weight: 700;
           color: #475569;
         }
@@ -1416,13 +1416,13 @@ export default function AdminAnalyticsPage() {
           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
         }
         .analytics-card h4 {
-          font-size: 16px;
+          font-size: calc(var(--admin-fs) + 1px);
           font-weight: 700;
           color: #0f172a;
           margin-bottom: 4px;
         }
         .card-subtitle-desc {
-          font-size: 12px;
+          font-size: calc(var(--admin-fs) - 3px);
           color: #64748b;
           margin-bottom: 16px;
         }
@@ -1441,14 +1441,14 @@ export default function AdminAnalyticsPage() {
         .category-bar-label-row {
           display: flex;
           justify-content: space-between;
-          font-size: 12.5px;
+          font-size: calc(var(--admin-fs) - 2.5px);
         }
         .category-bar-name {
           font-weight: 600;
           color: #334155;
         }
         .category-bar-count {
-          font-size: 11.5px;
+          font-size: calc(var(--admin-fs) - 3.5px);
           color: #64748b;
         }
         .category-bar-track {
@@ -1477,10 +1477,10 @@ export default function AdminAnalyticsPage() {
           gap: 6px;
         }
         .stock-all-good-box span {
-          font-size: 24px;
+          font-size: calc(var(--admin-fs) + 9px);
         }
         .stock-all-good-box p {
-          font-size: 12px;
+          font-size: calc(var(--admin-fs) - 3px);
           color: #15803d;
           font-weight: 600;
         }
@@ -1555,17 +1555,17 @@ export default function AdminAnalyticsPage() {
           margin-top: 20px;
         }
         .error-icon {
-          font-size: 40px;
+          font-size: calc(var(--admin-fs) + 25px);
         }
         .analytics-error-box h4 {
           color: #c53030;
           margin: 0;
-          font-size: 18px;
+          font-size: calc(var(--admin-fs) + 3px);
           font-weight: 700;
         }
         .analytics-error-box p {
           color: #742a2a;
-          font-size: 13px;
+          font-size: calc(var(--admin-fs) - 2px);
           margin-bottom: 12px;
         }
 
