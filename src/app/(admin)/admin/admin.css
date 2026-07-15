@@ -1010,10 +1010,10 @@
 .admin-search-box {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.5);
+  background: #fff;
   border-radius: 10px;
   padding: 0 16px;
-  border: 1px solid var(--admin-border);
+  border: 1px solid #cbd5e1;
   transition: all 0.3s;
 }
 
@@ -1131,13 +1131,24 @@
 .admin-form-textarea {
   width: 100%;
   padding: 12px 18px;
-  border: 1px solid var(--admin-border);
+  /* Visible slate border (the old translucent-white border disappeared on the
+     now-opaque white cards, making empty inputs look absent). */
+  border: 1px solid #cbd5e1;
   border-radius: 10px;
   font-size: calc(var(--admin-fs) + 1px);
   font-family: inherit;
   background: #fff;
   color: var(--admin-text);
   transition: border-color 0.2s, box-shadow 0.2s;
+}
+.admin-form-input::placeholder,
+.admin-form-textarea::placeholder {
+  color: #94a3b8;
+}
+.admin-form-input:hover:not(:disabled),
+.admin-form-select:hover:not(:disabled),
+.admin-form-textarea:hover:not(:disabled) {
+  border-color: #94a3b8;
 }
 
 .admin-form-input:focus,
