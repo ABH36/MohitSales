@@ -4,15 +4,17 @@ services:
     container_name: mohit-industries-db
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Abhi@369
-      POSTGRES_DB: mohit_industries
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      # Secret — set in deployment/.env (never commit it). Prefer an
+      # alphanumeric password so it needs no URL-encoding in DATABASE_URL below.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required — set it in deployment/.env}
+      POSTGRES_DB: ${POSTGRES_DB:-mohit_industries}
     ports:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d mohit_industries"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-mohit_industries}"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -28,14 +30,20 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    # App-level secrets/config (JWT_SECRET, SMTP, Cloudinary, GA, …) come from
+    # the repo-root .env (gitignored). See .env.example.
     env_file:
       - ../.env
     environment:
-      - DATABASE_URL=postgresql://postgres:Abhi%40369@db:5432/mohit_industries?schema=public
-      - DIRECT_URL=postgresql://postgres:Abhi%40369@db:5432/mohit_industries?schema=public
-      - NEXT_PUBLIC_SITE_URL=https://mohit.bdm.co.in
-      - DISABLE_RATE_LIMITER=true
-      - SECURE_COOKIE=false
+      # DB URLs point at the internal `db` service. If POSTGRES_PASSWORD contains
+      # special characters (@ : / etc.), URL-encode them here (e.g. @ -> %40).
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-mohit_industries}?schema=public
+      - DIRECT_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-mohit_industries}?schema=public
+      - NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL:-https://mohitscpl.com}
+      # Keep API rate limiting ON in production.
+      - DISABLE_RATE_LIMITER=false
+      # Cookies must be Secure in production (served over HTTPS).
+      - SECURE_COOKIE=true
 
 volumes:
   postgres_data:

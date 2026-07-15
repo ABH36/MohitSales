@@ -1,8 +1,8 @@
-mohit.bdm.co.in {
+mohitscpl.com, www.mohitscpl.com {
     # Enable compression for better performance
     encode zstd gzip
 
-    # Proxy all traffic to the Next.js app container
-    reverse_proxy app:3000
+    # Proxy all traffic to the Next.js app container (app listens on 3005)
+    reverse_proxy app:3005
 }
 
