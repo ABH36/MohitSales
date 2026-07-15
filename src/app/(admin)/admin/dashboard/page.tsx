@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import AdminShell from '../components/AdminShell';
 import prisma from '@/lib/prisma';
-import { cld } from '@/lib/cloudinary';
 import RecentInquiries, { type DashInquiry } from './RecentInquiries';
 
 export const dynamic = 'force-dynamic';
@@ -64,19 +63,6 @@ export default async function AdminDashboardPage() {
 
   return (
     <AdminShell pageTitle="Dashboard">
-      {/* Welcome Banner — compact header */}
-      <div className="admin-welcome-banner">
-        <div className="admin-welcome-text">
-          <h2 className="admin-welcome-title">Welcome back <span className="admin-welcome-wave">👋</span></h2>
-          <p className="admin-welcome-sub">Here's your business at a glance — products, inquiries &amp; more.</p>
-        </div>
-        <img
-          src={cld("https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167908/mohit/logo/msc_logo_without_bg.png", "f_auto,q_auto,w_320")}
-          alt="Mohit Sales Corporation"
-          className="admin-welcome-logo"
-        />
-      </div>
-
       {/* Stats Cards — each links to its section */}
       <div className="admin-stats-grid">
         {cards.map((c) => (
