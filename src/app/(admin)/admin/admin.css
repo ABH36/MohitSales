@@ -180,8 +180,8 @@
 /* ─── Sidebar ──────────────────────────────────── */
 .admin-sidebar {
   width: 290px;
-  background: linear-gradient(180deg, #0b1324 0%, #101a30 50%, #16213a 100%);
-  border-right: 1px solid rgba(96, 165, 250, 0.10);
+  background: linear-gradient(180deg, #8a1616 0%, #b41f1f 50%, #7a1212 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.10);
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -248,7 +248,7 @@
   font-size: calc(var(--admin-fs-sm) - 1.5px);
   text-transform: uppercase;
   letter-spacing: 1.6px;
-  color: rgba(148, 163, 184, 0.7);
+  color: rgba(255, 255, 255, 0.6);
   padding: 0 14px;
   margin-bottom: 14px;
   font-weight: 700;
@@ -1514,7 +1514,7 @@
     z-index: 200;
     box-shadow: none;
     /* Solid background on mobile — remove backdrop-filter to prevent text blur */
-    background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%) !important;
+    background: linear-gradient(180deg, #8a1616 0%, #b41f1f 50%, #7a1212 100%) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
   }
