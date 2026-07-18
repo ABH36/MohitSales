@@ -206,7 +206,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
     legacyHtml.includes('class="card_box"') ||
     legacyHtml.includes('class="fan_card_box"') ||
     legacyHtml.includes('class="product-card"') ||
-    legacyHtml.includes('class="industries-card"')
+    legacyHtml.includes('class="industries-card"') ||
+    legacyHtml.includes('class="standard-card"')
   );
 
   const isIndexPage = (product && product.cards && product.cards.length > 0) || hasLegacyCards;
