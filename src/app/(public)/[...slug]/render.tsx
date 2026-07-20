@@ -2,6 +2,21 @@ import React from 'react';
 import { sanitizeHtml } from '@/lib/utils';
 import { cld } from '@/lib/cloudinary';
 
+/**
+ * A card's `details` is sometimes a string and sometimes an array of lines —
+ * e.g. the Dowells crimping tools store ["Material: --", "Size: CAP:10 …"].
+ * Calling .replace() straight on it threw "details.replace is not a function"
+ * and took the whole page down with a 500. Normalise to HTML either way.
+ */
+function detailsToHtml(details: unknown): string | null {
+  if (details === null || details === undefined) return null;
+  const text = Array.isArray(details)
+    ? details.filter(Boolean).map(String).join('\n')
+    : String(details);
+  if (!text.trim()) return null;
+  return sanitizeHtml(text.replace(/\n/g, '<br>'));
+}
+
 export function renderDbProduct(dbProduct: any, productJson: any = null, legacyImage: string | null = null, legacyFeatures: string[] = []) {
   const breadcrumbs = [];
   let currentCat = dbProduct.category;
@@ -162,10 +177,10 @@ export function renderDbProduct(dbProduct: any, productJson: any = null, legacyI
                           </div>
                           <div className="flex flex-col flex-grow p-[18px] text-center">
                             {card.title && <div className="text-[#c1272d] text-[22px] font-semibold mb-[10px]">{card.title}</div>}
-                            {card.details && (
+                            {detailsToHtml(card.details) && (
                               <div
                                 className="text-[#555] text-[18px] leading-[1.6] mb-[18px] [&>span]:font-semibold [&>span]:text-[#333]"
-                                dangerouslySetInnerHTML={{ __html: sanitizeHtml(card.details.replace(/\n/g, '<br>')) }}
+                                dangerouslySetInnerHTML={{ __html: detailsToHtml(card.details) as string }}
                               />
                             )}
                             <a
@@ -561,10 +576,10 @@ export function renderProductLayout(isMultiProduct: boolean, product: any, clean
                         </div>
                         <div className="flex flex-col flex-grow p-[18px] text-center">
                           {card.title && <div className="text-[#c1272d] text-[22px] font-semibold mb-[10px]">{card.title}</div>}
-                          {card.details && (
+                          {detailsToHtml(card.details) && (
                             <div
                               className="text-[#555] text-[18px] leading-[1.6] mb-[18px] [&>span]:font-semibold [&>span]:text-[#333]"
-                              dangerouslySetInnerHTML={{ __html: sanitizeHtml(card.details.replace(/\n/g, '<br>')) }}
+                              dangerouslySetInnerHTML={{ __html: detailsToHtml(card.details) as string }}
                             />
                           )}
                           <a
