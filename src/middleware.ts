@@ -3,6 +3,45 @@ import type { NextRequest } from 'next/server';
 import { jwtVerify } from 'jose';
 import { COOKIE_NAME, JWT_SECRET } from './lib/auth';
 
+/**
+ * Redirect lookups are memoised here, in the middleware itself.
+ *
+ * The /api/public/redirect handler already caches its database query, but the
+ * middleware still paid a full internal HTTP round-trip on *every* public page
+ * view just to be told "no redirect" — and with an empty redirects table that
+ * is the answer every single time. Caching the answer here skips the request
+ * entirely for repeat paths.
+ *
+ * Module state on the Edge runtime is per-isolate and may be discarded at any
+ * time, so this is a best-effort cache: a miss simply falls back to the fetch.
+ */
+const REDIRECT_TTL = 5 * 60 * 1000; // 5 min — matches the API handler's TTL
+const REDIRECT_CACHE_MAX = 2000;
+const redirectCache = new Map<string, { redirect: { toPath: string; type: number } | null; expires: number }>();
+
+function readRedirectCache(path: string) {
+  const hit = redirectCache.get(path);
+  if (!hit) return undefined;
+  if (hit.expires <= Date.now()) {
+    redirectCache.delete(path);
+    return undefined;
+  }
+  return hit.redirect;
+}
+
+function writeRedirectCache(path: string, redirect: { toPath: string; type: number } | null) {
+  if (redirectCache.size >= REDIRECT_CACHE_MAX) {
+    const now = Date.now();
+    for (const [key, val] of redirectCache) if (val.expires <= now) redirectCache.delete(key);
+    // Still full of live entries — drop the oldest so the map cannot grow without bound.
+    if (redirectCache.size >= REDIRECT_CACHE_MAX) {
+      const oldest = redirectCache.keys().next().value;
+      if (oldest !== undefined) redirectCache.delete(oldest);
+    }
+  }
+  redirectCache.set(path, { redirect, expires: Date.now() + REDIRECT_TTL });
+}
+
 export async function middleware(request: NextRequest) {
   // Strip potential spoofed headers from incoming client request
   const requestHeaders = new Headers(request.headers);
@@ -23,17 +62,24 @@ export async function middleware(request: NextRequest) {
 
   if (isPublicPage) {
     try {
-      const redirectCheckUrl = new URL('/api/public/redirect', request.url);
-      redirectCheckUrl.searchParams.set('path', pathname);
-      const redirectRes = await fetch(redirectCheckUrl.toString());
-      if (redirectRes.ok) {
-        const data = await redirectRes.json();
-        if (data.redirect) {
-          return NextResponse.redirect(
-            new URL(data.redirect.toPath, request.url),
-            { status: data.redirect.type }
-          );
+      let redirect = readRedirectCache(pathname);
+
+      if (redirect === undefined) {
+        const redirectCheckUrl = new URL('/api/public/redirect', request.url);
+        redirectCheckUrl.searchParams.set('path', pathname);
+        const redirectRes = await fetch(redirectCheckUrl.toString());
+        if (redirectRes.ok) {
+          const data = await redirectRes.json();
+          redirect = data.redirect ?? null;
+          writeRedirectCache(pathname, redirect ?? null);
         }
+      }
+
+      if (redirect) {
+        return NextResponse.redirect(
+          new URL(redirect.toPath, request.url),
+          { status: redirect.type }
+        );
       }
     } catch {
       // fail open — never block a public page due to redirect check failure
