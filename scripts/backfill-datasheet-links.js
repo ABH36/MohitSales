@@ -28,8 +28,13 @@
  * Usage:
  *   node scripts/backfill-datasheet-links.js
  *
- * Dry-run (no DB writes — prints exactly what would change):
+ * Dry-run (no DB writes — prints exactly what would change). Either form works;
+ * the flag exists because the `DRY_RUN=1 …` prefix is not valid on Windows cmd:
+ *   node scripts/backfill-datasheet-links.js --dry
  *   DRY_RUN=1 node scripts/backfill-datasheet-links.js
+ *
+ * Safe to re-run: products that already carry a datasheetLink are skipped, so a
+ * second run reports 0 to update rather than rewriting anything.
  */
 
 const { PrismaClient } = require('@prisma/client');
@@ -37,7 +42,7 @@ const fs = require('fs');
 const path = require('path');
 
 const prisma = new PrismaClient();
-const DRY_RUN = process.env.DRY_RUN === '1';
+const DRY_RUN = process.env.DRY_RUN === '1' || process.argv.includes('--dry') || process.argv.includes('--dry-run');
 const PUBLIC_DIR = path.join(__dirname, '..', 'public');
 
 if (DRY_RUN) console.log('⚠️  DRY RUN — no database writes will happen\n');
