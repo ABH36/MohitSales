@@ -20,6 +20,18 @@ interface ProductPageProps {
   }>;
 }
 
+/**
+ * Pages that must never get an auto-injected enquiry button — they are company
+ * or index pages, not something a customer enquires about. Matched against the
+ * full slug and against its first segment, so /resources and /resources/x are
+ * both covered. Anything ending in "-catalogue" is excluded separately.
+ */
+const INFORMATIONAL_SLUGS = new Set([
+  'about-us', 'achievements', 'certificates', 'resources', 'catalogue',
+  'pricelist', 'contact-us', 'feedback', 'blog', 'company-profile',
+  'index', 'index-old',
+]);
+
 // Function to read and cache JSON content
 function getLegacyPath(slugPath: string): string {
   let clean = slugPath.toLowerCase();
@@ -388,6 +400,42 @@ export default async function ProductPage({ params }: ProductPageProps) {
           btn.attr('data-tab-target', match[1]);
         }
       });
+
+      // ── Give product pages an enquiry CTA when the legacy markup has none ──
+      // Roughly 250 legacy product and category pages were exported without one,
+      // so a visitor browsing e.g. /fans/ceiling-fans had no way to enquire
+      // except the footer. Informational pages are excluded — an enquiry button
+      // does not belong on About Us or a catalogue index.
+      if (!$('a[href*="contact-us"]').length) {
+        const firstSegment = slugPath.split('/')[0];
+        const isInformational =
+          INFORMATIONAL_SLUGS.has(slugPath) ||
+          INFORMATIONAL_SLUGS.has(firstSegment) ||
+          /(^|\/)[a-z0-9-]*catalogue$/.test(slugPath);
+
+        if (!isInformational) {
+          // Name the enquiry after the product, so sales can tell what it is
+          // about. The product row is the most precise source — several legacy
+          // breadcrumbs carry the section name ("Home Appliances") rather than
+          // the page's own ("Steam Iron"), which would reach sales as a useless
+          // enquiry. Falls back to the heading only when there is no product row.
+          const heading =
+            dbProductEarly?.title?.trim() ||
+            $('.rs-breadcrumb-title').first().text().trim() ||
+            $('h1').first().text().trim() ||
+            '';
+          const productParam = heading ? `?product=${encodeURIComponent(heading)}` : '';
+          $.root().append(
+            `<section class="enquiry-cta-section" style="padding:0 0 60px"><div class="container">` +
+              `<div class="enquiry-btn-container" style="display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;gap:16px">` +
+              `<div class="rs-banner-btn"><a class="rs-btn has-theme-orange has-icon has-bg enquiry-btn" href="/contact-us${productParam}">Send Enquiry` +
+              `<span class="icon-box">` +
+              `<svg class="icon-first" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z"></path></svg>` +
+              `<svg class="icon-second" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z"></path></svg>` +
+              `</span></a></div></div></div></section>`
+          );
+        }
+      }
 
       finalHtml = $.html();
 
