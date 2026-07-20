@@ -138,50 +138,11 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
 
-        {/* ── Global structured data: Organization / LocalBusiness + WebSite.
-             Helps Google build a Knowledge Panel and surface the business in
-             local/rich results. Complements the per-page JSON-LD. ── */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@graph': [
-                {
-                  '@type': ['Organization', 'LocalBusiness', 'ElectronicsStore'],
-                  '@id': 'https://mohitscpl.com/#organization',
-                  name: 'Mohit Sales Corporation Pvt. Ltd.',
-                  alternateName: 'Mohit Sales Corp.',
-                  url: 'https://mohitscpl.com',
-                  logo: 'https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/v1783167908/mohit/logo/msc_logo_without_bg.png',
-                  image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/v1783167908/mohit/logo/msc_logo_without_bg.png',
-                  description:
-                    'Authorized distributor of Polycab and Dowells electrical products in Indore — wires, cables, switchgears, fans, solar, cable terminals, glands and crimping tools.',
-                  telephone: '+91-9770707019',
-                  email: 'info@mohitscpl.com',
-                  foundingDate: '1997',
-                  address: {
-                    '@type': 'PostalAddress',
-                    streetAddress: '54/2/16 & 54/2/18 Siddharth Farms, Lasudia Mori, Dewas Naka',
-                    addressLocality: 'Indore',
-                    addressRegion: 'Madhya Pradesh',
-                    postalCode: '452010',
-                    addressCountry: 'IN',
-                  },
-                  areaServed: 'IN',
-                },
-                {
-                  '@type': 'WebSite',
-                  '@id': 'https://mohitscpl.com/#website',
-                  url: 'https://mohitscpl.com',
-                  name: 'Mohit Sales Corporation Pvt. Ltd.',
-                  publisher: { '@id': 'https://mohitscpl.com/#organization' },
-                  inLanguage: 'en',
-                },
-              ],
-            }),
-          }}
-        />
+        {/* Global Organization / LocalBusiness + WebSite structured data is
+            emitted by <OrganizationSchema /> further down. It was briefly
+            duplicated here as a hand-written block, which declared the same
+            @id twice with a different telephone than the one in Settings —
+            conflicting contact details for one entity. Single source now. */}
 
         {/* ── Critical CSS (render-blocking — layout depends on these) ── */}
         <link rel="stylesheet" href="/assets/css/vendor/bootstrap.min.css" />

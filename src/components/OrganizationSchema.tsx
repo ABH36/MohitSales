@@ -33,15 +33,23 @@ async function buildJsonLd(): Promise<string> {
   const phones = [s.contact_phone_1, s.contact_phone_2].filter(Boolean);
 
   const organization: Record<string, unknown> = {
-    '@type': 'Organization',
+    // LocalBusiness/ElectronicsStore alongside Organization so the branch can
+    // surface in local and map results, not just as a company entity.
+    '@type': ['Organization', 'LocalBusiness', 'ElectronicsStore'],
     '@id': `${SITE_URL}/#organization`,
     name: 'Mohit Sales Corporation Pvt. Ltd.',
+    alternateName: 'Mohit Sales Corp.',
     url: SITE_URL,
     logo: LOGO,
     image: LOGO,
     description:
       'Authorized distributor of Polycab India Ltd. and Dowells — wires, cables, terminals, switchgears, and solar products since 1997.',
     foundingDate: '1997',
+    areaServed: 'IN',
+    // Phone/email intentionally read from Settings rather than hardcoded, so
+    // updating them in the admin keeps the structured data honest.
+    ...(phones.length ? { telephone: phones[0] } : {}),
+    ...(s.contact_email ? { email: s.contact_email } : {}),
     ...(sameAs.length ? { sameAs } : {}),
     contactPoint: {
       '@type': 'ContactPoint',
@@ -56,6 +64,9 @@ async function buildJsonLd(): Promise<string> {
           address: {
             '@type': 'PostalAddress',
             streetAddress: s.contact_address.replace(/\s*\n\s*/g, ', '),
+            addressLocality: 'Indore',
+            addressRegion: 'Madhya Pradesh',
+            postalCode: '452010',
             addressCountry: 'IN',
           },
         }
@@ -68,6 +79,7 @@ async function buildJsonLd(): Promise<string> {
     url: SITE_URL,
     name: 'Mohit Sales Corporation Pvt. Ltd.',
     publisher: { '@id': `${SITE_URL}/#organization` },
+    inLanguage: 'en',
   };
 
   const graph = { '@context': 'https://schema.org', '@graph': [organization, website] };
