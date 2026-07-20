@@ -17,10 +17,12 @@ import './globals.css';
 // Falls back to the production ID when unset, so prod behaviour is unchanged.
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? 'G-FZF80T7820';
 
-// Required: without it Next tries to prerender all ~4,400 public pages at build
-// time, which hits the database during the build and fails. It also means the
-// shell streams before a page's async work finishes, so notFound() lands after
-// the 200 status is already committed — see the soft-404 note in the audit.
+// Every public page is server-rendered per request. Dropping this makes the
+// build prerender all ~4,400 pages instead (measured: builds fine, ~4 min, and
+// pages serve much faster) — but then admin edits only appear after the page
+// revalidates, so it is a content-workflow decision, not just a perf one.
+// Note: it is NOT what causes missing URLs to answer 200 — that was measured
+// with and without this flag and is unchanged.
 export const dynamic = 'force-dynamic';
 
 export function generateViewport(): Viewport {
