@@ -46,24 +46,28 @@ export default function PricelistPage() {
     },
   ];
 
+  // Each of these pointed at /catalogue, which lists only the six Polycab
+  // catalogues — so a visitor after cable terminals landed on a page with
+  // nothing about them. They now go to their own product pages, which exist
+  // and carry the actual content.
   const dowellsItems = [
     {
       title: 'Cable Terminal',
       image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167844/mohit/catalogue/cable-terminal.png',
-      link: '/catalogue',
-      label: 'View Catalogue'
+      link: '/cable-terminal',
+      label: 'View Products'
     },
     {
       title: 'Gland',
       image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167870/mohit/catalogue/gland.png',
-      link: '/catalogue',
-      label: 'View Catalogue'
+      link: '/gland',
+      label: 'View Products'
     },
     {
       title: 'Crimping Tool',
       image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167866/mohit/catalogue/crimping-tool.png',
-      link: '/catalogue',
-      label: 'View Catalogue'
+      link: '/crimping-tool',
+      label: 'View Products'
     },
   ];
 
