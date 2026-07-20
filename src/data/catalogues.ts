@@ -25,6 +25,13 @@ export const cablesCatalogue: CatalogueItem[] = [
   { title: 'Co-axial Wires', category: 'Cable', image: `${CDN}/v1783167849/mohit/catalogue/cables_catalogue/Coaxial.jpg`, pdf: '/assets/images/catalogue/cables_catalogue/pdf/Polycab-Coaxial-Cable.pdf' },
   { title: 'CCTV Cable', category: 'Cable', image: `${CDN}/v1783167847/mohit/catalogue/cables_catalogue/CCTV-CABLE.jpg`, pdf: '/assets/images/catalogue/cables_catalogue/pdf/Polycab-CCTV.pdf' },
   { title: 'Submersible Cables (Flat)', category: 'Cable', image: `${CDN}/v1783167860/mohit/catalogue/cables_catalogue/SUBMERSIBLE-CABLE.jpg`, pdf: '/assets/images/catalogue/cables_catalogue/pdf/SUBMERSIBLE-CABLE.pdf' },
+  // This 4.6 MB catalogue was sitting in public/ unreferenced — served fine on a
+  // direct URL but was not listed anywhere, so no customer could reach it.
+  // Reusing the cables-handbook thumbnail; swap in a dedicated cover when we have one.
+  // Percent-encoded on purpose: the filename has spaces. Browsers would encode
+  // them anyway, but crawlers and CDNs are less forgiving, and the file is left
+  // renamed-as-is in case anything already links to it directly.
+  { title: 'Cable Laying Catalogue', category: 'Cable', image: `${CDN}/v1783167856/mohit/catalogue/cables_catalogue/LDC-Img.png`, pdf: '/assets/images/catalogue/Cable%20Laying%20catalogue_Ord%2017709.pdf' },
 ];
 
 export const solarCatalogue: CatalogueItem[] = [
@@ -33,9 +40,16 @@ export const solarCatalogue: CatalogueItem[] = [
   { title: 'Solar Grid Tie String Inverter 25kw_40kw-5g', category: 'Solar', image: `${CDN}/v1783167881/mohit/catalogue/solar_catalogue/Solar-grid-three-phase-tie-25kw-1-1.png`, pdf: '/assets/images/catalogue/solar_catalogue/pdf/Solar-Catalogue_PSIT-25KW-40KW-5G.pdf' },
   { title: 'Solar Grid Tie String Inverter 50kw_60kw', category: 'Solar', image: `${CDN}/v1783167882/mohit/catalogue/solar_catalogue/Solar-grid-three-phase-tie-50kw-60KW-string-inverter-1.png`, pdf: '/assets/images/catalogue/solar_catalogue/pdf/string-inverter_50KW-60KW.pdf' },
   { title: 'Solar Grid Tie String Inverter 80kw_110kw-5g', category: 'Solar', image: `${CDN}/v1783167883/mohit/catalogue/solar_catalogue/Solar-grid-three-phase-tie-80kw-110KW-5G-string-inverter-1.png`, pdf: '/assets/images/catalogue/solar_catalogue/pdf/Final-Solar-Leaflet-80kw-110kw-5G.pdf' },
-  { title: 'Solar Grid Tie String Inverter 255k-ehv-5g', category: 'Solar', image: `${CDN}/v1783167876/mohit/catalogue/solar_catalogue/06-Grid-Tie-Solar-Inverter_3-Phase_-255K-EHV-5G-2-2-294x420.png`, pdf: '/assets/images/catalogue/solar_catalogue/pdf/Final-Solar-Leaflet-80kw-110kw-5G.pdf' },
+  // No 255K EHV leaflet was ever supplied, so this pointed at the 80–110kW one —
+  // a customer asking for 255K specs downloaded the wrong product's sheet.
+  // Falls back to the general solar catalogue until Polycab sends the leaflet.
+  { title: 'Solar Grid Tie String Inverter 255k-ehv-5g', category: 'Solar', image: `${CDN}/v1783167876/mohit/catalogue/solar_catalogue/06-Grid-Tie-Solar-Inverter_3-Phase_-255K-EHV-5G-2-2-294x420.png`, pdf: '/assets/images/catalogue/solar_catalogue/pdf/Polycab-Solar-Catalogue.pdf' },
   { title: 'Solar Cable', category: 'Solar', image: `${CDN}/v1783167877/mohit/catalogue/solar_catalogue/08-Solar-Cable-Brochure-2-211x300-1.png`, pdf: '/assets/images/catalogue/solar_catalogue/pdf/SOLAR-CABLE.pdf' },
-  { title: 'Polycrystalline Solar Module', category: 'Solar', image: `${CDN}/v1783167882/mohit/catalogue/solar_catalogue/Solar-grid-three-phase-tie-50kw-60KW-string-inverter-1.png`, pdf: '/assets/images/catalogue/solar_catalogue/pdf/string-inverter_50KW-60KW.pdf' },
+  // A PV module that was showing a string-inverter photo and handing out the
+  // 50–60kW inverter datasheet. Neither asset for the module was ever supplied;
+  // pointing at the general solar catalogue (which does cover PV modules) until
+  // Polycab sends the module leaflet and a real photo — both are on the request.
+  { title: 'Polycrystalline Solar Module', category: 'Solar', image: `${CDN}/v1783167884/mohit/catalogue/solar_catalogue/first_page.jpg`, pdf: '/assets/images/catalogue/solar_catalogue/pdf/Polycab-Solar-Catalogue.pdf' },
   { title: 'Polycab Solar Catalogue', category: 'Solar', image: `${CDN}/v1783167884/mohit/catalogue/solar_catalogue/first_page.jpg`, pdf: '/assets/images/catalogue/solar_catalogue/pdf/Polycab-Solar-Catalogue.pdf' },
   { title: 'Solar Catalogue(Grid Tie Inverter, PV Module, Solar DC Cables)', category: 'Solar', image: `${CDN}/v1783167885/mohit/catalogue/solar_catalogue/solar_catalogue.png`, pdf: '/assets/images/catalogue/solar_catalogue/pdf/REI-Cat-oct3-2023.pdf' },
 ];
