@@ -247,7 +247,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
   // has no features (was just auto-seeded), skip to Priority 2 to preserve the layout.
   // ══════════════════════════════════════════════════════════════════════
   const dbHasFeatures = dbProductEarly?.features && dbProductEarly.features !== '[]' && dbProductEarly.features !== 'null';
-  const skipDbTemplate = hasComplexLegacyHtml && !dbHasFeatures;
+  const dbHasDescription = dbProductEarly?.description && dbProductEarly.description !== '[]' && dbProductEarly.description !== 'null';
+  const dbHasImage = !!(dbProductEarly?.imageSrc && String(dbProductEarly.imageSrc).trim());
+  // An auto-seeded "empty shell" product (no image, no features, no description)
+  // must NOT hijack a real legacy listing page. e.g. `.../indian-standards` is a
+  // standards-index page (a grid of "IS 694 / IS 7098 …" links) that never had a
+  // product image — but a blank seeded product row was rendering the single-product
+  // "No Image" layout on top of it. When such a shell coincides with legacy HTML,
+  // fall through to PRIORITY 2 so the original listing renders instead.
+  const dbProductIsEmptyShell = !!dbProductEarly && !dbHasImage && !dbHasFeatures && !dbHasDescription;
+  const skipDbTemplate = (hasComplexLegacyHtml && !dbHasFeatures) || (dbProductIsEmptyShell && !!legacyHtml);
 
   if (dbProductEarly && !isIndexPage && !skipDbTemplate) {
     return (

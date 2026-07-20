@@ -27,8 +27,13 @@ export default function NonCriticalCSS() {
     // Skip on admin pages — these stylesheets conflict with admin panel
     if (pathname.startsWith('/admin')) return;
     NON_CRITICAL_CSS.forEach((href) => {
-      // Skip if already loaded
-      if (document.querySelector(`link[href="${href}"]`)) return;
+      // Skip only if it is already attached as an actual STYLESHEET.
+      // NOTE: match rel="stylesheet" specifically — the <head> may already
+      // hold a <link rel="preload"> for the same href (e.g. FontAwesome), and
+      // a preload merely fetches the file; it never applies the styles. A loose
+      // `link[href=...]` check matched that preload and skipped attaching the
+      // real stylesheet, leaving every FontAwesome icon invisible site-wide.
+      if (document.querySelector(`link[rel="stylesheet"][href="${href}"]`)) return;
 
       const link = document.createElement('link');
       link.rel = 'stylesheet';

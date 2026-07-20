@@ -103,25 +103,7 @@ export default function ContactUsPage() {
 
   return (
     <main>
-      <style dangerouslySetInnerHTML={{__html: `
-        .captcha-box {
-            display: inline-block;
-            padding: 10px 16px;
-            background: #f3f3f3;
-            border: 2px dashed #ccc;
-            font-weight: 700;
-            letter-spacing: 4px;
-            font-size: 18px;
-        }
 
-        .captcha-refresh {
-            cursor: pointer;
-            color: #000;
-            margin-left: 8px;
-            text-decoration: underline;
-            font-size: 14px;
-        }
-      `}} />
 
       {/* breadcrumb area start */}
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">

@@ -257,8 +257,12 @@ export default async function Page() {
             </div>
             <div className="col-xxl-5 col-lg-4 flex justify-content-lg-end justify-content-start mb-3">
               <div className="rs-portfolio-navigation">
-                <button className="swiper-button-prev rs-swiper-btn has-bg-white hover-orange rs-nav-prev-polycab"><i className="fa-regular fa-arrow-left"></i></button>
-                <button className="swiper-button-next rs-swiper-btn has-bg-white hover-orange rs-nav-next-polycab"><i className="fa-regular fa-arrow-right"></i></button>
+                <button className="swiper-button-prev rs-swiper-btn has-bg-white hover-orange rs-nav-prev-polycab" aria-label="Previous">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 32 32" fill="currentColor"><path d="M0.29 16.71l10 10 1.41-1.41L3.41 17H32v-2H3.41l8.29-8.29L10.29 5.29z"/></svg>
+                </button>
+                <button className="swiper-button-next rs-swiper-btn has-bg-white hover-orange rs-nav-next-polycab" aria-label="Next">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 32 32" fill="currentColor"><path d="M31.71 15.29l-10-10L20.29 6.71 28.59 15H0v2h28.59l-8.29 8.29 1.41 1.41z"/></svg>
+                </button>
               </div>
             </div>
           </div>
@@ -290,8 +294,12 @@ export default async function Page() {
             </div>
             <div className="col-xxl-5 col-lg-4 flex justify-content-lg-end justify-content-start mb-3">
               <div className="rs-portfolio-navigation">
-                <button className="swiper-button-prev rs-swiper-btn has-bg-white hover-orange rs-nav-prev-dowells"><i className="fa-regular fa-arrow-left"></i></button>
-                <button className="swiper-button-next rs-swiper-btn has-bg-white hover-orange rs-nav-next-dowells"><i className="fa-regular fa-arrow-right"></i></button>
+                <button className="swiper-button-prev rs-swiper-btn has-bg-white hover-orange rs-nav-prev-dowells" aria-label="Previous">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 32 32" fill="currentColor"><path d="M0.29 16.71l10 10 1.41-1.41L3.41 17H32v-2H3.41l8.29-8.29L10.29 5.29z"/></svg>
+                </button>
+                <button className="swiper-button-next rs-swiper-btn has-bg-white hover-orange rs-nav-next-dowells" aria-label="Next">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 32 32" fill="currentColor"><path d="M31.71 15.29l-10-10L20.29 6.71 28.59 15H0v2h28.59l-8.29 8.29 1.41 1.41z"/></svg>
+                </button>
               </div>
             </div>
           </div>

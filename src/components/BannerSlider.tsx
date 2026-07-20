@@ -35,6 +35,7 @@ const FALLBACK_MOBILE = [
 
 export default function BannerSlider() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [prevIndex, setPrevIndex] = useState(-1);
   const [banners, setBanners] = useState<BannerItem[] | null>(null);
 
   useEffect(() => {
@@ -60,8 +61,9 @@ export default function BannerSlider() {
   const count = desktopImages.length;
 
   const goToNext = useCallback(() => {
-    setActiveIndex(prev => (prev + 1) % (count || 1));
-  }, [count]);
+    setPrevIndex(activeIndex);
+    setActiveIndex((activeIndex + 1) % (count || 1));
+  }, [activeIndex, count]);
 
   useEffect(() => {
     if (count <= 1) return;
@@ -69,9 +71,40 @@ export default function BannerSlider() {
     return () => clearInterval(timer);
   }, [goToNext, count]);
 
+  const goToIndex = (index: number) => {
+    if (index === activeIndex) return;
+    setPrevIndex(activeIndex);
+    setActiveIndex(index);
+  };
+
   const handleSlideClick = (index: number) => {
     const link = bannerLinks[index];
     if (link) window.location.href = link;
+  };
+
+  // Vertical "conveyor" transition: the outgoing slide glides up and off the top
+  // while the incoming slide rises from the bottom into place — both move together,
+  // edge-to-edge, so it reads as one continuous upward scroll. Only the active and
+  // outgoing slides animate; every other slide snaps to its waiting spot below
+  // (transition: none) so nothing sweeps across the viewport out of turn.
+  const slideStyle = (index: number, banner: string, bgPos: string): React.CSSProperties => {
+    const isActive = index === activeIndex;
+    const isPrev = index === prevIndex && prevIndex !== activeIndex;
+    return {
+      backgroundImage: `url('${cld(banner)}')`,
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      backgroundSize: 'cover',
+      backgroundPosition: bgPos,
+      backgroundRepeat: 'no-repeat',
+      transform: isActive ? 'translateY(0)' : isPrev ? 'translateY(-100%)' : 'translateY(100%)',
+      transition: isActive || isPrev ? 'transform 1.15s cubic-bezier(0.6, 0.01, 0.2, 1)' : 'none',
+      zIndex: isActive || isPrev ? 2 : 1,
+      cursor: bannerLinks[index] ? 'pointer' : 'default',
+    };
   };
 
   return (
@@ -85,21 +118,7 @@ export default function BannerSlider() {
                 key={index}
                 className={`swiper-slide ${index === activeIndex ? 'swiper-slide-active' : ''}`}
                 onClick={() => handleSlideClick(index)}
-                style={{
-                  backgroundImage: `url('${cld(banner)}')`,
-                  position: 'absolute',
-                  opacity: index === activeIndex ? 1 : 0,
-                  transition: 'opacity 1s ease-in-out',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'left center',
-                  backgroundRepeat: 'no-repeat',
-                  zIndex: index === activeIndex ? 2 : 1,
-                  cursor: bannerLinks[index] ? 'pointer' : 'default',
-                }}
+                style={slideStyle(index, banner, 'left center')}
               />
             ))}
             <div style={{ visibility: 'hidden', width: '100%', height: '100%', position: 'relative' }} />
@@ -113,7 +132,7 @@ export default function BannerSlider() {
                 role="button"
                 aria-label={`Go to slide ${index + 1}`}
                 aria-current={index === activeIndex ? 'true' : undefined}
-                onClick={() => setActiveIndex(index)}
+                onClick={() => goToIndex(index)}
               />
             ))}
           </div>
@@ -129,21 +148,7 @@ export default function BannerSlider() {
                 key={index}
                 className={`swiper-slide ${index === activeIndex ? 'swiper-slide-active' : ''}`}
                 onClick={() => handleSlideClick(index)}
-                style={{
-                  backgroundImage: `url('${cld(banner)}')`,
-                  position: 'absolute',
-                  opacity: index === activeIndex ? 1 : 0,
-                  transition: 'opacity 1s ease-in-out',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat',
-                  zIndex: index === activeIndex ? 2 : 1,
-                  cursor: bannerLinks[index] ? 'pointer' : 'default',
-                }}
+                style={slideStyle(index, banner, 'center')}
               />
             ))}
             <div style={{ visibility: 'hidden', width: '100%', height: '100%', position: 'relative' }} />
@@ -157,7 +162,7 @@ export default function BannerSlider() {
                 role="button"
                 aria-label={`Go to slide ${index + 1}`}
                 aria-current={index === activeIndex ? 'true' : undefined}
-                onClick={() => setActiveIndex(index)}
+                onClick={() => goToIndex(index)}
               />
             ))}
           </div>

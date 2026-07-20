@@ -225,13 +225,12 @@ export function renderDbProduct(dbProduct: any, productJson: any = null, legacyI
                   return imgSrc ? (
                     <img src={imgSrc} alt={dbProduct.title} className="img-fluid w-full h-auto object-contain" />
                   ) : (
-                    <div className="d-flex align-items-center justify-content-center bg-light rounded" style={{ minHeight: 260, color: '#aaa' }}>
-                      <div style={{ textAlign: 'center' }}>
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ddd" strokeWidth="1.5" style={{ marginBottom: 8 }}>
-                          <rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
-                        </svg>
-                        <div>No Image</div>
-                      </div>
+                    <div className="d-flex align-items-center justify-content-center rounded" style={{ minHeight: 260, background: 'linear-gradient(135deg, #f8fafc 0%, #eef2f9 100%)', border: '1px solid rgba(30,46,94,0.08)' }}>
+                      <img
+                        src={cld('https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/logo/msc_logo_without_bg.png')}
+                        alt={dbProduct.title}
+                        style={{ maxWidth: '70%', maxHeight: 150, objectFit: 'contain', opacity: 0.85 }}
+                      />
                     </div>
                   );
                 })()}
@@ -433,7 +432,9 @@ export function renderDbCategory(cat: any) {
                             {prod.imageSrc ? (
                               <img src={prod.imageSrc} alt={prod.title} className="w-full h-[250px] object-contain rounded-[10px] shadow-[0_1px_2px_rgba(60,64,67,0.3),0_2px_6px_2px_rgba(60,64,67,0.15)] transition-transform duration-300 group-hover:scale-105" loading="lazy" />
                             ) : (
-                              <div className="w-full h-[250px] flex items-center justify-center text-slate-300 text-sm">No Image</div>
+                              <div className="w-full h-[250px] flex items-center justify-center rounded-[10px]" style={{ background: 'linear-gradient(135deg, #f8fafc 0%, #eef2f9 100%)' }}>
+                                <img src={cld('https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/logo/msc_logo_without_bg.png')} alt={prod.title} className="max-w-[65%] max-h-[130px] object-contain opacity-85" loading="lazy" />
+                              </div>
                             )}
                           </div>
                           <div className="flex flex-col flex-grow p-[18px] text-center">
