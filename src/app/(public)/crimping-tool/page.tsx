@@ -2,6 +2,7 @@
 
 import React from 'react';
 import BreadcrumbBanner from '@/components/BreadcrumbBanner';
+import ProductPageWrapper from '@/components/ProductPageWrapper';
 import { cld } from '@/lib/cloudinary';
 
 export default function CrimpingToolPage() {
@@ -26,7 +27,11 @@ export default function CrimpingToolPage() {
     }
   ];
 
+  // Wrapped so its "Send Enquiry" buttons open the enquiry modal like every
+  // other product page. Without this they navigated away to /contact-us, which
+  // is why the same button behaved differently here than elsewhere.
   return (
+    <ProductPageWrapper>
     <main>
       <BreadcrumbBanner
         title="Crimping Tool"
@@ -70,5 +75,6 @@ export default function CrimpingToolPage() {
         </div>
       </section>
     </main>
+    </ProductPageWrapper>
   );
 }

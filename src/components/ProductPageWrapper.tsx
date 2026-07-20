@@ -48,14 +48,35 @@ export default function ProductPageWrapper({ children }: ProductPageWrapperProps
 
       const href = anchor.getAttribute('href');
       if (href) {
-        // Intercept URLs containing 'contact-us' that have a 'product' query parameter
-        const isProductContact = href.includes('contact-us') && href.includes('product=');
+        // Which contact-us links become the modal.
+        //
+        // A `product=` parameter is the reliable signal, and most pages carry it.
+        // But some enquiry buttons link to a bare /contact-us — those used to
+        // navigate away while the identical button elsewhere opened the modal,
+        // so the same action behaved two different ways across the site.
+        //
+        // Those are matched on the button itself (its label or .enquiry-btn
+        // class) rather than the href, so the header/footer "Contact Us" links
+        // still navigate normally — they are not enquiry buttons.
+        const pointsAtContact = href.includes('contact-us');
+        const hasProductParam = href.includes('product=');
+        const looksLikeEnquiryCta =
+          anchor.classList.contains('enquiry-btn') ||
+          /enquir/i.test(anchor.textContent || '');
+
+        const isProductContact = pointsAtContact && (hasProductParam || looksLikeEnquiryCta);
         if (isProductContact) {
           e.preventDefault();
           try {
             // Extract the product query parameter
             const url = new URL(href, window.location.origin);
-            const prod = url.searchParams.get('product') || '';
+            // Without an explicit product, fall back to the page's own heading so
+            // the enquiry still says which product it is about.
+            const prod =
+              url.searchParams.get('product') ||
+              document.querySelector('.rs-breadcrumb-title')?.textContent?.trim() ||
+              document.querySelector('h1')?.textContent?.trim() ||
+              '';
             if (modalOpen) {
               setModalOpen(false);
               setTimeout(() => {
