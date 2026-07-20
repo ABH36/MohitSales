@@ -17,9 +17,12 @@ const FALLBACK_COMPANY_PROFILE = {
   title: 'Company Profile',
   content: '<p>Mohit Sales Corporation Pvt. Ltd. is a trusted name in the electrical distribution industry. With over 27+ years of experience, we deliver high-quality electrical products and customized solutions to diverse sectors. As an Authorised Distributor of Polycab and Dowells, we ensure our customers receive only genuine, certified products that meet the highest industry standards.</p>',
   imageUrl: 'https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/inner-banner/products.png',
-  // Empty by default — the old path pointed at a missing PDF (404). The
-  // "Download PDF Profile" button only renders once a real URL is set in the CMS.
-  extraField: '',
+  // The company profile PDF. This was emptied when the file 404'd — it had been
+  // swept up by a cleanup that deleted "unused" PDFs, unused only because this
+  // was the sole reference and it was already blank. The file is restored, so
+  // the download button renders again by default; the CMS still overrides it.
+  // Percent-encoded: the filename contains a space.
+  extraField: '/assets/images/pdf/MOHIT%20CATALOGUE.pdf',
 };
 
 export default async function CompanyProfilePage() {
