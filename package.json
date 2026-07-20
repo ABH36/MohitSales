@@ -19,6 +19,8 @@
     "db:rebuild-categories:dry": "DRY_RUN=1 node scripts/rebuild-category-tree.js",
     "db:backfill-datasheets": "node scripts/backfill-datasheet-links.js",
     "db:backfill-datasheets:dry": "node scripts/backfill-datasheet-links.js --dry",
+    "db:backfill-images": "node scripts/backfill-product-images.js",
+    "db:backfill-images:dry": "node scripts/backfill-product-images.js --dry",
     "test": "vitest run"
   },
   "prisma": {

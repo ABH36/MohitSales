@@ -71,7 +71,12 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     prisma.seoMeta.findFirst({
       where: { page: { in: altPath ? [cleanPath, altPath] : [cleanPath] } }
     }).catch(() => null),
-    prisma.product.findUnique({ where: { slug: slugPath }, select: { metaTitle: true, metaDescription: true, metaKeywords: true, imageSrc: true } }).catch(() => null),
+    // title/description are selected too: with no admin-authored meta (none of
+    // the 2173 products carry metaTitle/metaDescription) the fallback below used
+    // to build the title from the slug, which mangles technical notation —
+    // "polycab-mv-cu-bs-6622-63511kv" came out as "Polycab Mv Cu Bs 6622
+    // 63511kv" instead of the stored "Polycab MV Cu BS 6622 6.35/11kV".
+    prisma.product.findUnique({ where: { slug: slugPath }, select: { metaTitle: true, metaDescription: true, metaKeywords: true, imageSrc: true, title: true, description: true } }).catch(() => null),
   ]);
 
   const pageUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'https://mohitscpl.com'}/${slugPath}`;
@@ -94,10 +99,32 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     };
   }
 
+  // The stored description is sometimes a JSON array of paragraphs and sometimes
+  // plain text; take the first paragraph either way and trim it to a sane length
+  // for a meta description.
+  const productDescription = (() => {
+    const raw = dbProduct?.description;
+    if (!raw || raw === '[]' || raw === 'null') return null;
+    let text = raw;
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) text = parsed.filter(Boolean).join(' ');
+      else text = String(parsed);
+    } catch {
+      text = raw.split('\n\n').filter(Boolean)[0] || raw;
+    }
+    text = text.replace(/\s+/g, ' ').trim();
+    if (!text) return null;
+    return text.length > 300 ? `${text.slice(0, 297).trimEnd()}…` : text;
+  })();
+
+  const SITE_SUFFIX = 'Mohit Sales Corporation Pvt. Ltd.';
+  const GENERIC_DESCRIPTION = 'Authorized Polycab & Dowells Distributor';
+
   // Product-specific admin-managed SEO meta takes next priority
   if (dbProduct && (dbProduct.metaTitle || dbProduct.metaDescription || dbProduct.metaKeywords)) {
-    const title = dbProduct.metaTitle || `${product?.heading || product?.title || 'Product'} - Mohit Sales Corporation Pvt. Ltd.`;
-    const description = dbProduct.metaDescription || (product?.description && product.description[0]) || 'Authorized Polycab & Dowells Distributor';
+    const title = dbProduct.metaTitle || `${dbProduct.title || product?.heading || product?.title || 'Product'} - ${SITE_SUFFIX}`;
+    const description = dbProduct.metaDescription || productDescription || (product?.description && product.description[0]) || GENERIC_DESCRIPTION;
     return {
       title,
       description,
@@ -140,6 +167,23 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     };
   }
 
+  // A real product with no admin-authored meta: use its own stored title and
+  // description. Deriving these from the slug (below) destroys the technical
+  // notation these names depend on — "6.35/11kV" becomes "63511kv" — so the
+  // slug is only ever a last resort for pages with no product row at all.
+  if (dbProduct?.title) {
+    const title = `${dbProduct.title} - ${SITE_SUFFIX}`;
+    const description = productDescription || GENERIC_DESCRIPTION;
+    const images = dbProduct.imageSrc ? [dbProduct.imageSrc] : [];
+    return {
+      title,
+      description,
+      alternates: { canonical: pageUrl },
+      openGraph: { url: pageUrl, title, description, images },
+      twitter: { card: 'summary_large_image', title, description, images },
+    };
+  }
+
   const parts = resolvedParams.slug;
   const lastPart = parts[parts.length - 1];
   const formattedTitle = lastPart
@@ -148,8 +192,8 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     .replace(/\b\w/g, c => c.toUpperCase());
 
   return {
-    title: `${formattedTitle} - Mohit Sales Corporation Pvt. Ltd.`,
-    description: 'Authorized Polycab & Dowells Distributor',
+    title: `${formattedTitle} - ${SITE_SUFFIX}`,
+    description: GENERIC_DESCRIPTION,
     alternates: { canonical: pageUrl },
     openGraph: { url: pageUrl },
   };
