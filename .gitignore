@@ -59,3 +59,10 @@ coverage/
 # Cloudinary migration artifacts (generated)
 .cloudinary-map.json
 mohit_prod*.sql.gz
+# Database dumps must never be committed — they carry customer enquiries and
+# admin password hashes. Only the .sql.gz form was ignored, so a .dump sitting
+# in the repo root would have gone in with `git add -A`.
+*.dump
+*.sql
+*.sql.gz
+*.bak
