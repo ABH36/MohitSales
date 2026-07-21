@@ -3890,6 +3890,98 @@ body::-webkit-scrollbar {
   color: var(--brand-navy);
 }
 
+/* ════════════════════════════════════════════════════════════
+   CATEGORY FILTER — controls injected above legacy product grids.
+   Some listings carry 180+ cards with no way to narrow them.
+   ════════════════════════════════════════════════════════════ */
+.category-filter {
+  margin: 0 0 28px;
+  padding: 18px 20px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(30, 46, 94, 0.06);
+}
+
+.category-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.category-filter-search {
+  flex: 1 1 240px;
+  min-width: 0;
+  height: 46px;
+  padding: 0 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  color: #121a2f;
+  background: #ffffff;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* The theme applies an orange focus ring to inputs globally; inside this white
+   card it reads as a stray outline, so these controls carry their own. */
+.category-filter-search:focus,
+.category-filter-search:focus-visible {
+  border-color: var(--brand-navy) !important;
+  box-shadow: 0 0 0 3px rgba(30, 46, 94, 0.12) !important;
+  outline: none !important;
+}
+
+.category-filter-search::placeholder { color: #94a3b8; }
+
+.category-filter-select {
+  flex: 0 1 auto;
+  height: 46px;
+  padding: 0 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 9px;
+  background: #ffffff;
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  color: #121a2f;
+  cursor: pointer;
+  outline: none;
+  max-width: 220px;
+}
+
+.category-filter-select:focus { border-color: var(--brand-navy); }
+
+.category-filter-clear {
+  height: 46px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 9px;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  background: linear-gradient(135deg, var(--brand-orange), var(--brand-red));
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.category-filter-clear:hover { transform: translateY(-2px); filter: brightness(1.05); }
+
+.category-filter-count {
+  margin-top: 12px;
+  color: #475569;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+}
+
+@media (max-width: 575px) {
+  .category-filter { padding: 14px; }
+  .category-filter-select,
+  .category-filter-clear { flex: 1 1 100%; max-width: none; }
+}
+
 /* Respect users who prefer reduced motion — disables the heavy theme animations
    only for people who've set that OS preference; everyone else is unaffected. */
 @media (prefers-reduced-motion: reduce) {

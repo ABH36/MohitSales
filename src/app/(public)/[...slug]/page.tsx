@@ -4,6 +4,7 @@ import { Metadata } from 'next';
 import * as cheerio from 'cheerio';
 import prisma from '@/lib/prisma';
 import ProductPageWrapper from '@/components/ProductPageWrapper';
+import CategoryFilter from '@/components/CategoryFilter';
 import SchemaInjector from '@/components/SchemaInjector';
 import { sanitizeHtml } from '@/lib/utils';
 import { renderDbProduct, renderDbCategory, renderProductLayout } from './render';
@@ -551,6 +552,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <SchemaInjector page={`/${slugPath}`} />
         <main className="legacy-php-content">
           <div className="legacy-php-content" dangerouslySetInnerHTML={{ __html: sanitizeHtml(finalHtml) }} />
+          {/* Reads the cards this HTML just rendered and adds filter/sort over
+              them. Renders nothing on pages with only a handful of products. */}
+          <CategoryFilter />
         </main>
       </ProductPageWrapper>
     );
