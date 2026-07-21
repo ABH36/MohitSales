@@ -173,6 +173,8 @@ export default function Header() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [openSubmenus, setOpenSubmenus] = useState<Record<string, boolean>>({});
+  const [searchOpen, setSearchOpen] = useState(false);
+  const searchInputRef = React.useRef<HTMLInputElement>(null);
 
 
   // Curated static navigation. This is intentional and richer than the DB
@@ -338,6 +340,53 @@ export default function Header() {
               </div>
 
               <div className="rs-header-right d-flex align-items-center gap-4">
+                {/* Collapsed to an icon by default: the logo and seven nav items
+                    already fill the bar, and a permanently open field pushed the
+                    nav onto a second line. Expands on click; still a plain GET
+                    form, so it submits without JS once open. */}
+                <form
+                  action="/search"
+                  method="get"
+                  role="search"
+                  className={`header-search d-none d-lg-flex${searchOpen ? ' is-open' : ''}`}
+                  onSubmit={(e) => {
+                    if (!searchOpen) {
+                      e.preventDefault();
+                      setSearchOpen(true);
+                    }
+                  }}
+                >
+                  <input
+                    type="search"
+                    name="q"
+                    placeholder="Search products, IS 7098, 11kV…"
+                    aria-label="Search products"
+                    aria-hidden={!searchOpen}
+                    tabIndex={searchOpen ? 0 : -1}
+                    className="header-search-input"
+                    ref={searchInputRef}
+                  />
+                  <button
+                    type={searchOpen ? 'submit' : 'button'}
+                    className="header-search-btn"
+                    aria-label={searchOpen ? 'Search' : 'Open search'}
+                    aria-expanded={searchOpen}
+                    onClick={() => {
+                      if (!searchOpen) {
+                        setSearchOpen(true);
+                        // Focus after the width transition starts, or the caret
+                        // lands in a zero-width field.
+                        setTimeout(() => searchInputRef.current?.focus(), 60);
+                      }
+                    }}
+                  >
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
+                      <circle cx="11" cy="11" r="7" />
+                      <line x1="16.5" y1="16.5" x2="21" y2="21" />
+                    </svg>
+                  </button>
+                </form>
+
                 <div className="rs-header-hamburger">
                   <div className="sidebar-toggle new">
                     <a className="bar-icon" href="#" aria-label="Open menu" onClick={(e) => { e.preventDefault(); setIsSidebarOpen(true); }}>
@@ -381,6 +430,30 @@ export default function Header() {
 
               {/* Mobile Menu Navigation */}
               <div className="mobile-menu mb-4 d-lg-none">
+                {/* Mobile gets its own box — the desktop one is hidden below lg,
+                    and search is more useful on mobile, not less. */}
+                <form
+                  action="/search"
+                  method="get"
+                  className="mobile-search"
+                  role="search"
+                  onSubmit={() => setIsSidebarOpen(false)}
+                >
+                  <input
+                    type="search"
+                    name="q"
+                    placeholder="Search products, IS 7098, 11kV…"
+                    aria-label="Search products"
+                    className="mobile-search-input"
+                  />
+                  <button type="submit" className="mobile-search-btn" aria-label="Search">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
+                      <circle cx="11" cy="11" r="7" />
+                      <line x1="16.5" y1="16.5" x2="21" y2="21" />
+                    </svg>
+                  </button>
+                </form>
+
                 <ul className="list-none p-0 m-0">
                   <li className="mobile-nav-item">
                     <Link href="/" onClick={() => setIsSidebarOpen(false)} className="mobile-nav-link">Home</Link>

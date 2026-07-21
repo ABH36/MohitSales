@@ -3661,6 +3661,235 @@ body::-webkit-scrollbar {
   transform: scale(1.035);
 }
 
+/* ════════════════════════════════════════════════════════════
+   PRODUCT SEARCH — header box, mobile box, and the results page.
+   The site had no way to search 2,100+ products; these are the
+   surfaces for it. Kept here rather than inline so the header and
+   the results page cannot drift apart visually.
+   ════════════════════════════════════════════════════════════ */
+
+/* ── Header search (desktop): icon by default, expands on click ──
+   Collapsed it occupies only the button, so the nav keeps its single line. */
+.header-search {
+  align-items: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0;
+  height: 42px;
+  transition: background 0.25s ease, border-color 0.25s ease,
+              box-shadow 0.25s ease, padding 0.3s ease;
+}
+
+/* Open state floats over the nav rather than sitting in the row — expanding in
+   flow pushed the seven nav items onto a second line, which is what the
+   permanently-open field did in the first place. */
+.header-search.is-open {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  background: #ffffff;
+  border-color: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  padding: 0 5px 0 16px;
+}
+
+/* Anchor for the absolutely-positioned open state. */
+.rs-header-right { position: relative; }
+
+.header-search-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #121a2f;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  /* Zero-width and unclickable while collapsed, so it cannot steal the click
+     or hold layout space. */
+  width: 0;
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
+}
+
+.header-search.is-open .header-search-input {
+  width: clamp(150px, 16vw, 240px);
+  opacity: 1;
+  pointer-events: auto;
+  margin-right: 6px;
+}
+
+.header-search-input::placeholder { color: #94a3b8; }
+
+/* The white pill and its shadow already read as focused, so the theme's global
+   input focus ring only adds a stray outline inside it. */
+.header-search-input:focus,
+.header-search-input:focus-visible {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.header-search-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--brand-orange), var(--brand-red));
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.header-search-btn:hover { transform: scale(1.08); filter: brightness(1.07); }
+
+/* ── Mobile search (inside the offcanvas menu) ── */
+.mobile-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 6px 6px 6px 14px;
+  margin-bottom: 18px;
+}
+
+.mobile-search-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  color: #121a2f;
+}
+
+.mobile-search-input::placeholder { color: #94a3b8; }
+
+.mobile-search-btn {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--brand-orange), var(--brand-red));
+}
+
+/* ── Results page ── */
+.search-page-form {
+  display: flex;
+  gap: 10px;
+  max-width: 680px;
+  margin: 0 0 28px;
+}
+
+.search-page-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 52px;
+  padding: 0 18px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  color: #121a2f;
+  background: #ffffff;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-page-input:focus {
+  border-color: var(--brand-navy);
+  box-shadow: 0 0 0 3px rgba(30, 46, 94, 0.12);
+}
+
+.search-page-submit {
+  flex: 0 0 auto;
+  height: 52px;
+  padding: 0 30px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  background: linear-gradient(135deg, var(--brand-orange), var(--brand-red));
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.search-page-submit:hover { transform: translateY(-2px); filter: brightness(1.05); }
+
+.search-count { color: #475569; font-size: 16px; margin-bottom: 22px; }
+.search-hint { color: #475569; font-size: 16px; }
+
+.search-empty { padding: 30px 0 10px; max-width: 640px; }
+.search-empty h2 { font-size: 24px; margin-bottom: 10px; color: var(--brand-navy); }
+.search-empty p { color: #475569; margin-bottom: 20px; }
+
+.search-results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 22px;
+}
+
+.search-result-card {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  overflow: hidden;
+  text-decoration: none;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s ease, border-color 0.28s ease;
+}
+
+.search-result-card:hover {
+  transform: translateY(-6px);
+  border-color: transparent;
+  box-shadow: 0 16px 34px rgba(30, 46, 94, 0.16);
+}
+
+.search-result-thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 175px;
+  padding: 14px;
+  background: linear-gradient(135deg, #f8fafc 0%, #eef2f9 100%);
+}
+
+.search-result-thumb img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.search-result-card:hover .search-result-thumb img { transform: scale(1.06); }
+
+.search-result-title {
+  padding: 14px 16px 18px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--brand-navy);
+}
+
 /* Respect users who prefer reduced motion — disables the heavy theme animations
    only for people who've set that OS preference; everyone else is unaffected. */
 @media (prefers-reduced-motion: reduce) {
