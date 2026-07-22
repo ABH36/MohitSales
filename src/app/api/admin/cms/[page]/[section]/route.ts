@@ -83,7 +83,9 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     const revalidateMap: Record<string, string> = {
       'homepage': '/',
       'about-us': '/about-us',
-      'company-profile': '/company-profile',
+      // The company profile renders on About Us now; /company-profile is only a
+      // redirect, so revalidating that path would refresh nothing.
+      'company-profile': '/about-us',
     };
     const revalidateTarget = revalidateMap[params.page];
     if (revalidateTarget) revalidatePath(revalidateTarget);

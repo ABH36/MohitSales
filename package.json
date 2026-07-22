@@ -21,6 +21,8 @@
     "db:backfill-datasheets:dry": "node scripts/backfill-datasheet-links.js --dry",
     "db:backfill-images": "node scripts/backfill-product-images.js",
     "db:backfill-images:dry": "node scripts/backfill-product-images.js --dry",
+    "db:clear-junk-seo": "node scripts/clear-junk-seo-meta.js",
+    "db:clear-junk-seo:dry": "node scripts/clear-junk-seo-meta.js --dry",
     "test": "vitest run"
   },
   "prisma": {

@@ -145,7 +145,7 @@ export default function ContactUsPage() {
                   </svg>
                 </div>
                 <div className="rs-contact-content">
-                  <h5 className="rs-contact-title">Address </h5>
+                  <h5 className="rs-contact-title" aria-level={2}>Address </h5>
                   <a target="_blank" rel="noopener noreferrer" href={getSetting('google_maps_embed') || "https://maps.app.goo.gl/3oEyjo8ZYNDEhECH6"}>
                     <span style={{ whiteSpace: 'pre-line' }}>
                       {getSetting('contact_address', '54/2/16 & 54/2/18 Siddharth Farms\nLasudia Mori Dewas Naka\nIndore-452010')}
@@ -163,7 +163,7 @@ export default function ContactUsPage() {
                   </svg>
                 </div>
                 <div className="rs-contact-content">
-                  <h5 className="rs-contact-title">Opening Hour </h5>
+                  <h5 className="rs-contact-title" aria-level={2}>Opening Hour </h5>
                   <p> Mon - Sat 10.00 AM - 06.30 PM <br/></p>
                 </div>
               </div>
@@ -177,7 +177,7 @@ export default function ContactUsPage() {
                   </svg>
                 </div>
                 <div className="rs-contact-content">
-                  <h5 className="rs-contact-title">Call Us </h5>
+                  <h5 className="rs-contact-title" aria-level={2}>Call Us </h5>
                   <a href={`tel:${getSetting('contact_phone_1', '+919522952267').replace(/[^+\d]/g, '')}`}>
                     {getSetting('contact_phone_1', '+91 9522952267')}
                   </a>
@@ -194,7 +194,7 @@ export default function ContactUsPage() {
                   </svg>
                 </div>
                 <div className="rs-contact-content">
-                  <h5 className="rs-contact-title">Mail Us</h5>
+                  <h5 className="rs-contact-title" aria-level={2}>Mail Us</h5>
                   <a href={`mailto:${getSetting('contact_email', 'info@mohitscpl.com')}`}>
                     {getSetting('contact_email', 'info@mohitscpl.com')}
                   </a>
@@ -245,7 +245,7 @@ export default function ContactUsPage() {
 
                     <div className="col-md-6 d-flex justify-content-start">
                       <div className="rs-contact-input text-center">
-                        <input type="file" name="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp" onChange={handleFileChange} />
+                        <input type="file" name="file" aria-label="Attach a file (PDF, DOC, JPG or PNG)" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.webp" onChange={handleFileChange} />
                       </div>
                     </div>
                     

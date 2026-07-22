@@ -12,7 +12,8 @@ export async function GET(req: NextRequest) {
       { path: '', priority: 1.0, changefreq: 'daily' },
       { path: '/about-us', priority: 0.8, changefreq: 'monthly' },
       { path: '/contact-us', priority: 0.8, changefreq: 'monthly' },
-      { path: '/company-profile', priority: 0.7, changefreq: 'monthly' },
+      // /company-profile is gone — it now 308s to /about-us, which is already
+      // listed above, and a sitemap should not advertise a redirect.
       { path: '/feedback', priority: 0.5, changefreq: 'monthly' },
       { path: '/catalogue', priority: 0.8, changefreq: 'weekly' },
       { path: '/certificates', priority: 0.6, changefreq: 'monthly' },

@@ -15,10 +15,13 @@ const NON_CRITICAL_CSS = [
   '/assets/css/vendor/fontawesome-pro.css',
   '/assets/css/vendor/remixicon.css',
   '/assets/css/vendor/animate.min.css',
-  '/assets/css/plugins/nice-select.css',
-  '/assets/css/plugins/nouislider.min.css',
   '/assets/css/vendor/magnific-popup.css',
   '/assets/css/vendor/odometer.min.css',
+  // Dropped nice-select and nouislider stylesheets: their init JS was already
+  // removed, there are no `.nice-select`/`noUi-` elements and no `#slider-range`
+  // to create any, so the CSS styled nothing. magnific-popup is kept — 9
+  // `popup-image`/`popup-video` triggers in the stored legacy HTML open its
+  // lightbox at runtime, which needs this stylesheet.
 ];
 
 export default function NonCriticalCSS() {

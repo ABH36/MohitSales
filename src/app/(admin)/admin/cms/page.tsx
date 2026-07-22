@@ -14,12 +14,20 @@ interface BannerItem {
   sortOrder: number;
 }
 
+/** One photo in the About Us gallery. Caption doubles as the alt text. */
+interface GalleryImage {
+  url: string;
+  caption: string;
+}
+
 interface PageContent {
   title: string;
   subtitle?: string; // used by the homepage About section only
   content: string;
   imageUrl: string;
   extraField: string;
+  /** About Us only. Absent on rows saved before the gallery existed. */
+  gallery?: GalleryImage[];
 }
 
 type TabKey = 'banners' | 'homepage' | 'promotions' | 'about-us' | 'company-profile';
@@ -258,6 +266,38 @@ export default function CmsPage() {
 
   const updatePage = (page: string, field: keyof PageContent, value: string) => {
     setPageData(prev => ({ ...prev, [page]: { ...prev[page], [field]: value } }));
+  };
+
+  /**
+   * Gallery editing. Kept separate from updatePage because that one takes a
+   * string, and the gallery is an array — the whole list is written back each
+   * time so save/load need no special handling.
+   */
+  const setGallery = (page: string, next: GalleryImage[]) => {
+    setPageData(prev => ({ ...prev, [page]: { ...prev[page], gallery: next } }));
+  };
+
+  const addGalleryImage = (page: string) => {
+    const current = pageData[page].gallery || [];
+    setGallery(page, [...current, { url: '', caption: '' }]);
+  };
+
+  const updateGalleryImage = (page: string, index: number, field: keyof GalleryImage, value: string) => {
+    const current = [...(pageData[page].gallery || [])];
+    current[index] = { ...current[index], [field]: value };
+    setGallery(page, current);
+  };
+
+  const removeGalleryImage = (page: string, index: number) => {
+    setGallery(page, (pageData[page].gallery || []).filter((_, i) => i !== index));
+  };
+
+  const moveGalleryImage = (page: string, index: number, direction: -1 | 1) => {
+    const current = [...(pageData[page].gallery || [])];
+    const target = index + direction;
+    if (target < 0 || target >= current.length) return;
+    [current[index], current[target]] = [current[target], current[index]];
+    setGallery(page, current);
   };
 
   const [uploading, setUploading] = useState<string | null>(null);
@@ -886,6 +926,50 @@ export default function CmsPage() {
                     onChange={e => updatePage('about-us', 'content', e.target.value)} />
                 </div>
                 {renderImageField('Hero Banner Image', pageData['about-us'].imageUrl, (url) => updatePage('about-us', 'imageUrl', url), 'aboutus-img', 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167900/mohit/inner-banner/about-us.png')}
+
+                {/* Photo gallery. Shown on the public page between the intro and
+                    the brands table; the whole block disappears when no photo
+                    has a URL, so the page never renders an empty section. */}
+                <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '20px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                    <label style={{ ...labelStyle, marginBottom: 0 }}>Photos (office, warehouse, team)</label>
+                    <button onClick={() => addGalleryImage('about-us')} style={btnUpload}>+ Add photo</button>
+                  </div>
+                  <span style={{ fontSize: 'calc(var(--admin-fs) - 4px)', color: '#9ca3af', display: 'block', marginBottom: '14px' }}>
+                    Real photos of your premises or team work best here. The caption is also
+                    used as the image&apos;s alt text, so describe what is in the picture.
+                  </span>
+
+                  {(pageData['about-us'].gallery || []).length === 0 ? (
+                    <div style={{ padding: '18px', borderRadius: '10px', background: '#f9fafb', border: '1px dashed #d1d5db', color: '#6b7280', fontSize: 'calc(var(--admin-fs) - 2px)' }}>
+                      No photos yet. The gallery section stays hidden on the website until you add one.
+                    </div>
+                  ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                      {(pageData['about-us'].gallery || []).map((img, i) => (
+                        <div key={i} style={{ padding: '16px', borderRadius: '10px', background: '#f9fafb', border: '1px solid #e5e7eb' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                            <strong style={{ fontSize: 'calc(var(--admin-fs) - 1px)', color: '#374151' }}>Photo {i + 1}</strong>
+                            <div style={{ display: 'flex', gap: '6px' }}>
+                              <button onClick={() => moveGalleryImage('about-us', i, -1)} disabled={i === 0}
+                                style={{ ...btnUpload, opacity: i === 0 ? 0.4 : 1 }} title="Move up">↑</button>
+                              <button onClick={() => moveGalleryImage('about-us', i, 1)} disabled={i === (pageData['about-us'].gallery || []).length - 1}
+                                style={{ ...btnUpload, opacity: i === (pageData['about-us'].gallery || []).length - 1 ? 0.4 : 1 }} title="Move down">↓</button>
+                              <button onClick={() => removeGalleryImage('about-us', i)}
+                                style={{ ...btnUpload, background: '#fee2e2', color: '#b91c1c', borderColor: '#fecaca' }}>Remove</button>
+                            </div>
+                          </div>
+                          {renderImageField('Image', img.url, (url) => updateGalleryImage('about-us', i, 'url', url), `aboutus-gal-${i}`, '/assets/images/about/...')}
+                          <div style={{ marginTop: '12px' }}>
+                            <label style={labelStyle}>Caption / alt text</label>
+                            <input style={inputStyle} value={img.caption} placeholder="Our warehouse in Indore"
+                              onChange={e => updateGalleryImage('about-us', i, 'caption', e.target.value)} />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           )}
@@ -894,31 +978,37 @@ export default function CmsPage() {
           {tab === 'company-profile' && (
             <div style={{ background: '#fff', borderRadius: '16px', padding: '24px', boxShadow: '0 4px 20px rgba(15,23,42,0.05)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-                <h3 style={{ margin: 0, fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 700, color: '#111827' }}>Company Profile Page</h3>
+                <h3 style={{ margin: 0, fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 700, color: '#111827' }}>Company Profile PDF</h3>
                 <button onClick={() => savePageContent('company-profile')} disabled={savingKey === 'company-profile'}
                   style={{ ...btnPrimary, opacity: savingKey === 'company-profile' ? 0.6 : 1 }}>
                   {savingKey === 'company-profile' ? 'Saving...' : 'Save Company Profile'}
                 </button>
               </div>
+              {/*
+                Only the PDF is edited here now.
+                The company profile used to be a page of its own, and this tab
+                also carried its title, body copy and hero image. That page has
+                been folded into About Us — the body copy repeated what About Us
+                already said, so only the download survived. Those three fields
+                no longer appear anywhere on the site, so they are not shown:
+                editing them would have looked like it worked and changed
+                nothing. Their stored values are left untouched in the database.
+              */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                <div>
-                  <label style={labelStyle}>Page Title</label>
-                  <input style={inputStyle} value={pageData['company-profile'].title} placeholder="Company Profile"
-                    onChange={e => updatePage('company-profile', 'title', e.target.value)} />
-                </div>
-                <div>
-                  <label style={labelStyle}>Page Content (HTML supported)</label>
-                  <textarea style={{ ...inputStyle, minHeight: '250px', resize: 'vertical' }}
-                    value={pageData['company-profile'].content} placeholder="<p>Company overview...</p>"
-                    onChange={e => updatePage('company-profile', 'content', e.target.value)} />
+                <div style={{ padding: '14px 16px', borderRadius: '10px', background: '#eff6ff', border: '1px solid #bfdbfe', fontSize: 'calc(var(--admin-fs) - 2px)', color: '#1e40af' }}>
+                  This PDF is offered for download at the bottom of the{' '}
+                  <strong>About Us</strong> page. Leave it empty to fall back to the
+                  default profile file.
                 </div>
                 <div>
                   <label style={labelStyle}>Company Profile PDF URL</label>
                   <input style={inputStyle} value={pageData['company-profile'].extraField}
                     placeholder="/assets/images/pdf/MOHIT CATALOGUE.pdf"
                     onChange={e => updatePage('company-profile', 'extraField', e.target.value)} />
+                  <span style={{ fontSize: 'calc(var(--admin-fs) - 4px)', color: '#9ca3af', marginTop: '2px', display: 'block' }}>
+                    Paste the path or URL of the PDF you want visitors to download.
+                  </span>
                 </div>
-                {renderImageField('Hero Image', pageData['company-profile'].imageUrl, (url) => updatePage('company-profile', 'imageUrl', url), 'profile-img', 'https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/inner-banner/products.png')}
               </div>
             </div>
           )}

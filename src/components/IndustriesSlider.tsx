@@ -85,9 +85,10 @@ export default function IndustriesSlider() {
                       <img src={cld(ind.image, 'f_auto,q_auto,w_500')} alt={ind.name} />
                     </div>
                     <div className="rs-portfolio-content">
-                      <h4 className="rs-portfolio-title" aria-level={3}>
-                        <a href="#">{ind.name}</a>
-                      </h4>
+                      {/* Informational showcase — these industries have no
+                          dedicated pages, so the name is plain text, not a dead
+                          "#" link. */}
+                      <h4 className="rs-portfolio-title" aria-level={3}>{ind.name}</h4>
                     </div>
                   </div>
                 </div>

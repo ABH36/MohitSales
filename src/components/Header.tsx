@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import ProductsMegaMenu from '@/components/ProductsMegaMenu';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -23,8 +24,9 @@ const DEFAULT_MENU_TREE: NavItem[] = [
     // Consumer and Industries — so the catalogue reads the way customers expect.
     // Every entry points at a slug that already exists; nothing here renames or
     // moves a page, it only regroups how they are surfaced in the menu.
-    // (Polycab also lists a consumer "Lighting" arm — deliberately omitted for
-    //  now because we stock no lighting SKUs yet.)
+    // Lighting, Switches & Accessories and the house-wire ranges arrived later,
+    // once their catalogue data existed; the arms were on polycab.com all along
+    // but had nothing behind them here.
     id: 'polycab-static',
     slug: 'polycab',
     name: 'Polycab',
@@ -47,12 +49,39 @@ const DEFAULT_MENU_TREE: NavItem[] = [
             ]
           },
           {
-            // House-wire ranges live inside the industrial cable taxonomy; these
-            // link straight into the existing hubs rather than duplicating them.
+            // Two kinds of entry sit here on purpose: the first two link into the
+            // industrial cable hubs that already carry building wire, the rest are
+            // the named consumer ranges, which are products rather than hubs.
             id: 'pc-wires', slug: 'industries/cables-by-type/others/building-wires', name: 'Wires',
             children: [
               { id: 'pc-wire-building', name: 'Building Wires', slug: 'industries/cables-by-type/others/building-wires', children: [] },
-              { id: 'pc-wire-domestic', name: 'Domestic Appliance & Lighting Cable', slug: 'industries/cables-by-type/others/domestic-appliance-and-lighting-cable', children: [] }
+              { id: 'pc-wire-domestic', name: 'Domestic Appliance & Lighting Cable', slug: 'industries/cables-by-type/others/domestic-appliance-and-lighting-cable', children: [] },
+              { id: 'pc-wire-suprema', name: 'Polycab Suprema', slug: 'wires/polycab-suprema', children: [] },
+              { id: 'pc-wire-optima', name: 'Polycab Optima+', slug: 'wires/polycab-optima-plus', children: [] },
+              { id: 'pc-wire-primma', name: 'Polycab Primma', slug: 'wires/polycab-primma', children: [] },
+              { id: 'pc-wire-green180', name: 'Polycab Green Wire (180m)', slug: 'wires/polycab-green-wire', children: [] },
+              { id: 'pc-wire-lffr180', name: 'LF FR 180m Wires', slug: 'wires/lf-fr-180m-wires', children: [] }
+            ]
+          },
+          {
+            id: 'pc-lighting', slug: 'lighting/led-bulb', name: 'Lighting',
+            children: [
+              { id: 'pc-lt-bulb', name: 'LED Bulb', slug: 'lighting/led-bulb', children: [] },
+              { id: 'pc-lt-downlight', name: 'Downlight', slug: 'lighting/downlight', children: [] },
+              { id: 'pc-lt-panel', name: 'Panel Light', slug: 'lighting/panel-light', children: [] },
+              { id: 'pc-lt-batten', name: 'LED Batten', slug: 'lighting/led-batten', children: [] },
+              { id: 'pc-lt-cob', name: 'LED COB', slug: 'lighting/led-cob', children: [] },
+              { id: 'pc-lt-outdoor', name: 'Outdoor Lights', slug: 'lighting/outdoor-lights', children: [] },
+              { id: 'pc-lt-rope', name: 'Rope & Strip Lights', slug: 'lighting/rope-and-strip-lights', children: [] }
+            ]
+          },
+          {
+            id: 'pc-switches', slug: 'switches-accessories/etira', name: 'Switches & Accessories',
+            children: [
+              { id: 'pc-sw-etira', name: 'Etira', slug: 'switches-accessories/etira', children: [] },
+              { id: 'pc-sw-levana', name: 'Levana', slug: 'switches-accessories/levana', children: [] },
+              { id: 'pc-sw-boxes', name: 'Plastic Modular Boxes', slug: 'switches-accessories/plastic-modular-boxes', children: [] },
+              { id: 'pc-sw-acc', name: 'Accessories', slug: 'switches-accessories/accessories', children: [] }
             ]
           },
           {
@@ -66,8 +95,8 @@ const DEFAULT_MENU_TREE: NavItem[] = [
             ]
           },
           {
-            // Polycab lists no Distribution Board equivalent for us — we stock
-            // none — so the other six of their seven types are all that appear.
+            // All seven of Polycab's switchgear types are now listed; the
+            // distribution board was the one we previously had no page for.
             id: 'pc-switchgear', slug: 'polycab/switchgears', name: 'Switchgear',
             children: [
               { id: 'pc-sg-mcb', name: 'MCB', slug: 'switchgears/mcb', children: [] },
@@ -75,7 +104,8 @@ const DEFAULT_MENU_TREE: NavItem[] = [
               { id: 'pc-sg-rccb', name: 'RCCB', slug: 'switchgears/rccb', children: [] },
               { id: 'pc-sg-rcbo', name: 'RCBO', slug: 'switchgears/rcbo', children: [] },
               { id: 'pc-sg-isolator', name: 'Isolator', slug: 'switchgears/isolator', children: [] },
-              { id: 'pc-sg-accl', name: 'ACCL', slug: 'switchgears/accl', children: [] }
+              { id: 'pc-sg-accl', name: 'ACCL', slug: 'switchgears/accl', children: [] },
+              { id: 'pc-sg-db', name: 'Distribution Board', slug: 'switchgears/distribution-board', children: [] }
             ]
           },
           {
@@ -201,31 +231,9 @@ export default function Header() {
     }));
   };
 
-  // Both menus render the tree recursively so the config can nest as deep as it
-  // needs (Polycab → Industries → Cables By Type → Others → Industrial Cable is
-  // five levels) without the markup having to know the depth up front.
-  const renderFlyout = (items: NavItem[]): React.ReactNode => (
-    <ul className="nav-flyout">
-      {items.map(item => {
-        const hasChildren = item.children && item.children.length > 0;
-        return (
-          <li key={item.id} className={hasChildren ? 'nav-has-sub' : ''}>
-            {hasChildren ? (
-              <>
-                <a href="#" onClick={(e) => e.preventDefault()}>
-                  <span>{item.name}</span>
-                  <i className="fa-solid fa-chevron-right nav-fly-arrow"></i>
-                </a>
-                {renderFlyout(item.children)}
-              </>
-            ) : (
-              <Link href={`/${item.slug}`}>{item.name}</Link>
-            )}
-          </li>
-        );
-      })}
-    </ul>
-  );
+  // Desktop Products is now ProductsMegaMenu (a click-opened drill-down panel);
+  // the old recursive hover flyout that used to render here was removed with it.
+  // The mobile drawer still renders the tree recursively below.
 
   // Keyed by item.id, not slug — the same slug legitimately appears in two
   // branches (Building Wires sits under both Consumer → Wires and Cables By
@@ -299,29 +307,11 @@ export default function Header() {
                       <Link href="/about-us">About Us</Link>
                     </li>
 
-                    {/* ── Products — cascading flyout (matches PHP original) ── */}
-                    <li className="nav-has-sub">
-                      <a href="#" onClick={(e) => e.preventDefault()}>
-                        Products
-                        <svg
-                          width="12"
-                          height="12"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="3"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          style={{ marginLeft: '5px', verticalAlign: 'middle' }}
-                          aria-hidden="true"
-                        >
-                          <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                      </a>
-
-                      {/* Brands → Consumer/Industries → categories → … (recursive) */}
-                      {renderFlyout(menuTree)}
-                    </li>
+                    {/* Products — click-opened drill-down panel. Replaced the
+                        hover cascade: five levels deep, the pointer had to stay
+                        inside a chain of panels that overlapped their own
+                        ancestors, and hover does not exist on touch. */}
+                    <ProductsMegaMenu tree={menuTree} />
 
                     <li>
                       <Link href="/catalogue">Catalogue</Link>
@@ -329,9 +319,9 @@ export default function Header() {
                     <li>
                       <Link href="/pricelist">Pricelist</Link>
                     </li>
-                    <li>
-                      <Link href="/company-profile">Company Profile</Link>
-                    </li>
+                    {/* Company Profile now lives as a section on About Us — the
+                        page was one paragraph plus a PDF, and dropping it keeps
+                        the nav to six items so the labels can breathe. */}
                     <li>
                       <Link href="/contact-us">Contact Us</Link>
                     </li>
@@ -476,9 +466,6 @@ export default function Header() {
                   </li>
                   <li className="mobile-nav-item">
                     <Link href="/pricelist" onClick={() => setIsSidebarOpen(false)} className="mobile-nav-link">Pricelist</Link>
-                  </li>
-                  <li className="mobile-nav-item">
-                    <Link href="/company-profile" onClick={() => setIsSidebarOpen(false)} className="mobile-nav-link">Company Profile</Link>
                   </li>
                   <li className="mobile-nav-item">
                     <Link href="/contact-us" onClick={() => setIsSidebarOpen(false)} className="mobile-nav-link">Contact Us</Link>

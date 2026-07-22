@@ -590,7 +590,7 @@ function AdminProductsPageInner() {
                       <td>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
                           <span className="prod-slug" title={p.slug} style={{ fontSize: 'calc(var(--admin-fs) - 3px)', color: '#718096', flex: 1 }}>{p.slug}</span>
-                          <a href={`/${p.slug}`} target="_blank" rel="noreferrer" style={{ fontSize: 'calc(var(--admin-fs) - 4px)', color: '#f7931e', textDecoration: 'none', fontWeight: 600, flexShrink: 0, whiteSpace: 'nowrap' }} title="View on site">
+                          <a href={`/${p.slug}`} target="_blank" rel="noreferrer" style={{ fontSize: 'calc(var(--admin-fs) - 4px)', color: '#c1272d', textDecoration: 'none', fontWeight: 600, flexShrink: 0, whiteSpace: 'nowrap' }} title="View on site">
                             ↗ View
                           </a>
                         </div>
@@ -1162,12 +1162,12 @@ function AdminProductsPageInner() {
           text-align: left;
         }
         .feature-chip:hover {
-          border-color: #f7931e;
+          border-color: #c1272d;
           background: #fffaf0;
         }
         .feature-chip.active {
-          background: #f7931e;
-          border-color: #f7931e;
+          background: #c1272d;
+          border-color: #c1272d;
           color: #fff;
         }
 

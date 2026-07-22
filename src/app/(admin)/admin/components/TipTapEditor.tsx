@@ -86,7 +86,7 @@ export default function TipTapEditor({ value, onChange, placeholder, disabled }:
           margin-bottom: 0.8rem;
         }
         .tiptap-content-area .ProseMirror blockquote {
-          border-left: 4px solid #f7931e;
+          border-left: 4px solid #c1272d;
           padding-left: 1rem;
           font-style: italic;
           color: #475569;

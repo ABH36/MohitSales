@@ -88,7 +88,7 @@ export default async function BlogPage({
               <div style={{ fontSize: '48px', marginBottom: '16px' }}>📝</div>
               <h3 className="text-2xl font-bold text-slate-800">No blog posts published yet</h3>
               <p className="text-gray-500 mt-2">Check back soon for insights, newsletters, and announcements.</p>
-              <Link href="/" className="mt-6 inline-block bg-gradient-to-r from-[#f7931e] to-[#c1272d] text-white px-6 py-2.5 rounded font-medium hover:opacity-90">
+              <Link href="/" className="mt-6 inline-block bg-gradient-to-r from-[#e8434a] to-[#c1272d] text-white px-6 py-2.5 rounded font-medium hover:opacity-90">
                 Back to Homepage
               </Link>
             </div>
@@ -122,7 +122,7 @@ export default async function BlogPage({
                               Mohit SCPL
                             </div>
                           )}
-                          <span className="absolute top-4 left-4 bg-[#f7931e] text-white text-xs px-2.5 py-1 rounded font-semibold uppercase tracking-wider shadow">
+                          <span className="absolute top-4 left-4 bg-[#c1272d] text-white text-xs px-2.5 py-1 rounded font-semibold uppercase tracking-wider shadow">
                             {categoryName}
                           </span>
                         </div>
@@ -139,7 +139,7 @@ export default async function BlogPage({
                             </span>
                           </div>
 
-                          <h3 className="text-xl font-bold text-slate-800 leading-snug mb-3 hover:text-[#f7931e] transition-colors duration-200">
+                          <h3 className="text-xl font-bold text-slate-800 leading-snug mb-3 hover:text-[#c1272d] transition-colors duration-200">
                             <Link href={`/blog/${post.slug}`}>{post.title}</Link>
                           </h3>
 
@@ -150,7 +150,7 @@ export default async function BlogPage({
                           <div className="mt-auto pt-4 border-t border-gray-100 flex justify-between items-center">
                             <Link 
                               href={`/blog/${post.slug}`} 
-                              className="text-[#f7931e] font-semibold text-sm inline-flex items-center gap-1 hover:text-[#c1272d] transition-colors duration-200"
+                              className="text-[#c1272d] font-semibold text-sm inline-flex items-center gap-1 hover:text-[#c1272d] transition-colors duration-200"
                             >
                               Read Full Post &rarr;
                             </Link>
@@ -201,7 +201,7 @@ export default async function BlogPage({
                           href={`/blog?page=${pageNum}`}
                           className={`px-4 py-2 rounded-md font-medium text-sm transition-all duration-200 no-underline ${
                             page === pageNum
-                              ? 'bg-gradient-to-r from-[#f7931e] to-[#c1272d] text-white border-transparent shadow-sm'
+                              ? 'bg-gradient-to-r from-[#e8434a] to-[#c1272d] text-white border-transparent shadow-sm'
                               : 'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
                           }`}
                         >

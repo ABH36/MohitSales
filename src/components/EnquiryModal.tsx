@@ -166,7 +166,7 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
         <div className="sticky top-0 bg-white/95 backdrop-blur-md px-8 py-6 border-b border-slate-100 flex items-center justify-between z-20">
           <div>
             <h3 id="enquiry-modal-title" className="text-2xl font-extrabold text-slate-900 flex items-center gap-3">
-              <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#f7931e]/10 text-xl text-[#f7931e]">
+              <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#c1272d]/10 text-xl text-[#c1272d]">
                 <svg className="w-5.5 h-5.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
@@ -196,7 +196,7 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
           {/* Read-only Product Name Field */}
           <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 flex items-center gap-4 shadow-sm relative overflow-hidden">
             <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-slate-100/50 to-transparent pointer-events-none" />
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#f7931e] to-[#c1272d] flex items-center justify-center text-white text-2xl shadow-md relative z-10 shrink-0">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#e8434a] to-[#c1272d] flex items-center justify-center text-white text-2xl shadow-md relative z-10 shrink-0">
               <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
               </svg>
@@ -222,7 +222,7 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
                 placeholder="Enter your name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-slate-800 text-base bg-slate-50/40 hover:bg-white focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#f7931e]/10 focus:border-[#f7931e] transition-all duration-200 shadow-sm placeholder:text-slate-400"
+                className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-slate-800 text-base bg-slate-50/40 hover:bg-white focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#c1272d]/10 focus:border-[#c1272d] transition-all duration-200 shadow-sm placeholder:text-slate-400"
               />
             </div>
 
@@ -239,7 +239,7 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
                 placeholder="Enter company name"
                 value={formData.cname}
                 onChange={handleChange}
-                className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-slate-800 text-base bg-slate-50/40 hover:bg-white focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#f7931e]/10 focus:border-[#f7931e] transition-all duration-200 shadow-sm placeholder:text-slate-400"
+                className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-slate-800 text-base bg-slate-50/40 hover:bg-white focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#c1272d]/10 focus:border-[#c1272d] transition-all duration-200 shadow-sm placeholder:text-slate-400"
               />
             </div>
 
@@ -256,7 +256,7 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
                 placeholder="Enter email address"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-slate-800 text-base bg-slate-50/40 hover:bg-white focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#f7931e]/10 focus:border-[#f7931e] transition-all duration-200 shadow-sm placeholder:text-slate-400"
+                className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-slate-800 text-base bg-slate-50/40 hover:bg-white focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#c1272d]/10 focus:border-[#c1272d] transition-all duration-200 shadow-sm placeholder:text-slate-400"
               />
             </div>
 
@@ -273,7 +273,7 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
                 placeholder="Enter contact number"
                 value={formData.mobile}
                 onChange={handleChange}
-                className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-slate-800 text-base bg-slate-50/40 hover:bg-white focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#f7931e]/10 focus:border-[#f7931e] transition-all duration-200 shadow-sm placeholder:text-slate-400"
+                className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-slate-800 text-base bg-slate-50/40 hover:bg-white focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#c1272d]/10 focus:border-[#c1272d] transition-all duration-200 shadow-sm placeholder:text-slate-400"
               />
             </div>
           </div>
@@ -291,7 +291,7 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
               placeholder="Write your specifications or requirements"
               value={formData.message}
               onChange={handleChange}
-              className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-slate-800 text-base bg-slate-50/40 hover:bg-white focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#f7931e]/10 focus:border-[#f7931e] transition-all duration-200 shadow-sm resize-none placeholder:text-slate-400"
+              className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-slate-800 text-base bg-slate-50/40 hover:bg-white focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#c1272d]/10 focus:border-[#c1272d] transition-all duration-200 shadow-sm resize-none placeholder:text-slate-400"
             />
           </div>
 
@@ -300,21 +300,22 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
             <label htmlFor="enq-file" className="block text-sm font-semibold text-slate-700 mb-2 ml-1">
               Attach RFQ / Specs <span className="text-slate-400 font-normal">(Optional)</span>
             </label>
-            <div className="relative border-2 border-dashed border-slate-200 hover:border-[#f7931e] rounded-xl p-6 transition-all duration-300 bg-slate-50/40 flex flex-col items-center justify-center cursor-pointer group hover:bg-white hover:shadow-md">
+            <div className="relative border-2 border-dashed border-slate-200 hover:border-[#c1272d] rounded-xl p-6 transition-all duration-300 bg-slate-50/40 flex flex-col items-center justify-center cursor-pointer group hover:bg-white hover:shadow-md">
               <input 
                 id="enq-file"
                 type="file"
+                aria-label="Attach a file (PDF, DOC, JPG or PNG)"
                 accept=".pdf,.doc,.docx,.jpg,.png"
                 onChange={handleFileChange}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
               />
               <div className="flex flex-col items-center text-center">
-                <div className="w-12 h-12 rounded-full bg-slate-100 group-hover:bg-[#f7931e]/10 text-slate-400 group-hover:text-[#f7931e] flex items-center justify-center mb-3 transition-colors duration-300">
+                <div className="w-12 h-12 rounded-full bg-slate-100 group-hover:bg-[#c1272d]/10 text-slate-400 group-hover:text-[#c1272d] flex items-center justify-center mb-3 transition-colors duration-300">
                   <svg className="w-6 h-6 transform group-hover:-translate-y-0.5 transition-transform duration-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                   </svg>
                 </div>
-                <span className="text-sm font-semibold text-slate-700 group-hover:text-[#f7931e] transition-colors">
+                <span className="text-sm font-semibold text-slate-700 group-hover:text-[#c1272d] transition-colors">
                   {file ? file.name : 'Click to upload RFQ or Specifications'}
                 </span>
                 {!file && (
@@ -354,7 +355,7 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
                 placeholder="Type code"
                 value={formData.captchaInput}
                 onChange={handleChange}
-                className="w-[140px] px-4 py-3.5 rounded-xl border border-slate-200 text-center font-bold text-slate-800 text-base focus:outline-none focus:ring-4 focus:ring-[#f7931e]/10 focus:border-[#f7931e] transition-all duration-200 shadow-sm placeholder:text-slate-400"
+                className="w-[140px] px-4 py-3.5 rounded-xl border border-slate-200 text-center font-bold text-slate-800 text-base focus:outline-none focus:ring-4 focus:ring-[#c1272d]/10 focus:border-[#c1272d] transition-all duration-200 shadow-sm placeholder:text-slate-400"
               />
             </div>
           </div>
@@ -384,7 +385,7 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
             <button 
               type="submit"
               disabled={isSubmitting}
-              className="px-10 py-3.5 rounded-xl bg-gradient-to-r from-[#f7931e] to-[#c1272d] hover:from-[#c1272d] hover:to-[#f7931e] text-white text-base font-bold shadow-[0_4px_14px_rgba(247,147,30,0.35)] hover:shadow-[0_6px_20px_rgba(247,147,30,0.45)] hover:-translate-y-[1px] active:translate-y-0 active:scale-[0.98] transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2 h-[52px]"
+              className="px-10 py-3.5 rounded-xl bg-gradient-to-r from-[#e8434a] to-[#c1272d] hover:from-[#c1272d] hover:to-[#e8434a] text-white text-base font-bold shadow-[0_4px_14px_rgba(193,39,45,0.35)] hover:shadow-[0_6px_20px_rgba(193,39,45,0.45)] hover:-translate-y-[1px] active:translate-y-0 active:scale-[0.98] transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2 h-[52px]"
             >
               {isSubmitting ? (
                 <>

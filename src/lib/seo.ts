@@ -35,10 +35,42 @@ export async function getSeoMetadata(pagePath: string, fallback: Metadata): Prom
 
     const seoMeta = await getCachedSeoRow(altPath ? [cleanPath, altPath] : [cleanPath]);
 
-    // No admin SEO row: use the caller's fallback but ensure a self-referencing
-    // canonical exists (many landing pages pass only title/description).
+    // No admin SEO row: use the caller's fallback, but fill in the pieces most
+    // callers leave out. Most pages pass only title/description, and without an
+    // explicit openGraph.title Next inherits the root layout's — so sharing
+    // /about-us showed the homepage's title in the link preview while the page's
+    // own <title> was correct. Only the branch below (a real SEO row) used to set
+    // these, so pages with no row never got them.
     if (!seoMeta) {
-      return fallback.alternates ? fallback : { ...fallback, alternates: { canonical: defaultCanonical } };
+      const fbTitle = typeof fallback.title === 'string' ? fallback.title : undefined;
+      const fbDescription =
+        typeof fallback.description === 'string' ? fallback.description : undefined;
+
+      return {
+        ...fallback,
+        alternates: fallback.alternates || { canonical: defaultCanonical },
+        // Left untouched when there is nothing to add, so a page that sets none
+        // of this keeps inheriting the layout defaults rather than being handed
+        // an empty object.
+        ...(fbTitle || fallback.openGraph
+          ? {
+              openGraph: {
+                ...(fallback.openGraph || {}),
+                title: (fallback.openGraph?.title as string) || fbTitle,
+                description: (fallback.openGraph?.description as string) || fbDescription,
+              },
+            }
+          : {}),
+        ...(fbTitle || fallback.twitter
+          ? {
+              twitter: {
+                ...(fallback.twitter || {}),
+                title: (fallback.twitter?.title as string) || fbTitle,
+                description: (fallback.twitter?.description as string) || fbDescription,
+              },
+            }
+          : {}),
+      };
     }
 
     return {

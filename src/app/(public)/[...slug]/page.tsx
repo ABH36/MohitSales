@@ -213,7 +213,13 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 }
 
 // ── DB lookup for page content (PageContent table; 4,339 pages) ──────────
-async function getPageContentHtml(slugPath: string): Promise<string | null> {
+// Returns the row's `heading` alongside the HTML: 73 of those pages were
+// exported with their *section* name in the banner ("Home Appliances" on the
+// Coolers page) while the row's own heading is correct, so the caller needs
+// both to put the right title on screen.
+async function getPageContent(
+  slugPath: string
+): Promise<{ html: string; heading: string | null } | null> {
   try {
     let pageContent = await prisma.pageContent.findUnique({
       where: { slug: slugPath }
@@ -225,9 +231,9 @@ async function getPageContentHtml(slugPath: string): Promise<string | null> {
       });
     }
     if (!pageContent || !pageContent.isActive) return null;
-    return pageContent.htmlContent;
+    return { html: pageContent.htmlContent, heading: pageContent.heading };
   } catch (e) {
-    console.error('[getPageContentHtml] Error:', e);
+    console.error('[getPageContent] Error:', e);
     return null;
   }
 }
@@ -256,7 +262,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
   ]);
 
   const dbProductEarly = (dbCategoryEarly || (dbProductEarlyRaw && (!dbProductEarlyRaw.isActive || dbProductEarlyRaw.stock <= 0))) ? null : dbProductEarlyRaw;
-  const legacyHtml = await getPageContentHtml(slugPath);
+  const legacyPage = await getPageContent(slugPath);
+  const legacyHtml = legacyPage?.html ?? null;
 
   const hasLegacyCards = legacyHtml && (
     legacyHtml.includes('class="cables-card"') ||
@@ -335,6 +342,23 @@ export default async function ProductPage({ params }: ProductPageProps) {
       // ── Dynamic Breadcrumbs Clickable Link Fix ──────────────────────────
       const $ = cheerio.load(finalHtml, null, false);
 
+      // ── Put the page's own name in the banner ──
+      // 73 exported pages carry their parent section's name in the banner: the
+      // Coolers page is headed "Home Appliances", every fan sub-range is headed
+      // "Fans". The row's `heading` column holds the correct name, so it wins.
+      // Punctuation-only differences are left alone — the export writes
+      // "Conduit & Accessories" where the column says "Conduit Accessories",
+      // and the ampersand version is the better title.
+      if (legacyPage?.heading?.trim()) {
+        const bannerEl = $('.rs-breadcrumb-title').first();
+        const banner = bannerEl.text().replace(/\s+/g, ' ').trim();
+        const heading = legacyPage.heading.trim();
+        const bare = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (bannerEl.length && bare(banner) !== bare(heading)) {
+          bannerEl.text(heading);
+        }
+      }
+
       // Fix legacy features title nesting inside ul
       $('ul.product-features h3, ul.product-features h4, ul.product-features .product-title').each((i, el) => {
         const titleEl = $(el);
@@ -376,17 +400,37 @@ export default async function ProductPage({ params }: ProductPageProps) {
           const catMap = new Map<string, string>();
           dbCats.forEach(c => catMap.set(c.name.toLowerCase(), c.slug));
 
+          // Legacy hub levels (e.g. "Industries", "Cables By Type") are valid
+          // pages but not category rows, so also resolve a crumb against the
+          // current URL path when the DB lookup misses. If neither resolves, the
+          // dead "#" link is replaced with plain text so no breadcrumb ever
+          // points nowhere.
+          const urlSegments = slugPath.split('/').filter(Boolean);
+          const slugify = (t: string) =>
+            t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
           for (let i = 0; i < length - 1; i++) {
             const li = $(breadcrumbLis[i]);
             const a = li.find('a');
+            const needsFix = a.length === 0 || a.attr('href') === '#';
+            if (!needsFix) continue;
+
             const text = li.text().trim();
-            const slug = catMap.get(text.toLowerCase());
-            if (slug) {
+            const dbSlug = catMap.get(text.toLowerCase());
+            let href = dbSlug ? `/${dbSlug}` : '';
+            if (!href) {
+              const segIdx = urlSegments.indexOf(slugify(text));
+              if (segIdx >= 0) href = `/${urlSegments.slice(0, segIdx + 1).join('/')}`;
+            }
+
+            if (href) {
               if (a.length > 0) {
-                a.attr('href', `/${slug}`);
+                a.attr('href', href);
               } else {
-                li.empty().append(`<span><a href="/${slug}">${text}</a></span>`);
+                li.empty().append(`<span><a href="${href}">${text}</a></span>`);
               }
+            } else if (text) {
+              li.empty().append(`<span>${text}</span>`);
             }
           }
         }

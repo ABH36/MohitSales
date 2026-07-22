@@ -34,9 +34,13 @@ export default function StickySocialMedia() {
         transition: 'all 0.3s ease',
       }}
     >
-      <a href={getSetting('social_facebook', '#') || '#'} className="Facebook" target="_blank" rel="noopener noreferrer">
-        <i className="social-facebook"><FaFacebookF /></i> Facebook
-      </a>
+      {/* Social profiles come from site settings; only render an icon once the
+          admin has entered a real URL, so there are never dead "#" links. */}
+      {getSetting('social_facebook', '') ? (
+        <a href={getSetting('social_facebook', '')} className="Facebook" target="_blank" rel="noopener noreferrer">
+          <i className="social-facebook"><FaFacebookF /></i> Facebook
+        </a>
+      ) : null}
       <a
         href="https://api.whatsapp.com/send?phone=919522952267&text=Hi,%20I%20would%20like%20to%20do%20enquire%20about%20your%20products."
         className="Google"
@@ -45,12 +49,16 @@ export default function StickySocialMedia() {
       >
         <i className="social-whatsapp"><FaWhatsapp /></i> WhatsApp
       </a>
-      <a href={getSetting('social_instagram', '#') || '#'} className="Instagram" target="_blank" rel="noopener noreferrer">
-        <i className="social-instagram"><FaInstagram /></i> Instagram
-      </a>
-      <a href={getSetting('social_linkedin', '#') || '#'} className="LinkedIn linkedin" target="_blank" rel="noopener noreferrer">
-        <i className="social-linkedin"><FaLinkedinIn /></i> LinkedIn
-      </a>
+      {getSetting('social_instagram', '') ? (
+        <a href={getSetting('social_instagram', '')} className="Instagram" target="_blank" rel="noopener noreferrer">
+          <i className="social-instagram"><FaInstagram /></i> Instagram
+        </a>
+      ) : null}
+      {getSetting('social_linkedin', '') ? (
+        <a href={getSetting('social_linkedin', '')} className="LinkedIn linkedin" target="_blank" rel="noopener noreferrer">
+          <i className="social-linkedin"><FaLinkedinIn /></i> LinkedIn
+        </a>
+      ) : null}
       <a href="/contact-us#contact-us-form" className="Quote">
         <div className="social_icon" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
           <Image src={cld("https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167897/mohit/icon/sign-document-icon.svg")} className="img-fluid inline-block" alt="Quote Icon" width={24} height={24} />

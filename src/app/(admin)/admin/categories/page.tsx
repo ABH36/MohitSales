@@ -101,7 +101,7 @@ function CategoryRow({ cat, depth, isReadOnly, isAdmin, onEdit, onDelete }: RowP
         </td>
         <td>
           <span style={{ fontSize: 'calc(var(--admin-fs) - 3px)', color: '#718096' }}>{cat.slug}</span>
-          <a href={`/${cat.slug}`} target="_blank" rel="noreferrer" style={{ marginLeft: 8, fontSize: 'calc(var(--admin-fs) - 4px)', color: '#f7931e', textDecoration: 'none', fontWeight: 600 }}>
+          <a href={`/${cat.slug}`} target="_blank" rel="noreferrer" style={{ marginLeft: 8, fontSize: 'calc(var(--admin-fs) - 4px)', color: '#c1272d', textDecoration: 'none', fontWeight: 600 }}>
             ↗ View
           </a>
         </td>

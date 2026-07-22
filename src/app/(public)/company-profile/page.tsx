@@ -1,3 +1,15 @@
+/**
+ * SUPERSEDED — this route no longer serves traffic.
+ *
+ * /company-profile is redirected to /about-us in next.config.js, where the
+ * profile PDF is now offered as a section. The page was one paragraph that
+ * repeated About Us plus the download, so it did not justify a nav slot.
+ *
+ * Kept rather than deleted on purpose: this file was removed once before and
+ * had to be restored because the profile PDF and its download button went with
+ * it (see commit "fix(company-profile): restore the deleted profile PDF…").
+ * Deleting the redirect in next.config.js brings this page straight back.
+ */
 import React from 'react';
 import Link from 'next/link';
 import prisma from '@/lib/prisma';

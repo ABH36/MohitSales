@@ -35,6 +35,10 @@ const nextConfig = {
       // Legacy homepage aliases.
       { source: '/index', destination: '/', permanent: true },
       { source: '/index-old', destination: '/', permanent: true },
+      // The company profile is now a section of About Us rather than a page of
+      // its own. Redirected rather than dropped so older links and anything
+      // printed with the old URL still land somewhere useful.
+      { source: '/company-profile', destination: '/about-us', permanent: true },
     ];
   },
   async headers() {

@@ -159,7 +159,7 @@ export default async function BlogDetailsPage({ params }: BlogDetailsPageProps) 
               <div className="bg-white rounded-xl shadow-sm p-6 md:p-10 border border-gray-100">
                 {/* Meta header */}
                 <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-6 pb-6 border-b border-gray-100">
-                  <span className="bg-[#f7931e] text-white text-xs px-3 py-1 rounded-full font-semibold uppercase tracking-wider">
+                  <span className="bg-[#c1272d] text-white text-xs px-3 py-1 rounded-full font-semibold uppercase tracking-wider">
                     {categoryName}
                   </span>
                   <span className="flex items-center gap-1">
@@ -184,7 +184,7 @@ export default async function BlogDetailsPage({ params }: BlogDetailsPageProps) 
 
                 {/* Excerpt */}
                 {post.excerpt && (
-                  <blockquote className="border-l-4 border-[#f7931e] pl-4 italic text-gray-700 text-lg leading-relaxed mb-8 bg-orange-50/50 py-3 pr-2 rounded-r">
+                  <blockquote className="border-l-4 border-[#c1272d] pl-4 italic text-gray-700 text-lg leading-relaxed mb-8 bg-orange-50/50 py-3 pr-2 rounded-r">
                     {post.excerpt}
                   </blockquote>
                 )}
@@ -258,7 +258,7 @@ export default async function BlogDetailsPage({ params }: BlogDetailsPageProps) 
                               )}
                             </div>
                             <div className="flex-grow">
-                              <h5 className="font-semibold text-slate-800 text-sm leading-snug group-hover:text-[#f7931e] transition-colors duration-200 line-clamp-2">
+                              <h5 className="font-semibold text-slate-800 text-sm leading-snug group-hover:text-[#c1272d] transition-colors duration-200 line-clamp-2">
                                 <Link href={`/blog/${rPost.slug}`}>{rPost.title}</Link>
                               </h5>
                               <span className="text-[11px] text-gray-500 mt-1 block">{rDateStr}</span>
@@ -274,7 +274,7 @@ export default async function BlogDetailsPage({ params }: BlogDetailsPageProps) 
                 <div className="bg-gradient-to-br from-[#1e2e5e] to-[#2d4080] text-white rounded-xl p-6 text-center shadow-lg">
                   <h4 className="font-bold text-lg mb-2">Need premium wires & cables?</h4>
                   <p className="text-xs text-gray-200 mb-4 leading-relaxed">We are the authorized distributor of Polycab and Dowells, supplying Indore & beyond.</p>
-                  <Link href="/contact-us" className="inline-block bg-[#f7931e] text-white font-semibold text-xs px-4 py-2 rounded uppercase tracking-wider hover:bg-[#c1272d] transition-colors duration-300">
+                  <Link href="/contact-us" className="inline-block bg-[#c1272d] text-white font-semibold text-xs px-4 py-2 rounded uppercase tracking-wider hover:bg-[#c1272d] transition-colors duration-300">
                     Send Enquiry &rarr;
                   </Link>
                 </div>

@@ -1,4 +1,5 @@
 import prisma from '@/lib/prisma';
+import { expandTerm, matchesTerm } from '@/lib/product-synonyms';
 
 /**
  * Product search shared by the API route and the /search page, so both rank and
@@ -28,17 +29,26 @@ export async function searchProducts(query: string, limit = 20): Promise<SearchR
     where: {
       isActive: true,
       stock: { gt: 0 },
-      AND: terms.map((t) => ({ title: { contains: t, mode: 'insensitive' as const } })),
+      // Each term matches itself or any trade code it implies ("armoured" → SWA).
+      AND: terms.map((t) => ({
+        OR: expandTerm(t).map((v) => ({ title: { contains: v, mode: 'insensitive' as const } })),
+      })),
     },
     select: { title: true, slug: true, imageSrc: true },
     // The same product sits under several taxonomy branches, so over-fetch and
-    // collapse by title below.
-    take: capped * 4,
+    // collapse by title below. Expanded terms widen this further: `contains`
+    // cannot do word boundaries, so "aluminium" → "al" also pulls in "metal"
+    // until the JS pass below discards them.
+    take: Math.min(capped * 10, 500),
     orderBy: { title: 'asc' },
   });
 
+  // Re-check with word-boundary semantics to drop the substring noise the
+  // widened query let through.
+  const matched = products.filter((p) => terms.every((t) => matchesTerm(p.title, t)));
+
   const seen = new Set<string>();
-  const deduped = products.filter((p) => {
+  const deduped = matched.filter((p) => {
     const key = p.title.toLowerCase();
     if (seen.has(key)) return false;
     seen.add(key);

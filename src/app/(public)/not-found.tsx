@@ -41,7 +41,7 @@ export default function NotFound() {
             <div 
               className="rounded-full p-4 d-flex align-items-center justify-content-center"
               style={{ 
-                background: 'rgba(247, 147, 30, 0.15)',
+                background: 'rgba(193, 39, 45, 0.15)',
                 border: '2px dashed #F7931E',
                 width: '80px',
                 height: '80px',
@@ -79,7 +79,7 @@ export default function NotFound() {
             style={{ 
               background: 'linear-gradient(135deg, #F7931E 0%, #d07613 100%)', 
               textDecoration: 'none',
-              boxShadow: '0 8px 20px rgba(247, 147, 30, 0.3)'
+              boxShadow: '0 8px 20px rgba(193, 39, 45, 0.3)'
             }}
           >
             Go to Homepage

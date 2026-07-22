@@ -1,6 +1,8 @@
 import React from 'react';
 import { sanitizeHtml } from '@/lib/utils';
 import { cld } from '@/lib/cloudinary';
+import { deriveSpecs, splitDescription, type Spec } from '@/lib/product-specs';
+import StickyProductActions from '@/components/StickyProductActions';
 
 /**
  * A card's `details` is sometimes a string and sometimes an array of lines —
@@ -185,7 +187,7 @@ export function renderDbProduct(dbProduct: any, productJson: any = null, legacyI
                             )}
                             <a
                               href={card.link ? cleanLink(card.link) : `/contact-us?product=${encodeURIComponent(card.title || dbProduct.title)}`}
-                              className="bg-gradient-to-br from-[#f7931e] to-[#c1272d] text-white rounded-[4px] px-[24px] py-[10px] font-medium text-[15px] border-none inline-flex items-center justify-center transition-all duration-300 w-auto min-w-[140px] h-[45px] self-center mt-auto mb-0 whitespace-nowrap hover:bg-none hover:bg-[#1e2e5e] hover:-translate-y-[2px] hover:shadow-[0_4px_12px_rgba(30,46,94,0.25)]"
+                              className="bg-gradient-to-br from-[#e8434a] to-[#c1272d] text-white rounded-[4px] px-[24px] py-[10px] font-medium text-[15px] border-none inline-flex items-center justify-center transition-all duration-300 w-auto min-w-[140px] h-[45px] self-center mt-auto mb-0 whitespace-nowrap hover:bg-none hover:bg-[#1e2e5e] hover:-translate-y-[2px] hover:shadow-[0_4px_12px_rgba(30,46,94,0.25)]"
                             >
                               {card.link && card.link !== '/contact-us' && card.link !== '/contact-us.php' ? 'Explore More' : 'Send Enquiry'}
                             </a>
@@ -251,29 +253,78 @@ export function renderDbProduct(dbProduct: any, productJson: any = null, legacyI
                 })()}
               </div>
 
+              {/* Specifications sit under the image, in the left column, so the
+                  empty space below a short product photo is filled and the page
+                  balances left-to-right instead of stacking everything on the
+                  right. Skipped for titles that carry no designation. */}
+              {(() => {
+                const titleSpecs = deriveSpecs(dbProduct.title);
+                const { specs: descSpecs } = splitDescription(parsedDescription);
+                const seen = new Set(titleSpecs.map((s) => s.label.toLowerCase()));
+                const merged: Spec[] = [
+                  ...titleSpecs,
+                  ...descSpecs.filter((s) => !seen.has(s.label.toLowerCase())),
+                ];
+                if (!merged.length) return null;
+                return (
+                  <div className="product-specs product-specs-aside">
+                    <h4 aria-level={3}>Specifications</h4>
+                    <div className="separator1"></div>
+                    <dl className="product-spec-grid">
+                      {merged.map((s) => (
+                        <div key={s.label} className="product-spec-row">
+                          <dt>{s.label}</dt>
+                          <dd>{s.value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </div>
+                );
+              })()}
+
             </div>
 
             <div className="col-lg-7">
               <div className="wires-title">
-                <h3>{dbProduct.title}</h3>
+                {/* Visual size comes from the tag; aria-level keeps the outline
+                    unbroken (h1 → 2 → 3) for screen readers. */}
+                <h3 aria-level={2}>{dbProduct.title}</h3>
                 <div className="separator1"></div>
               </div>
 
 
 
-              <div className="wires-desc">
-                {parsedDescription.length > 0 ? (
-                  parsedDescription.map((desc: string, idx: number) => (
-                    <p key={idx} className="mb-3">{desc}</p>
-                  ))
-                ) : (
-                  <p>Contact us for more information about this product.</p>
-                )}
-              </div>
+              {/* Description renders as ordered blocks: real prose stays a
+                  paragraph, but a construction line written as one comma-run —
+                  "Copper conductor, PVC insulated, PVC sheathed" — becomes
+                  bullets so the build is scannable. "Available Size" style facts
+                  are pulled out into the spec table below. */}
+              {(() => {
+                const { blocks } = splitDescription(parsedDescription);
+                return (
+                  <div className="wires-desc">
+                    {blocks.length > 0 ? (
+                      blocks.map((block, idx) =>
+                        block.type === 'ul' ? (
+                          <ul key={idx} className="product-desc-list">
+                            {block.items.map((item, i) => (
+                              <li key={i}>{item}</li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <p key={idx} className="mb-3">{block.text}</p>
+                        )
+                      )
+                    ) : (
+                      <p>Contact us for more information about this product.</p>
+                    )}
+                  </div>
+                );
+              })()}
 
               {parsedFeatures.length > 0 && (
                 <div className="features">
-                  <h4>Key Features</h4>
+                  <h4 aria-level={3}>Key Features</h4>
                   <div className="separator1"></div>
                   <ul className="animated-list">
                     {parsedFeatures.map((feat: any, idx: number) => {
@@ -332,6 +383,11 @@ export function renderDbProduct(dbProduct: any, productJson: any = null, legacyI
           </div>
         </div>
       </section>
+
+      <StickyProductActions
+        productTitle={dbProduct.title}
+        datasheetLink={dbProduct.datasheetLink}
+      />
     </main>
   );
 }
@@ -401,7 +457,7 @@ export function renderDbCategory(cat: any) {
                         <img src={cld(child.image)} alt={child.name} className="db-subcategory-img" />
                       ) : (
                         <div className="db-subcategory-icon">
-                          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#f7931e" strokeWidth="1.5">
+                          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#c1272d" strokeWidth="1.5">
                             <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
                           </svg>
                         </div>
@@ -426,24 +482,16 @@ export function renderDbCategory(cat: any) {
               <div className="products-section">
                 <div className="row mt-4">
                   {cat.products.map((prod: any) => {
-                    let displayDesc = prod.description || '';
-                    if (prod.description) {
-                      try {
-                        const parsed = JSON.parse(prod.description);
-                        if (Array.isArray(parsed)) {
-                          displayDesc = parsed.join(' ');
-                        } else {
-                          displayDesc = String(parsed);
-                        }
-                      } catch (e) {
-                        displayDesc = prod.description;
-                      }
-                    }
-
                     return (
                       <div key={prod.id} className="col-md-4 mt-4 d-flex align-items-stretch">
                         <div className="bg-white rounded-[14px] shadow-[0_12px_30px_rgba(0,0,0,0.12)] border border-transparent overflow-hidden flex flex-col flex-grow h-full w-full transition-transform duration-300 hover:-translate-y-1.5 group">
-                          <div className="p-[15px] bg-white d-flex justify-content-center align-items-center">
+                          {/* The card only offered "Send Enquiry", which was fine
+                              while these listings held items with nothing behind
+                              them. Products now have their own page carrying the
+                              description, features and datasheet, so the image and
+                              title open it — a card that cannot be clicked reads
+                              as broken. */}
+                          <a href={`/${prod.slug}`} className="p-[15px] bg-white d-flex justify-content-center align-items-center">
                             {prod.imageSrc ? (
                               <img src={prod.imageSrc} alt={prod.title} className="w-full h-[250px] object-contain rounded-[10px] shadow-[0_1px_2px_rgba(60,64,67,0.3),0_2px_6px_2px_rgba(60,64,67,0.15)] transition-transform duration-300 group-hover:scale-105" loading="lazy" />
                             ) : (
@@ -451,14 +499,18 @@ export function renderDbCategory(cat: any) {
                                 <img src={cld('https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/logo/msc_logo_without_bg.png')} alt={prod.title} className="max-w-[65%] max-h-[130px] object-contain opacity-85" loading="lazy" />
                               </div>
                             )}
-                          </div>
+                          </a>
                           <div className="flex flex-col flex-grow p-[18px] text-center">
-                            <div className="text-[#c1272d] text-[22px] font-semibold mb-[10px]">{prod.title}</div>
-                            {displayDesc && (
-                              <div className="text-[#555] text-[16px] leading-[1.6] mb-[18px]">{displayDesc}</div>
-                            )}
-                            <a href={`/contact-us?product=${encodeURIComponent(prod.title)}`} className="bg-gradient-to-br from-[#f7931e] to-[#c1272d] text-white rounded-[4px] px-[24px] py-[10px] font-medium text-[15px] border-none inline-flex items-center justify-center transition-all duration-300 w-auto min-w-[140px] h-[45px] self-center mt-auto mb-0 whitespace-nowrap hover:bg-none hover:bg-[#1e2e5e] hover:-translate-y-[2px] hover:shadow-[0_4px_12px_rgba(30,46,94,0.25)]">
-                              Send Enquiry
+                            <a href={`/${prod.slug}`} className="text-[#c1272d] text-[22px] font-semibold mb-[10px] no-underline hover:text-[#1e2e5e] transition-colors duration-200">
+                              {prod.title}
+                            </a>
+                            {/* The description, sizes and features all live on the
+                                product page, which this card already links to — so
+                                the card no longer repeats them and the button is
+                                "Explore More" (to that page) rather than a duplicate
+                                enquiry, matching the other product cards. */}
+                            <a href={`/${prod.slug}`} className="bg-gradient-to-br from-[#e8434a] to-[#c1272d] text-white rounded-[4px] px-[24px] py-[10px] font-medium text-[15px] border-none inline-flex items-center justify-center transition-all duration-300 w-auto min-w-[140px] h-[45px] self-center mt-auto mb-0 whitespace-nowrap hover:bg-none hover:bg-[#1e2e5e] hover:-translate-y-[2px] hover:shadow-[0_4px_12px_rgba(30,46,94,0.25)]">
+                              Explore More
                             </a>
                           </div>
                         </div>
@@ -484,7 +536,7 @@ export function renderDbCategory(cat: any) {
                 )}
                 <div className={cat.image ? "col-lg-7 col-md-6" : "col-lg-8 text-center"}>
                   <div className="bg-white rounded-[14px] shadow-[0_12px_30px_rgba(0,0,0,0.12)] border border-transparent p-5">
-                    <h3 className="text-[#1e2e5e] text-[28px] font-semibold mb-3" style={{ borderBottom: '2px solid #f7931e', paddingBottom: '8px', display: 'inline-block' }}>
+                    <h3 className="text-[#1e2e5e] text-[28px] font-semibold mb-3" style={{ borderBottom: '2px solid #c1272d', paddingBottom: '8px', display: 'inline-block' }}>
                       Enquire About {cat.name.trim()}
                     </h3>
                     <p className="text-[#555] text-[18px] leading-[1.6] mt-3 mb-4">
@@ -492,7 +544,7 @@ export function renderDbCategory(cat: any) {
                     </p>
                     <a
                       href={`/contact-us?product=${encodeURIComponent(cat.name.trim())}`}
-                      className="bg-gradient-to-br from-[#f7931e] to-[#c1272d] text-white rounded-[4px] px-[32px] py-[12px] font-medium text-[16px] border-none inline-flex items-center justify-center transition-all duration-300 hover:bg-[#1e2e5e] hover:-translate-y-[2px] hover:shadow-[0_4px_12px_rgba(30,46,94,0.25)]"
+                      className="bg-gradient-to-br from-[#e8434a] to-[#c1272d] text-white rounded-[4px] px-[32px] py-[12px] font-medium text-[16px] border-none inline-flex items-center justify-center transition-all duration-300 hover:bg-[#1e2e5e] hover:-translate-y-[2px] hover:shadow-[0_4px_12px_rgba(30,46,94,0.25)]"
                     >
                       Send Enquiry &rarr;
                     </a>
@@ -584,7 +636,7 @@ export function renderProductLayout(isMultiProduct: boolean, product: any, clean
                           )}
                           <a
                             href={card.link ? cleanLink(card.link) : `/contact-us?product=${encodeURIComponent(card.title || product.heading || product.title)}`}
-                            className="bg-gradient-to-br from-[#f7931e] to-[#c1272d] text-white rounded-[4px] px-[24px] py-[10px] font-medium text-[15px] border-none inline-flex items-center justify-center transition-all duration-300 w-auto min-w-[140px] h-[45px] self-center mt-auto mb-0 whitespace-nowrap hover:bg-none hover:bg-[#1e2e5e] hover:-translate-y-[2px] hover:shadow-[0_4px_12px_rgba(30,46,94,0.25)]"
+                            className="bg-gradient-to-br from-[#e8434a] to-[#c1272d] text-white rounded-[4px] px-[24px] py-[10px] font-medium text-[15px] border-none inline-flex items-center justify-center transition-all duration-300 w-auto min-w-[140px] h-[45px] self-center mt-auto mb-0 whitespace-nowrap hover:bg-none hover:bg-[#1e2e5e] hover:-translate-y-[2px] hover:shadow-[0_4px_12px_rgba(30,46,94,0.25)]"
                           >
                             {card.link && card.link !== '/contact-us' && card.link !== '/contact-us.php' ? 'Explore More' : 'Send Enquiry'}
                           </a>
@@ -623,7 +675,7 @@ export function renderProductLayout(isMultiProduct: boolean, product: any, clean
             {/* Product Details Column */}
             <div className="col-lg-8">
               <div className="wires-title">
-                <h3>{product.heading || product.title}</h3>
+                <h3 aria-level={2}>{product.heading || product.title}</h3>
                 <div className="separator1"></div>
               </div>
 
@@ -636,7 +688,7 @@ export function renderProductLayout(isMultiProduct: boolean, product: any, clean
               {/* Features list */}
               {product.features && product.features.length > 0 && (
                 <div className="features">
-                  <h4>Features</h4>
+                  <h4 aria-level={3}>Features</h4>
                   <div className="separator1"></div>
                   <ul className="animated-list">
                     {product.features.map((feat: string, idx: number) => (

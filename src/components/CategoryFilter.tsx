@@ -2,6 +2,8 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { matchesTerm } from '@/lib/product-synonyms';
+import { extractStandard, extractVoltage } from '@/lib/product-specs';
 
 /**
  * Filter/sort bar for the legacy category listings.
@@ -47,24 +49,6 @@ interface Card {
   voltage: string | null;
 }
 
-// "IS 694", "BS 7870-4-10", "BSEN 50525-2-31", "IEC 60502-1", "AS-NZS 5000", "UL 44"
-const STANDARD_RE = /\b(IS|BS|BSEN|BS\s?EN|IEC|UL|AS[-\s]?NZS|ANSI|ICEA|NEMA)\s?-?\s?(\d[\d\-.\/]*)/i;
-// "1100V", "450/750V", "6.35/11kV", "33kV"
-const VOLTAGE_RE = /\b(\d+(?:\.\d+)?(?:\/\d+(?:\.\d+)?)?)\s?(kV|V)\b/i;
-
-function normaliseStandard(title: string): string | null {
-  const m = title.match(STANDARD_RE);
-  if (!m) return null;
-  const family = m[1].toUpperCase().replace(/\s/g, '').replace('BSEN', 'BSEN');
-  return `${family} ${m[2]}`.trim();
-}
-
-function normaliseVoltage(title: string): string | null {
-  const m = title.match(VOLTAGE_RE);
-  if (!m) return null;
-  return `${m[1]}${m[2].toLowerCase() === 'kv' ? 'kV' : 'V'}`;
-}
-
 export default function CategoryFilter() {
   const [cards, setCards] = useState<Card[]>([]);
   const [query, setQuery] = useState('');
@@ -73,6 +57,9 @@ export default function CategoryFilter() {
   const [sort, setSort] = useState<'default' | 'az' | 'za'>('default');
   // Kept so "reset" can restore the page's original card order.
   const originalOrder = useRef<HTMLElement[]>([]);
+  // Reordering means re-appending nodes, which restarts their CSS entrance
+  // animation — so only touch the DOM order when a sort is actually in play.
+  const reordered = useRef(false);
   const gridRef = useRef<HTMLElement | null>(null);
   // The controls belong directly above the grid, which sits inside the stored
   // HTML — so mount a host there and portal into it rather than rendering at
@@ -93,8 +80,8 @@ export default function CategoryFilter() {
         wrapper,
         title,
         lower: title.toLowerCase(),
-        standard: normaliseStandard(title),
-        voltage: normaliseVoltage(title),
+        standard: extractStandard(title),
+        voltage: extractVoltage(title),
       });
     }
     if (!collected.length) return;
@@ -141,7 +128,8 @@ export default function CategoryFilter() {
     () =>
       cards.filter(
         (c) =>
-          terms.every((t) => c.lower.includes(t)) &&
+          // Titles are trade shorthand, so "armoured" has to reach "SWA"/"AWA".
+          terms.every((t) => matchesTerm(c.lower, t)) &&
           (!standard || c.standard === standard) &&
           (!voltage || c.voltage === voltage)
       ),
@@ -152,23 +140,43 @@ export default function CategoryFilter() {
   useEffect(() => {
     if (!cards.length) return;
     const shown = new Set(visible.map((c) => c.wrapper));
-    for (const c of cards) c.wrapper.style.display = shown.has(c.wrapper) ? '' : 'none';
+    for (const c of cards) {
+      if (shown.has(c.wrapper)) c.wrapper.style.removeProperty('display');
+      // custom.css forces `display: flex !important` on these column wrappers for
+      // equal-height cards, and a plain inline style loses to !important — so the
+      // hide has to be marked important too or nothing disappears.
+      else c.wrapper.style.setProperty('display', 'none', 'important');
+    }
 
     const grid = gridRef.current;
     if (!grid) return;
 
     if (sort === 'default') {
+      // Nothing to undo on first run, and re-appending 183 nodes per keystroke
+      // would restart every card's fade-in.
+      if (!reordered.current) return;
       for (const el of originalOrder.current) grid.appendChild(el);
+      reordered.current = false;
       return;
     }
     const sorted = [...visible].sort((a, b) =>
       sort === 'az' ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title)
     );
     for (const c of sorted) grid.appendChild(c.wrapper);
+    reordered.current = true;
   }, [cards, visible, sort]);
 
+  // Once the entrance animation has played, take it off the cards: sorting
+  // re-appends them, and without this every sort replays the whole stagger.
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!cards.length || !grid) return;
+    const t = setTimeout(() => grid.classList.add('cf-settled'), 1200);
+    return () => { clearTimeout(t); grid.classList.remove('cf-settled'); };
+  }, [cards]);
+
   // Never leave the page filtered if this unmounts.
-  useEffect(() => () => { for (const c of cards) c.wrapper.style.display = ''; }, [cards]);
+  useEffect(() => () => { for (const c of cards) c.wrapper.style.removeProperty('display'); }, [cards]);
 
   if (cards.length < MIN_CARDS || !host) return null;
 
