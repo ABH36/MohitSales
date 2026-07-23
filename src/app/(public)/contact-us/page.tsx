@@ -286,6 +286,25 @@ export default function ContactUsPage() {
         </div>
       </section>
       {/* contact form area end */}
+
+      {/* Location map — same Siddharth Farms embed as the homepage, so visitors
+          on the dedicated contact page can find us too. */}
+      <section className="rs-contact-map-area section-space-bottom">
+        <div className="container">
+          <div className="contact-page-map">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7357.08999728618!2d75.90854!3d22.782261!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39631da62f44dfe1%3A0xb76224f845182eed!2sSiddharth%20Farms!5e0!3m2!1sen!2sin!4v1768201690028!5m2!1sen!2sin"
+              width="100%"
+              height="440"
+              style={{ border: 0 }}
+              loading="lazy"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Mohit Sales Corporation Pvt. Ltd. — Siddharth Farms, Lasudia Mori, Indore"
+            ></iframe>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

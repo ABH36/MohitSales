@@ -216,6 +216,35 @@ body {
   margin-bottom: 0;
 }
 
+/* ── Catalogue cards — bring buttons/hover into the site's red/navy theme (the
+   orange→red pass missed these) and match the homepage explorer-card polish:
+   soft gradient image tile and a red "View Catalogue" pill that lifts to navy. */
+.catalogue-img {
+  background: linear-gradient(135deg, #f8fafc 0%, #eef2f9 100%) !important;
+}
+
+.catalogue-content .view-btn,
+.catalogue-btn {
+  background: var(--brand-cta) !important;
+  color: #fff !important;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.catalogue-card:hover .view-btn,
+.catalogue-btn:hover {
+  background: var(--brand-navy) !important;
+  box-shadow: 0 6px 18px rgba(30, 46, 94, 0.28) !important;
+}
+
+/* Category-grid card: hover accent in brand navy, not the off-brand blue. */
+.catalogue-section .catalogue-card:hover {
+  color: var(--brand-navy) !important;
+}
+
+.catalogue-section .catalogue-card:hover h5 {
+  color: var(--brand-red) !important;
+}
+
 /* Products Grid Layout */
 .products-section {
   padding: 0;
@@ -4723,6 +4752,46 @@ body::-webkit-scrollbar {
 .contact_us_sec .rs-contact-bg-thumb,
 .contact_us_sec .rs-contact-form-bg-thumb {
   display: none !important;
+}
+
+/* ── Below-the-fold sections skip all rendering work (style, layout, paint)
+   until the reader scrolls near them — with most of this long page off-screen
+   at load, this removes seconds of main-thread layout on a throttled phone.
+   contain-intrinsic-size keeps the scrollbar honest while a section is
+   skipped; the marquee's infinite animation inside .hce-section also simply
+   doesn't run while it is off-screen. ── */
+.hce-section,
+.clientle_sec,
+.rs-portfolio-seven,
+.wcu_sec,
+.contact_us_sec,
+.rs-counter-area {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 700px;
+}
+
+/* Breadcrumb separator — a plain unicode chevron instead of the remixicon
+   glyph (\ea6e). This was the only real remixicon use on the site, so the
+   144KB icon font + stylesheet could be dropped entirely. */
+.rs-breadcrumb-area.rs-breadcrumb-one .rs-breadcrumb-menu ul li:not(:last-child)::before {
+  content: "›" !important;
+  font-family: inherit !important;
+  font-size: 24px !important;
+  line-height: 1;
+}
+
+/* Contact-us location map — rounded, shadowed, sits on the page gradient. */
+.contact-page-map {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 18px 45px rgba(30, 46, 94, 0.16);
+  border: 1px solid rgba(30, 46, 94, 0.08);
+  line-height: 0;
+}
+
+.contact-page-map iframe {
+  display: block;
+  width: 100%;
 }
 
 /* ════════════════════════════════════════════════════════════

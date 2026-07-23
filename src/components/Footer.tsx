@@ -118,11 +118,16 @@ export default function Footer() {
                         <div className="product-col">
                           <h6 aria-level={4}>Polycab</h6>
                           <ul className="list-unstyled">
-                            <li><Link href="/switchgears">Switchgears</Link></li>
+                            <li><Link href="/cables">Cables</Link></li>
                             <li><Link href="/fans">Fans</Link></li>
-                            <li><Link href="/solar">Solar</Link></li>
-                            <li><Link href="/conduit-accessories">Conduit & Accessories</Link></li>
+                            <li><Link href="/wires">Wires</Link></li>
+                            <li><Link href="/lighting">Lighting</Link></li>
+                            <li><Link href="/switches-accessories">Switches & Accessories</Link></li>
+                            <li><Link href="/water-heaters">Water Heaters</Link></li>
+                            <li><Link href="/switchgears">Switchgears</Link></li>
                             <li><Link href="/home-appliances">Home Appliances</Link></li>
+                            <li><Link href="/conduit-accessories">Conduit & Accessories</Link></li>
+                            <li><Link href="/solar">Solar</Link></li>
                           </ul>
                         </div>
                         <div className="product-col">

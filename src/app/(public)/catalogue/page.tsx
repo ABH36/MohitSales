@@ -47,17 +47,19 @@ export default function CataloguePage() {
     {
       title: 'Cable Terminal',
       image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167844/mohit/catalogue/cable-terminal.png',
-      link: '#'
+      // No standalone catalogue PDF yet — link to the product page so the card
+      // isn't a dead end.
+      link: '/dowells/cable-terminal'
     },
     {
       title: 'Gland',
       image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167870/mohit/catalogue/gland.png',
-      link: '#'
+      link: '/dowells/gland'
     },
     {
       title: 'Crimping Tool',
       image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167866/mohit/catalogue/crimping-tool.png',
-      link: '#'
+      link: '/dowells/crimping-tool'
     }
   ];
 

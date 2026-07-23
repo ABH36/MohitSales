@@ -82,7 +82,9 @@ export default function IndustriesSlider() {
                 <div key={index} className="swiper-slide">
                   <div className="rs-portfolio-item">
                     <div className="rs-portfolio-thumb">
-                      <img src={cld(ind.image, 'f_auto,q_auto,w_500')} alt={ind.name} />
+                      {/* Far below the fold — lazy so these seven slides never
+                          compete with the hero LCP image for bandwidth. */}
+                      <img src={cld(ind.image, 'f_auto,q_auto,w_500')} alt={ind.name} loading="lazy" decoding="async" />
                     </div>
                     <div className="rs-portfolio-content">
                       {/* Informational showcase — these industries have no

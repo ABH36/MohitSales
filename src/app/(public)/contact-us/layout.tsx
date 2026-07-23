@@ -7,7 +7,7 @@ export const revalidate = 3600;
 export async function generateMetadata(): Promise<Metadata> {
   return getSeoMetadata('/contact-us', {
   title: 'Contact Us | Mohit Sales Corporation Pvt. Ltd. — Indore',
-  description: 'Get in touch with Mohit Sales Corporation Pvt. Ltd. in Indore. Contact our team for Polycab and Dowells product inquiries, pricing, and bulk orders. Visit us at 206 Rajiv Gandhi Market, Indore.',
+  description: 'Get in touch with Mohit Sales Corporation Pvt. Ltd. in Indore. Contact our team for Polycab and Dowells product inquiries, pricing, and bulk orders. Visit us at Siddharth Farms, Lasudia Mori, Dewas Naka, Indore-452010.',
   openGraph: {
     title: 'Contact Us | Mohit Sales Corporation Pvt. Ltd. — Indore',
     description: 'Get in touch with Mohit Sales Corporation Pvt. Ltd. in Indore for Polycab and Dowells product inquiries, pricing, and bulk orders.',

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { cld } from '@/lib/cloudinary';
+import { FIRST_BANNER, BANNER_TRANSFORM } from '@/lib/hero-banner';
 
 interface BannerItem {
   id: string;
@@ -14,7 +15,7 @@ interface BannerItem {
 }
 
 const FALLBACK_DESKTOP = [
-  'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167821/mohit/banner/desktop/cable.webp',
+  FIRST_BANNER.desktop,
   'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167824/mohit/banner/desktop/polycab.webp',
   'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167823/mohit/banner/desktop/fans.webp',
   'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167826/mohit/banner/desktop/solar_product.webp',
@@ -24,7 +25,7 @@ const FALLBACK_DESKTOP = [
 ];
 
 const FALLBACK_MOBILE = [
-  'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167829/mohit/banner/mobile/cable.webp',
+  FIRST_BANNER.mobile,
   'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167834/mohit/banner/mobile/polycab_banner.webp',
   'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167833/mohit/banner/mobile/fans.webp',
   'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167835/mohit/banner/mobile/solar_product.webp',
@@ -87,11 +88,13 @@ export default function BannerSlider() {
   // edge-to-edge, so it reads as one continuous upward scroll. Only the active and
   // outgoing slides animate; every other slide snaps to its waiting spot below
   // (transition: none) so nothing sweeps across the viewport out of turn.
-  const slideStyle = (index: number, banner: string, bgPos: string): React.CSSProperties => {
+  const slideStyle = (index: number, banner: string, bgPos: string, transform: string): React.CSSProperties => {
     const isActive = index === activeIndex;
     const isPrev = index === prevIndex && prevIndex !== activeIndex;
     return {
-      backgroundImage: `url('${cld(banner)}')`,
+      // Width-capped per breakpoint (see BANNER_TRANSFORM) — must stay in sync
+      // with the homepage preload URLs or the image downloads twice.
+      backgroundImage: `url('${cld(banner, transform)}')`,
       position: 'absolute',
       top: 0,
       left: 0,
@@ -118,7 +121,7 @@ export default function BannerSlider() {
                 key={index}
                 className={`swiper-slide ${index === activeIndex ? 'swiper-slide-active' : ''}`}
                 onClick={() => handleSlideClick(index)}
-                style={slideStyle(index, banner, 'left center')}
+                style={slideStyle(index, banner, 'left center', BANNER_TRANSFORM.desktop)}
               />
             ))}
             <div style={{ visibility: 'hidden', width: '100%', height: '100%', position: 'relative' }} />
@@ -148,7 +151,7 @@ export default function BannerSlider() {
                 key={index}
                 className={`swiper-slide ${index === activeIndex ? 'swiper-slide-active' : ''}`}
                 onClick={() => handleSlideClick(index)}
-                style={slideStyle(index, banner, 'center')}
+                style={slideStyle(index, banner, 'center', BANNER_TRANSFORM.mobile)}
               />
             ))}
             <div style={{ visibility: 'hidden', width: '100%', height: '100%', position: 'relative' }} />

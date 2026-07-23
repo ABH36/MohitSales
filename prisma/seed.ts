@@ -13,6 +13,7 @@
 
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { randomBytes } from 'crypto';
 
 const prisma = new PrismaClient();
 
@@ -110,8 +111,12 @@ async function main() {
   console.log('   ✓ Roles: ADMIN, EDITOR, VIEWER created\n');
 
   // ─── 3. ADMIN USER ───────────────────────────────────────
+  // The password is NEVER hardcoded (this repo is public): it comes from the
+  // SEED_ADMIN_PASSWORD env var, or a random one is generated and printed once.
   console.log('👤 Creating admin user...');
-  const hashedPassword = await bcrypt.hash('Admin@2024!', 12);
+  const adminPassword =
+    process.env.SEED_ADMIN_PASSWORD || randomBytes(12).toString('base64url') + '!A1';
+  const hashedPassword = await bcrypt.hash(adminPassword, 12);
 
   await prisma.user.upsert({
     where: { email: 'admin@mohitscpl.com' },
@@ -124,7 +129,7 @@ async function main() {
       isActive: true,
     },
   });
-  console.log(`   ✓ Admin user: admin@mohitscpl.com (Password: Admin@2024!)\n`);
+  console.log('   ✓ Admin user: admin@mohitscpl.com\n');
 
   // ─── 4. PRODUCT CATEGORIES ───────────────────────────────
   console.log('📦 Creating product categories...');
@@ -476,7 +481,11 @@ async function main() {
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
   console.log('🔑 Admin Login:');
   console.log('   Email    : admin@mohitscpl.com');
-  console.log('   Password : Admin@2024!');
+  if (process.env.SEED_ADMIN_PASSWORD) {
+    console.log('   Password : (from SEED_ADMIN_PASSWORD env var)');
+  } else {
+    console.log(`   Password : ${adminPassword}  ← generated once, save it now`);
+  }
   console.log('\n⚠️  IMPORTANT: Change the admin password after first login!\n');
 }
 

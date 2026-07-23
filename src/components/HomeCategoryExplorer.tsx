@@ -29,9 +29,9 @@ interface Props {
 const FALLBACK =
   'https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/logo/msc_logo_without_bg.png';
 
-function Card({ node, eager = false }: { node: ExplorerNode; eager?: boolean }) {
+function Card({ node, eager = false, tabbable = true }: { node: ExplorerNode; eager?: boolean; tabbable?: boolean }) {
   return (
-    <Link href={`/${node.slug}`} className="hce-card">
+    <Link href={`/${node.slug}`} className="hce-card" tabIndex={tabbable ? undefined : -1}>
       <span className="hce-card-img">
         {/* Marquee cards scroll continuously, so they load eagerly to avoid
             visible pop-in; grid cards stay lazy. */}
@@ -109,7 +109,7 @@ export default function HomeCategoryExplorer({ arm, heading, flat = false }: Pro
               ))}
               <span className="hce-marquee-dup" aria-hidden="true">
                 {cards.map((node) => (
-                  <Card key={'dup-' + node.slug + node.name} node={node} eager />
+                  <Card key={'dup-' + node.slug + node.name} node={node} eager tabbable={false} />
                 ))}
               </span>
             </div>

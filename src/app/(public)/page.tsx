@@ -1,6 +1,9 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import BannerSlider from '@/components/BannerSlider';
+import LazyHydrate from '@/components/LazyHydrate';
+import { FIRST_BANNER, BANNER_TRANSFORM } from '@/lib/hero-banner';
+import { cld } from '@/lib/cloudinary';
 import IndustriesSlider from '@/components/IndustriesSlider';
 import WhyChooseUs from '@/components/WhyChooseUs';
 import HomeContactForm from '@/components/HomeContactForm';
@@ -88,6 +91,20 @@ export default async function Page() {
           top-level h1 for screen readers + SEO without altering the design. */}
       <h1 className="sr-only">Mohit Sales Corporation Pvt. Ltd. — Authorized Polycab &amp; Dowells Distributor in Indore</h1>
 
+      {/* Preload the first hero slide: it is painted as a CSS background from a
+          client component, so without this hint the browser only discovers the
+          LCP image after hydration. Raw HTML (not JSX links) because React
+          hoists JSX preloads and drops the media attribute — these must stay
+          media-split so only one variant downloads per device. */}
+      <div
+        style={{ display: 'none' }}
+        dangerouslySetInnerHTML={{
+          __html:
+            `<link rel="preload" as="image" href="${cld(FIRST_BANNER.mobile, BANNER_TRANSFORM.mobile)}" media="(max-width: 991px)" fetchpriority="high">` +
+            `<link rel="preload" as="image" href="${cld(FIRST_BANNER.desktop, BANNER_TRANSFORM.desktop)}" media="(min-width: 992px)" fetchpriority="high">`,
+        }}
+      />
+
       {/* Banner slider area */}
       <BannerSlider />
 
@@ -133,20 +150,43 @@ export default async function Page() {
       {/* Polycab Cables — the seven cable types as a card grid, each linking
           straight to its listing page (no drill-down: each type holds hundreds
           of SKUs, browsed on the listing page). */}
-      {cables && <HomeCategoryExplorer arm={cables} heading="Polycab Cables" flat />}
+      {/* The explorers and everything below hydrate lazily (LazyHydrate): the
+          server HTML paints and is crawlable immediately, but their React
+          hydration cost is paid only as each block nears the viewport — the
+          marquee is pure CSS and card links are plain anchors, so nothing a
+          visitor can reach is dead in the meantime. */}
+      {cables && (
+        <LazyHydrate>
+          <HomeCategoryExplorer arm={cables} heading="Polycab Cables" flat />
+        </LazyHydrate>
+      )}
 
       {/* Polycab Consumer & Industries — filterable card explorers so a visitor
           can drill from the homepage to any range without opening the menu. */}
-      {consumer && <HomeCategoryExplorer arm={consumer} heading="Polycab Consumer" />}
-      {industries && <HomeCategoryExplorer arm={industries} heading="Polycab Industries" />}
+      {consumer && (
+        <LazyHydrate>
+          <HomeCategoryExplorer arm={consumer} heading="Polycab Consumer" />
+        </LazyHydrate>
+      )}
+      {industries && (
+        <LazyHydrate>
+          <HomeCategoryExplorer arm={industries} heading="Polycab Industries" />
+        </LazyHydrate>
+      )}
 
       {/* Dowells Products — same filterable card explorer, so visitors can drill
           from the homepage into every Dowells range without opening the menu. */}
-      {dowells && <HomeCategoryExplorer arm={dowells} heading="Dowells Products" />}
+      {dowells && (
+        <LazyHydrate>
+          <HomeCategoryExplorer arm={dowells} heading="Dowells Products" />
+        </LazyHydrate>
+      )}
 
       {/* Clientele / Partners Section */}
       <div className="scroll-reveal" data-delay="100">
-        <ClienteleSlider />
+        <LazyHydrate>
+          <ClienteleSlider />
+        </LazyHydrate>
       </div>
 
       {/* Industries Served */}
@@ -163,7 +203,9 @@ export default async function Page() {
             </div>
           </div>
           <div className="scroll-reveal" data-delay="200">
-            <IndustriesSlider />
+            <LazyHydrate>
+              <IndustriesSlider />
+            </LazyHydrate>
           </div>
         </div>
       </section>
@@ -176,11 +218,15 @@ export default async function Page() {
 
       {/* Get in Touch - Contact Form Section */}
       <div className="scroll-reveal" data-delay="100">
-        <HomeContactForm />
+        <LazyHydrate>
+          <HomeContactForm />
+        </LazyHydrate>
       </div>
 
       {/* Achievements / Counter Section */}
-      <HomeAchievements />
+      <LazyHydrate>
+        <HomeAchievements />
+      </LazyHydrate>
       <PromoPopup />
     </main>
     </>

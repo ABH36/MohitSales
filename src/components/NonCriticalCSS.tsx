@@ -13,7 +13,9 @@ const NON_CRITICAL_CSS = [
   // already cached by the time this attaches. Keeps every icon available
   // (incl. any used only in admin-editable DB content).
   '/assets/css/vendor/fontawesome-pro.css',
-  '/assets/css/vendor/remixicon.css',
+  // remixicon dropped entirely: zero `ri-` classes anywhere in src OR in the
+  // stored legacy DB HTML (verified), so the 144KB stylesheet + fonts styled
+  // nothing. FontAwesome remains for menu arrows / fa-* in content.
   '/assets/css/vendor/animate.min.css',
   '/assets/css/vendor/magnific-popup.css',
   '/assets/css/vendor/odometer.min.css',

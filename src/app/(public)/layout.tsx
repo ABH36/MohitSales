@@ -117,11 +117,14 @@ export default function RootLayout({
       {/* Google Analytics (gtag.js) — only injected when a measurement ID is set */}
       {GA_MEASUREMENT_ID && (
         <>
+          {/* lazyOnload (not afterInteractive): gtag's ~1.6s of long tasks were
+              landing inside the TBT window on throttled phones; analytics can
+              wait until the browser is idle without losing pageview data. */}
           <Script
             src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-            strategy="afterInteractive"
+            strategy="lazyOnload"
           />
-          <Script id="google-analytics" strategy="afterInteractive">
+          <Script id="google-analytics" strategy="lazyOnload">
             {`
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
@@ -134,11 +137,10 @@ export default function RootLayout({
       <head>
         <link rel="shortcut icon" type="image/x-icon" href="https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167895/mohit/favicon/favicon.png" />
 
-        {/* ── Preload LCP image (banner) — browser downloads immediately.
-             URL carries f_auto,q_auto to match BannerSlider's rendered
-             background so the preload is reused (no duplicate download).
-             `type` is omitted because f_auto may deliver AVIF or WebP. ── */}
-        <link rel="preload" as="image" href="https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/v1783167821/mohit/banner/desktop/cable.webp" />
+        {/* The hero-banner preload lives on the homepage itself (media-split
+            mobile/desktop, fetchpriority=high) — a single desktop-only preload
+            here loaded the wrong variant for phones and wasted bytes on every
+            non-home page. */}
 
         {/* ── DNS prefetch for external domains ── */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
