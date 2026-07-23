@@ -38,9 +38,9 @@ const DRY_RUN =
   process.argv.includes('--dry') ||
   process.argv.includes('--dry-run');
 
-const REPO =
-  process.env.POLYCAB_SRC ||
-  'C:/Users/FTT/AppData/Local/Temp/claude/d--MS/24e42124-6ffe-4c3b-8e32-bd75b447e8f0/scratchpad/polycab-src';
+// A checkout of the Real-Switch-Gears repository; sits next to this project
+// by default, override with POLYCAB_SRC.
+const REPO = process.env.POLYCAB_SRC || path.join(process.cwd(), '..', 'polycab-src');
 const DATA = path.join(REPO, 'src/data/catalog/polycab.products.json');
 const IMAGES = path.join(REPO, 'public');
 

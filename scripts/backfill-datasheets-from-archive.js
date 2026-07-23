@@ -40,7 +40,9 @@ const DRY_RUN =
   process.argv.includes('--dry-run');
 const NO_VERIFY = process.argv.includes('--no-verify');
 
-const REPO = process.env.POLYCAB_SRC || 'd:/MS/polycab-src';
+// A checkout of the Real-Switch-Gears repository; sits next to this project
+// by default, override with POLYCAB_SRC.
+const REPO = process.env.POLYCAB_SRC || path.join(process.cwd(), '..', 'polycab-src');
 const DATA = path.join(REPO, 'src/data/catalog/polycab.products.json');
 
 const norm = (s) => String(s).toLowerCase().replace(/[^a-z0-9]/g, '');
