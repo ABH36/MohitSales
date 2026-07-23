@@ -2,6 +2,10 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
+import { cld } from '@/lib/cloudinary';
+import { categoryIcon } from '@/lib/category-icons';
+import { menuImage } from '@/lib/menu-images';
+import { Package, ShieldCheck, ChevronRight, LayoutGrid, X } from 'lucide-react';
 
 /**
  * The Products menu, as a click-opened panel instead of a hover cascade.
@@ -11,10 +15,13 @@ import Link from 'next/link';
  * to drive: the pointer has to stay inside a chain of panels that overlap their
  * own ancestors, and on a touch or hybrid screen there is no hover at all.
  *
- * This shows two columns at a time and a path across the top. Choosing a branch
- * on the right shifts it into the left column and extends the path, so the depth
- * is unbounded while the panel itself never grows or leaves the viewport. Every
- * step of the path is clickable, which is the way back out.
+ * Layout (per the approved mock): a header row with an icon tile, the
+ * clickable path and a close button; a "BROWSE …" rail on the left listing the
+ * current level with icon tiles (the highlighted one becomes a red pill), a
+ * promo + "Trusted Quality" card under it; and the highlighted branch's
+ * children as tile rows on the right under a "<name> RANGE" eyebrow. Choosing
+ * a branch on the right shifts it into the left rail and extends the path, so
+ * the depth is unbounded while the panel never grows or leaves the viewport.
  */
 
 export interface NavItem {
@@ -31,6 +38,25 @@ interface Props {
 }
 
 const hasKids = (i: NavItem) => Array.isArray(i.children) && i.children.length > 0;
+
+/** One-liner under the right column's eyebrow, per arm. */
+function armBlurb(name: string): string {
+  const n = name.toLowerCase();
+  if (n.includes('consumer'))
+    return 'Wide range of high quality electrical products designed for modern homes and spaces.';
+  if (n.includes('industr'))
+    return 'High performance cables and solutions engineered for demanding industrial applications.';
+  if (n.includes('renewable') || n.includes('solar'))
+    return 'Solar panels, inverters and DC gear for clean, dependable power.';
+  if (n.includes('polycab'))
+    return "India's most trusted electrical brand — explore the complete range.";
+  if (n.includes('dowells'))
+    return 'Cable terminals, glands and crimping tools trusted across the industry.';
+  return 'Explore the complete range.';
+}
+
+const PROMO_IMG =
+  'https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto,w_420/mohit/about/authorized-distributor.png';
 
 export default function ProductsMegaMenu({ tree, label = 'Products' }: Props) {
   const [open, setOpen] = useState(false);
@@ -95,25 +121,8 @@ export default function ProductsMegaMenu({ tree, label = 'Products' }: Props) {
     setPath((p) => p.slice(0, index + 1));
   };
 
-  const renderRow = (item: NavItem, opts: { active?: boolean; onDrill: () => void }) => {
-    if (!hasKids(item)) {
-      return (
-        <Link href={`/${item.slug}`} className="pmm-row pmm-leaf" onClick={close}>
-          <span>{item.name}</span>
-        </Link>
-      );
-    }
-    return (
-      <button
-        type="button"
-        className={`pmm-row${opts.active ? ' is-active' : ''}`}
-        onClick={opts.onDrill}
-      >
-        <span>{item.name}</span>
-        <i className="fa-solid fa-chevron-right" aria-hidden="true"></i>
-      </button>
-    );
-  };
+  /** The name the left rail browses — the current branch, or the menu root. */
+  const browseName = path.length ? path[path.length - 1].name : label;
 
   return (
     <li className="nav-has-sub pmm-wrap" ref={wrapRef}>
@@ -141,6 +150,7 @@ export default function ProductsMegaMenu({ tree, label = 'Products' }: Props) {
       {open && (
         <div className="pmm-panel" role="dialog" aria-label="Products menu">
           <div className="pmm-head">
+            <span className="pmm-head-icon" aria-hidden="true"><Package /></span>
             <nav className="pmm-path" aria-label="Menu path">
               <button type="button" onClick={() => jumpTo(-1)} className="pmm-crumb">
                 {label}
@@ -155,54 +165,122 @@ export default function ProductsMegaMenu({ tree, label = 'Products' }: Props) {
               ))}
             </nav>
             <button type="button" className="pmm-close" onClick={close} aria-label="Close products menu">
-              ✕
+              <X aria-hidden="true" />
             </button>
           </div>
 
           <div className="pmm-body">
-            <ul className="pmm-col pmm-col-left">
-              {/* Once inside a branch, offer the branch's own page as well as its
-                  children — several of them are real listing pages. */}
-              {path.length > 0 && path[path.length - 1].slug && (
-                <li>
-                  <Link href={`/${path[path.length - 1].slug}`} className="pmm-row pmm-all" onClick={close}>
-                    All {path[path.length - 1].name}
-                  </Link>
-                </li>
-              )}
-              {level.map((item) => (
-                <li key={item.id}>
-                  {renderRow(item, {
-                    active: shown?.id === item.id,
-                    onDrill: () => setPreview(item),
-                  })}
-                </li>
-              ))}
-            </ul>
+            <div className="pmm-rail">
+              <span className="pmm-eyebrow">Browse {browseName}</span>
 
-            <ul className="pmm-col pmm-col-right">
-              {shown ? (
-                <>
-                  <li className="pmm-col-title">{shown.name}</li>
-                  {shown.slug && (
-                    <li>
-                      <Link href={`/${shown.slug}`} className="pmm-row pmm-all" onClick={close}>
-                        All {shown.name}
+              <ul className="pmm-rail-list">
+                {/* Once inside a branch, offer the branch's own page as well as
+                    its children — several of them are real listing pages. */}
+                {path.length > 0 && path[path.length - 1].slug && (
+                  <li>
+                    <Link href={`/${path[path.length - 1].slug}`} className="pmm-arm pmm-arm-all" onClick={close}>
+                      <span className="pmm-arm-icon" aria-hidden="true"><LayoutGrid /></span>
+                      <span className="pmm-arm-name">All {path[path.length - 1].name}</span>
+                      <ChevronRight className="pmm-chev" aria-hidden="true" />
+                    </Link>
+                  </li>
+                )}
+                {level.map((item) =>
+                  hasKids(item) ? (
+                    <li key={item.id}>
+                      <button
+                        type="button"
+                        className={`pmm-arm${shown?.id === item.id ? ' is-active' : ''}`}
+                        onClick={() => setPreview(item)}
+                      >
+                        <span className="pmm-arm-icon" aria-hidden="true">{categoryIcon(item.name)}</span>
+                        <span className="pmm-arm-name">{item.name}</span>
+                        <ChevronRight className="pmm-chev" aria-hidden="true" />
+                      </button>
+                    </li>
+                  ) : (
+                    <li key={item.id}>
+                      <Link href={`/${item.slug}`} className="pmm-arm" onClick={close}>
+                        <span className="pmm-arm-icon" aria-hidden="true">{categoryIcon(item.name)}</span>
+                        <span className="pmm-arm-name">{item.name}</span>
+                        <ChevronRight className="pmm-chev" aria-hidden="true" />
                       </Link>
                     </li>
-                  )}
-                  {shown.children.map((child) => (
-                    <li key={child.id}>
-                      {renderRow(child, {
-                        onDrill: () => stepInto(shown, child),
-                      })}
-                    </li>
-                  ))}
+                  )
+                )}
+              </ul>
+
+              <div className="pmm-promo">
+                <div className="pmm-promo-stage" aria-hidden="true">
+                  <img src={cld(PROMO_IMG)} alt="" loading="lazy" decoding="async" />
+                </div>
+                <div className="pmm-trust">
+                  <span className="pmm-trust-icon" aria-hidden="true"><ShieldCheck /></span>
+                  <span>
+                    <strong>Trusted Quality</strong>
+                    <small>Safe. Reliable. Durable.</small>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="pmm-main">
+              {shown ? (
+                <>
+                  <span className="pmm-eyebrow">{shown.name} Range</span>
+                  <p className="pmm-blurb">{armBlurb(shown.name)}</p>
+
+                  <ul className="pmm-rows">
+                    {shown.slug && (
+                      <li>
+                        <Link href={`/${shown.slug}`} className="pmm-item pmm-item-all" onClick={close}>
+                          <span className="pmm-item-tile pmm-tile-0" aria-hidden="true"><LayoutGrid /></span>
+                          <span className="pmm-item-name">All {shown.name}</span>
+                          <ChevronRight className="pmm-chev" aria-hidden="true" />
+                        </Link>
+                      </li>
+                    )}
+                    {shown.children.map((child, i) => {
+                      // Real product photo where one exists (see menu-images);
+                      // the category icon stands in otherwise.
+                      const img = menuImage(child.slug);
+                      const tile = (
+                        <span className={`pmm-item-tile pmm-tile-${(i + 1) % 4}`} aria-hidden="true">
+                          {img ? (
+                            <img src={cld(img, 'f_auto,q_auto,w_120')} alt="" loading="lazy" decoding="async" />
+                          ) : (
+                            categoryIcon(child.name)
+                          )}
+                        </span>
+                      );
+                      return hasKids(child) ? (
+                        <li key={child.id}>
+                          <button
+                            type="button"
+                            className="pmm-item"
+                            onClick={() => stepInto(shown, child)}
+                          >
+                            {tile}
+                            <span className="pmm-item-name">{child.name}</span>
+                            <ChevronRight className="pmm-chev" aria-hidden="true" />
+                          </button>
+                        </li>
+                      ) : (
+                        <li key={child.id}>
+                          <Link href={`/${child.slug}`} className="pmm-item" onClick={close}>
+                            {tile}
+                            <span className="pmm-item-name">{child.name}</span>
+                            <ChevronRight className="pmm-chev" aria-hidden="true" />
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
                 </>
               ) : (
-                <li className="pmm-empty">Choose a category on the left.</li>
+                <p className="pmm-empty">Choose a category on the left.</p>
               )}
-            </ul>
+            </div>
           </div>
         </div>
       )}

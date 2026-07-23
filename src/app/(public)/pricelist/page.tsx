@@ -3,6 +3,10 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { cld } from '@/lib/cloudinary';
+import JsonLd from '@/components/JsonLd';
+import { breadcrumbJsonLd } from '@/lib/json-ld';
+import { categoryIcon } from '@/lib/category-icons';
+import { ArrowRight } from 'lucide-react';
 
 export default function PricelistPage() {
   const [activeTab, setActiveTab] = useState<'polycab' | 'dowells'>('polycab');
@@ -74,6 +78,7 @@ export default function PricelistPage() {
 
   return (
     <main>
+      <JsonLd data={breadcrumbJsonLd([{ name: 'Pricelist' }], '/pricelist')} />
 
       {/* Breadcrumb Area */}
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
@@ -125,44 +130,48 @@ export default function PricelistPage() {
             </li>
           </ul>
 
-          {/* Tab Content */}
+          {/* Tab Content — cards share the homepage explorer design (.hce-card). */}
           <div className="pricelist-tab-content">
             <div className={`tab-pane ${activeTab === 'polycab' ? 'active' : ''}`} id="polycab">
-              <div className="row">
+              <div className="hce-grid">
                 {polycabItems.map((item, idx) => (
-                  <div key={idx} className="col-lg-4 col-md-6 mb-4">
-                    <div className="pricelist-card">
-                      <div className="pricelist-image">
-                        <img src={cld(item.image)} alt={item.title} />
-                      </div>
-                      <div className="pricelist-title">
-                        <p>{item.title}</p>
-                      </div>
-                      <div className="pricelist-button">
-                        <Link href={item.link} className="pricelist-btn">{item.label}</Link>
-                      </div>
-                    </div>
-                  </div>
+                  <Link key={item.title} href={item.link} className="hce-card">
+                    <span className="hce-card-brand">polycab</span>
+                    <span className={`hce-card-img hce-tint-${idx % 4}`}>
+                      <img src={cld(item.image)} alt={item.title} loading="lazy" />
+                    </span>
+                    <span className="hce-card-body">
+                      <span className={`hce-card-badge hce-badge-${idx % 4}`} aria-hidden="true">
+                        {categoryIcon(item.title)}
+                      </span>
+                      <span className="hce-card-name">{item.title}</span>
+                      <span className="hce-card-cta">
+                        {item.label} <ArrowRight aria-hidden="true" />
+                      </span>
+                    </span>
+                  </Link>
                 ))}
               </div>
             </div>
 
             <div className={`tab-pane ${activeTab === 'dowells' ? 'active' : ''}`} id="dowells">
-              <div className="row">
+              <div className="hce-grid">
                 {dowellsItems.map((item, idx) => (
-                  <div key={idx} className="col-lg-4 col-md-6 mb-4">
-                    <div className="pricelist-card">
-                      <div className="pricelist-image">
-                        <img src={cld(item.image)} alt={item.title} />
-                      </div>
-                      <div className="pricelist-title">
-                        <p>{item.title}</p>
-                      </div>
-                      <div className="pricelist-button">
-                        <Link href={item.link} className="pricelist-btn">{item.label}</Link>
-                      </div>
-                    </div>
-                  </div>
+                  <Link key={item.title} href={item.link} className="hce-card">
+                    <span className="hce-card-brand">dowells</span>
+                    <span className={`hce-card-img hce-tint-${idx % 4}`}>
+                      <img src={cld(item.image)} alt={item.title} loading="lazy" />
+                    </span>
+                    <span className="hce-card-body">
+                      <span className={`hce-card-badge hce-badge-${idx % 4}`} aria-hidden="true">
+                        {categoryIcon(item.title)}
+                      </span>
+                      <span className="hce-card-name">{item.title}</span>
+                      <span className="hce-card-cta">
+                        {item.label} <ArrowRight aria-hidden="true" />
+                      </span>
+                    </span>
+                  </Link>
                 ))}
               </div>
             </div>

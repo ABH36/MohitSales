@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePublicSettings } from '@/components/PublicSettingsContext';
 import { useCaptcha } from '@/components/useCaptcha';
+import JsonLd from '@/components/JsonLd';
+import { breadcrumbJsonLd } from '@/lib/json-ld';
 import { cld } from '@/lib/cloudinary';
 
 
@@ -103,7 +105,7 @@ export default function ContactUsPage() {
 
   return (
     <main>
-
+      <JsonLd data={breadcrumbJsonLd([{ name: 'Contact Us' }], '/contact-us')} />
 
       {/* breadcrumb area start */}
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">

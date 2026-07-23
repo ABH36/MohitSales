@@ -4,6 +4,8 @@ import React from 'react';
 import BreadcrumbBanner from '@/components/BreadcrumbBanner';
 import ProductPageWrapper from '@/components/ProductPageWrapper';
 import { cld } from '@/lib/cloudinary';
+import { categoryIcon } from '@/lib/category-icons';
+import { ArrowRight } from 'lucide-react';
 
 export default function CrimpingToolPage() {
   const products = [
@@ -44,32 +46,33 @@ export default function CrimpingToolPage() {
             <h2>Crimping Tool</h2>
           </div>
 
-          <div className="row mt-4">
+          {/* Same card design as the homepage explorers (.hce-card); the whole
+              card is the enquiry link, intercepted by ProductPageWrapper. */}
+          <div className="hce-grid">
             {products.map((prod, idx) => (
-              <div key={idx} className="col-md-4 mt-4">
-                <h5 className="mb-4">{prod.subtitle}</h5>
-                <div className="product-card">
-                  <div className="product-img">
-                    <img 
-                      src={cld(prod.image)} 
-                      alt={prod.title} 
-                      className="img-fluid" 
-                    />
-                  </div>
-
-                  <div className="product-content">
-                    <div className="product-title">{prod.title}</div>
-
-                    <div className="product-details">
-                      <span>Material:</span> --<br />
-                      <span>Finishing:</span> --<br />
-                      <span>Size:</span> {prod.size}
-                    </div>
-
-                    <a href="/contact-us" className="enquiry-btn">Send Enquiry</a>
-                  </div>
-                </div>
-              </div>
+              <a
+                key={idx}
+                href={`/contact-us?product=${encodeURIComponent(prod.subtitle)}`}
+                className="hce-card"
+              >
+                <span className="hce-card-brand">dowells</span>
+                <span className={`hce-card-img hce-tint-${idx % 4}`}>
+                  <img src={cld(prod.image)} alt={prod.title} loading="lazy" />
+                </span>
+                <span className="hce-card-body">
+                  <span className={`hce-card-badge hce-badge-${idx % 4}`} aria-hidden="true">
+                    {categoryIcon('crimping tool')}
+                  </span>
+                  <span className="hce-card-name">{prod.subtitle}</span>
+                  <span className="hce-card-details">
+                    <span>Type:</span> {prod.title}<br />
+                    <span>Size:</span> {prod.size}
+                  </span>
+                  <span className="hce-card-cta">
+                    Send Enquiry <ArrowRight aria-hidden="true" />
+                  </span>
+                </span>
+              </a>
             ))}
           </div>
         </div>

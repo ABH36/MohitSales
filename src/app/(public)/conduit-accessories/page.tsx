@@ -33,6 +33,7 @@ export default function ConduitAccessoriesPage() {
       title="Conduit & Accessories"
       breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Polycab', href: '/polycab' }, { label: 'Conduit & Accessories' }]}
       items={PRODUCTS}
+      brandMark="polycab"
     />
   );
 }

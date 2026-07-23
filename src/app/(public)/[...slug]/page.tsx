@@ -9,6 +9,10 @@ import SchemaInjector from '@/components/SchemaInjector';
 import { sanitizeHtml } from '@/lib/utils';
 import { renderDbProduct, renderDbCategory, renderProductLayout } from './render';
 import { cld } from '@/lib/cloudinary';
+import JsonLd from '@/components/JsonLd';
+import { breadcrumbJsonLd } from '@/lib/json-ld';
+import { brandFromSlug } from '@/lib/brand';
+import { SITE_URL } from '@/lib/seo';
 
 export const revalidate = 3600; // ISR: revalidate every 1 hour (admin edits trigger instant revalidation via API)
 export const dynamicParams = true; // Allow on-demand generation for pages not generated at build time
@@ -337,6 +341,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
   // Falls through here only when PRIORITY 1 (DB product) did not match.
   if (legacyHtml) {
     let finalHtml = legacyHtml;
+    // BreadcrumbList JSON-LD extracted from the (fixed-up) legacy breadcrumb
+    // trail; rendered as a React element because sanitizeHtml strips scripts.
+    let legacyCrumbsLd: object | null = null;
 
     try {
       // ── Dynamic Breadcrumbs Clickable Link Fix ──────────────────────────
@@ -436,6 +443,39 @@ export default async function ProductPage({ params }: ProductPageProps) {
         }
       }
 
+      // ── BreadcrumbList structured data for legacy pages ──
+      // Built from the SAME (post-fix-up) trail the visitor sees, so the schema
+      // always matches the visual breadcrumb. Collected into a variable and
+      // rendered as a React <JsonLd> beside the HTML — it cannot live INSIDE
+      // finalHtml because sanitizeHtml strips every <script> tag at render.
+      {
+        const crumbEls = $('.rs-breadcrumb-menu nav ul li');
+        if (crumbEls.length > 0) {
+          const items: object[] = [];
+          crumbEls.each((i, el) => {
+            const li = $(el);
+            const name = li.text().trim();
+            if (!name) return;
+            const href = li.find('a').attr('href');
+            items.push({
+              '@type': 'ListItem',
+              position: items.length + 1,
+              name,
+              ...(href && href !== '#'
+                ? { item: href.startsWith('http') ? href : `${SITE_URL}${href}` }
+                : {}),
+            });
+          });
+          if (items.length > 0) {
+            legacyCrumbsLd = {
+              '@context': 'https://schema.org',
+              '@type': 'BreadcrumbList',
+              itemListElement: items,
+            };
+          }
+        }
+      }
+
       // Convert legacy inline tab switch triggers to data-tab-target
       $('button[onclick*="openTab"]').each((_, elem) => {
         const btn = $(elem);
@@ -482,6 +522,51 @@ export default async function ProductPage({ params }: ProductPageProps) {
         }
       }
 
+      // ── Restyle legacy grid product cards to the shared .hce-card design ──
+      // The stored export carries two grid shapes: the landing grid
+      // (.products-grid > .product-card > a > img+h3+.pricelist-button, e.g.
+      // the cable-terminal index) and the listing card (.product-card >
+      // .product-img/.product-content, e.g. water-heaters). Swapping their
+      // classes for the homepage-card ones makes the same CSS apply, so these
+      // pages match every React-rendered grid — and detaches them from the
+      // old .product-card/.pricelist-btn rules in custom.css. The horizontal
+      // spec rows (.card_box "row product-card") are a different layout and
+      // keep their classes. Icon badges are skipped: sanitizeHtml strips
+      // <svg>, so the CTA arrow comes from CSS instead.
+      $('.products-grid').removeClass('products-grid').addClass('hce-grid');
+      const cardBrand = brandFromSlug(slugPath);
+      $('.product-card').each((i, el) => {
+        const card = $(el);
+        if (card.hasClass('row') || card.closest('.card_box').length) return;
+        card.prepend(`<span class="hce-card-brand">${cardBrand}</span>`);
+        const link = card.children('a').first();
+        if (link.length && link.children('img').length) {
+          // Landing-grid variant — rebuild the anchor's children into the
+          // image stage + body structure the hce CSS expects.
+          card.removeClass('product-card').addClass('hce-card');
+          link.children('img').first().wrap(`<span class="hce-card-img hce-tint-${i % 4}"></span>`);
+          const body = $('<span class="hce-card-body"></span>');
+          const h3 = link.children('h3').first();
+          const ctaText = link.find('.pricelist-btn').first().text().trim() || 'Explore More';
+          link.children('.pricelist-button').remove();
+          if (h3.length) {
+            h3.addClass('hce-card-name');
+            body.append(h3);
+          }
+          body.append(`<span class="hce-card-cta">${ctaText}</span>`);
+          link.append(body);
+        } else {
+          // Listing variant — a straight class swap.
+          card.removeClass('product-card').addClass('hce-card hce-card-fluid');
+          card.find('.product-img').first().removeClass('product-img').addClass(`hce-card-img hce-tint-${i % 4}`);
+          card.find('.product-content').first().removeClass('product-content').addClass('hce-card-body');
+          card.find('.product-title').first().removeClass('product-title').addClass('hce-card-name');
+          card.find('.product-details').first().removeClass('product-details').addClass('hce-card-details');
+          // Text stays "Send Enquiry", so ProductPageWrapper still opens the modal.
+          card.find('a.enquiry-btn').first().removeClass('enquiry-btn').addClass('hce-card-cta');
+        }
+      });
+
       finalHtml = $.html();
 
       // Only query DB for category products if the HTML actually has card slots to fill
@@ -498,7 +583,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
         let htmlModified = false;
 
         // Find the template card to use for appending new products
-        const legacyCard = $('.cables-card, .card_box, .fan_card_box, .product-card').last();
+        // (.hce-card covers legacy product cards restyled by the pass above)
+        const legacyCard = $('.cables-card, .card_box, .fan_card_box, .product-card, .hce-card').last();
         const colWrapper = legacyCard.length > 0 ? legacyCard.closest('[class*="col-"]') : null;
         const gridContainer = colWrapper && colWrapper.length > 0 ? colWrapper.parent() : null;
 
@@ -506,7 +592,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           let existingCard: any = null;
 
           // Try to match by checking if any card contains the product title exactly or contains a link matching the product slug suffix
-          $('.cables-card, .card_box, .fan_card_box, .product-card').each((i, el) => {
+          $('.cables-card, .card_box, .fan_card_box, .product-card, .hce-card').each((i, el) => {
             const cardHtml = $(el).html() || '';
             const cardText = $(el).text();
 
@@ -543,7 +629,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 }
               }
               // Update title if modified
-              const titleEl = existingCard.find('h4, h3, h5, .cables-name a, .product-details span').not('.product-features h3, .product-features h4, .product-features h5, :contains("FEATURES")');
+              const titleEl = existingCard.find('h4, h3, h5, .cables-name a, .hce-card-name, .product-details span').not('.product-features h3, .product-features h4, .product-features h5, :contains("FEATURES")');
               if (titleEl.length && titleEl.text().trim() !== prod.title) {
                 titleEl.text(prod.title);
                 htmlModified = true;
@@ -562,7 +648,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               }
 
               // Update title
-              const titleEl = newCol.find('h4, h3, h5, .cables-name a, .product-details span').not('.product-features h3, .product-features h4, .product-features h5, :contains("FEATURES")');
+              const titleEl = newCol.find('h4, h3, h5, .cables-name a, .hce-card-name, .product-details span').not('.product-features h3, .product-features h4, .product-features h5, :contains("FEATURES")');
               if (titleEl.length) {
                 titleEl.text(prod.title);
               }
@@ -595,6 +681,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <ProductPageWrapper>
         <SchemaInjector page={`/${slugPath}`} />
         <main className="legacy-php-content">
+          {legacyCrumbsLd && <JsonLd data={legacyCrumbsLd} />}
           <div className="legacy-php-content" dangerouslySetInnerHTML={{ __html: sanitizeHtml(finalHtml) }} />
           {/* Reads the cards this HTML just rendered and adds filter/sort over
               them. Renders nothing on pages with only a handful of products. */}
@@ -626,6 +713,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <ProductPageWrapper>
           <SchemaInjector page={`/${slugPath}`} />
           <main>
+            {/* Legacy JSON layouts carry name-only crumbs, so the schema keeps
+                to the compliant two entries: Home + this page. */}
+            <JsonLd data={breadcrumbJsonLd([{ name: product.heading || product.title }], `/${slugPath}`)} />
             <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
               <div className="rs-breadcrumb-bg" style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')}')` }}></div>
               <div className="container">
@@ -655,7 +745,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </div>
               </div>
             </section>
-            {renderProductLayout(isMultiProduct, product, cleanLink)}
+            {renderProductLayout(isMultiProduct, product, cleanLink, brandFromSlug(slugPath))}
           </main>
         </ProductPageWrapper>
       );

@@ -34,6 +34,7 @@ export default function CableTerminalPage() {
       title="Cable Terminal"
       breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Dowells', href: '/dowells' }, { label: 'Cable Terminal' }]}
       items={PRODUCTS}
+      brandMark="dowells"
     />
   );
 }

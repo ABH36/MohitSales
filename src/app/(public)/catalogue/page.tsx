@@ -3,6 +3,11 @@ import { getSeoMetadata } from '@/lib/seo';
 ﻿import React from 'react';
 import Link from 'next/link';
 import { cld } from '@/lib/cloudinary';
+import JsonLd from '@/components/JsonLd';
+import { breadcrumbJsonLd } from '@/lib/json-ld';
+import { categoryIcon } from '@/lib/category-icons';
+import { brandFromSlug } from '@/lib/brand';
+import { ArrowRight } from 'lucide-react';
 
 export async function generateMetadata(): Promise<Metadata> {
   return getSeoMetadata('/catalogue', {
@@ -65,6 +70,7 @@ export default function CataloguePage() {
 
   return (
     <main>
+      <JsonLd data={breadcrumbJsonLd([{ name: 'Catalogue' }], '/catalogue')} />
 
       {/* Breadcrumb Area */}
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
@@ -102,14 +108,25 @@ export default function CataloguePage() {
             <p>Explore our wide range of electrical products across trusted categories</p>
           </div>
 
-          <div className="row">
+          {/* Same card design as the homepage explorers (.hce-card). */}
+          <div className="hce-grid">
             {catalogs.map((cat, idx) => (
-              <div key={idx} className="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <Link href={cat.link} className="catalogue-card">
-                  <img src={cld(cat.image)} alt={cat.title} />
-                  <h5>{cat.title}</h5>
-                </Link>
-              </div>
+              <Link key={cat.title} href={cat.link} className="hce-card">
+                <span className="hce-card-brand">{brandFromSlug(cat.link)}</span>
+                <span className={`hce-card-img hce-tint-${idx % 4}`}>
+                  <img src={cld(cat.image)} alt={cat.title} loading="lazy" />
+                </span>
+                <span className="hce-card-body">
+                  <span className={`hce-card-badge hce-badge-${idx % 4}`} aria-hidden="true">
+                    {categoryIcon(cat.title)}
+                  </span>
+                  <span className="hce-card-name">{cat.title}</span>
+                  <span className="hce-card-cta">
+                    {cat.link.startsWith('/dowells') ? 'View Products' : 'View Catalogue'}
+                    <ArrowRight aria-hidden="true" />
+                  </span>
+                </span>
+              </Link>
             ))}
           </div>
 

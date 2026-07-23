@@ -3,6 +3,7 @@ import { getSeoMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { cld } from '@/lib/cloudinary';
+import { FileText, ArrowRight } from 'lucide-react';
 
 export async function generateMetadata(): Promise<Metadata> {
   return getSeoMetadata('/resources', {
@@ -59,40 +60,33 @@ export default async function ResourcesPage() {
         </div>
       </section>
 
-      <section className="resources_sec">
-        <div className="container pricelist">
-          <div className="row">
-            <div className="col-lg-4">
-              <a href="/assets/images/resources/prabhat-wires-ak-pvt-ltd-company-profile.pdf">
-                <div className="resources-card">
-                  <span style={{ display: 'block' }}>
-                    <h4>Company Profile</h4>
-                  </span>
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="resources_sec">
-        <div className="container catalogue">
-          <div className="row d-flex justify-content-center">
-            <div className="col-lg-4">
-              <div className="catalogue-card">
-                <a href="/assets/images/catalogue/Cable Laying catalogue_Ord 17709.pdf" target="_blank" rel="noopener noreferrer">
-                  <div className="catalogue-icon-box">
-                    <i className="fa-solid fa-file-pdf"></i>
-                  </div>
-                </a>
-                <div className="catalogue-content">
-                  <h3>Cable Laying Catalogue</h3>
-                  <a href="/assets/images/catalogue/Cable Laying catalogue_Ord 17709.pdf" className="catalogue-btn" target="_blank" rel="noopener noreferrer">
-                    View Catalogue
-                  </a>
-                </div>
-              </div>
-            </div>
+      {/* Download cards — same design as the homepage explorers (.hce-card).
+          The old "Company Profile" card was removed: its PDF never existed in
+          this repo and the filename referenced another company entirely
+          (prabhat-wires…, a template leftover). */}
+      <section className="catalogue-section">
+        <div className="container">
+          <div className="hce-grid">
+            <a
+              href="/assets/images/catalogue/Cable Laying catalogue_Ord 17709.pdf"
+              className="hce-card"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="hce-card-brand">polycab</span>
+              <span className="hce-card-img hce-tint-0">
+                <FileText className="hce-card-doc-icon" aria-hidden="true" />
+              </span>
+              <span className="hce-card-body">
+                <span className="hce-card-badge hce-badge-0" aria-hidden="true">
+                  <FileText />
+                </span>
+                <span className="hce-card-name">Cable Laying Catalogue</span>
+                <span className="hce-card-cta">
+                  View Catalogue <ArrowRight aria-hidden="true" />
+                </span>
+              </span>
+            </a>
           </div>
         </div>
       </section>

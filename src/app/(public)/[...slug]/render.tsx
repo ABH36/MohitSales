@@ -3,6 +3,11 @@ import { sanitizeHtml } from '@/lib/utils';
 import { cld } from '@/lib/cloudinary';
 import { deriveSpecs, splitDescription, type Spec } from '@/lib/product-specs';
 import StickyProductActions from '@/components/StickyProductActions';
+import JsonLd from '@/components/JsonLd';
+import { breadcrumbJsonLd, productJsonLd } from '@/lib/json-ld';
+import { categoryIcon } from '@/lib/category-icons';
+import { brandFromSlug } from '@/lib/brand';
+import { ArrowRight } from 'lucide-react';
 
 /**
  * A card's `details` is sometimes a string and sometimes an array of lines —
@@ -82,12 +87,34 @@ export function renderDbProduct(dbProduct: any, productJson: any = null, legacyI
     return clean;
   };
 
+  // Structured data — Product + a BreadcrumbList that mirrors the visual trail.
+  // Emitted by both render branches below.
+  const currentPath = `/${dbProduct.slug}`;
+  const productLd = productJsonLd({
+    title: dbProduct.title,
+    slug: dbProduct.slug,
+    description:
+      parsedDescription.filter((d: any) => typeof d === 'string').join(' ') || null,
+    imageSrc: dbProduct.imageSrc || legacyImage,
+    categoryName: dbProduct.category?.name?.trim() || null,
+  });
+  const crumbsLd = breadcrumbJsonLd(
+    [
+      ...breadcrumbs.map((b: any) => ({ name: b.label, path: b.href })),
+      { name: dbProduct.title },
+    ],
+    currentPath,
+  );
+
   // If it is a multi-product page (contains nested product card items)
   if (isMultiProduct) {
     const hasCardBoxStyle = parsedFeatures.some((card: any) => card.features && card.features.length > 0);
 
     return (
       <main>
+        {/* Range/listing page — BreadcrumbList only; Product schema belongs on
+            the single-product branch below. */}
+        <JsonLd data={crumbsLd} />
         <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
           <div className="rs-breadcrumb-bg" style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')}')` }}></div>
           <div className="container">
@@ -164,35 +191,37 @@ export function renderDbProduct(dbProduct: any, productJson: any = null, legacyI
                       </div>
                     );
                   } else {
+                    // Grid product card — same design as the homepage explorers.
+                    const cardHref = card.link
+                      ? cleanLink(card.link)
+                      : `/contact-us?product=${encodeURIComponent(card.title || dbProduct.title)}`;
+                    const isExplore =
+                      card.link && card.link !== '/contact-us' && card.link !== '/contact-us.php';
                     return (
-                      <div key={idx} className="col-md-4 mt-4 d-flex align-items-stretch">
-                        <div className="bg-white rounded-[14px] shadow-[0_12px_30px_rgba(0,0,0,0.12)] border border-transparent overflow-hidden flex flex-col flex-grow h-full w-full transition-transform duration-300 hover:-translate-y-1.5 group">
-                          <div className="p-[15px] bg-white d-flex justify-content-center align-items-center">
+                      <div key={idx} className="col-lg-3 col-md-4 mt-4 d-flex align-items-stretch">
+                        <a href={cardHref} className="hce-card hce-card-fluid">
+                          <span className="hce-card-brand">{brandFromSlug(dbProduct.slug)}</span>
+                          <span className={`hce-card-img hce-tint-${idx % 4}`}>
                             {card.image && (
-                              <img
-                                src={cld(card.image)}
-                                alt={card.title || 'Product'}
-                                className="w-full h-[250px] object-contain rounded-[10px] shadow-[0_1px_2px_rgba(60,64,67,0.3),0_2px_6px_2px_rgba(60,64,67,0.15)] transition-transform duration-300 group-hover:scale-105"
-                                loading="lazy"
-                              />
+                              <img src={cld(card.image)} alt={card.title || 'Product'} loading="lazy" />
                             )}
-                          </div>
-                          <div className="flex flex-col flex-grow p-[18px] text-center">
-                            {card.title && <div className="text-[#c1272d] text-[22px] font-semibold mb-[10px]">{card.title}</div>}
+                          </span>
+                          <span className="hce-card-body">
+                            <span className={`hce-card-badge hce-badge-${idx % 4}`} aria-hidden="true">
+                              {categoryIcon(card.title || dbProduct.title)}
+                            </span>
+                            {card.title && <span className="hce-card-name">{card.title}</span>}
                             {detailsToHtml(card.details) && (
-                              <div
-                                className="text-[#555] text-[18px] leading-[1.6] mb-[18px] [&>span]:font-semibold [&>span]:text-[#333]"
+                              <span
+                                className="hce-card-details"
                                 dangerouslySetInnerHTML={{ __html: detailsToHtml(card.details) as string }}
                               />
                             )}
-                            <a
-                              href={card.link ? cleanLink(card.link) : `/contact-us?product=${encodeURIComponent(card.title || dbProduct.title)}`}
-                              className="bg-gradient-to-br from-[#e8434a] to-[#c1272d] text-white rounded-[4px] px-[24px] py-[10px] font-medium text-[15px] border-none inline-flex items-center justify-center transition-all duration-300 w-auto min-w-[140px] h-[45px] self-center mt-auto mb-0 whitespace-nowrap hover:bg-none hover:bg-[#1e2e5e] hover:-translate-y-[2px] hover:shadow-[0_4px_12px_rgba(30,46,94,0.25)]"
-                            >
-                              {card.link && card.link !== '/contact-us' && card.link !== '/contact-us.php' ? 'Explore More' : 'Send Enquiry'}
-                            </a>
-                          </div>
-                        </div>
+                            <span className="hce-card-cta">
+                              {isExplore ? 'Explore More' : 'Send Enquiry'} <ArrowRight aria-hidden="true" />
+                            </span>
+                          </span>
+                        </a>
                       </div>
                     );
                   }
@@ -208,6 +237,8 @@ export function renderDbProduct(dbProduct: any, productJson: any = null, legacyI
   // Single Product Detailed View Layout (Layout A)
   return (
     <main>
+      <JsonLd data={productLd} />
+      <JsonLd data={crumbsLd} />
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div className="rs-breadcrumb-bg" style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')}')` }}></div>
         <div className="container">
@@ -294,27 +325,22 @@ export function renderDbProduct(dbProduct: any, productJson: any = null, legacyI
 
 
 
-              {/* Description renders as ordered blocks: real prose stays a
-                  paragraph, but a construction line written as one comma-run —
-                  "Copper conductor, PVC insulated, PVC sheathed" — becomes
-                  bullets so the build is scannable. "Available Size" style facts
-                  are pulled out into the spec table below. */}
+              {/* Description keeps only real prose paragraphs. Construction
+                  comma-runs ("Copper conductor, PVC insulated, …") used to
+                  render as a bullet list here, but those info points are
+                  dropped by request — the spec table below already carries the
+                  factual details. */}
               {(() => {
                 const { blocks } = splitDescription(parsedDescription);
+                const paragraphs = blocks.filter(
+                  (block): block is Extract<typeof block, { type: 'p' }> => block.type === 'p',
+                );
                 return (
                   <div className="wires-desc">
-                    {blocks.length > 0 ? (
-                      blocks.map((block, idx) =>
-                        block.type === 'ul' ? (
-                          <ul key={idx} className="product-desc-list">
-                            {block.items.map((item, i) => (
-                              <li key={i}>{item}</li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <p key={idx} className="mb-3">{block.text}</p>
-                        )
-                      )
+                    {paragraphs.length > 0 ? (
+                      paragraphs.map((block, idx) => (
+                        <p key={idx} className="mb-3">{block.text}</p>
+                      ))
                     ) : (
                       <p>Contact us for more information about this product.</p>
                     )}
@@ -405,8 +431,18 @@ export function renderDbCategory(cat: any) {
     currentParent = currentParent.parent;
   }
 
+  // BreadcrumbList structured data mirroring the visual trail above.
+  const crumbsLd = breadcrumbJsonLd(
+    [
+      ...breadcrumbs.map((b: any) => ({ name: b.name, path: `/${b.slug}` })),
+      { name: cat.name.trim() },
+    ],
+    `/${cat.slug}`,
+  );
+
   return (
     <main>
+      <JsonLd data={crumbsLd} />
       {/* Breadcrumb */}
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div
@@ -449,23 +485,28 @@ export function renderDbCategory(cat: any) {
               <div className="section-title">
                 <h2>Product Lines</h2>
               </div>
-              <div className="row mt-4 mb-5">
-                {cat.children.map((child: any) => (
-                  <div key={child.id} className="col-lg-3 col-md-4 col-sm-6 mt-4">
-                    <a href={`/${child.slug}`} className="db-subcategory-card">
-                      {child.image ? (
-                        <img src={cld(child.image)} alt={child.name} className="db-subcategory-img" />
-                      ) : (
-                        <div className="db-subcategory-icon">
-                          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#c1272d" strokeWidth="1.5">
-                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
-                          </svg>
-                        </div>
-                      )}
-                      <div className="db-subcategory-name">{child.name}</div>
-                      <div className="db-subcategory-count">{child._count?.products || 0} products</div>
-                    </a>
-                  </div>
+              {/* Same card design as the homepage explorers (.hce-card). */}
+              <div className="hce-grid mt-4 mb-5">
+                {cat.children.map((child: any, idx: number) => (
+                  <a key={child.id} href={`/${child.slug}`} className="hce-card">
+                    <span className="hce-card-brand">{brandFromSlug(child.slug)}</span>
+                    <span className={`hce-card-img hce-tint-${idx % 4}`}>
+                      <img
+                        src={child.image ? cld(child.image) : cld('https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/logo/msc_logo_without_bg.png')}
+                        alt={child.name}
+                        loading="lazy"
+                      />
+                    </span>
+                    <span className="hce-card-body">
+                      <span className={`hce-card-badge hce-badge-${idx % 4}`} aria-hidden="true">
+                        {categoryIcon(child.name)}
+                      </span>
+                      <span className="hce-card-name">{child.name}</span>
+                      <span className="hce-card-cta">
+                        View Products ({child._count?.products || 0}) <ArrowRight aria-hidden="true" />
+                      </span>
+                    </span>
+                  </a>
                 ))}
               </div>
             </>
@@ -479,44 +520,32 @@ export function renderDbCategory(cat: any) {
                   <h2>All Products</h2>
                 </div>
               )}
+              {/* Product cards share the homepage explorer design (.hce-card);
+                  the whole card opens the product page, which carries the
+                  description, features and datasheet. */}
               <div className="products-section">
-                <div className="row mt-4">
-                  {cat.products.map((prod: any) => {
-                    return (
-                      <div key={prod.id} className="col-md-4 mt-4 d-flex align-items-stretch">
-                        <div className="bg-white rounded-[14px] shadow-[0_12px_30px_rgba(0,0,0,0.12)] border border-transparent overflow-hidden flex flex-col flex-grow h-full w-full transition-transform duration-300 hover:-translate-y-1.5 group">
-                          {/* The card only offered "Send Enquiry", which was fine
-                              while these listings held items with nothing behind
-                              them. Products now have their own page carrying the
-                              description, features and datasheet, so the image and
-                              title open it — a card that cannot be clicked reads
-                              as broken. */}
-                          <a href={`/${prod.slug}`} className="p-[15px] bg-white d-flex justify-content-center align-items-center">
-                            {prod.imageSrc ? (
-                              <img src={prod.imageSrc} alt={prod.title} className="w-full h-[250px] object-contain rounded-[10px] shadow-[0_1px_2px_rgba(60,64,67,0.3),0_2px_6px_2px_rgba(60,64,67,0.15)] transition-transform duration-300 group-hover:scale-105" loading="lazy" />
-                            ) : (
-                              <div className="w-full h-[250px] flex items-center justify-center rounded-[10px]" style={{ background: 'linear-gradient(135deg, #f8fafc 0%, #eef2f9 100%)' }}>
-                                <img src={cld('https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/logo/msc_logo_without_bg.png')} alt={prod.title} className="max-w-[65%] max-h-[130px] object-contain opacity-85" loading="lazy" />
-                              </div>
-                            )}
-                          </a>
-                          <div className="flex flex-col flex-grow p-[18px] text-center">
-                            <a href={`/${prod.slug}`} className="text-[#c1272d] text-[22px] font-semibold mb-[10px] no-underline hover:text-[#1e2e5e] transition-colors duration-200">
-                              {prod.title}
-                            </a>
-                            {/* The description, sizes and features all live on the
-                                product page, which this card already links to — so
-                                the card no longer repeats them and the button is
-                                "Explore More" (to that page) rather than a duplicate
-                                enquiry, matching the other product cards. */}
-                            <a href={`/${prod.slug}`} className="bg-gradient-to-br from-[#e8434a] to-[#c1272d] text-white rounded-[4px] px-[24px] py-[10px] font-medium text-[15px] border-none inline-flex items-center justify-center transition-all duration-300 w-auto min-w-[140px] h-[45px] self-center mt-auto mb-0 whitespace-nowrap hover:bg-none hover:bg-[#1e2e5e] hover:-translate-y-[2px] hover:shadow-[0_4px_12px_rgba(30,46,94,0.25)]">
-                              Explore More
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
+                <div className="hce-grid mt-4">
+                  {cat.products.map((prod: any, idx: number) => (
+                    <a key={prod.id} href={`/${prod.slug}`} className="hce-card">
+                      <span className="hce-card-brand">{brandFromSlug(prod.slug)}</span>
+                      <span className={`hce-card-img hce-tint-${idx % 4}`}>
+                        <img
+                          src={prod.imageSrc || cld('https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/logo/msc_logo_without_bg.png')}
+                          alt={prod.title}
+                          loading="lazy"
+                        />
+                      </span>
+                      <span className="hce-card-body">
+                        <span className={`hce-card-badge hce-badge-${idx % 4}`} aria-hidden="true">
+                          {categoryIcon(prod.title)}
+                        </span>
+                        <span className="hce-card-name">{prod.title}</span>
+                        <span className="hce-card-cta">
+                          Explore More <ArrowRight aria-hidden="true" />
+                        </span>
+                      </span>
+                    </a>
+                  ))}
                 </div>
               </div>
             </>
@@ -559,7 +588,7 @@ export function renderDbCategory(cat: any) {
   );
 }
 
-export function renderProductLayout(isMultiProduct: boolean, product: any, cleanLink: (url: string) => string) {
+export function renderProductLayout(isMultiProduct: boolean, product: any, cleanLink: (url: string) => string, brand: 'polycab' | 'dowells' = 'polycab') {
   if (isMultiProduct) {
     // Layout B: Category Catalog with Product Cards
     const hasCardBoxStyle = product.cards.some((card: any) => card.features && card.features.length > 0);
@@ -613,35 +642,37 @@ export function renderProductLayout(isMultiProduct: boolean, product: any, clean
                     </div>
                   );
                 } else {
+                  // Grid product card — same design as the homepage explorers.
+                  const cardHref = card.link
+                    ? cleanLink(card.link)
+                    : `/contact-us?product=${encodeURIComponent(card.title || product.heading || product.title)}`;
+                  const isExplore =
+                    card.link && card.link !== '/contact-us' && card.link !== '/contact-us.php';
                   return (
-                    <div key={idx} className="col-md-4 mt-4 d-flex align-items-stretch">
-                      <div className="bg-white rounded-[14px] shadow-[0_12px_30px_rgba(0,0,0,0.12)] border border-transparent overflow-hidden flex flex-col flex-grow h-full w-full transition-transform duration-300 hover:-translate-y-1.5 group">
-                        <div className="p-[15px] bg-white d-flex justify-content-center align-items-center">
+                    <div key={idx} className="col-lg-3 col-md-4 mt-4 d-flex align-items-stretch">
+                      <a href={cardHref} className="hce-card hce-card-fluid">
+                        <span className="hce-card-brand">{brand}</span>
+                        <span className={`hce-card-img hce-tint-${idx % 4}`}>
                           {card.image && (
-                            <img
-                              src={cld(card.image)}
-                              alt={card.title || 'Product'}
-                              className="w-full h-[250px] object-contain rounded-[10px] shadow-[0_1px_2px_rgba(60,64,67,0.3),0_2px_6px_2px_rgba(60,64,67,0.15)] transition-transform duration-300 group-hover:scale-105"
-                              loading="lazy"
-                            />
+                            <img src={cld(card.image)} alt={card.title || 'Product'} loading="lazy" />
                           )}
-                        </div>
-                        <div className="flex flex-col flex-grow p-[18px] text-center">
-                          {card.title && <div className="text-[#c1272d] text-[22px] font-semibold mb-[10px]">{card.title}</div>}
+                        </span>
+                        <span className="hce-card-body">
+                          <span className={`hce-card-badge hce-badge-${idx % 4}`} aria-hidden="true">
+                            {categoryIcon(card.title || product.heading || product.title)}
+                          </span>
+                          {card.title && <span className="hce-card-name">{card.title}</span>}
                           {detailsToHtml(card.details) && (
-                            <div
-                              className="text-[#555] text-[18px] leading-[1.6] mb-[18px] [&>span]:font-semibold [&>span]:text-[#333]"
+                            <span
+                              className="hce-card-details"
                               dangerouslySetInnerHTML={{ __html: detailsToHtml(card.details) as string }}
                             />
                           )}
-                          <a
-                            href={card.link ? cleanLink(card.link) : `/contact-us?product=${encodeURIComponent(card.title || product.heading || product.title)}`}
-                            className="bg-gradient-to-br from-[#e8434a] to-[#c1272d] text-white rounded-[4px] px-[24px] py-[10px] font-medium text-[15px] border-none inline-flex items-center justify-center transition-all duration-300 w-auto min-w-[140px] h-[45px] self-center mt-auto mb-0 whitespace-nowrap hover:bg-none hover:bg-[#1e2e5e] hover:-translate-y-[2px] hover:shadow-[0_4px_12px_rgba(30,46,94,0.25)]"
-                          >
-                            {card.link && card.link !== '/contact-us' && card.link !== '/contact-us.php' ? 'Explore More' : 'Send Enquiry'}
-                          </a>
-                        </div>
-                      </div>
+                          <span className="hce-card-cta">
+                            {isExplore ? 'Explore More' : 'Send Enquiry'} <ArrowRight aria-hidden="true" />
+                          </span>
+                        </span>
+                      </a>
                     </div>
                   );
                 }

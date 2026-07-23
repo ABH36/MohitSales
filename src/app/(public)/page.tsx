@@ -8,11 +8,12 @@ import IndustriesSlider from '@/components/IndustriesSlider';
 import WhyChooseUs from '@/components/WhyChooseUs';
 import HomeContactForm from '@/components/HomeContactForm';
 import HomeAchievements from '@/components/HomeAchievements';
-import ClienteleSlider from '@/components/ClienteleSlider';
 import SplitText from '@/components/SplitText';
 import SchemaInjector from '@/components/SchemaInjector';
 import PromoPopup from '@/components/PromoPopup';
 import prisma from '@/lib/prisma';
+import { SITE_URL } from '@/lib/seo';
+import { Building2, Award, HeartHandshake } from 'lucide-react';
 import HomeCategoryExplorer from '@/components/HomeCategoryExplorer';
 import { buildExplorerArms } from '@/lib/home-explorer';
 
@@ -38,11 +39,21 @@ export async function generateMetadata(): Promise<Metadata> {
     description,
     keywords: seoMeta?.keywords ? seoMeta.keywords.split(',').map((k) => k.trim()) : undefined,
     robots: seoMeta ? { index: !seoMeta.noIndex, follow: !seoMeta.noFollow } : undefined,
-    alternates: seoMeta?.canonicalUrl ? { canonical: seoMeta.canonicalUrl } : undefined,
+    // Always self-referencing canonical — without it the homepage shipped no
+    // canonical at all whenever the admin SEO row was absent.
+    alternates: { canonical: seoMeta?.canonicalUrl || SITE_URL },
     openGraph: {
       title: seoMeta?.ogTitle || title,
       description,
+      url: SITE_URL,
+      siteName: 'Mohit Sales Corporation Pvt. Ltd.',
+      type: 'website',
       images: seoMeta?.ogImage ? [seoMeta.ogImage] : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: seoMeta?.ogTitle || title,
+      description,
     },
   };
 }
@@ -83,6 +94,19 @@ export default async function Page() {
     } catch {}
   }
 
+  // Distribute the CMS paragraphs across the three titled feature rows, so an
+  // admin editing the content still drives everything here. The third
+  // paragraph keeps only its first sentence — its tail used to feed the
+  // pull-quote card, which was removed by request.
+  const [aboutP1 = '', aboutP2 = '', aboutP3raw = ''] = aboutData.paragraphs;
+  const quoteSplit = aboutP3raw.indexOf('. ');
+  const aboutP3 = quoteSplit > -1 ? aboutP3raw.slice(0, quoteSplit + 1) : aboutP3raw;
+  const aboutFeatures = [
+    { title: 'Established Legacy', body: aboutP1, icon: <Building2 /> },
+    { title: 'Authorized Excellence', body: aboutP2, icon: <Award /> },
+    { title: 'Driven by Commitment', body: aboutP3, icon: <HeartHandshake /> },
+  ].filter((f) => f.body);
+
   return (
     <>
     <SchemaInjector page="/" />
@@ -108,8 +132,9 @@ export default async function Page() {
       {/* Banner slider area */}
       <BannerSlider />
 
-      {/* About Us — heading sits top-left (same treatment as the "Our Products"
-          sections), then image on the left and copy on the right. */}
+      {/* About Us — centred heading, then a media card + trust chips on the
+          left and titled feature rows + a pull-quote on the right. All copy
+          stays CMS-driven (see the paragraph mapping above the return). */}
       <section className="image-box-section about-us pt-100 pb-50">
         <div className="container">
           <div className="rs-section-title-wrapper text-center about-head scroll-reveal" data-delay="0">
@@ -121,25 +146,43 @@ export default async function Page() {
               {aboutData.title}
             </span>
             <h2 className="rs-section-title rs-split-text-enable split-in-fade"><SplitText text={aboutData.subtitle} /></h2>
+            <span className="about-head-underline" aria-hidden="true"></span>
           </div>
 
-          <div className="row align-items-center">
-            <div className="col-lg-6 w-full mb-5 mb-lg-0 scroll-reveal" data-direction="left" data-delay="100">
-              <div className="image_boxes style_three position-relative">
+          {/* Each block reveals on its own staggered delay (media card first,
+              then the strip; feature rows cascade down the right column). */}
+          {/* 5/7 split: the media column hugs the (square-ish) graphic so the
+              card doesn't carry wide white margins beside it. */}
+          <div className="row g-4 g-lg-5 about-v2">
+            <div className="col-lg-5 w-full">
+              <div className="about-media-card scroll-reveal" data-direction="left" data-delay="0">
                 <img
                   src={aboutData.imageUrl}
                   alt="Authorized Distributor of Polycab and Dowells"
-                  className="img-fluid rounded shadow"
+                  className="img-fluid"
                   fetchPriority="high"
                   loading="eager"
                 />
               </div>
             </div>
 
-            <div className="col-lg-6 w-full scroll-reveal" data-direction="right" data-delay="250">
-              <div className="about-copy">
-                {aboutData.paragraphs.map((p, i) => (
-                  <p key={i}>{p}</p>
+            <div className="col-lg-7 w-full">
+              <div className="about-features">
+                {aboutFeatures.map((f, i) => (
+                  <div
+                    key={f.title}
+                    className="about-feature scroll-reveal"
+                    data-direction="right"
+                    data-delay={`${100 + i * 140}`}
+                  >
+                    <span className={`about-feature-icon${i === 1 ? ' is-red' : ''}`} aria-hidden="true">
+                      {f.icon}
+                    </span>
+                    <div>
+                      <h3 className="about-feature-title">{f.title}</h3>
+                      <p>{f.body}</p>
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
@@ -157,7 +200,7 @@ export default async function Page() {
           visitor can reach is dead in the meantime. */}
       {cables && (
         <LazyHydrate>
-          <HomeCategoryExplorer arm={cables} heading="Polycab Cables" flat />
+          <HomeCategoryExplorer arm={cables} heading="Polycab Cables" brandMark="polycab" flat />
         </LazyHydrate>
       )}
 
@@ -165,12 +208,12 @@ export default async function Page() {
           can drill from the homepage to any range without opening the menu. */}
       {consumer && (
         <LazyHydrate>
-          <HomeCategoryExplorer arm={consumer} heading="Polycab Consumer" />
+          <HomeCategoryExplorer arm={consumer} heading="Polycab Consumer" brandMark="polycab" />
         </LazyHydrate>
       )}
       {industries && (
         <LazyHydrate>
-          <HomeCategoryExplorer arm={industries} heading="Polycab Industries" />
+          <HomeCategoryExplorer arm={industries} heading="Polycab Industries" brandMark="polycab" />
         </LazyHydrate>
       )}
 
@@ -178,16 +221,9 @@ export default async function Page() {
           from the homepage into every Dowells range without opening the menu. */}
       {dowells && (
         <LazyHydrate>
-          <HomeCategoryExplorer arm={dowells} heading="Dowells Products" />
+          <HomeCategoryExplorer arm={dowells} heading="Dowells Products" brandMark="dowells" />
         </LazyHydrate>
       )}
-
-      {/* Clientele / Partners Section */}
-      <div className="scroll-reveal" data-delay="100">
-        <LazyHydrate>
-          <ClienteleSlider />
-        </LazyHydrate>
-      </div>
 
       {/* Industries Served */}
       <section className="rs-portfolio-area section-space rs-portfolio-seven rs-swiper">

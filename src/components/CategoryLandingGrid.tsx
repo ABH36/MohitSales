@@ -2,6 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import BreadcrumbBanner, { type Crumb } from '@/components/BreadcrumbBanner';
 import { cld } from '@/lib/cloudinary';
+import { categoryIcon } from '@/lib/category-icons';
+import { ArrowRight } from 'lucide-react';
 
 /** @deprecated use `Crumb` from BreadcrumbBanner — kept as an alias for callers. */
 export type LandingCrumb = Crumb;
@@ -15,17 +17,21 @@ export interface LandingItem {
  * Shared layout for the brand/category landing pages (gland, cable-terminal,
  * fans, solar, …). Renders the breadcrumb banner + product-card grid — the
  * markup that was previously duplicated across ~9 near-identical pages.
+ * Cards share the homepage explorer design (.hce-card); `brandMark` adds the
+ * small wordmark on each card's top-right (e.g. "dowells").
  */
 export default function CategoryLandingGrid({
   title,
   breadcrumbs,
   items,
   buttonLabel = 'Explore More',
+  brandMark,
 }: {
   title: string;
   breadcrumbs: Crumb[];
   items: LandingItem[];
   buttonLabel?: string;
+  brandMark?: string;
 }) {
   return (
     <main>
@@ -38,23 +44,25 @@ export default function CategoryLandingGrid({
             <h2>{title}</h2>
           </div>
 
-          <section className="products-section">
-            <div className="container">
-              <div className="products-grid">
-                {items.map((item, idx) => (
-                  <div key={idx} className="product-card">
-                    <Link href={item.link}>
-                      <img src={cld(item.image, 'f_auto,q_auto,w_600')} alt={item.title} loading="lazy" decoding="async" />
-                      <h3>{item.title}</h3>
-                      <div className="pricelist-button">
-                        <span className="pricelist-btn">{buttonLabel}</span>
-                      </div>
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
+          <div className="hce-grid">
+            {items.map((item, idx) => (
+              <Link key={idx} href={item.link} className="hce-card">
+                {brandMark && <span className="hce-card-brand">{brandMark}</span>}
+                <span className={`hce-card-img hce-tint-${idx % 4}`}>
+                  <img src={cld(item.image, 'f_auto,q_auto,w_600')} alt={item.title} loading="lazy" decoding="async" />
+                </span>
+                <span className="hce-card-body">
+                  <span className={`hce-card-badge hce-badge-${idx % 4}`} aria-hidden="true">
+                    {categoryIcon(item.title)}
+                  </span>
+                  <span className="hce-card-name">{item.title}</span>
+                  <span className="hce-card-cta">
+                    {buttonLabel} <ArrowRight aria-hidden="true" />
+                  </span>
+                </span>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
     </main>

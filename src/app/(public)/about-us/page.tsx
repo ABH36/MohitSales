@@ -2,6 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import prisma from '@/lib/prisma';
 import Reveal from '@/components/Reveal';
+import JsonLd from '@/components/JsonLd';
+import { breadcrumbJsonLd } from '@/lib/json-ld';
 import { sanitizeHtml } from '@/lib/utils';
 import { cld } from '@/lib/cloudinary';
 
@@ -84,6 +86,7 @@ export default async function AboutUsPage() {
 
   return (
     <main>
+      <JsonLd data={breadcrumbJsonLd([{ name: 'About Us' }], '/about-us')} />
       {/* breadcrumb area start */}
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div 

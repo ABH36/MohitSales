@@ -21,6 +21,7 @@ export default function DowellsPage() {
       title="Dowells"
       breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Dowells' }]}
       items={PRODUCTS}
+      brandMark="dowells"
     />
   );
 }

@@ -4,6 +4,8 @@ import { getSeoMetadata } from '@/lib/seo';
 import Link from 'next/link';
 import SplitText from '@/components/SplitText';
 import { cld } from '@/lib/cloudinary';
+import { categoryIcon } from '@/lib/category-icons';
+import { ArrowRight } from 'lucide-react';
 
 export async function generateMetadata(): Promise<Metadata> {
   return getSeoMetadata('/polycab', {
@@ -26,75 +28,6 @@ const PRODUCTS = [
 export default function PolycabPage() {
   return (
     <>
-      <style dangerouslySetInnerHTML={{__html: `
-        .products-section {
-            padding: 80px 20px;
-            background: #f8f9fb;
-        }
-        .custom-container {
-            max-width: 1200px;
-            margin: auto;
-        }
-        .section-title {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-        .section-title h2 {
-            font-size: 36px;
-            font-weight: 700;
-            color: #222;
-            position: relative;
-        }
-        .section-title h2::after {
-            content: "";
-            width: 60px;
-            height: 4px;
-            background: #007bff;
-            display: block;
-            margin: 12px auto;
-            border-radius: 2px;
-        }
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-        }
-        .product-card {
-            background: #fff;
-            padding: 20px;
-            border-radius: 14px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-            text-align: center;
-            display: block;
-            text-decoration: none;
-            color: inherit;
-        }
-        .product-card:hover {
-            transform: translateY(-10px);
-        }
-        .product-card img {
-            width: 100%;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
-
-        .product-card h3 {
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-        @media (max-width: 992px) {
-            .products-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        @media (max-width: 576px) {
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-      `}} />
-
       <main>
         {/* breadcrumb area start */}
         <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
@@ -130,24 +63,26 @@ export default function PolycabPage() {
               <h2 className="rs-section-title rs-split-text-enable split-in-fade"><SplitText text="Polycab Cables" /></h2>
             </div>
 
-            <section className="products-section">
-              <div className="custom-container">
-                {/* Products Grid */}
-                <div className="products-grid">
-                  {PRODUCTS.map((prod, idx) => (
-                    <div key={idx} className="product-card">
-                      <Link href={prod.link}>
-                        <img src={cld(prod.image)} alt={prod.title} loading="lazy" decoding="async" />
-                        <h3>{prod.title}</h3>
-                        <div className="pricelist-button">
-                          <span className="pricelist-btn">Explore More</span>
-                        </div>
-                      </Link>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </section>
+            {/* Same card design as the homepage explorers (.hce-card). */}
+            <div className="hce-grid">
+              {PRODUCTS.map((prod, idx) => (
+                <Link key={idx} href={prod.link} className="hce-card">
+                  <span className="hce-card-brand">polycab</span>
+                  <span className={`hce-card-img hce-tint-${idx % 4}`}>
+                    <img src={cld(prod.image, 'f_auto,q_auto,w_600')} alt={prod.title} loading="lazy" decoding="async" />
+                  </span>
+                  <span className="hce-card-body">
+                    <span className={`hce-card-badge hce-badge-${idx % 4}`} aria-hidden="true">
+                      {categoryIcon(prod.title)}
+                    </span>
+                    <span className="hce-card-name">{prod.title}</span>
+                    <span className="hce-card-cta">
+                      Explore More <ArrowRight aria-hidden="true" />
+                    </span>
+                  </span>
+                </Link>
+              ))}
+            </div>
           </div>
         </section>
       </main>

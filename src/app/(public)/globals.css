@@ -183,7 +183,6 @@ body {
 .catalogue-section,
 .pricelist-inner,
 .rs-portfolio-area,
-.clientle_sec,
 .rs-brand-area,
 .wires_inner {
   background: var(--brand-surface) !important;
@@ -216,47 +215,20 @@ body {
   margin-bottom: 0;
 }
 
-/* ── Catalogue cards — bring buttons/hover into the site's red/navy theme (the
-   orange→red pass missed these) and match the homepage explorer-card polish:
-   soft gradient image tile and a red "View Catalogue" pill that lifts to navy. */
-.catalogue-img {
-  background: linear-gradient(135deg, #f8fafc 0%, #eef2f9 100%) !important;
-}
-
-.catalogue-content .view-btn,
-.catalogue-btn {
-  background: var(--brand-cta) !important;
-  color: #fff !important;
-  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-}
-
-.catalogue-card:hover .view-btn,
-.catalogue-btn:hover {
-  background: var(--brand-navy) !important;
-  box-shadow: 0 6px 18px rgba(30, 46, 94, 0.28) !important;
-}
-
-/* Category-grid card: hover accent in brand navy, not the off-brand blue. */
-.catalogue-section .catalogue-card:hover {
-  color: var(--brand-navy) !important;
-}
-
-.catalogue-section .catalogue-card:hover h5 {
-  color: var(--brand-red) !important;
-}
+/* Catalogue and pricelist card grids now reuse the homepage explorer cards
+   (.hce-card in the HOMEPAGE CATEGORY EXPLORER block) — the old
+   .catalogue-card/.view-btn overrides were removed with that markup. */
 
 /* Products Grid Layout */
 .products-section {
   padding: 0;
 }
 
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-/* Product Card — catalogue-style */
+/* .product-card — only the horizontal spec rows (.card_box "row product-card")
+   still carry this class: every grid card, React and legacy, was rebuilt on
+   .hce-card (the legacy ones by the cheerio pass in [...slug]/page.tsx). The
+   old .products-grid/.pricelist-btn landing-card rules and their custom.css
+   tug-of-war overrides went with that markup. */
 .product-card {
   background: #fff;
   border-radius: 14px;
@@ -273,31 +245,14 @@ body {
   border-color: var(--brand-navy);
 }
 
-.product-card>a {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  /* Tightened from 25px 20px 20px to bring these landing cards down to the
-     compact size of the listing cards on the rest of the site. */
-  padding: 16px 14px 14px;
-}
-
-/* custom.css gives the card itself another 20px on top of the anchor's padding
-   (double padding) and sizes the image at 240px, both with !important and both
-   loading after this file — so these carry an extra ancestor class to outrank
-   them. Removing the card padding and shrinking the image is what makes these
-   landing cards compact like the listing cards elsewhere. */
-.products-grid .product-card:not(.row) {
-  padding: 0 !important;
-}
-
-.products-grid .product-card a img,
 .product-card img {
   width: 100%;
-  height: 160px !important;
+  height: 190px !important;
   object-fit: contain;
   border-radius: 10px;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+  padding: 16px !important;
+  background: linear-gradient(135deg, #f8fafc 0%, #eef2f9 100%);
   transition: transform 0.3s ease;
 }
 
@@ -309,210 +264,21 @@ body {
   font-size: 17px;
   font-weight: 700;
   color: var(--brand-navy);
-  margin-bottom: 10px;
   line-height: 24px;
   font-family: "Outfit", sans-serif;
-  min-height: 44px;
+  margin: 6px 0 !important;
+  min-height: 0 !important;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* ────────────────────────────────────────────────────────────
-   LANDING CARD — compact & clean
-   custom.css forces the card AND its inner <a> to be full-height
-   flex columns with space-between, so short content is spread out
-   with a big empty gap between the title and the button, and every
-   card stretches to the tallest — the "layers and wasted white"
-   look. These pin the content to the top and let each card size to
-   its own content, and the image sits in a soft tile so it reads as
-   a product photo, not a small graphic floating in white.
-   !important because the offending rules are in custom.css with
-   !important and load after this file.
-   ──────────────────────────────────────────────────────────── */
-.products-grid { align-items: start; }
-
-.products-grid .product-card:not(.row),
-.products-grid .product-card:not(.row) > a {
-  height: auto !important;
-  justify-content: flex-start !important;
-}
-
-.products-grid .product-card a img,
-.product-card img {
-  height: 190px !important;
-  margin-bottom: 14px;
-  padding: 16px !important;
-  background: linear-gradient(135deg, #f8fafc 0%, #eef2f9 100%);
-}
-
-/* min-height reserved room for a second title line; with the cards now sizing
-   to their content that reserved space just became a gap under one-line titles,
-   so it is released and the title sits close to the button. */
-.product-card h3 {
-  margin: 6px 0 !important;
-  min-height: 0 !important;
-}
-
-/* custom.css sets margin-top: auto here, which shoves the button to the bottom
-   of the card and opens the empty gap under the title. Pinned to a small fixed
-   gap so the button sits just below the title. */
-.products-grid .product-card .pricelist-button {
-  margin-top: 6px !important;
-  margin-bottom: 0 !important;
-}
-
-.pricelist-button {
-  margin-top: 10px;
-}
-
-.pricelist-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  width: auto;
-  min-width: 140px;
-  align-self: center;
-  padding: 10px 24px;
-  background: linear-gradient(135deg, var(--brand-navy), #2d4080);
-  color: #fff;
-  border-radius: 30px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: "Mukta", sans-serif;
-  line-height: 1;
-}
-
-.product-card:hover .pricelist-btn {
-  background: linear-gradient(135deg, #ef3d45, var(--brand-red));
-}
-
-/* ────────────────────────────────────────────────────────────
-   "Explore More" button — made identical to the ceiling-fans one
-   custom.css wrapped this button in a dark grey frame
-   (.pricelist-button #353535) with the pill inside, so on the
-   category landings it read as a red pill floating in a black box.
-   The frame is dropped and the button is given the exact styling of
-   the Explore More button on /fans/ceiling-fans — the same red
-   gradient, 4px radius, size and navy hover — so every "Explore
-   More" is the same button. !important because the frame and fill
-   are set on single-class selectors in custom.css, which loads
-   after this file.
-   ──────────────────────────────────────────────────────────── */
-.pricelist-button {
-  background: transparent !important;
-  padding: 0 !important;
-  border: none !important;
-}
-
-/* The class is doubled (.pricelist-btn.pricelist-btn) to outrank the several
-   single-class .pricelist-btn rules in custom.css — one of which sets a
-   different padding with !important and loads after this file. */
-.pricelist-btn.pricelist-btn,
-.product-card:hover .pricelist-btn.pricelist-btn {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  min-width: 140px !important;
-  height: 45px !important;
-  padding: 10px 24px !important;
-  background: linear-gradient(135deg, #e8434a 0%, #c1272d 100%) !important;
-  color: #fff !important;
-  border: none !important;
-  border-radius: 4px !important;
-  font-size: 15px !important;
-  font-weight: 500 !important;
-  white-space: nowrap !important;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease !important;
-}
-
-/* Same navy lift-on-hover as the ceiling-fans button. */
-.pricelist-btn.pricelist-btn:hover,
-.product-card:hover .pricelist-btn.pricelist-btn:hover {
-  background: #1e2e5e !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 4px 12px rgba(30, 46, 94, 0.25) !important;
-}
-
-/* Responsive: 2-cols on tablet */
-@media (max-width: 992px) {
-  .products-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Responsive: 1-col on mobile */
 @media (max-width: 576px) {
-  .products-grid {
-    grid-template-columns: 1fr;
-  }
-
   .catalogue-section {
     padding: 50px 0;
   }
 }
 
-
-/* ====================================================
-   DETAIL PRODUCT CARD STYLES
-   ==================================================== */
-
-.detail-product-card {
-  background: #ffffff;
-  width: 100%;
-  border-radius: 14px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-  overflow: hidden;
-  transition: transform 0.3s ease;
-}
-
-.detail-product-card:hover {
-  transform: translateY(-6px);
-}
-
-.detail-product-img {
-  padding: 15px;
-  background: #fff;
-}
-
-.detail-product-img img {
-  width: 100%;
-  height: 250px;
-  object-fit: contain;
-  border-radius: 10px;
-  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.detail-product-img img:hover {
-  transform: scale(1.03);
-}
-
-.detail-product-content {
-  padding: 18px;
-}
-
-.detail-product-title {
-  font-size: 22px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  color: var(--brand-red);
-}
-
-.detail-product-details {
-  font-size: 18px;
-  color: #555;
-  line-height: 1.6;
-  margin-bottom: 18px;
-}
-
-.detail-product-details span {
-  font-weight: 600;
-  color: #333;
-}
 
 
 
@@ -749,80 +515,6 @@ body {
   }
 }
 
-
-
-/* ====================================================
-   FAN PRODUCT CARD (Design Series, etc.)
-   ==================================================== */
-
-.fan-product-card {
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-  border: 1px solid transparent;
-  transition: all 0.3s ease;
-}
-
-.fan-product-card:hover {
-  transform: translateY(-6px);
-  border-color: var(--brand-navy);
-  box-shadow: 0 14px 35px rgba(30, 46, 94, 0.14);
-}
-
-.fan-product-card .fan-img {
-  padding: 20px;
-  text-align: center;
-  background: var(--brand-surface);
-}
-
-.fan-product-card .fan-img img {
-  height: 180px;
-  width: auto;
-  max-width: 100%;
-  object-fit: contain;
-  transition: transform 0.3s ease;
-}
-
-.fan-product-card:hover .fan-img img {
-  transform: scale(1.06);
-}
-
-.fan-product-card .fan-info {
-  padding: 18px 20px 22px;
-}
-
-.fan-product-card .fan-info h4 {
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--brand-navy);
-  font-family: "Outfit", sans-serif;
-  margin-bottom: 8px;
-  line-height: 24px;
-}
-
-.fan-product-card .fan-info p {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 14px;
-  line-height: 22px;
-}
-
-.fan-product-card .fan-info a.fan-btn {
-  display: inline-block;
-  padding: 9px 22px;
-  background: var(--brand-navy);
-  color: #fff;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background 0.3s ease;
-}
-
-.fan-product-card .fan-info a.fan-btn:hover {
-  background: #ef3d45;
-}
 
 
 /* ====================================================
@@ -1504,111 +1196,16 @@ body {
   }
 }
 
-/* ====================================================
-   CLIENTELE / PARTNERS BRAND SECTION
-   ==================================================== */
-
-.clientle_sec {
-  /* Transparent so the page gradient shows through, like every other section
-     (was #f4f5fa). The client logos below carry their own tiles. */
-  background: var(--brand-surface) !important;
-  position: relative;
-  z-index: 1;
-}
-
-/* Was a second #f4f5fa fill overriding .primary-bg; kept transparent to match. */
-.clientle_sec.primary-bg {
-  background-color: var(--brand-surface) !important;
-}
-
-/* Section title styling in clientele */
-.clientle_sec .rs-section-subtitle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--brand-navy);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-family: "Outfit", sans-serif;
-  justify-content: center;
-}
-
 /* Every "has-theme-orange" section eyebrow (About Us, Our Achievements, Our
-   Products, …) shares the "Product Range" eyebrow style — 15px Outfit 600 — so
-   the small labels above the headings look consistent across the homepage.
-   Alignment is left to each section's own justify-content class. */
+   Products, …) shares the same eyebrow style — 15px Outfit 600 — so the small
+   labels above the headings look consistent across the homepage. Alignment is
+   left to each section's own justify-content class. */
 .rs-section-subtitle.has-theme-orange {
   font-family: "Outfit", sans-serif !important;
   font-size: 15px !important;
   font-weight: 600 !important;
   letter-spacing: 1px;
   text-transform: uppercase;
-}
-
-/* "Authorized Wires…" heading has NO override — it inherits the base
-   .rs-section-title (52px, near-black), matching "Milestones That Define Our
-   Success" and the other section headings for a consistent homepage. */
-.clientle_sec .rs-section-title {
-  margin-top: 10px;
-}
-
-/* Swiper wrapper for continuous scroll */
-.clientele-swiper-wrapper {
-  overflow: hidden;
-}
-
-.clientele-swiper {
-  /* Enable continuous slide by removing transition jumps */
-  transition-timing-function: linear !important;
-}
-
-/* Brand item box - clip-path card style matching original */
-.clientle_sec .rs-brand-item {
-  background: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 110px;
-  width: 100%;
-  box-shadow: 7px 7px 40px -3px rgba(17, 12, 46, 0.05);
-  border-radius: 4px;
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-.clientle_sec .rs-brand-item.has-clip-path {
-  clip-path: polygon(0% 0%, 85% 0, 100% 18%, 100% 100%, 0% 100%);
-}
-
-.clientle_sec .rs-brand-item:hover {
-  box-shadow: 0 12px 32px rgba(30, 46, 94, 0.14);
-  transform: translateY(-4px);
-}
-
-/* Brand logo image */
-.clientle_sec .rs-brand-thumb {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px;
-  width: 100%;
-  height: 100%;
-}
-
-.clientle_sec .rs-brand-thumb img {
-  max-width: 100px;
-  max-height: 70px;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  filter: grayscale(30%);
-  transition: filter 0.3s ease, transform 0.5s ease;
-}
-
-.clientle_sec .rs-brand-item:hover .rs-brand-thumb img {
-  filter: grayscale(0%);
-  transform: scale(1.08);
 }
 
 /* ====================================================
@@ -2016,9 +1613,10 @@ img[alt="logo"] {
    ==================================================== */
 
 /* Normalize Base Cards */
-.product-card:not(.card_box .product-card),
-.detail-product-card,
-.fan-product-card,
+/* Spec-row cards (.card_box) — the one legacy card family that keeps its own
+   layout. The .product-card/.detail-product-card/.fan-product-card selectors
+   that used to share these rules are gone: every grid card now renders as
+   .hce-card, and the fan/detail variants never occur in the data. */
 .card_box {
   background: #ffffff !important;
   border-radius: 16px !important;
@@ -2029,91 +1627,28 @@ img[alt="logo"] {
   position: relative !important;
 }
 
-/* Unified Hover Lift Effect */
-.product-card:not(.card_box .product-card):hover,
-.detail-product-card:hover,
-.fan-product-card:hover,
 .card_box:hover {
   transform: translateY(-8px) !important;
   box-shadow: 0 18px 45px rgba(193, 39, 45, 0.12) !important;
   border-color: rgba(193, 39, 45, 0.15) !important;
 }
 
-/* Flexbox Layout for Consistent Button Alignment — exclude Bootstrap .row usage */
-.product-card:not(.row) {
-  display: flex !important;
-  flex-direction: column !important;
-}
-
-.product-content {
-  display: flex !important;
-  flex-direction: column !important;
-  flex-grow: 1 !important;
-}
-
-
-
-/* Unified Button - Orange Gradient */
-.product-card a:not(.enquiry-btn):not(.pricelist-btn):not(.fan-btn) {
-  background: transparent !important;
-  text-decoration: none !important;
-}
-
 @layer components {
-
-  .product-card>a,
-  .detail-product-card {
-    @apply flex flex-col grow h-full no-underline text-inherit;
-  }
-
-  .detail-product-content {
-    @apply flex flex-col grow p-[18px];
-  }
-
-  .product-card>a>img,
-  .detail-product-img img {
-    @apply w-full rounded-[12px] p-[10px] transition-transform duration-500;
-  }
-
-  .product-card:hover>a>img,
-  .detail-product-card:hover .detail-product-img img {
-    @apply scale-105;
-  }
-
-  .product-card>a>h3,
-  .detail-product-title {
-    @apply text-[20px] font-semibold text-[var(--brand-red)] my-[15px] px-[15px];
-    font-family: 'Outfit', sans-serif;
-  }
-
-  .pricelist-button {
-    @apply bg-transparent border-none p-0 mt-auto mb-[15px] flex justify-center items-end;
-  }
 
   .product-img img {
     @apply w-full h-[250px] object-contain rounded-[10px] transition-transform duration-300;
     box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
   }
 
-  .product-details {
-    @apply text-[18px] text-[#555] leading-[1.6] mb-[18px] min-h-[140px] md:min-h-[160px];
-  }
-
-  .product-details span {
-    @apply font-semibold text-[#333];
-  }
-
   a.pricelist-btn,
-  a.enquiry-btn,
-  a.fan-btn {
+  a.enquiry-btn {
     @apply bg-gradient-to-br from-[var(--brand-orange)] to-[var(--brand-red)] rounded-[4px] px-[24px] py-[10px] font-medium text-[15px] border-none inline-flex items-center justify-center transition-all duration-300 w-auto min-w-[140px] h-[45px] box-border mt-auto mb-0 whitespace-nowrap self-center;
     color: white !important;
     text-align: center;
   }
 
   a.pricelist-btn:hover,
-  a.enquiry-btn:hover,
-  a.fan-btn:hover {
+  a.enquiry-btn:hover {
     @apply bg-none bg-[var(--brand-navy)] -translate-y-[2px];
     box-shadow: 0 4px 12px rgba(30, 46, 94, 0.25);
     color: white !important;
@@ -2121,9 +1656,7 @@ img[alt="logo"] {
 }
 
 /* Unified Image Styling & Hover Zoom */
-.product-img img,
-.detail-product-img img,
-.fan-img img {
+.product-img img {
   transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1) !important;
   border-radius: 12px !important;
   padding: 10px !important;
@@ -2132,16 +1665,12 @@ img[alt="logo"] {
 }
 
 .product-card:hover .product-img img,
-.detail-product-card:hover .detail-product-img img,
-.fan-product-card:hover .fan-img img,
 .card_box:hover .product-img img {
   transform: scale(1.08) !important;
 }
 
 /* Unified Typography */
-.product-title,
-.detail-product-title,
-.fan-info h4 {
+.product-title {
   color: var(--brand-red) !important;
   font-size: 20px !important;
   font-weight: 700 !important;
@@ -2154,16 +1683,13 @@ img[alt="logo"] {
 }
 
 .product-details,
-.detail-product-details,
-.fan-info p,
 .product-features li {
   font-size: 15px !important;
   color: #444 !important;
   line-height: 1.6 !important;
 }
 
-.product-details span,
-.detail-product-details span {
+.product-details span {
   color: #111 !important;
   font-weight: 600 !important;
 }
@@ -2174,8 +1700,7 @@ img[alt="logo"] {
     margin-bottom: 25px !important;
   }
 
-  .product-img img,
-  .detail-product-img img {
+  .product-img img {
     height: 220px !important;
   }
 }
@@ -2675,182 +2200,7 @@ img.product-img {
    Used when admin adds Categories/Products via admin panel
    ============================================================ */
 
-/* Sub-category folder cards */
-.db-subcategory-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
-  padding: 28px 20px 20px;
-  text-decoration: none;
-  text-align: center;
-  height: 100%;
-  transition: transform 0.25s, box-shadow 0.25s;
-  border: 2px solid transparent;
-}
-
-.db-subcategory-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 32px rgba(247, 147, 30, 0.15);
-  border-color: var(--brand-orange);
-  text-decoration: none;
-}
-
-.db-subcategory-img {
-  width: 80px;
-  height: 80px;
-  object-fit: contain;
-  margin-bottom: 16px;
-}
-
-.db-subcategory-icon {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: #fff8f0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 16px;
-}
-
-.db-subcategory-name {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--brand-navy);
-  font-family: "Outfit", sans-serif;
-  margin-bottom: 6px;
-}
-
-.db-subcategory-count {
-  font-size: 12px;
-  color: #a0aec0;
-  font-weight: 500;
-}
-
-/* Product cards from admin DB */
-.db-product-card {
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.25s, box-shadow 0.25s;
-}
-
-.db-product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-}
-
-.db-product-img {
-  padding: 20px;
-  background: #fafafa;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 200px;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.db-product-img img {
-  max-height: 180px;
-  max-width: 100%;
-  object-fit: contain;
-  transition: transform 0.3s;
-}
-
-.db-product-card:hover .db-product-img img {
-  transform: scale(1.05);
-}
-
-.db-product-no-img {
-  width: 100%;
-  height: 160px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.db-product-body {
-  padding: 18px 18px 20px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.db-product-title {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--brand-navy);
-  font-family: "Outfit", sans-serif;
-  margin-bottom: 8px;
-  line-height: 1.4;
-}
-
-.db-product-desc {
-  font-size: 13px;
-  color: #718096;
-  line-height: 1.6;
-  margin-bottom: 14px;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  line-clamp: 3;
-  overflow: hidden;
-}
-
-.db-product-footer {
-  margin-top: auto;
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.db-product-detail-btn {
-  flex: 1;
-  text-align: center;
-  padding: 9px 14px;
-  border: 2px solid var(--brand-navy);
-  color: var(--brand-navy);
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background 0.2s, color 0.2s;
-  font-family: "Outfit", sans-serif;
-}
-
-.db-product-detail-btn:hover {
-  background: var(--brand-navy);
-  color: #fff;
-  text-decoration: none;
-}
-
-.db-product-enquiry-btn {
-  flex: 1;
-  text-align: center;
-  padding: 9px 14px;
-  background: linear-gradient(135deg, var(--brand-orange), var(--brand-red));
-  color: #fff;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: opacity 0.2s;
-  font-family: "Outfit", sans-serif;
-}
-
-.db-product-enquiry-btn:hover {
-  opacity: 0.9;
-  color: #fff;
-  text-decoration: none;
-}
+/* The old .db-subcategory-* / .db-product-* card styles were removed - DB listing cards now reuse the homepage explorer cards (.hce-card). */
 
 /* ====================================================
    RESPONSIVE GLOBAL GRID OVERRIDES
@@ -3376,14 +2726,12 @@ a.enquiry-btn:hover,
   left: 50%;
   transform: translateX(-38%);
   z-index: 1002;
-  width: min(880px, 92vw);
+  width: min(960px, 94vw);
   margin-top: 10px;
-  /* Same page gradient the site uses as its backdrop, so the panel reads as part
-     of the site rather than a plain white sheet. It is pale enough that the row
-     text keeps its contrast; the columns below sit on translucent white so the
-     tint carries through evenly. */
-  background: linear-gradient(125deg, #fbdede 0%, #f1ecf1 42%, #dde8fb 100%);
-  border-radius: 16px;
+  /* Soft pink→blue wash, same family as the page gradient, so the panel reads
+     as part of the site rather than a plain white sheet. */
+  background: linear-gradient(135deg, #fdf0f1 0%, #f8f6fb 52%, #edf2fc 100%);
+  border-radius: 20px;
   box-shadow: 0 30px 80px rgba(15, 23, 42, 0.28);
   overflow: hidden;
   animation: pmmIn 0.18s cubic-bezier(0.22, 1, 0.36, 1);
@@ -3394,14 +2742,29 @@ a.enquiry-btn:hover,
   to   { opacity: 1; transform: translateX(-38%) translateY(0); }
 }
 
+/* ── Header row: icon tile, clickable path, close ── */
 .pmm-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  gap: 14px;
   padding: 16px 20px;
-  border-bottom: 1px solid #eef1f6;
+  border-bottom: 1px solid rgba(30, 46, 94, 0.08);
 }
+
+.pmm-head-icon {
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #fdeef0;
+  color: var(--brand-red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(193, 39, 45, 0.12);
+}
+
+.pmm-head-icon svg { width: 21px; height: 21px; }
 
 .pmm-path {
   display: flex;
@@ -3409,6 +2772,7 @@ a.enquiry-btn:hover,
   flex-wrap: wrap;
   gap: 4px;
   min-width: 0;
+  flex: 1;
 }
 
 .pmm-crumb {
@@ -3416,126 +2780,307 @@ a.enquiry-btn:hover,
   background: none;
   padding: 4px 6px;
   border-radius: 6px;
-  font-family: inherit;
-  font-size: 14px;
+  font-family: "Outfit", sans-serif;
+  font-size: 16px;
   font-weight: 700;
   color: var(--brand-navy);
   cursor: pointer;
   transition: background 0.2s ease, color 0.2s ease;
 }
 
-.pmm-crumb:hover { background: #f1f5f9; color: var(--brand-red); }
+.pmm-crumb:hover { background: rgba(255, 255, 255, 0.85); color: var(--brand-red); }
 .pmm-path .pmm-crumb:last-of-type { color: #4a5468; }
-.pmm-sep { color: #cbd5e1; font-size: 14px; }
+.pmm-sep { color: #b6c0d4; font-size: 15px; }
 
 .pmm-close {
   flex-shrink: 0;
+  width: 38px;
+  height: 38px;
   border: 0;
-  background: none;
-  font-size: 16px;
-  line-height: 1;
-  padding: 6px 8px;
-  border-radius: 6px;
-  color: #94a3b8;
+  border-radius: 50%;
+  background: #fff;
+  color: #4a5468;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  box-shadow: 0 2px 6px rgba(30, 46, 94, 0.08), 0 8px 20px rgba(30, 46, 94, 0.1);
+  transition: color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.pmm-close:hover { background: #f1f5f9; color: var(--brand-navy); }
+.pmm-close svg { width: 17px; height: 17px; }
 
+.pmm-close:hover {
+  color: var(--brand-red);
+  transform: rotate(90deg);
+  box-shadow: 0 4px 10px rgba(30, 46, 94, 0.12), 0 12px 26px rgba(30, 46, 94, 0.14);
+}
+
+/* ── Body: browse rail + range list ── */
 .pmm-body {
   display: grid;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: 320px 1fr;
   /* Fixed height with per-column scrolling: the cable branches run to dozens of
      entries and the panel must not grow to fit them. */
-  height: 380px;
+  height: 500px;
 }
 
-.pmm-col {
-  margin: 0;
-  padding: 10px;
-  list-style: none;
+/* Shared eyebrow — "BROWSE POLYCAB" / "CONSUMER RANGE" with the red dash. */
+.pmm-eyebrow {
+  display: block;
+  text-align: left;
+  font-family: "Outfit", sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--brand-red);
+}
+
+.pmm-eyebrow::after {
+  content: "";
+  display: block;
+  width: 36px;
+  height: 3px;
+  margin-top: 7px;
+  border-radius: 2px;
+  background: var(--brand-red);
+}
+
+/* Left rail */
+.pmm-rail {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 18px 18px;
+  border-right: 1px solid rgba(30, 46, 94, 0.08);
   overflow-y: auto;
 }
 
-/* A touch greyer than before: at #fbfcfe the two columns read as one white
-   sheet and the split was only visible from the divider line. */
-.pmm-col-left { border-right: 1px solid rgba(30, 46, 94, 0.08); background: rgba(255, 255, 255, 0.35); }
-
-.pmm-col-title {
-  padding: 8px 12px 10px;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  /* Was #94a3b8 — 2.56:1 on white, under the 4.5:1 needed to be read
-     comfortably. This clears it while staying visibly secondary. */
-  color: #5b6478;
+.pmm-rail-list {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.pmm-row {
+.pmm-arm {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  gap: 12px;
   width: 100%;
-  padding: 10px 12px;
-  border: 0;
-  border-radius: 9px;
+  padding: 9px 12px;
+  border: 1px solid transparent;
+  border-radius: 14px;
   background: none;
   font-family: inherit;
-  font-size: 14.5px;
-  font-weight: 600;
-  line-height: 1.4;
-  color: #2b3652;
   text-align: left;
   text-decoration: none;
   cursor: pointer;
-  transition: background 0.18s ease, color 0.18s ease;
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.pmm-row i { font-size: 11px; color: #cbd5e1; flex-shrink: 0; }
-
-.pmm-row:hover { background: #eef2f9; color: var(--brand-navy); }
-.pmm-row:hover i { color: var(--brand-red); }
-
-.pmm-row.is-active {
-  background: #e8eef9;
-  color: var(--brand-navy);
-}
-
-.pmm-row.is-active i { color: var(--brand-red); }
-
-/* The panel sits inside .main-menu, so the nav's own link colour applied to
-   every anchor in it and the leaf rows came out white on white. Buttons were
-   unaffected, which is why only half the panel disappeared.
-   The rule to beat is `.rs-header-area.has-theme-orange .main-menu li a`, so
-   these carry the same ancestors plus the panel — anything shorter ties or
-   loses, and custom.css is linked after this file. */
-.rs-header-area.has-theme-orange .main-menu .pmm-panel a.pmm-row,
-.rs-header-area.has-theme-orange .main-menu .pmm-panel a.pmm-row:focus {
-  color: #33405a;
-  font-weight: 500;
-  /* The same nav rule also pads links to 40px 15px for the top bar, which made
-     every anchor row in the panel 98px tall against the buttons' 40px. */
-  padding: 10px 12px;
-  /* …and sizes nav links at 18px, which the leaf rows (real <a>s) inherited
-     while the branch rows (<button>s) stayed at the panel's 14.5px — the two
-     columns ended up at different sizes. Pinned to match the buttons. */
-  font-size: 14.5px;
-}
-
-.rs-header-area.has-theme-orange .main-menu .pmm-panel a.pmm-row:hover {
-  color: var(--brand-navy);
-}
-
-.rs-header-area.has-theme-orange .main-menu .pmm-panel a.pmm-all,
-.rs-header-area.has-theme-orange .main-menu .pmm-panel a.pmm-all:hover,
-.rs-header-area.has-theme-orange .main-menu .pmm-panel a.pmm-all:focus {
+.pmm-arm-icon {
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #fff;
   color: var(--brand-red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(30, 46, 94, 0.08);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.pmm-arm-icon svg { width: 19px; height: 19px; }
+
+.pmm-arm-name {
+  flex: 1;
+  font-size: 15px;
   font-weight: 700;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  color: #1f2b46;
+  line-height: 1.35;
+}
+
+.pmm-chev {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: #b6c0d4;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.pmm-arm:hover { background: rgba(255, 255, 255, 0.8); }
+.pmm-arm:hover .pmm-chev { color: var(--brand-red); }
+
+.pmm-arm.is-active {
+  background: linear-gradient(90deg, #fde4e6 0%, #fdeef0 100%);
+  border-color: rgba(193, 39, 45, 0.18);
+  box-shadow: 0 6px 16px rgba(193, 39, 45, 0.1);
+}
+
+.pmm-arm.is-active .pmm-chev { color: var(--brand-red); transform: translateX(2px); }
+
+/* Promo + trust card pinned under the rail list. */
+.pmm-promo { margin-top: auto; padding-top: 18px; }
+
+.pmm-promo-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 10px 10px;
+  background: radial-gradient(circle at 50% 45%, #fbdcdf 0%, rgba(251, 220, 223, 0) 70%);
+}
+
+.pmm-promo-stage img {
+  max-width: 170px;
+  max-height: 108px;
+  object-fit: contain;
+}
+
+.pmm-trust {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid #f0e4e6;
+  border-radius: 14px;
+  padding: 12px 14px;
+  box-shadow: 0 2px 6px rgba(30, 46, 94, 0.05), 0 10px 24px rgba(30, 46, 94, 0.08);
+}
+
+.pmm-trust-icon {
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #fdeef0;
+  color: var(--brand-red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pmm-trust-icon svg { width: 20px; height: 20px; }
+
+.pmm-trust strong {
+  display: block;
+  font-family: "Outfit", sans-serif;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #1f2b46;
+}
+
+.pmm-trust small { color: #61708f; font-size: 12.5px; }
+
+/* Right: the highlighted branch's range */
+.pmm-main {
+  padding: 20px 22px;
+  overflow-y: auto;
+}
+
+.pmm-blurb {
+  margin: 12px 0 14px;
+  max-width: 480px;
+  text-align: left;
+  color: #61708f;
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
+.pmm-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.pmm-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 7px 14px 7px 7px;
+  border: 1px solid rgba(30, 46, 94, 0.05);
+  border-radius: 14px;
+  background: #fff;
+  font-family: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(30, 46, 94, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.pmm-item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(193, 39, 45, 0.16);
+  box-shadow: 0 4px 10px rgba(30, 46, 94, 0.07), 0 12px 26px rgba(30, 46, 94, 0.1);
+}
+
+.pmm-item:hover .pmm-chev { color: var(--brand-red); transform: translateX(3px); }
+
+.pmm-item-tile {
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pmm-item-tile svg { width: 21px; height: 21px; }
+
+.pmm-item-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 4px;
+  border-radius: inherit;
+}
+
+/* Same tint family as the product-card badges. */
+.pmm-tile-0 { background: #fdeef0; color: var(--brand-red); }
+.pmm-tile-1 { background: #ecebfa; color: #5b54c9; }
+.pmm-tile-2 { background: #fdf0e0; color: #d97b1f; }
+.pmm-tile-3 { background: #e5f5ec; color: #1f9d55; }
+
+.pmm-item-name {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f2b46;
+  line-height: 1.35;
+}
+
+/* The panel sits inside .main-menu, so the nav's own link rules (white text,
+   40px padding, 18px size) restyle every anchor in it. The rule to beat is
+   `.rs-header-area.has-theme-orange .main-menu li a`, so these carry the same
+   ancestors plus the panel — anything shorter ties or loses, and custom.css
+   is linked after this file. */
+.rs-header-area.has-theme-orange .main-menu .pmm-panel a.pmm-arm,
+.rs-header-area.has-theme-orange .main-menu .pmm-panel a.pmm-arm:focus {
+  padding: 9px 12px;
+  font-size: 15px;
+  color: #1f2b46;
+}
+
+.rs-header-area.has-theme-orange .main-menu .pmm-panel a.pmm-item,
+.rs-header-area.has-theme-orange .main-menu .pmm-panel a.pmm-item:focus {
+  padding: 7px 14px 7px 7px;
+  font-size: 15px;
+  color: #1f2b46;
+}
+
+.rs-header-area.has-theme-orange .main-menu .pmm-panel a.pmm-arm:hover,
+.rs-header-area.has-theme-orange .main-menu .pmm-panel a.pmm-item:hover {
+  color: var(--brand-navy);
 }
 
 .pmm-empty { padding: 20px 14px; color: #94a3b8; font-size: 14px; }
@@ -3546,8 +3091,8 @@ a.enquiry-btn:hover,
 }
 
 @media (max-width: 1200px) {
-  .pmm-panel { width: min(760px, 94vw); }
-  .pmm-body { grid-template-columns: 260px 1fr; height: 340px; }
+  .pmm-panel { width: min(820px, 94vw); }
+  .pmm-body { grid-template-columns: 280px 1fr; height: 420px; }
 }
 
 /* ═══════════════════════════════════════════════
@@ -4303,10 +3848,13 @@ body::-webkit-scrollbar {
 .legacy-php-content .cables-card {
   padding: 14px !important;
   gap: 10px !important;
-  border-radius: 14px !important;
-  border: 1px solid #e8edf5 !important;
+  /* Matched to .hce-card so legacy listings read as the same card family:
+     16px radius, layered shadows, and the red bottom bar on hover. */
+  border-radius: 16px !important;
+  border: 1px solid #e6ebf4 !important;
+  border-bottom: 3px solid transparent !important;
   background: #ffffff !important;
-  box-shadow: 0 2px 10px rgba(30, 46, 94, 0.06) !important;
+  box-shadow: 0 2px 8px rgba(30, 46, 94, 0.04), 0 6px 22px rgba(30, 46, 94, 0.07) !important;
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
               box-shadow 0.3s ease,
               border-color 0.3s ease !important;
@@ -4315,8 +3863,8 @@ body::-webkit-scrollbar {
 
 .legacy-php-content .cables-card:hover {
   transform: translateY(-6px);
-  border-color: transparent !important;
-  box-shadow: 0 16px 34px rgba(30, 46, 94, 0.16) !important;
+  border-bottom-color: var(--brand-red) !important;
+  box-shadow: 0 4px 12px rgba(30, 46, 94, 0.06), 0 20px 44px rgba(30, 46, 94, 0.15) !important;
 }
 
 .legacy-php-content .cables-card .cables-img {
@@ -4355,6 +3903,54 @@ body::-webkit-scrollbar {
 
 /* The divider sat above a 90px block; with the block gone it needs to hug. */
 .legacy-php-content .cables-name h4::before { width: 60px !important; top: 0 !important; opacity: 0.35; }
+
+/* Brand wordmark on legacy cable listings — every .cables-card grid on the
+   site is a Polycab cable range, so the mark is drawn from CSS (the stored
+   HTML can't carry the span the React cards render). */
+.legacy-php-content .cables-card {
+  position: relative !important;
+}
+
+.legacy-php-content .cables-card::after {
+  content: "polycab";
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  z-index: 1;
+  font-family: "Outfit", sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--brand-red);
+  letter-spacing: 0.2px;
+}
+
+/* ── Legacy cards rebuilt on .hce-card at render time ──
+   The stored landing-grid markup keeps its inner <a>, which has to become
+   the card's flex column for the image stage + body to stack; and since
+   sanitizeHtml strips <svg>, the CTA arrow is drawn here instead of the
+   lucide icon the React cards use. */
+.legacy-php-content .hce-card > a {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+  text-decoration: none;
+}
+
+.legacy-php-content h3.hce-card-name {
+  margin: 0;
+}
+
+.legacy-php-content .hce-card-cta::after {
+  content: "→";
+  display: inline-block;
+  margin-left: 6px;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.legacy-php-content .hce-card:hover .hce-card-cta::after {
+  transform: translateX(5px);
+}
 
 /* Standards index cards get the same treatment so listings match. */
 .standard-card {
@@ -4437,17 +4033,42 @@ body::-webkit-scrollbar {
    HOME CATEGORY EXPLORER (Consumer / Industries)
    Filter tabs above a card grid that swaps as tabs change.
    ════════════════════════════════════════════════════════════ */
+/* Tightened from 60px so consecutive homepage sections sit closer together. */
 .hce-section {
-  padding: 60px 0;
+  padding: 32px 0;
 }
 
-.hce-head {
-  margin-bottom: 26px;
+.hce-head-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
 }
 
-.hce-head .rs-section-title {
+.hce-head .rs-section-title,
+.hce-title {
   margin: 6px 0 0;
-  font-size: clamp(26px, 3vw, 40px);
+  font-size: clamp(28px, 3.2vw, 44px);
+  font-weight: 800;
+}
+
+/* Second word of the heading in the brand-red gradient. */
+.hce-title-accent {
+  background: var(--brand-cta);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hce-underline {
+  display: block;
+  width: 56px;
+  height: 3px;
+  margin-top: 10px;
+  border-radius: 2px;
+  background: var(--brand-cta);
 }
 
 .hce-tabs {
@@ -4458,27 +4079,36 @@ body::-webkit-scrollbar {
 }
 
 .hce-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   border: 1px solid #e2e8f0;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.85);
   color: var(--brand-navy);
   font-family: "Outfit", sans-serif;
   font-size: 14.5px;
   font-weight: 600;
-  padding: 9px 18px;
+  padding: 10px 18px;
   border-radius: 999px;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 2px 8px rgba(30, 46, 94, 0.05);
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease,
+    transform 0.25s ease, box-shadow 0.25s ease;
 }
+
+.hce-tab svg { width: 16px; height: 16px; }
 
 .hce-tab:hover {
   border-color: var(--brand-red);
   color: var(--brand-red);
+  transform: translateY(-2px);
 }
 
 .hce-tab.is-active {
   background: var(--brand-cta);
   border-color: transparent;
   color: #fff;
+  box-shadow: 0 8px 18px rgba(193, 39, 45, 0.3);
 }
 
 .hce-grid {
@@ -4494,93 +4124,151 @@ body::-webkit-scrollbar {
 }
 
 .hce-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   background: #fff;
   border: 1px solid #e6ebf4;
-  border-radius: 14px;
+  border-bottom: 3px solid transparent;
+  border-radius: 16px;
   overflow: hidden;
   text-decoration: none;
-  box-shadow: 0 6px 22px rgba(30, 46, 94, 0.07);
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+  box-shadow: 0 2px 8px rgba(30, 46, 94, 0.04), 0 6px 22px rgba(30, 46, 94, 0.07);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .hce-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 16px 34px rgba(30, 46, 94, 0.14);
-  border-color: rgba(30, 46, 94, 0.18);
+  border-bottom-color: var(--brand-red);
+  box-shadow: 0 4px 12px rgba(30, 46, 94, 0.06), 0 20px 44px rgba(30, 46, 94, 0.15);
 }
 
+/* Small brand wordmark ("polycab" / "dowells") on the card's top-right. */
+.hce-card-brand {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  z-index: 1;
+  font-family: "Outfit", sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--brand-red);
+  letter-spacing: 0.2px;
+}
+
+/* Image stage with a soft tinted glow that varies per card. */
 .hce-card-img {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 22px;
-  background: linear-gradient(135deg, #f8fafc 0%, #eef2f9 100%);
+  padding: 24px 22px 10px;
 }
+
+.hce-card-img.hce-tint-0 { background: radial-gradient(circle at 50% 42%, #fde5e8 0%, #fff 72%); }
+.hce-card-img.hce-tint-1 { background: radial-gradient(circle at 50% 42%, #e9e8fb 0%, #fff 72%); }
+.hce-card-img.hce-tint-2 { background: radial-gradient(circle at 50% 42%, #fdeedd 0%, #fff 72%); }
+.hce-card-img.hce-tint-3 { background: radial-gradient(circle at 50% 42%, #e3f4ea 0%, #fff 72%); }
 
 .hce-card-img img {
   width: 100%;
-  height: 190px;
+  height: 180px;
   object-fit: contain;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Document cards (resources) — an icon fills the image stage instead of a photo. */
+.hce-card-doc-icon {
+  width: 64px;
+  height: 64px;
+  color: var(--brand-red);
+  opacity: 0.85;
+  margin: 58px 0;
+}
+
+.hce-card:hover .hce-card-img img { transform: scale(1.06); }
+
+/* Body: icon badge, title, then the CTA row. */
+.hce-card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 4px 20px 18px;
+}
+
+.hce-card-badge {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 3px;
   transition: transform 0.3s ease;
 }
 
-.hce-card:hover .hce-card-img img { transform: scale(1.05); }
+.hce-card:hover .hce-card-badge { transform: translateY(-3px); }
+
+.hce-card-badge svg { width: 22px; height: 22px; }
+
+.hce-badge-0 { background: #fdeef0; color: var(--brand-red); }
+.hce-badge-1 { background: #ecebfa; color: #5b54c9; }
+.hce-badge-2 { background: #fdf0e0; color: #d97b1f; }
+.hce-badge-3 { background: #e5f5ec; color: #1f9d55; }
 
 .hce-card-name {
-  position: relative;
-  overflow: hidden;
-  padding: 15px 14px 17px;
-  text-align: center;
   font-family: "Outfit", sans-serif;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 700;
   color: var(--brand-navy);
   line-height: 1.35;
 }
 
-/* On hover a red fill flows up from the bottom of the name bar and the label is
-   swapped for "Explore", so a visitor can tell the card is clickable. */
-.hce-card-name::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--brand-cta);
-  transform: translateY(100%);
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-  z-index: 0;
-}
-
-.hce-card:hover .hce-card-name::before {
-  transform: translateY(0);
-}
-
-.hce-card-label {
-  position: relative;
-  z-index: 1;
-  transition: opacity 0.3s ease;
-}
-
-.hce-card-explore {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  display: flex;
+.hce-card-cta {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  opacity: 0;
-  color: #fff;
-  letter-spacing: 0.4px;
-  transition: opacity 0.3s ease 0.12s;
+  gap: 6px;
+  font-family: "Outfit", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--brand-red);
 }
 
-.hce-card:hover .hce-card-label {
-  opacity: 0;
+.hce-card-cta svg {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.hce-card:hover .hce-card-explore {
-  opacity: 1;
+.hce-card:hover .hce-card-cta svg { transform: translateX(5px); }
+
+/* Fluid variant for cards living inside bootstrap columns (DB product grids):
+   fill the column and pin the CTA to the bottom so rows stay level. */
+.hce-card-fluid {
+  width: 100%;
+  height: 100%;
+}
+
+.hce-card-fluid .hce-card-body {
+  flex-grow: 1;
+}
+
+.hce-card-fluid .hce-card-cta {
+  margin-top: auto;
+  padding-top: 6px;
+}
+
+/* Optional spec/detail lines inside a card (multi-product range pages). */
+.hce-card-details {
+  color: #61708f;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.hce-card-details span {
+  font-weight: 600;
+  color: var(--brand-navy);
 }
 
 @media (max-width: 1100px) {
@@ -4589,8 +4277,10 @@ body::-webkit-scrollbar {
 
 @media (max-width: 767px) {
   .hce-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
-  .hce-card-img { padding: 16px; }
-  .hce-card-img img { height: 150px; }
+  .hce-card-img { padding: 16px 14px 6px; }
+  .hce-card-img img { height: 140px; }
+  .hce-card-body { padding: 4px 14px 14px; }
+  .hce-card-badge { width: 42px; height: 42px; }
 }
 
 /* ── Flat "auto-swap" marquee — a single row whose cards scroll continuously
@@ -4646,34 +4336,159 @@ body::-webkit-scrollbar {
    .rs-section-title (52px, near-black) so it matches "Milestones That Define Our
    Success" and every other main section heading. */
 
-.about-us .image_boxes {
+/* Red→navy underline centred beneath the heading. */
+.about-head-underline {
+  display: block;
+  width: 110px;
+  height: 3px;
+  margin: 14px auto 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--brand-red) 0 50%, var(--brand-navy) 50% 100%);
+}
+
+/* Left: media card holding the Authorized Distributor artwork.
+   Shadows are layered (tight ambient + soft key) and deepen on hover. */
+/* The media card matches the feature column's height (the bootstrap columns
+   stretch; the card fills its column) and the image scales to fill the card,
+   so there is no white slab around a small centred graphic. */
+.about-us .about-v2 {
+  align-items: stretch;
+}
+
+.about-us .about-media-card {
+  background: #fff;
+  border: 1px solid #e6ebf4;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(30, 46, 94, 0.05), 0 18px 45px rgba(30, 46, 94, 0.1);
+  position: relative;
+  height: 100%;
+  min-height: 320px;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+}
+
+.about-us .about-media-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 4px 12px rgba(30, 46, 94, 0.06), 0 28px 60px rgba(30, 46, 94, 0.16);
+}
+
+/* Absolutely positioned so the image never drives the card's height — the
+   card takes the feature column's height and the image fills whatever space
+   that gives it. */
+.about-us .about-media-card img {
+  position: absolute;
+  inset: 16px;
+  width: calc(100% - 32px) !important;
+  height: calc(100% - 32px);
+  object-fit: contain;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about-us .about-media-card:hover img {
+  transform: scale(1.03);
+}
+
+/* Right: titled feature rows — slide right on hover, icon tile lifts and its
+   coloured shadow deepens, title tints red. */
+.about-us .about-feature {
   display: flex;
+  gap: 18px;
+  padding: 17px 0;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about-us .about-feature:hover {
+  transform: translateX(6px);
+}
+
+.about-us .about-feature:first-child {
+  padding-top: 4px;
+}
+
+.about-us .about-feature + .about-feature {
+  border-top: 1px solid #e8edf6;
+}
+
+.about-us .about-feature-icon {
+  flex: 0 0 60px;
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+  background: var(--brand-navy);
+  color: #fff;
+  display: flex;
+  align-items: center;
   justify-content: center;
+  box-shadow: 0 3px 8px rgba(30, 46, 94, 0.14), 0 10px 22px rgba(30, 46, 94, 0.22);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
 }
 
-.about-us .image_boxes img {
-  max-height: 380px;
-  width: auto !important;
-  height: auto;
-  max-width: 100%;
+.about-us .about-feature:hover .about-feature-icon {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 5px 10px rgba(30, 46, 94, 0.16), 0 16px 32px rgba(30, 46, 94, 0.3);
 }
 
-.about-us .about-copy p {
-  color: var(--brand-navy) !important;
-  font-size: 17px;
-  line-height: 1.8;
-  margin-bottom: 18px;
-  text-align: justify;
+.about-us .about-feature-icon.is-red {
+  background: var(--brand-red);
+  box-shadow: 0 3px 8px rgba(193, 39, 45, 0.16), 0 10px 22px rgba(193, 39, 45, 0.25);
 }
 
-.about-us .about-copy p:last-child {
-  margin-bottom: 0;
+.about-us .about-feature:hover .about-feature-icon.is-red {
+  box-shadow: 0 5px 10px rgba(193, 39, 45, 0.18), 0 16px 32px rgba(193, 39, 45, 0.34);
+}
+
+.about-us .about-feature-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.about-us .about-feature-title {
+  font-family: "Outfit", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--brand-navy);
+  margin: 0 0 6px;
+  transition: color 0.3s ease;
+}
+
+.about-us .about-feature:hover .about-feature-title {
+  color: var(--brand-red);
+}
+
+.about-us .about-feature p {
+  color: var(--brand-navy);
+  font-size: 15.5px;
+  line-height: 1.7;
+  margin: 0;
 }
 
 @media (max-width: 991px) {
   .about-head { margin-bottom: 24px; }
-  .about-us .about-copy p { font-size: 16px; }
-  .about-us .image_boxes img { max-height: 320px; }
+  /* Stacked layout: no feature column to match, so the card takes a fixed
+     stage height for the image. */
+  .about-us .about-media-card { height: 320px; min-height: 0; }
+}
+
+/* ── Homepage section rhythm — the theme's 100px/50px paddings left big empty
+   bands between sections; tightened so the page flows without dead space. */
+.image-box-section.about-us {
+  padding-top: 56px !important;
+  padding-bottom: 10px !important;
+  margin-bottom: 0 !important;
+}
+
+.rs-portfolio-area.rs-portfolio-seven {
+  padding-top: 36px !important;
+  padding-bottom: 36px !important;
+}
+
+.rs-contact-area.contact_us_sec {
+  padding-top: 44px !important;
+  padding-bottom: 44px !important;
+}
+
+.rs-counter-area {
+  padding-top: 40px !important;
+  padding-bottom: 40px !important;
 }
 
 /* ── Why Choose Us enhancements — the icons become bordered chips with a numbered
@@ -4761,7 +4576,6 @@ body::-webkit-scrollbar {
    skipped; the marquee's infinite animation inside .hce-section also simply
    doesn't run while it is off-screen. ── */
 .hce-section,
-.clientle_sec,
 .rs-portfolio-seven,
 .wcu_sec,
 .contact_us_sec,
@@ -5194,33 +5008,6 @@ body::-webkit-scrollbar {
 }
 
 /* Construction lines pulled out of the description and shown as bullets. */
-.product-desc-list {
-  margin: 0 0 16px;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  gap: 8px;
-}
-
-.product-desc-list li {
-  position: relative;
-  padding-left: 24px;
-  line-height: 1.6;
-  color: var(--brand-text-muted);
-  text-align: left; /* bullets never justify */
-}
-
-.product-desc-list li::before {
-  content: "";
-  position: absolute;
-  left: 4px;
-  top: 9px;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--brand-red);
-}
-
 /* ════════════════════════════════════════════════════════════
    PRODUCT SPECIFICATIONS (derived from the title designation)
    ════════════════════════════════════════════════════════════ */

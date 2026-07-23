@@ -34,6 +34,7 @@ export default function HomeAppliancesPage() {
       title="Home Appliances"
       breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Polycab', href: '/polycab' }, { label: 'Home Appliances' }]}
       items={PRODUCTS}
+      brandMark="polycab"
     />
   );
 }

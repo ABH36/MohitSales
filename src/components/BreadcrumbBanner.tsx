@@ -1,6 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
 import { cld } from '@/lib/cloudinary';
+import JsonLd from '@/components/JsonLd';
+
+const SITE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://mohitscpl.com';
 
 export interface Crumb {
   label: string;
@@ -27,8 +30,25 @@ export default function BreadcrumbBanner({
   crumbs: Crumb[];
   bannerImage?: string;
 }) {
+  // BreadcrumbList structured data built from the SAME crumbs as the visual
+  // trail, so the two can never drift apart. `item` is omitted for crumbs
+  // without an href (the current page) — valid per Google's guidelines.
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: crumbs.map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: c.label,
+      ...(c.href && c.href !== '#'
+        ? { item: c.href.startsWith('http') ? c.href : `${SITE_URL}${c.href}` }
+        : {}),
+    })),
+  };
+
   return (
     <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
+      <JsonLd data={breadcrumbLd} />
       <div className="rs-breadcrumb-bg" style={{ backgroundImage: `url('${cld(bannerImage)}')` }}></div>
       <div className="container">
         <div className="row">

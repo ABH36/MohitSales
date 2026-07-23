@@ -1,6 +1,8 @@
 import React from 'react';
 import BreadcrumbBanner, { BANNER } from '@/components/BreadcrumbBanner';
 import { cld } from '@/lib/cloudinary';
+import { categoryIcon } from '@/lib/category-icons';
+import { ArrowRight } from 'lucide-react';
 
 export interface CatalogueItem {
   title: string;
@@ -40,22 +42,31 @@ export default function CatalogueGrid({
             <h2>{title}</h2>
           </div>
 
-          <div className="row g-5">
+          {/* Same card design as the homepage explorers (.hce-card); each card
+              opens its catalogue PDF in a new tab. */}
+          <div className="hce-grid">
             {items.map((cat, idx) => (
-              <div key={idx} className="col-lg-3 col-md-4 col-sm-6">
-                <div className="catalogue-card">
-                  <a href={cat.pdf} className="catalogue-link" target="_blank" rel="noopener noreferrer">
-                    <div className="catalogue-img">
-                      <img src={cld(cat.image, 'f_auto,q_auto,w_500')} alt={cat.title} loading="lazy" decoding="async" />
-                    </div>
-                    <div className="catalogue-content">
-                      <h3>{cat.title}</h3>
-                      <p>{cat.category}</p>
-                      <span className="view-btn">View Catalogue</span>
-                    </div>
-                  </a>
-                </div>
-              </div>
+              <a
+                key={cat.title + idx}
+                href={cat.pdf}
+                className="hce-card"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span className="hce-card-brand">polycab</span>
+                <span className={`hce-card-img hce-tint-${idx % 4}`}>
+                  <img src={cld(cat.image, 'f_auto,q_auto,w_500')} alt={cat.title} loading="lazy" decoding="async" />
+                </span>
+                <span className="hce-card-body">
+                  <span className={`hce-card-badge hce-badge-${idx % 4}`} aria-hidden="true">
+                    {categoryIcon(cat.category || cat.title)}
+                  </span>
+                  <span className="hce-card-name">{cat.title}</span>
+                  <span className="hce-card-cta">
+                    View Catalogue <ArrowRight aria-hidden="true" />
+                  </span>
+                </span>
+              </a>
             ))}
           </div>
         </div>

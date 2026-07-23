@@ -35,6 +35,7 @@ export default function SolarPage() {
       title="Solar"
       breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Polycab', href: '/polycab' }, { label: 'Solar' }]}
       items={PRODUCTS}
+      brandMark="polycab"
     />
   );
 }
