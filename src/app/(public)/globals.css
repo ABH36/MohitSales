@@ -2233,6 +2233,19 @@ img.product-img {
     margin-top: -20px !important;
   }
 
+  /* Taller phone hero. responsive.css pins the mobile banner to the desktop
+     artwork's 1920/911 ratio (a ~185px strip on a 390px phone); the slides are
+     now served as a 1080×800 auto-gravity crop (see BANNER_TRANSFORM.mobile),
+     and this matches the frame to that crop. Element prefix outranks the
+     equal-specificity !important rules in responsive.css, which loads later. */
+  section.banner_sec.mobile,
+  section.banner_sec.mobile .banner-swiper,
+  section.banner_sec.mobile .swiper-wrapper,
+  section.banner_sec.mobile .swiper-slide {
+    aspect-ratio: 1080 / 900 !important;
+    height: auto !important;
+  }
+
   .col-lg-1,
   .col-lg-2,
   .col-lg-3,
@@ -4364,6 +4377,26 @@ body::-webkit-scrollbar {
   .hce-card-img img { height: 140px; }
   .hce-card-body { padding: 4px 14px 14px; }
   .hce-card-badge { width: 42px; height: 42px; }
+
+  /* Category tabs: one swipeable row instead of a six-deep pill stack that
+     pushed the cards off-screen. Scrollbar hidden, edge padding bleeds to the
+     container edges so the row reads as cut off (i.e. scrollable). */
+  .hce-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 8px;
+    margin: 0 -16px 22px;
+    padding: 2px 16px 6px;
+  }
+
+  .hce-tabs::-webkit-scrollbar { display: none; }
+
+  .hce-tab {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
 }
 
 /* ── Flat "auto-swap" marquee — a single row whose cards scroll continuously
