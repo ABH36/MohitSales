@@ -213,8 +213,10 @@ export default function Header() {
   const menuTree = DEFAULT_MENU_TREE;
 
   useEffect(() => {
+    // Immediately, not after 250px: the old threshold let the header scroll
+    // away and then drop back in, which read as it vanishing and reappearing.
     const handleScroll = () => {
-      setIsSticky(window.scrollY > 250);
+      setIsSticky(window.scrollY > 10);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -270,9 +272,14 @@ export default function Header() {
 
   return (
     <>
-      <header>
+      {/* Home: transparent over the banner, pinned (rs-sticky) as soon as the
+          page moves. Inner pages: position:sticky on the <header> element
+          itself (.header-pinned) — sticky on the inner div would be caged by
+          this wrapper's own height and never engage. Always in view, never
+          leaves the flow, so no content jump. */}
+      <header className={isHomePage ? undefined : 'header-pinned'}>
         <div
-          className={`rs-header-area rs-header-two ${isHomePage ? 'header-transparent' : 'bg-[#121a2f] relative'} has-theme-orange has-border header-new ${isSticky ? 'rs-sticky' : ''}`}
+          className={`rs-header-area rs-header-two ${isHomePage ? 'header-transparent' : 'bg-[#121a2f]'} has-theme-orange has-border header-new ${isHomePage && isSticky ? 'rs-sticky' : ''}`}
           id="header-sticky"
         >
           <div className="container-fluid" style={{ paddingLeft: 0, paddingRight: 0 }}>

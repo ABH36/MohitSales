@@ -225,7 +225,7 @@
             }
             e(window).on("scroll", function () {
                 e(this).scrollTop() > 150 ? e(".backtotop-wrap").addClass("active-progress") : e(".backtotop-wrap").removeClass("active-progress"),
-                    e(this).scrollTop() > 250 ? e("#header-sticky").addClass("rs-sticky") : e("#header-sticky").removeClass("rs-sticky");
+                    e(this).scrollTop() > 5 ? e("#header-sticky").addClass("rs-sticky") : e("#header-sticky").removeClass("rs-sticky");
             }),
                 e(".backtotop-wrap").on("click", function (t) {
                     return t.preventDefault(), e("html, body").animate({ scrollTop: 0 }, parseInt(550, 10)), !1;
