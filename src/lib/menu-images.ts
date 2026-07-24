@@ -24,6 +24,7 @@ const MENU_IMAGES: Record<string, string> = {
   'fans/farrata-fans': 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783166469/mohit/our_products/fans/farrata_fans/Maruth-Oscillating-Fan-Pedestal-Fan-1.png',
 
   // Wires
+  'polycab-wires': 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167956/mohit/our_products/polycab/polycab_wires.png',
   'industries/cables-by-type/others/building-wires': 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167956/mohit/our_products/polycab/polycab_wires.png',
   'industries/cables-by-type/others/domestic-appliance-and-lighting-cable': 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167950/mohit/our_products/polycab/polycab_cable.png',
   'wires/polycab-suprema': 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1784641282/mohit/catalog/wire-polycab-suprema.webp',

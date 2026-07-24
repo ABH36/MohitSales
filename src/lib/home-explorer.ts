@@ -49,15 +49,15 @@ const CONSUMER: ExplorerArm = {
       ],
     },
     {
-      name: 'Wires', slug: 'industries/cables-by-type/others/building-wires',
+      // Consumer house wires only — the industrial building-wire / domestic-cable
+      // hubs belong to the Industries arm, not here.
+      name: 'Wires', slug: 'polycab-wires',
       children: [
-        { name: 'Building Wires', slug: 'industries/cables-by-type/others/building-wires' },
-        { name: 'Domestic Appliance & Lighting Cable', slug: 'industries/cables-by-type/others/domestic-appliance-and-lighting-cable' },
+        { name: 'Polycab Green Wire+', slug: 'wires/polycab-green-wire' },
         { name: 'Polycab Suprema', slug: 'wires/polycab-suprema' },
         { name: 'Polycab Optima+', slug: 'wires/polycab-optima-plus' },
         { name: 'Polycab Primma', slug: 'wires/polycab-primma' },
-        { name: 'Polycab Green Wire (180m)', slug: 'wires/polycab-green-wire' },
-        { name: 'LF FR 180m Wires', slug: 'wires/lf-fr-180m-wires' },
+        { name: 'Polycab LF FR 180M', slug: 'wires/lf-fr-180m-wires' },
       ],
     },
     {
@@ -73,10 +73,10 @@ const CONSUMER: ExplorerArm = {
       ],
     },
     {
-      name: 'Switches & Accessories', slug: 'switches-accessories/etira',
+      name: 'Switches and Accessories', slug: 'switches-accessories/levana',
       children: [
-        { name: 'Etira', slug: 'switches-accessories/etira' },
         { name: 'Levana', slug: 'switches-accessories/levana' },
+        { name: 'Etira', slug: 'switches-accessories/etira' },
         { name: 'Plastic Modular Boxes', slug: 'switches-accessories/plastic-modular-boxes' },
         { name: 'Accessories', slug: 'switches-accessories/accessories' },
       ],
@@ -123,41 +123,40 @@ const INDUSTRIES: ExplorerArm = {
   allSlug: 'industries',
   categories: [
     {
-      name: 'Cables By Application', slug: 'industries/cables-by-application',
+      name: 'Cables by Application', slug: 'industries/cables-by-application',
       children: [
-        { name: 'Building Infrastructure', slug: 'industries/cables-by-application/building-infrastructure' },
-        { name: 'Energy And Power Grid', slug: 'industries/cables-by-application/energy-and-power-grid' },
-        { name: 'Exploration Industries', slug: 'industries/cables-by-application/exploration-industries' },
-        { name: 'Manufacturing Industries', slug: 'industries/cables-by-application/manufacturing-industries' },
-        { name: 'Mobility Infrastructure', slug: 'industries/cables-by-application/mobility-infrastructure' },
+        { name: 'Building infrastructure', slug: 'industries/cables-by-application/building-infrastructure' },
+        { name: 'Energy and Power Grid', slug: 'industries/cables-by-application/energy-and-power-grid' },
+        { name: 'Exploration industries', slug: 'industries/cables-by-application/exploration-industries' },
+        { name: 'Manufacturing industries', slug: 'industries/cables-by-application/manufacturing-industries' },
+        { name: 'Mobility infrastructure', slug: 'industries/cables-by-application/mobility-infrastructure' },
       ],
     },
     {
-      name: 'Cables By Standards', slug: 'industries/cables-by-standards',
+      name: 'Cables by Standards', slug: 'industries/cables-by-standards',
       children: [
         { name: 'Indian Standards (IS)', slug: 'industries/cables-by-standards/indian-standards' },
         { name: 'International Standards', slug: 'industries/cables-by-standards/international-standards' },
       ],
     },
     {
-      name: 'Cables By Type', slug: 'industries/cables-by-type',
+      name: 'Cables by Type', slug: 'industries/cables-by-type',
       children: [
         { name: 'LV Power Cable', slug: 'industries/cables-by-type/lv-power-cable' },
-        { name: 'MV Power Cable', slug: 'industries/cables-by-type/mv-power-cable' },
-        { name: 'EHV Power Cable', slug: 'industries/cables-by-type/ehv-power-cable' },
+        { name: 'Others', slug: 'industries/cables-by-type/others' },
         { name: 'Instrumentation Cable', slug: 'industries/cables-by-type/instrumentation-cable' },
         { name: 'Communication & Data Cable', slug: 'industries/cables-by-type/communication-and-data-cable' },
         { name: 'Renewable Energy', slug: 'industries/cables-by-type/renewable-energy' },
-        { name: 'Others', slug: 'industries/cables-by-type/others' },
+        { name: 'MV Power Cable', slug: 'industries/cables-by-type/mv-power-cable' },
+        { name: 'EHV Power Cable', slug: 'industries/cables-by-type/ehv-power-cable' },
       ],
     },
     {
-      name: 'Renewables', slug: 'industries/cables-by-type/renewable-energy',
+      name: 'Renewables', slug: 'polycab/solar',
       children: [
-        { name: 'Solar Panel', slug: 'solar/solar-panel' },
-        { name: 'Solar DC Cable', slug: 'solar/solar-dc-cable' },
+        { name: 'Solar Inverters and Panels', slug: 'solar/solar-panel' },
+        { name: 'Solar Cables', slug: 'solar/solar-dc-cable' },
         { name: 'DC MCB', slug: 'solar/dc-mcb' },
-        { name: 'Renewable Energy Cable', slug: 'industries/cables-by-type/renewable-energy' },
       ],
     },
   ],
