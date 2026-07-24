@@ -23,7 +23,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const formData = await request.formData();
+    // The real form always posts multipart FormData; anything else (a bot or a
+    // wrong-content-type request) makes formData() throw. Catch it here so it
+    // returns a clean 400 instead of falling through to a logged 500.
+    let formData: FormData;
+    try {
+      formData = await request.formData();
+    } catch {
+      return NextResponse.json(
+        { success: false, message: 'Invalid request format.' },
+        { status: 400 }
+      );
+    }
     const name    = formData.get('name')    as string;
     const cname   = formData.get('cname')   as string;
     const email   = formData.get('email')   as string;

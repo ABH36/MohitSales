@@ -3154,8 +3154,6 @@ a.enquiry-btn:hover,
   font-weight: 700;
 }
 
-.pmm-empty { padding: 20px 14px; color: #94a3b8; font-size: 14px; }
-
 /* The panel is desktop-only; below 992px the hamburger drawer takes over. */
 @media (max-width: 991px) {
   .pmm-panel { display: none; }
