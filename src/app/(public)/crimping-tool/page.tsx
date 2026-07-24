@@ -55,7 +55,6 @@ export default function CrimpingToolPage() {
                 href={`/contact-us?product=${encodeURIComponent(prod.subtitle)}`}
                 className="hce-card"
               >
-                <span className="hce-card-brand">dowells</span>
                 <span className={`hce-card-img hce-tint-${idx % 4}`}>
                   <img src={cld(prod.image)} alt={prod.title} loading="lazy" />
                 </span>

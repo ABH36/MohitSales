@@ -136,7 +136,6 @@ export default function PricelistPage() {
               <div className="hce-grid">
                 {polycabItems.map((item, idx) => (
                   <Link key={item.title} href={item.link} className="hce-card">
-                    <span className="hce-card-brand">polycab</span>
                     <span className={`hce-card-img hce-tint-${idx % 4}`}>
                       <img src={cld(item.image)} alt={item.title} loading="lazy" />
                     </span>
@@ -158,7 +157,6 @@ export default function PricelistPage() {
               <div className="hce-grid">
                 {dowellsItems.map((item, idx) => (
                   <Link key={item.title} href={item.link} className="hce-card">
-                    <span className="hce-card-brand">dowells</span>
                     <span className={`hce-card-img hce-tint-${idx % 4}`}>
                       <img src={cld(item.image)} alt={item.title} loading="lazy" />
                     </span>

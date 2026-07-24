@@ -73,7 +73,6 @@ export default async function ResourcesPage() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <span className="hce-card-brand">polycab</span>
               <span className="hce-card-img hce-tint-0">
                 <FileText className="hce-card-doc-icon" aria-hidden="true" />
               </span>

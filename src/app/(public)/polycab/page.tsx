@@ -67,7 +67,6 @@ export default function PolycabPage() {
             <div className="hce-grid">
               {PRODUCTS.map((prod, idx) => (
                 <Link key={idx} href={prod.link} className="hce-card">
-                  <span className="hce-card-brand">polycab</span>
                   <span className={`hce-card-img hce-tint-${idx % 4}`}>
                     <img src={cld(prod.image, 'f_auto,q_auto,w_600')} alt={prod.title} loading="lazy" decoding="async" />
                   </span>

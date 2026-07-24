@@ -3998,26 +3998,6 @@ body::-webkit-scrollbar {
 /* The divider sat above a 90px block; with the block gone it needs to hug. */
 .legacy-php-content .cables-name h4::before { width: 60px !important; top: 0 !important; opacity: 0.35; }
 
-/* Brand wordmark on legacy cable listings — every .cables-card grid on the
-   site is a Polycab cable range, so the mark is drawn from CSS (the stored
-   HTML can't carry the span the React cards render). */
-.legacy-php-content .cables-card {
-  position: relative !important;
-}
-
-.legacy-php-content .cables-card::after {
-  content: "polycab";
-  position: absolute;
-  top: 10px;
-  right: 14px;
-  z-index: 1;
-  font-family: "Outfit", sans-serif;
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--brand-red);
-  letter-spacing: 0.2px;
-}
-
 /* ── Legacy cards rebuilt on .hce-card at render time ──
    The stored landing-grid markup keeps its inner <a>, which has to become
    the card's flex column for the image stage + body to stack; and since
@@ -4236,19 +4216,6 @@ body::-webkit-scrollbar {
   transform: translateY(-6px);
   border-bottom-color: var(--brand-red);
   box-shadow: 0 4px 12px rgba(30, 46, 94, 0.06), 0 20px 44px rgba(30, 46, 94, 0.15);
-}
-
-/* Small brand wordmark ("polycab" / "dowells") on the card's top-right. */
-.hce-card-brand {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  z-index: 1;
-  font-family: "Outfit", sans-serif;
-  font-size: 14px;
-  font-weight: 800;
-  color: var(--brand-red);
-  letter-spacing: 0.2px;
 }
 
 /* Image stage with a soft tinted glow that varies per card. */

@@ -6,7 +6,6 @@ import { cld } from '@/lib/cloudinary';
 import JsonLd from '@/components/JsonLd';
 import { breadcrumbJsonLd } from '@/lib/json-ld';
 import { categoryIcon } from '@/lib/category-icons';
-import { brandFromSlug } from '@/lib/brand';
 import { ArrowRight } from 'lucide-react';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -112,7 +111,6 @@ export default function CataloguePage() {
           <div className="hce-grid">
             {catalogs.map((cat, idx) => (
               <Link key={cat.title} href={cat.link} className="hce-card">
-                <span className="hce-card-brand">{brandFromSlug(cat.link)}</span>
                 <span className={`hce-card-img hce-tint-${idx % 4}`}>
                   <img src={cld(cat.image)} alt={cat.title} loading="lazy" />
                 </span>

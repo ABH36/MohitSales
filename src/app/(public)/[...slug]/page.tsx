@@ -11,7 +11,6 @@ import { renderDbProduct, renderDbCategory, renderProductLayout } from './render
 import { cld } from '@/lib/cloudinary';
 import JsonLd from '@/components/JsonLd';
 import { breadcrumbJsonLd } from '@/lib/json-ld';
-import { brandFromSlug } from '@/lib/brand';
 import { SITE_URL } from '@/lib/seo';
 
 export const revalidate = 3600; // ISR: revalidate every 1 hour (admin edits trigger instant revalidation via API)
@@ -534,11 +533,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
       // keep their classes. Icon badges are skipped: sanitizeHtml strips
       // <svg>, so the CTA arrow comes from CSS instead.
       $('.products-grid').removeClass('products-grid').addClass('hce-grid');
-      const cardBrand = brandFromSlug(slugPath);
       $('.product-card').each((i, el) => {
         const card = $(el);
         if (card.hasClass('row') || card.closest('.card_box').length) return;
-        card.prepend(`<span class="hce-card-brand">${cardBrand}</span>`);
         const link = card.children('a').first();
         if (link.length && link.children('img').length) {
           // Landing-grid variant — rebuild the anchor's children into the
@@ -745,7 +742,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </div>
               </div>
             </section>
-            {renderProductLayout(isMultiProduct, product, cleanLink, brandFromSlug(slugPath))}
+            {renderProductLayout(isMultiProduct, product, cleanLink)}
           </main>
         </ProductPageWrapper>
       );

@@ -36,7 +36,6 @@ export default function GlandPage() {
       title="Gland"
       breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Dowells', href: '/dowells' }, { label: 'Gland' }]}
       items={PRODUCTS}
-      brandMark="dowells"
     />
   );
 }

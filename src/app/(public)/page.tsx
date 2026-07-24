@@ -200,7 +200,7 @@ export default async function Page() {
           visitor can reach is dead in the meantime. */}
       {cables && (
         <LazyHydrate>
-          <HomeCategoryExplorer arm={cables} heading="Polycab Cables" brandMark="polycab" flat />
+          <HomeCategoryExplorer arm={cables} heading="Polycab Cables" flat />
         </LazyHydrate>
       )}
 
@@ -208,12 +208,12 @@ export default async function Page() {
           can drill from the homepage to any range without opening the menu. */}
       {consumer && (
         <LazyHydrate>
-          <HomeCategoryExplorer arm={consumer} heading="Polycab Consumer" brandMark="polycab" />
+          <HomeCategoryExplorer arm={consumer} heading="Polycab Consumer" />
         </LazyHydrate>
       )}
       {industries && (
         <LazyHydrate>
-          <HomeCategoryExplorer arm={industries} heading="Polycab Industries" brandMark="polycab" />
+          <HomeCategoryExplorer arm={industries} heading="Polycab Industries" />
         </LazyHydrate>
       )}
 
@@ -221,7 +221,7 @@ export default async function Page() {
           from the homepage into every Dowells range without opening the menu. */}
       {dowells && (
         <LazyHydrate>
-          <HomeCategoryExplorer arm={dowells} heading="Dowells Products" brandMark="dowells" />
+          <HomeCategoryExplorer arm={dowells} heading="Dowells Products" />
         </LazyHydrate>
       )}
 

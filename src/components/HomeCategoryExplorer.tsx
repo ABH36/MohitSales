@@ -22,8 +22,6 @@ interface Props {
   /** Section heading, e.g. "Polycab Consumer" — the words after the first are
       rendered in the red accent, matching the section design. */
   heading: string;
-  /** Small brand wordmark on each card's top-right (e.g. "dowells"). */
-  brandMark?: string;
   /** Flat mode: no tabs — a single marquee row (Polycab Cables). */
   flat?: boolean;
 }
@@ -36,18 +34,15 @@ function Card({
   index,
   eager = false,
   tabbable = true,
-  brandMark,
 }: {
   node: ExplorerNode;
   index: number;
   eager?: boolean;
   tabbable?: boolean;
-  brandMark?: string;
 }) {
   const tint = index % 4;
   return (
     <Link href={`/${node.slug}`} className="hce-card" tabIndex={tabbable ? undefined : -1}>
-      {brandMark && <span className="hce-card-brand">{brandMark}</span>}
       <span className={`hce-card-img hce-tint-${tint}`}>
         {/* Marquee cards scroll continuously, so they load eagerly to avoid
             visible pop-in; grid cards stay lazy. */}
@@ -66,7 +61,7 @@ function Card({
   );
 }
 
-export default function HomeCategoryExplorer({ arm, heading, brandMark, flat = false }: Props) {
+export default function HomeCategoryExplorer({ arm, heading, flat = false }: Props) {
   // -1 is the default "All …" tab; otherwise the index into arm.categories.
   const [active, setActive] = useState(-1);
 
@@ -135,11 +130,11 @@ export default function HomeCategoryExplorer({ arm, heading, brandMark, flat = f
           <div className="hce-marquee">
             <div className="hce-marquee-track">
               {cards.map((node, i) => (
-                <Card key={node.slug + node.name} node={node} index={i} eager brandMark={brandMark} />
+                <Card key={node.slug + node.name} node={node} index={i} eager />
               ))}
               <span className="hce-marquee-dup" aria-hidden="true">
                 {cards.map((node, i) => (
-                  <Card key={'dup-' + node.slug + node.name} node={node} index={i} eager tabbable={false} brandMark={brandMark} />
+                  <Card key={'dup-' + node.slug + node.name} node={node} index={i} eager tabbable={false} />
                 ))}
               </span>
             </div>
@@ -149,7 +144,7 @@ export default function HomeCategoryExplorer({ arm, heading, brandMark, flat = f
              the fade — that is the "swap" animation. */
           <div className="hce-grid" key={active}>
             {cards.map((node, i) => (
-              <Card key={node.slug + node.name} node={node} index={i} brandMark={brandMark} />
+              <Card key={node.slug + node.name} node={node} index={i} />
             ))}
           </div>
         )}

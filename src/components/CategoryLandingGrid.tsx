@@ -17,21 +17,18 @@ export interface LandingItem {
  * Shared layout for the brand/category landing pages (gland, cable-terminal,
  * fans, solar, …). Renders the breadcrumb banner + product-card grid — the
  * markup that was previously duplicated across ~9 near-identical pages.
- * Cards share the homepage explorer design (.hce-card); `brandMark` adds the
- * small wordmark on each card's top-right (e.g. "dowells").
+ * Cards share the homepage explorer design (.hce-card).
  */
 export default function CategoryLandingGrid({
   title,
   breadcrumbs,
   items,
   buttonLabel = 'Explore More',
-  brandMark,
 }: {
   title: string;
   breadcrumbs: Crumb[];
   items: LandingItem[];
   buttonLabel?: string;
-  brandMark?: string;
 }) {
   return (
     <main>
@@ -47,7 +44,6 @@ export default function CategoryLandingGrid({
           <div className="hce-grid">
             {items.map((item, idx) => (
               <Link key={idx} href={item.link} className="hce-card">
-                {brandMark && <span className="hce-card-brand">{brandMark}</span>}
                 <span className={`hce-card-img hce-tint-${idx % 4}`}>
                   <img src={cld(item.image, 'f_auto,q_auto,w_600')} alt={item.title} loading="lazy" decoding="async" />
                 </span>

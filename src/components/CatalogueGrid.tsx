@@ -53,7 +53,6 @@ export default function CatalogueGrid({
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <span className="hce-card-brand">polycab</span>
                 <span className={`hce-card-img hce-tint-${idx % 4}`}>
                   <img src={cld(cat.image, 'f_auto,q_auto,w_500')} alt={cat.title} loading="lazy" decoding="async" />
                 </span>

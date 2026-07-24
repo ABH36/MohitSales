@@ -25,7 +25,6 @@ export default function FansPage() {
       title="Fans"
       breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Polycab', href: '/polycab' }, { label: 'Fans' }]}
       items={PRODUCTS}
-      brandMark="polycab"
     />
   );
 }

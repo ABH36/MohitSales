@@ -6,7 +6,6 @@ import StickyProductActions from '@/components/StickyProductActions';
 import JsonLd from '@/components/JsonLd';
 import { breadcrumbJsonLd, productJsonLd } from '@/lib/json-ld';
 import { categoryIcon } from '@/lib/category-icons';
-import { brandFromSlug } from '@/lib/brand';
 import { ArrowRight } from 'lucide-react';
 
 /**
@@ -200,7 +199,6 @@ export function renderDbProduct(dbProduct: any, productJson: any = null, legacyI
                     return (
                       <div key={idx} className="col-lg-3 col-md-4 mt-4 d-flex align-items-stretch">
                         <a href={cardHref} className="hce-card hce-card-fluid">
-                          <span className="hce-card-brand">{brandFromSlug(dbProduct.slug)}</span>
                           <span className={`hce-card-img hce-tint-${idx % 4}`}>
                             {card.image && (
                               <img src={cld(card.image)} alt={card.title || 'Product'} loading="lazy" />
@@ -489,7 +487,6 @@ export function renderDbCategory(cat: any) {
               <div className="hce-grid mt-4 mb-5">
                 {cat.children.map((child: any, idx: number) => (
                   <a key={child.id} href={`/${child.slug}`} className="hce-card">
-                    <span className="hce-card-brand">{brandFromSlug(child.slug)}</span>
                     <span className={`hce-card-img hce-tint-${idx % 4}`}>
                       <img
                         src={child.image ? cld(child.image) : cld('https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/logo/msc_logo_without_bg.png')}
@@ -527,7 +524,6 @@ export function renderDbCategory(cat: any) {
                 <div className="hce-grid mt-4">
                   {cat.products.map((prod: any, idx: number) => (
                     <a key={prod.id} href={`/${prod.slug}`} className="hce-card">
-                      <span className="hce-card-brand">{brandFromSlug(prod.slug)}</span>
                       <span className={`hce-card-img hce-tint-${idx % 4}`}>
                         <img
                           src={prod.imageSrc || cld('https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/logo/msc_logo_without_bg.png')}
@@ -588,7 +584,7 @@ export function renderDbCategory(cat: any) {
   );
 }
 
-export function renderProductLayout(isMultiProduct: boolean, product: any, cleanLink: (url: string) => string, brand: 'polycab' | 'dowells' = 'polycab') {
+export function renderProductLayout(isMultiProduct: boolean, product: any, cleanLink: (url: string) => string) {
   if (isMultiProduct) {
     // Layout B: Category Catalog with Product Cards
     const hasCardBoxStyle = product.cards.some((card: any) => card.features && card.features.length > 0);
@@ -651,7 +647,6 @@ export function renderProductLayout(isMultiProduct: boolean, product: any, clean
                   return (
                     <div key={idx} className="col-lg-3 col-md-4 mt-4 d-flex align-items-stretch">
                       <a href={cardHref} className="hce-card hce-card-fluid">
-                        <span className="hce-card-brand">{brand}</span>
                         <span className={`hce-card-img hce-tint-${idx % 4}`}>
                           {card.image && (
                             <img src={cld(card.image)} alt={card.title || 'Product'} loading="lazy" />
