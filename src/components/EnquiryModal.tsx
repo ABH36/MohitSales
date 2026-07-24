@@ -428,19 +428,23 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
             </div>
           )}
 
-          {/* Action buttons */}
+          {/* Action buttons — Submit reuses the site's Send-Enquiry button
+              (.rs-btn has-theme-orange has-icon has-bg): red fill, navy wipe on
+              hover, and the two-arrow icon swap, so it matches every other
+              enquiry button on the site. */}
           <div className="flex items-center justify-end gap-4 pt-6 border-t border-slate-100">
-            <button 
+            <button
               type="button"
               onClick={handleClose}
-              className="px-7 py-3.5 rounded-xl border border-slate-200 text-slate-600 text-base font-semibold hover:bg-slate-50 hover:text-slate-800 hover:border-slate-300 transition-all duration-200 active:bg-slate-100 active:scale-[0.98]"
+              className="px-7 h-[60px] inline-flex items-center justify-center rounded-[2px] border border-slate-200 text-slate-600 text-base font-semibold hover:bg-slate-50 hover:text-slate-800 hover:border-slate-300 transition-all duration-200 active:bg-slate-100 active:scale-[0.98]"
             >
               Cancel
             </button>
-            <button 
+            <button
               type="submit"
               disabled={isSubmitting}
-              className="px-10 py-3.5 rounded-xl bg-gradient-to-r from-[#e8434a] to-[#c1272d] hover:from-[#c1272d] hover:to-[#e8434a] text-white text-base font-bold shadow-[0_4px_14px_rgba(193,39,45,0.35)] hover:shadow-[0_6px_20px_rgba(193,39,45,0.45)] hover:-translate-y-[1px] active:translate-y-0 active:scale-[0.98] transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2 h-[52px]"
+              className="rs-btn has-theme-orange has-icon has-bg"
+              style={{ opacity: isSubmitting ? 0.65 : 1, pointerEvents: isSubmitting ? 'none' : undefined }}
             >
               {isSubmitting ? (
                 <>
@@ -452,10 +456,15 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
                 </>
               ) : (
                 <>
-                  <span>Submit Enquiry</span>
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
+                  Submit Enquiry
+                  <span className="icon-box">
+                    <svg className="icon-first" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                      <path d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z"></path>
+                    </svg>
+                    <svg className="icon-second" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                      <path d="M31.71,15.29l-10-10L20.29,6.71,28.59,15H0v2H28.59l-8.29,8.29,1.41,1.41,10-10A1,1,0,0,0,31.71,15.29Z"></path>
+                    </svg>
+                  </span>
                 </>
               )}
             </button>
