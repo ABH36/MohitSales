@@ -14,6 +14,8 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
     cname: '',
     email: '',
     mobile: '',
+    color: '',
+    size: '',
     message: `I am interested in ${productName}. Please send me more details and pricing information.`,
     captchaInput: ''
   });
@@ -98,12 +100,22 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
     setIsSubmitting(true);
 
     try {
+      // Colour / size are optional preferences — fold them into the message so
+      // they reach sales (DB + email) without needing extra backend columns.
+      const prefs = [
+        formData.color.trim() && `Preferred Colour: ${formData.color.trim()}`,
+        formData.size.trim() && `Preferred Size: ${formData.size.trim()}`,
+      ].filter(Boolean);
+      const fullMessage = prefs.length
+        ? `${formData.message}\n\n${prefs.join('\n')}`
+        : formData.message;
+
       const postData = new FormData();
       postData.append('name', formData.name);
       postData.append('cname', formData.cname);
       postData.append('email', formData.email);
       postData.append('mobile', formData.mobile);
-      postData.append('message', formData.message);
+      postData.append('message', fullMessage);
       postData.append('captchaInput', formData.captchaInput);
       postData.append('captchaToken', captchaToken);
       if (file) {
@@ -143,8 +155,8 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
       }`}
     >
       {/* Backdrop overlay */}
-      <div 
-        className="absolute inset-0 bg-[#0f172a]/70 backdrop-blur-sm"
+      <div
+        className="absolute inset-0 bg-[#121a2f]/75 backdrop-blur-md"
         onClick={handleClose}
       />
 
@@ -165,7 +177,7 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
         {/* Header */}
         <div className="sticky top-0 bg-white/95 backdrop-blur-md px-8 py-6 border-b border-slate-100 flex items-center justify-between z-20">
           <div>
-            <h3 id="enquiry-modal-title" className="text-2xl font-extrabold text-slate-900 flex items-center gap-3">
+            <h3 id="enquiry-modal-title" className="text-2xl font-extrabold text-[#1e2e5e] flex items-center gap-3">
               <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#c1272d]/10 text-xl text-[#c1272d]">
                 <svg className="w-5.5 h-5.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -202,8 +214,8 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
               </svg>
             </div>
             <div className="relative z-10">
-              <span className="block text-xs font-bold text-slate-400 uppercase tracking-widest">Selected Product</span>
-              <span className="block text-xl font-black text-slate-900 leading-tight mt-1">{productName}</span>
+              <span className="block text-xs font-bold text-[#c1272d] uppercase tracking-widest">Selected Product</span>
+              <span className="block text-xl font-black text-[#1e2e5e] leading-tight mt-1">{productName}</span>
             </div>
           </div>
 
@@ -275,6 +287,49 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
                 onChange={handleChange}
                 className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-slate-800 text-base bg-slate-50/40 hover:bg-white focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#c1272d]/10 focus:border-[#c1272d] transition-all duration-200 shadow-sm placeholder:text-slate-400"
               />
+            </div>
+          </div>
+
+          {/* Optional product preferences — colour & size */}
+          <div>
+            <div className="flex items-center gap-3 mb-3">
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-widest whitespace-nowrap">
+                Product Preferences <span className="text-slate-300 normal-case tracking-normal font-medium">(Optional)</span>
+              </span>
+              <span className="flex-1 h-px bg-slate-100" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {/* Preferred Colour */}
+              <div>
+                <label htmlFor="enq-color" className="block text-sm font-semibold text-slate-700 mb-2 ml-1">
+                  Preferred Colour
+                </label>
+                <input
+                  id="enq-color"
+                  type="text"
+                  name="color"
+                  placeholder="e.g. Red, Black, White"
+                  value={formData.color}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-slate-800 text-base bg-slate-50/40 hover:bg-white focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#c1272d]/10 focus:border-[#c1272d] transition-all duration-200 shadow-sm placeholder:text-slate-400"
+                />
+              </div>
+
+              {/* Preferred Size */}
+              <div>
+                <label htmlFor="enq-size" className="block text-sm font-semibold text-slate-700 mb-2 ml-1">
+                  Preferred Size
+                </label>
+                <input
+                  id="enq-size"
+                  type="text"
+                  name="size"
+                  placeholder="e.g. 1.5 sqmm, 2.5 sqmm, 90m"
+                  value={formData.size}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-slate-800 text-base bg-slate-50/40 hover:bg-white focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#c1272d]/10 focus:border-[#c1272d] transition-all duration-200 shadow-sm placeholder:text-slate-400"
+                />
+              </div>
             </div>
           </div>
 
