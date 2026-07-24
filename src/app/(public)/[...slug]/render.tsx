@@ -471,17 +471,14 @@ export function renderDbCategory(cat: any) {
 
       <section className="catalogue-section">
         <div className="container">
-          {cat.description && (
-            <div className="wires-desc text-center mb-5" style={{ maxWidth: 700, margin: '0 auto 32px' }}>
-              <p>{cat.description}</p>
-            </div>
-          )}
-
           {/* Sub-categories as folder cards */}
           {hasSubCategories && (
             <>
-              <div className="section-title">
+              {/* Premium centred heading + description, matching every other
+                  listing page (catalogue, pricelist). */}
+              <div className="section-title text-center mb-5">
                 <h2>Product Lines</h2>
+                {cat.description && <p>{cat.description}</p>}
               </div>
               {/* Same card design as the homepage explorers (.hce-card). */}
               <div className="hce-grid mt-4 mb-5">
@@ -512,11 +509,13 @@ export function renderDbCategory(cat: any) {
           {/* Direct products in this category */}
           {hasDirectProducts && (
             <>
-              {hasSubCategories && (
-                <div className="section-title mt-4">
-                  <h2>All Products</h2>
-                </div>
-              )}
+              {/* Always a premium heading before the product grid. When the
+                  page has no sub-categories this is the page's only section
+                  heading (previously the grid sat under a bare description). */}
+              <div className="section-title text-center mb-5">
+                <h2>{hasSubCategories ? 'All Products' : 'Product Range'}</h2>
+                {!hasSubCategories && cat.description && <p>{cat.description}</p>}
+              </div>
               {/* Product cards share the homepage explorer design (.hce-card);
                   the whole card opens the product page, which carries the
                   description, features and datasheet. */}
