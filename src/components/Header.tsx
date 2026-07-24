@@ -27,6 +27,11 @@ const DEFAULT_MENU_TREE: NavItem[] = [
     // Lighting, Switches & Accessories and the house-wire ranges arrived later,
     // once their catalogue data existed; the arms were on polycab.com all along
     // but had nothing behind them here.
+    // Structure and category names mirror polycab.com's own Consumer /
+    // Industries menus. Every leaf points at a slug that renders a real page
+    // (verified). Two-level groups (Wires → House Wires / 180 METER; Cables by
+    // Application → Building infrastructure / … ) are shown as sub-headers with
+    // indented items by the mega-menu.
     id: 'polycab-static',
     slug: 'polycab',
     name: 'Polycab',
@@ -39,28 +44,35 @@ const DEFAULT_MENU_TREE: NavItem[] = [
           {
             id: 'pc-fans', slug: 'polycab/fans', name: 'Fans',
             children: [
-              { id: 'pc-fan-ceiling', name: 'Ceiling Fans', slug: 'fans/ceiling-fans', children: [] },
-              { id: 'pc-fan-table', name: 'Table Fans', slug: 'fans/table-fans', children: [] },
-              { id: 'pc-fan-wall', name: 'Wall Fans', slug: 'fans/wall-fans', children: [] },
-              { id: 'pc-fan-pedestal', name: 'Pedestal Fans', slug: 'fans/pedestal-fans', children: [] },
-              { id: 'pc-fan-exhaust', name: 'Exhaust Fans', slug: 'fans/exhaust-fans', children: [] },
+              { id: 'pc-fan-ceiling', name: 'Ceiling Fan', slug: 'fans/ceiling-fans', children: [] },
+              { id: 'pc-fan-table', name: 'Table Fan', slug: 'fans/table-fans', children: [] },
+              { id: 'pc-fan-wall', name: 'Wall Fan', slug: 'fans/wall-fans', children: [] },
+              { id: 'pc-fan-pedestal', name: 'Pedestal Fan', slug: 'fans/pedestal-fans', children: [] },
+              { id: 'pc-fan-exhaust', name: 'Exhaust Fan', slug: 'fans/exhaust-fans', children: [] },
               { id: 'pc-fan-air', name: 'Air Circulator', slug: 'fans/air-circulator', children: [] },
-              { id: 'pc-fan-farrata', name: 'Farrata Fans', slug: 'fans/farrata-fans', children: [] }
+              { id: 'pc-fan-farrata', name: 'Farrata Fan', slug: 'fans/farrata-fans', children: [] }
             ]
           },
           {
-            // Two kinds of entry sit here on purpose: the first two link into the
-            // industrial cable hubs that already carry building wire, the rest are
-            // the named consumer ranges, which are products rather than hubs.
-            id: 'pc-wires', slug: 'industries/cables-by-type/others/building-wires', name: 'Wires',
+            id: 'pc-wires', slug: 'polycab-wires', name: 'Wires',
             children: [
-              { id: 'pc-wire-building', name: 'Building Wires', slug: 'industries/cables-by-type/others/building-wires', children: [] },
-              { id: 'pc-wire-domestic', name: 'Domestic Appliance & Lighting Cable', slug: 'industries/cables-by-type/others/domestic-appliance-and-lighting-cable', children: [] },
-              { id: 'pc-wire-suprema', name: 'Polycab Suprema', slug: 'wires/polycab-suprema', children: [] },
-              { id: 'pc-wire-optima', name: 'Polycab Optima+', slug: 'wires/polycab-optima-plus', children: [] },
-              { id: 'pc-wire-primma', name: 'Polycab Primma', slug: 'wires/polycab-primma', children: [] },
-              { id: 'pc-wire-green180', name: 'Polycab Green Wire (180m)', slug: 'wires/polycab-green-wire', children: [] },
-              { id: 'pc-wire-lffr180', name: 'LF FR 180m Wires', slug: 'wires/lf-fr-180m-wires', children: [] }
+              {
+                id: 'pc-wire-house', slug: 'polycab-wires', name: 'House Wires',
+                children: [
+                  { id: 'pc-wire-green', name: 'Polycab Green Wire+', slug: 'wires/polycab-green-wire', children: [] },
+                  { id: 'pc-wire-suprema', name: 'PolycabSuprema E-Beam Wire', slug: 'wires/polycab-suprema', children: [] },
+                  { id: 'pc-wire-optima', name: 'PolycabOptima+', slug: 'wires/polycab-optima-plus', children: [] },
+                  { id: 'pc-wire-primma', name: 'PolycabPrimma', slug: 'wires/polycab-primma', children: [] },
+                  { id: 'pc-wire-etira', name: 'Etira', slug: 'polycab-wires', children: [] }
+                ]
+              },
+              {
+                id: 'pc-wire-180', slug: 'polycab-wires', name: '180 METER',
+                children: [
+                  { id: 'pc-wire-green180', name: 'Greenwire 180M', slug: 'wires/polycab-green-wire', children: [] },
+                  { id: 'pc-wire-lffr180', name: 'Polycab LF FR 180M', slug: 'wires/lf-fr-180m-wires', children: [] }
+                ]
+              }
             ]
           },
           {
@@ -70,58 +82,37 @@ const DEFAULT_MENU_TREE: NavItem[] = [
               { id: 'pc-lt-downlight', name: 'Downlight', slug: 'lighting/downlight', children: [] },
               { id: 'pc-lt-panel', name: 'Panel Light', slug: 'lighting/panel-light', children: [] },
               { id: 'pc-lt-batten', name: 'LED Batten', slug: 'lighting/led-batten', children: [] },
-              { id: 'pc-lt-cob', name: 'LED COB', slug: 'lighting/led-cob', children: [] },
               { id: 'pc-lt-outdoor', name: 'Outdoor Lights', slug: 'lighting/outdoor-lights', children: [] },
-              { id: 'pc-lt-rope', name: 'Rope & Strip Lights', slug: 'lighting/rope-and-strip-lights', children: [] }
+              { id: 'pc-lt-rope', name: 'Rope and Strip Lights', slug: 'lighting/rope-and-strip-lights', children: [] },
+              { id: 'pc-lt-cob', name: 'LED COB', slug: 'lighting/led-cob', children: [] }
             ]
           },
           {
-            id: 'pc-switches', slug: 'switches-accessories/etira', name: 'Switches & Accessories',
+            id: 'pc-switches', slug: 'switches-accessories/levana', name: 'Switches and Accessories',
             children: [
-              { id: 'pc-sw-etira', name: 'Etira', slug: 'switches-accessories/etira', children: [] },
               { id: 'pc-sw-levana', name: 'Levana', slug: 'switches-accessories/levana', children: [] },
+              { id: 'pc-sw-etira', name: 'Etira', slug: 'switches-accessories/etira', children: [] },
               { id: 'pc-sw-boxes', name: 'Plastic Modular Boxes', slug: 'switches-accessories/plastic-modular-boxes', children: [] },
               { id: 'pc-sw-acc', name: 'Accessories', slug: 'switches-accessories/accessories', children: [] }
             ]
           },
           {
-            // Polycab surfaces Water Heaters as its own consumer arm — split
-            // Instant / Storage — sitting immediately before Switchgear, so it
-            // is mirrored that way here rather than buried under appliances.
             id: 'pc-water-heaters', slug: 'home-appliances/water-heaters', name: 'Water Heaters',
             children: [
-              { id: 'pc-wh-instant', name: 'Instant Water Heaters', slug: 'home-appliances/water-heaters/instant-water-heaters', children: [] },
-              { id: 'pc-wh-storage', name: 'Storage Water Heaters', slug: 'home-appliances/water-heaters/storage-water-heaters', children: [] }
+              { id: 'pc-wh-instant', name: 'Instant Water Heater', slug: 'home-appliances/water-heaters/instant-water-heaters', children: [] },
+              { id: 'pc-wh-storage', name: 'Storage Water Heater', slug: 'home-appliances/water-heaters/storage-water-heaters', children: [] }
             ]
           },
           {
-            // All seven of Polycab's switchgear types are now listed; the
-            // distribution board was the one we previously had no page for.
             id: 'pc-switchgear', slug: 'polycab/switchgears', name: 'Switchgear',
             children: [
               { id: 'pc-sg-mcb', name: 'MCB', slug: 'switchgears/mcb', children: [] },
-              { id: 'pc-sg-changeover', name: 'MCB Changeover Switch', slug: 'switchgears/mcb-switch', children: [] },
               { id: 'pc-sg-rccb', name: 'RCCB', slug: 'switchgears/rccb', children: [] },
               { id: 'pc-sg-rcbo', name: 'RCBO', slug: 'switchgears/rcbo', children: [] },
               { id: 'pc-sg-isolator', name: 'Isolator', slug: 'switchgears/isolator', children: [] },
               { id: 'pc-sg-accl', name: 'ACCL', slug: 'switchgears/accl', children: [] },
+              { id: 'pc-sg-changeover', name: 'MCB Changeover Switch', slug: 'switchgears/mcb-switch', children: [] },
               { id: 'pc-sg-db', name: 'Distribution Board', slug: 'switchgears/distribution-board', children: [] }
-            ]
-          },
-          {
-            // Irons and coolers are ours, not part of Polycab's consumer menu —
-            // kept in their own group so they don't muddy the mirrored sections.
-            id: 'pc-appliances', slug: 'polycab/home-appliances', name: 'Home Appliances',
-            children: [
-              { id: 'pc-ap-iron', name: 'Irons', slug: 'home-appliances/irons', children: [] },
-              { id: 'pc-ap-cooler', name: 'Coolers', slug: 'home-appliances/coolers', children: [] }
-            ]
-          },
-          {
-            id: 'pc-conduit', slug: 'polycab/conduit-and-accessories', name: 'Conduit & Accessories',
-            children: [
-              { id: 'pc-cd-upvc', name: 'UPVC Conduit', slug: 'conduit-accessories/upvc-conduit', children: [] },
-              { id: 'pc-cd-box', name: 'Concealed Box', slug: 'conduit-accessories/concealed-box', children: [] }
             ]
           }
         ]
@@ -134,19 +125,61 @@ const DEFAULT_MENU_TREE: NavItem[] = [
           {
             id: 'cba-static',
             slug: 'industries/cables-by-application',
-            name: 'Cables By Application',
+            name: 'Cables by Application',
             children: [
-              { id: 'cba-1', name: 'Building Infrastructure', slug: 'industries/cables-by-application/building-infrastructure', children: [] },
-              { id: 'cba-2', name: 'Energy And Power Grid', slug: 'industries/cables-by-application/energy-and-power-grid', children: [] },
-              { id: 'cba-3', name: 'Exploration Industries', slug: 'industries/cables-by-application/exploration-industries', children: [] },
-              { id: 'cba-4', name: 'Manufacturing Industries', slug: 'industries/cables-by-application/manufacturing-industries', children: [] },
-              { id: 'cba-5', name: 'Mobility Infrastructure', slug: 'industries/cables-by-application/mobility-infrastructure', children: [] }
+              {
+                id: 'cba-building', slug: 'industries/cables-by-application/building-infrastructure', name: 'Building infrastructure',
+                children: [
+                  { id: 'cba-b-res', name: 'Residential', slug: 'industries/cables-by-application/residential', children: [] },
+                  { id: 'cba-b-dc', name: 'Datacenters', slug: 'industries/cables-by-application/datacenters', children: [] },
+                  { id: 'cba-b-tel', name: 'Telecommunication', slug: 'industries/cables-by-application/telecommunication', children: [] },
+                  { id: 'cba-b-com', name: 'Commercial', slug: 'industries/cables-by-application/commercial', children: [] },
+                  { id: 'cba-b-it', name: 'IT Industry', slug: 'industries/cables-by-application/it-industry', children: [] }
+                ]
+              },
+              {
+                id: 'cba-energy', slug: 'industries/cables-by-application/energy-and-power-grid', name: 'Energy and Power Grid',
+                children: [
+                  { id: 'cba-e-pn', name: 'Power & Network', slug: 'industries/cables-by-application/power-and-network', children: [] },
+                  { id: 'cba-e-util', name: 'Utility', slug: 'industries/cables-by-application/utility', children: [] },
+                  { id: 'cba-e-ren', name: 'Renewable Energy', slug: 'industries/cables-by-application/renewable-energy', children: [] },
+                  { id: 'cba-e-se', name: 'Service Entrance', slug: 'industries/cables-by-application/service-entrance', children: [] }
+                ]
+              },
+              {
+                id: 'cba-explore', slug: 'industries/cables-by-application/exploration-industries', name: 'Exploration industries',
+                children: [
+                  { id: 'cba-x-oil', name: 'Oil Gas & Petrochemical', slug: 'industries/cables-by-application/oil-gas-and-petrochemical', children: [] },
+                  { id: 'cba-x-min', name: 'Mining Drilling and Tunneling', slug: 'industries/cables-by-application/mining-drilling-and-tunneling', children: [] }
+                ]
+              },
+              {
+                id: 'cba-mfg', slug: 'industries/cables-by-application/manufacturing-industries', name: 'Manufacturing industries',
+                children: [
+                  { id: 'cba-m-auto', name: 'Automation & Process Control', slug: 'industries/cables-by-application/automation-and-process-control', children: [] },
+                  { id: 'cba-m-health', name: 'Healthcare', slug: 'industries/cables-by-application/healthcare', children: [] },
+                  { id: 'cba-m-food', name: 'Food & Beverages', slug: 'industries/cables-by-application/food-and-beverages', children: [] },
+                  { id: 'cba-m-water', name: 'Water Treatment and Waste Disposal', slug: 'industries/cables-by-application/water-treatment-and-waste-disposal', children: [] },
+                  { id: 'cba-m-cement', name: 'Cement Industry', slug: 'industries/cables-by-application/cement-industry', children: [] },
+                  { id: 'cba-m-metal', name: 'Metal Industry', slug: 'industries/cables-by-application/metal-industry', children: [] },
+                  { id: 'cba-m-sugar', name: 'Sugar Industry', slug: 'industries/cables-by-application/sugar-industry', children: [] },
+                  { id: 'cba-m-pharma', name: 'Pharmaceutical Industry', slug: 'industries/cables-by-application/pharmaceutical-industry', children: [] }
+                ]
+              },
+              {
+                id: 'cba-mobility', slug: 'industries/cables-by-application/mobility-infrastructure', name: 'Mobility infrastructure',
+                children: [
+                  { id: 'cba-o-mass', name: 'Mass Transit (Railways & Marine)', slug: 'industries/cables-by-application/mass-transit-railways-and-marine', children: [] },
+                  { id: 'cba-o-def', name: 'Defence & Armaments Industry', slug: 'industries/cables-by-application/defence-and-armaments-industry', children: [] },
+                  { id: 'cba-o-aero', name: 'Aerospace Industry', slug: 'industries/cables-by-application/aerospace-industry', children: [] }
+                ]
+              }
             ]
           },
           {
             id: 'cbs-static',
             slug: 'industries/cables-by-standards',
-            name: 'Cables By Standards',
+            name: 'Cables by Standards',
             children: [
               { id: 'cbs-1', name: 'Indian Standards (IS)', slug: 'industries/cables-by-standards/indian-standards', children: [] },
               { id: 'cbs-2', name: 'International Standards', slug: 'industries/cables-by-standards/international-standards', children: [] }
@@ -155,28 +188,23 @@ const DEFAULT_MENU_TREE: NavItem[] = [
           {
             id: 'cbt-static',
             slug: 'industries/cables-by-type',
-            name: 'Cables By Type',
+            name: 'Cables by Type',
             children: [
               { id: 'cbt-1', name: 'LV Power Cable', slug: 'industries/cables-by-type/lv-power-cable', children: [] },
-              { id: 'cbt-2', name: 'MV Power Cable', slug: 'industries/cables-by-type/mv-power-cable', children: [] },
-              { id: 'cbt-3', name: 'EHV Power Cable', slug: 'industries/cables-by-type/ehv-power-cable', children: [] },
-              { id: 'cbt-4', name: 'Instrumentation Cable', slug: 'industries/cables-by-type/instrumentation-cable', children: [] },
-              { id: 'cbt-5', name: 'Communication & Data Cable', slug: 'industries/cables-by-type/communication-and-data-cable', children: [] },
-              { id: 'cbt-6', name: 'Renewable Energy', slug: 'industries/cables-by-type/renewable-energy', children: [] },
-              // Kept as a plain link on purpose: the Others hub page already
-              // lists all 11 of its sub-types, and nesting them here pushed the
-              // cascade to a fifth panel, which overlapped its own ancestors and
-              // broke the hover chain. Clicking through loses nothing.
-              { id: 'cbt-7', name: 'Others', slug: 'industries/cables-by-type/others', children: [] }
+              { id: 'cbt-2', name: 'Others', slug: 'industries/cables-by-type/others', children: [] },
+              { id: 'cbt-3', name: 'Instrumentation Cable', slug: 'industries/cables-by-type/instrumentation-cable', children: [] },
+              { id: 'cbt-4', name: 'Communication & Data Cable', slug: 'industries/cables-by-type/communication-and-data-cable', children: [] },
+              { id: 'cbt-5', name: 'Renewable Energy', slug: 'industries/cables-by-type/renewable-energy', children: [] },
+              { id: 'cbt-6', name: 'MV Power Cable', slug: 'industries/cables-by-type/mv-power-cable', children: [] },
+              { id: 'cbt-7', name: 'EHV Power Cable', slug: 'industries/cables-by-type/ehv-power-cable', children: [] }
             ]
           },
           {
             id: 'pc-renewables', slug: 'polycab/solar', name: 'Renewables',
             children: [
-              { id: 'pc-rn-panel', name: 'Solar Panel', slug: 'solar/solar-panel', children: [] },
-              { id: 'pc-rn-inverter', name: 'Solar Grid-Tie Inverter', slug: 'solar/solar-grid-tie-inverter', children: [] },
-              { id: 'pc-rn-cable', name: 'Solar DC Cable', slug: 'solar/solar-dc-cable', children: [] },
-              { id: 'pc-rn-dcmcb', name: 'DC MCB', slug: 'solar/dc-mcb', children: [] }
+              { id: 'pc-rn-panel', name: 'Solar Inverters and Panels', slug: 'solar/solar-panel', children: [] },
+              { id: 'pc-rn-db', name: 'Distribution Boxes', slug: 'polycab/solar', children: [] },
+              { id: 'pc-rn-cable', name: 'Solar Cables', slug: 'solar/solar-dc-cable', children: [] }
             ]
           }
         ]

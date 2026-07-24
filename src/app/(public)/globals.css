@@ -3084,6 +3084,12 @@ a.enquiry-btn:hover,
   margin-bottom: 22px;
 }
 
+/* Groups with sub-groups (Cables by Application) are tall — let them flow
+   across columns while each sub-group stays intact. */
+.pmm-group--wide {
+  break-inside: auto;
+}
+
 .pmm-g-head {
   display: flex;
   align-items: center;
@@ -3126,6 +3132,9 @@ a.enquiry-btn:hover,
   font-weight: 700;
   color: #1f2b46;
   line-height: 1.3;
+  /* Keep the exact casing from the menu data ("Cables by Application", not
+     "Cables By Application") — the theme nav capitalises every word. */
+  text-transform: none;
 }
 
 .pmm-g-head:hover .pmm-g-name { color: var(--brand-red); }
@@ -3149,6 +3158,32 @@ a.enquiry-btn:hover,
 
 .pmm-g-link:hover { color: var(--brand-red); transform: translateX(3px); }
 
+/* Sub-group inside a column: a bold sub-header (e.g. "Building infrastructure",
+   "House Wires") with its items indented under it. */
+.pmm-subgroup {
+  break-inside: avoid;
+  margin-bottom: 14px;
+}
+
+.pmm-g-sub {
+  display: block;
+  font-family: "Outfit", sans-serif;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--brand-navy);
+  padding: 4px 0 5px;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.pmm-g-sub:hover { color: var(--brand-red); }
+
+.pmm-g-sublist {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 12px;
+}
+
 .pmm-g-all {
   display: inline-flex;
   align-items: center;
@@ -3167,6 +3202,12 @@ a.enquiry-btn:hover,
    `.rs-header-area.has-theme-orange .main-menu li a`, so these carry the same
    ancestors plus the panel — anything shorter ties or loses, and custom.css
    is linked after this file. */
+/* text-transform: none on all panel anchors — the theme nav capitalises every
+   word, which would turn "Cables by Application" into "Cables By Application". */
+.rs-header-area.has-theme-orange .main-menu .pmm-panel a {
+  text-transform: none;
+}
+
 .rs-header-area.has-theme-orange .main-menu .pmm-panel a.pmm-g-head,
 .rs-header-area.has-theme-orange .main-menu .pmm-panel a.pmm-g-head:focus {
   padding: 0 0 9px;
@@ -3182,6 +3223,18 @@ a.enquiry-btn:hover,
 }
 
 .rs-header-area.has-theme-orange .main-menu .pmm-panel a.pmm-g-link:hover {
+  color: var(--brand-red);
+}
+
+.rs-header-area.has-theme-orange .main-menu .pmm-panel a.pmm-g-sub,
+.rs-header-area.has-theme-orange .main-menu .pmm-panel a.pmm-g-sub:focus {
+  padding: 4px 0 5px;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--brand-navy);
+}
+
+.rs-header-area.has-theme-orange .main-menu .pmm-panel a.pmm-g-sub:hover {
   color: var(--brand-red);
 }
 

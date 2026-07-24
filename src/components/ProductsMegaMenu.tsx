@@ -212,28 +212,59 @@ export default function ProductsMegaMenu({ tree, label = 'Products' }: Props) {
                   <p className="pmm-blurb">{armBlurb(active.item.name)}</p>
 
                   <div className="pmm-groups">
-                    {groups.map((g) => (
-                      <div key={g.id} className="pmm-group">
-                        <Link href={`/${g.slug}`} className="pmm-g-head" onClick={close}>
-                          {groupTile(g)}
-                          <span className="pmm-g-name">{g.name}</span>
-                        </Link>
-                        <ul className="pmm-g-list">
-                          {g.children.map((child) => (
-                            <li key={child.id}>
-                              <Link href={`/${child.slug}`} className="pmm-g-link" onClick={close}>
-                                {child.name}
-                              </Link>
-                            </li>
-                          ))}
-                          <li>
-                            <Link href={`/${g.slug}`} className="pmm-g-link pmm-g-all" onClick={close}>
-                              View All <ChevronRight aria-hidden="true" />
-                            </Link>
-                          </li>
-                        </ul>
-                      </div>
-                    ))}
+                    {groups.map((g) => {
+                      // A group whose children are themselves branches (Wires →
+                      // House Wires / 180 METER; Cables by Application → Building
+                      // infrastructure / …) renders those as bold sub-headers
+                      // with indented items. Flat groups keep the "View All" row.
+                      const nested = g.children.some(hasKids);
+                      // Only a group with several sub-groups (Cables by
+                      // Application) is tall enough to flow across columns; a
+                      // small one (Wires → House Wires / 180 METER) must stay
+                      // whole so its sub-groups don't float off on their own.
+                      const wide = g.children.filter(hasKids).length >= 3;
+                      return (
+                        <div key={g.id} className={`pmm-group${wide ? ' pmm-group--wide' : ''}`}>
+                          <Link href={`/${g.slug}`} className="pmm-g-head" onClick={close}>
+                            {groupTile(g)}
+                            <span className="pmm-g-name">{g.name}</span>
+                          </Link>
+                          <ul className="pmm-g-list">
+                            {g.children.map((child) =>
+                              hasKids(child) ? (
+                                <li key={child.id} className="pmm-subgroup">
+                                  <Link href={`/${child.slug}`} className="pmm-g-sub" onClick={close}>
+                                    {child.name}
+                                  </Link>
+                                  <ul className="pmm-g-sublist">
+                                    {child.children.map((gc) => (
+                                      <li key={gc.id}>
+                                        <Link href={`/${gc.slug}`} className="pmm-g-link" onClick={close}>
+                                          {gc.name}
+                                        </Link>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </li>
+                              ) : (
+                                <li key={child.id}>
+                                  <Link href={`/${child.slug}`} className="pmm-g-link" onClick={close}>
+                                    {child.name}
+                                  </Link>
+                                </li>
+                              )
+                            )}
+                            {!nested && (
+                              <li>
+                                <Link href={`/${g.slug}`} className="pmm-g-link pmm-g-all" onClick={close}>
+                                  View All <ChevronRight aria-hidden="true" />
+                                </Link>
+                              </li>
+                            )}
+                          </ul>
+                        </div>
+                      );
+                    })}
 
                     {/* Arms with no sub-groups (Dowells) render as one column. */}
                     {loose.length > 0 && (
