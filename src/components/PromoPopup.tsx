@@ -119,6 +119,13 @@ export default function PromoPopup() {
     setVisible(false);
   };
 
+  // The CTA must always lead somewhere. When no link is configured, an
+  // "Inquire Now" button belongs on the contact page — the previous fallback
+  // was href="#", which just jumped to the top and dismissed. Clicking always
+  // closes the popup so it doesn't linger over the destination.
+  const ctaHref = config.linkUrl || '/contact-us';
+  const handleCtaClick = () => setVisible(false);
+
   const getPopupTypeEmoji = () => {
     switch (config.popupType) {
       case 'festival': return '🎆';
@@ -153,136 +160,147 @@ export default function PromoPopup() {
           display: flex;
           align-items: center;
           justify-content: center;
-          background: rgba(15, 23, 42, 0.6);
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
+          /* Navy-tinted scrim, matching the site's brand backdrop. */
+          background: rgba(18, 26, 47, 0.55);
+          backdrop-filter: blur(7px);
+          -webkit-backdrop-filter: blur(7px);
           padding: 20px;
           animation: promoFadeIn 0.3s ease-out forwards;
         }
         .promo-modal-card {
           position: relative;
-          background: rgba(255, 255, 255, 0.9);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border: 1px solid rgba(255, 255, 255, 0.4);
-          box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.3);
-          border-radius: 24px;
+          background: #ffffff;
+          border: 1px solid #e6ebf4;
+          /* Layered brand shadows — tight ambient + soft navy key. */
+          box-shadow: 0 4px 14px rgba(30, 46, 94, 0.08), 0 30px 70px -20px rgba(30, 46, 94, 0.35);
+          border-radius: 22px;
           overflow: hidden;
           width: 100%;
-          font-family: 'Inter', system-ui, sans-serif;
+          font-family: 'Outfit', system-ui, sans-serif;
           animation: promoScaleUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-          color: #1e293b;
+          color: #1f2b46;
         }
         .promo-close-btn {
           position: absolute;
           top: 16px;
           right: 16px;
           z-index: 10;
-          width: 36px;
-          height: 36px;
+          width: 38px;
+          height: 38px;
           border-radius: 50%;
-          background: rgba(15, 23, 42, 0.08);
-          border: 1px solid rgba(255, 255, 255, 0.2);
+          background: #ffffff;
+          border: 1px solid #eef1f6;
           display: flex;
           align-items: center;
           justify-content: center;
           cursor: pointer;
           font-size: 16px;
-          font-weight: bold;
-          color: #1e293b;
-          transition: all 0.2s;
+          color: #4a5468;
+          box-shadow: 0 2px 6px rgba(30, 46, 94, 0.08), 0 8px 20px rgba(30, 46, 94, 0.1);
+          transition: color 0.2s ease, transform 0.25s ease, box-shadow 0.2s ease;
         }
         .promo-close-btn:hover {
-          background: rgba(15, 23, 42, 0.15);
-          transform: scale(1.1);
+          color: var(--brand-red, #c1272d);
+          transform: rotate(90deg);
+          box-shadow: 0 4px 10px rgba(30, 46, 94, 0.12), 0 12px 26px rgba(30, 46, 94, 0.14);
         }
         .promo-cta-btn {
           display: inline-flex;
           align-items: center;
+          gap: 8px;
           justify-content: center;
-          padding: 12px 28px;
-          border-radius: 12px;
+          padding: 13px 30px;
+          border-radius: 10px;
+          font-family: 'Outfit', system-ui, sans-serif;
           font-weight: 700;
-          font-size: 14.5px;
+          font-size: 15px;
+          letter-spacing: 0.2px;
           text-decoration: none;
           color: #fff !important;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.2);
+          /* Site CTA gradient (red-light → brand red). */
+          background: linear-gradient(135deg, #e8434a 0%, #c1272d 100%);
+          transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+          box-shadow: 0 6px 16px rgba(193, 39, 45, 0.28);
           cursor: pointer;
           border: none;
         }
+        .promo-cta-btn svg { transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
         .promo-cta-btn:hover {
           transform: translateY(-2px);
-          box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.3);
+          box-shadow: 0 10px 24px rgba(193, 39, 45, 0.34);
         }
+        .promo-cta-btn:hover svg { transform: translateX(4px); }
         .promo-dismiss-label {
           display: flex;
           align-items: center;
           gap: 8px;
-          font-size: 12px;
-          color: #64748b;
+          font-size: 12.5px;
+          font-weight: 500;
+          color: #61708f;
           cursor: pointer;
           user-select: none;
           transition: color 0.2s;
         }
         .promo-dismiss-label:hover {
-          color: #334155;
+          color: var(--brand-navy, #1e2e5e);
         }
       `}} />
 
       <div className="promo-overlay">
         {/* Template Layout 1: Standard (Vertical) */}
         {config.template === 'standard' && (
-          <div className="promo-modal-card" style={{ maxWidth: '480px' }}>
-            <button className="promo-close-btn" onClick={handleClose}>✕</button>
+          <div className="promo-modal-card" style={{ maxWidth: '460px' }}>
+            <button className="promo-close-btn" onClick={handleClose} aria-label="Close">✕</button>
             {config.imageUrl && (
               <div style={{
                 width: '100%',
-                height: '220px',
+                height: '210px',
                 backgroundImage: `url('${config.imageUrl}')`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-                borderBottom: `4px solid ${themeHex}`
+                borderBottom: '4px solid #c1272d'
               }} />
             )}
-            <div style={{ padding: '32px 28px 24px 28px', textAlign: 'center' }}>
+            <div style={{ padding: '38px 32px 28px', textAlign: 'center' }}>
               <div style={{
                 display: 'inline-flex',
-                fontSize: '28px',
-                marginBottom: '14px',
-                background: `${themeHex}1A`,
-                width: '60px',
-                height: '60px',
+                fontSize: '30px',
+                marginBottom: '18px',
+                background: 'radial-gradient(circle at 50% 40%, #fde5e8 0%, #fdeef0 70%)',
+                width: '66px',
+                height: '66px',
                 borderRadius: '50%',
                 alignItems: 'center',
                 justifyContent: 'center',
+                boxShadow: '0 6px 16px rgba(193, 39, 45, 0.14)',
               }}>
                 {getPopupTypeEmoji()}
               </div>
-              <h4 style={{ margin: '0 0 6px 0', fontSize: '22px', fontWeight: 850, color: '#0f172a' }}>{config.title}</h4>
+              <h4 style={{ margin: '0 0 10px 0', fontSize: '26px', fontWeight: 800, color: '#1e2e5e', lineHeight: 1.2 }}>{config.title}</h4>
               {config.subtitle && (
-                <p style={{ margin: '0 0 16px 0', fontSize: '14px', fontWeight: 700, color: themeHex }}>{config.subtitle}</p>
+                <p style={{
+                  margin: '0 0 16px 0', fontSize: '12.5px', fontWeight: 700, color: '#c1272d',
+                  textTransform: 'uppercase', letterSpacing: '1.4px',
+                }}>{config.subtitle}</p>
               )}
               {config.description && (
-                <p style={{ margin: '0 0 24px 0', fontSize: '13.5px', color: '#475569', lineHeight: '1.6' }}>{config.description}</p>
+                <p style={{ margin: '0 auto 26px', maxWidth: '340px', fontSize: '14.5px', color: '#61708f', lineHeight: '1.65' }}>{config.description}</p>
               )}
-              
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', alignItems: 'center' }}>
-                <a
-                  href={config.linkUrl || '#'}
-                  onClick={!config.linkUrl ? handleClose : undefined}
-                  className="promo-cta-btn"
-                  style={{ background: themeHex }}
-                >
-                  {config.buttonText || 'View Details'}
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '18px', alignItems: 'center' }}>
+                <a href={ctaHref} onClick={handleCtaClick} className="promo-cta-btn">
+                  {config.buttonText || 'Inquire Now'}
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
+                  </svg>
                 </a>
-                
+
                 <label className="promo-dismiss-label">
                   <input
                     type="checkbox"
                     checked={dismissUntilToday}
                     onChange={(e) => setDismissUntilToday(e.target.checked)}
-                    style={{ accentColor: themeHex }}
+                    style={{ accentColor: '#c1272d' }}
                   />
                   Don't show this again today
                 </label>
@@ -320,21 +338,16 @@ export default function PromoPopup() {
               )}
               
               <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
-                <a
-                  href={config.linkUrl || '#'}
-                  onClick={!config.linkUrl ? handleClose : undefined}
-                  className="promo-cta-btn"
-                  style={{ background: themeHex }}
-                >
-                  {config.buttonText || 'View Details'}
+                <a href={ctaHref} onClick={handleCtaClick} className="promo-cta-btn">
+                  {config.buttonText || 'Inquire Now'}
                 </a>
-                
+
                 <label className="promo-dismiss-label">
                   <input
                     type="checkbox"
                     checked={dismissUntilToday}
                     onChange={(e) => setDismissUntilToday(e.target.checked)}
-                    style={{ accentColor: themeHex }}
+                    style={{ accentColor: '#c1272d' }}
                   />
                   Don't show again today
                 </label>
@@ -369,10 +382,10 @@ export default function PromoPopup() {
               
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', borderTop: '1px solid rgba(255,255,255,0.15)', paddingTop: '20px' }}>
                 <a
-                  href={config.linkUrl || '#'}
-                  onClick={!config.linkUrl ? handleClose : undefined}
+                  href={ctaHref}
+                  onClick={handleCtaClick}
                   className="promo-cta-btn"
-                  style={{ background: '#fff', color: '#0f172a !important', fontWeight: 800 }}
+                  style={{ background: '#fff', color: '#1e2e5e', fontWeight: 800, boxShadow: '0 6px 16px rgba(0,0,0,0.25)' }}
                 >
                   {config.buttonText || 'Discover More'}
                 </a>
@@ -408,13 +421,8 @@ export default function PromoPopup() {
               )}
               
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', borderTop: '1px solid #e2e8f0', paddingTop: '18px' }}>
-                <a
-                  href={config.linkUrl || '#'}
-                  onClick={!config.linkUrl ? handleClose : undefined}
-                  className="promo-cta-btn"
-                  style={{ background: themeHex }}
-                >
-                  {config.buttonText || 'OK'}
+                <a href={ctaHref} onClick={handleCtaClick} className="promo-cta-btn">
+                  {config.buttonText || 'Inquire Now'}
                 </a>
                 
                 <label className="promo-dismiss-label">
