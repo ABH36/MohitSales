@@ -1,4 +1,5 @@
 import prisma from '@/lib/prisma';
+import { countFromRows } from '@/lib/product-counts';
 
 /**
  * Data for the homepage "Polycab Consumer" and "Polycab Industries" explorers —
@@ -16,6 +17,8 @@ export interface ExplorerNode {
   name: string;
   slug: string;
   image?: string | null;
+  /** Products under this listing — shown as "View Products (N)" on the card. */
+  count?: number;
   children?: ExplorerNode[];
 }
 
@@ -237,7 +240,7 @@ export async function buildExplorerArms(): Promise<{
   industries: ExplorerArm;
   dowells: ExplorerArm;
 }> {
-  const [products, categories] = await Promise.all([
+  const [products, categories, allSlugs] = await Promise.all([
     prisma.product.findMany({
       where: { isActive: true, imageSrc: { not: null } },
       select: { slug: true, imageSrc: true },
@@ -247,11 +250,17 @@ export async function buildExplorerArms(): Promise<{
       where: { image: { not: null } },
       select: { slug: true, image: true },
     }),
+    // Every active product's slug + features — used to count "products under a
+    // listing" (features carries the card count for single-row multi-product
+    // pages like cable-terminal/copper).
+    prisma.product.findMany({ where: { isActive: true }, select: { slug: true, features: true } }),
   ]);
 
   const catImage = new Map(categories.map((c) => [c.slug, c.image] as const));
   // Exact-slug lookup, plus a prefix scan for hubs that are not products.
   const productImage = new Map(products.map((p) => [p.slug, p.imageSrc] as const));
+
+  const countFor = (slug: string): number => countFromRows(allSlugs, [slug])[slug] ?? 0;
 
   const resolve = (slug: string): string => {
     if (catImage.get(slug)) return catImage.get(slug)!;
@@ -271,7 +280,11 @@ export async function buildExplorerArms(): Promise<{
   const fill = (arm: ExplorerArm): ExplorerArm => ({
     ...arm,
     categories: arm.categories.map((cat) => {
-      const children = cat.children?.map((child) => ({ ...child, image: pick(child) }));
+      const children = cat.children?.map((child) => ({
+        ...child,
+        image: pick(child),
+        count: countFor(child.slug),
+      }));
       // A category's own slug is its menu landing (e.g. "polycab/fans"), which
       // holds no products — the ranges live under "fans/…". So when the category
       // resolves to the placeholder, borrow the first range's image instead.
@@ -280,7 +293,14 @@ export async function buildExplorerArms(): Promise<{
         const fromChild = children?.find((c) => c.image && c.image !== FALLBACK_IMAGE)?.image;
         if (fromChild) image = fromChild;
       }
-      return { ...cat, image, children };
+      // Top-level total: the larger of the category's own slug count and the
+      // sum of its ranges. Covers both a real hub (Cables by Application — the
+      // hub slug holds every product, the range hubs hold none) and a category
+      // whose slug is just one landing (Lighting → lighting/led-bulb — the hub
+      // count is only the bulbs, so the range sum wins).
+      const childSum = children ? children.reduce((s, c) => s + (c.count || 0), 0) : 0;
+      const count = Math.max(countFor(cat.slug), childSum);
+      return { ...cat, image, count, children };
     }),
   });
 

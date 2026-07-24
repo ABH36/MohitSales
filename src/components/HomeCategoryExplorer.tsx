@@ -54,7 +54,7 @@ function Card({
         </span>
         <span className="hce-card-name">{node.name}</span>
         <span className="hce-card-cta">
-          View Products <ArrowRight aria-hidden="true" />
+          View Products{node.count ? ` (${node.count})` : ''} <ArrowRight aria-hidden="true" />
         </span>
       </span>
     </Link>

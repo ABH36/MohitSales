@@ -3,6 +3,7 @@ import Link from 'next/link';
 import BreadcrumbBanner, { type Crumb } from '@/components/BreadcrumbBanner';
 import { cld } from '@/lib/cloudinary';
 import { categoryIcon } from '@/lib/category-icons';
+import { productCountsBySlug } from '@/lib/product-counts';
 import { ArrowRight } from 'lucide-react';
 
 /** @deprecated use `Crumb` from BreadcrumbBanner — kept as an alias for callers. */
@@ -19,7 +20,7 @@ export interface LandingItem {
  * markup that was previously duplicated across ~9 near-identical pages.
  * Cards share the homepage explorer design (.hce-card).
  */
-export default function CategoryLandingGrid({
+export default async function CategoryLandingGrid({
   title,
   breadcrumbs,
   items,
@@ -30,6 +31,10 @@ export default function CategoryLandingGrid({
   items: LandingItem[];
   buttonLabel?: string;
 }) {
+  // "View Products (N)" like every other category card; slugs carry a leading
+  // slash here, the counter keys on the bare product slug.
+  const counts = await productCountsBySlug(items.map((i) => i.link.replace(/^\//, '')));
+
   return (
     <main>
       <BreadcrumbBanner title={title} crumbs={breadcrumbs} />
@@ -53,7 +58,10 @@ export default function CategoryLandingGrid({
                   </span>
                   <span className="hce-card-name">{item.title}</span>
                   <span className="hce-card-cta">
-                    {buttonLabel} <ArrowRight aria-hidden="true" />
+                    {counts[item.link.replace(/^\//, '')]
+                      ? `View Products (${counts[item.link.replace(/^\//, '')]})`
+                      : buttonLabel}{' '}
+                    <ArrowRight aria-hidden="true" />
                   </span>
                 </span>
               </Link>
