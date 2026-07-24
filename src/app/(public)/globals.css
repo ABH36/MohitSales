@@ -168,6 +168,15 @@ body {
   overflow-x: clip;
 }
 
+/* The company name under "About Us" mirrors the multi-colour logo wordmark
+   (red / blue / orange), a touch bolder. The per-word colours are set inline by
+   SplitText's wordColors, so this rule only carries the weight — no colour here,
+   or it would override those. */
+.image-box-section.about-us .home-about-name,
+.image-box-section.about-us .home-about-name .word {
+  font-weight: 800 !important;
+}
+
 /* ────────────────────────────────────────────────────────────
    PAGE SURFACE CONSISTENCY
    The fixed body gradient is the page's backdrop, and the design
@@ -2744,11 +2753,13 @@ a.enquiry-btn:hover,
   z-index: 1002;
   width: min(1120px, 94vw);
   margin-top: 0;
-  /* Soft pink→blue wash, same family as the page gradient, so the panel reads
-     as part of the site rather than a plain white sheet. */
-  background: linear-gradient(135deg, #fdf0f1 0%, #f8f6fb 52%, #edf2fc 100%);
+  /* Near-white with only a faint warm→cool tint, so the panel lifts clearly
+     off the page's pinkish gradient instead of blending into it. A hairline
+     border plus a deeper, tighter shadow make it read as a raised surface. */
+  background: linear-gradient(135deg, #ffffff 0%, #fdf8f9 52%, #f4f8ff 100%);
+  border: 1px solid rgba(30, 46, 94, 0.07);
   border-radius: 20px;
-  box-shadow: 0 30px 80px rgba(15, 23, 42, 0.28);
+  box-shadow: 0 6px 18px rgba(30, 46, 94, 0.1), 0 32px 70px -12px rgba(30, 46, 94, 0.34);
   overflow: hidden;
   animation: pmmIn 0.18s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -2994,18 +3005,45 @@ a.enquiry-btn:hover,
 
 /* Right: the highlighted branch's range */
 .pmm-main {
-  padding: 20px 22px 34px;
+  padding: 20px 22px 30px;
   overflow-y: auto;
 }
 
-/* The columns scroll, but the grey scrollbar gutter broke the panel's rounded
-   silhouette — hidden (scrolling still works via wheel/touch/keys). */
-.pmm-main,
+/* Right column: a slim branded scrollbar running the full height. Firefox and
+   modern Chromium honour the standard `scrollbar-width`/`scrollbar-color` (a
+   thin navy bar); older WebKit/Chromium fall back to the ::-webkit rules,
+   which additionally reserve a little track space. */
+.pmm-main {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(30, 46, 94, 0.4) transparent;
+}
+
+.pmm-main::-webkit-scrollbar {
+  width: 9px;
+}
+
+.pmm-main::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 10px 0;
+}
+
+.pmm-main::-webkit-scrollbar-thumb {
+  background: rgba(30, 46, 94, 0.32);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.pmm-main::-webkit-scrollbar-thumb:hover {
+  background: var(--brand-red);
+  background-clip: padding-box;
+}
+
+/* Left rail rarely scrolls (and carries the promo card) — keep it clean. */
 .pmm-rail {
   scrollbar-width: none;
 }
 
-.pmm-main::-webkit-scrollbar,
 .pmm-rail::-webkit-scrollbar {
   display: none;
 }
@@ -3018,10 +3056,10 @@ a.enquiry-btn:hover,
   left: 0;
   right: 0;
   bottom: 0;
-  height: 28px;
+  height: 22px;
   pointer-events: none;
   border-radius: 0 0 20px 20px;
-  background: linear-gradient(to top, rgba(244, 242, 249, 0.95), rgba(244, 242, 249, 0));
+  background: linear-gradient(to top, rgba(248, 250, 255, 0.95), rgba(248, 250, 255, 0));
 }
 
 .pmm-blurb {
@@ -4108,8 +4146,15 @@ body::-webkit-scrollbar {
    Filter tabs above a card grid that swaps as tabs change.
    ════════════════════════════════════════════════════════════ */
 /* Tightened from 60px so consecutive homepage sections sit closer together. */
+/* Centred "Our Products" label that introduces the whole products area. */
+.products-intro {
+  padding: 40px 0 8px;
+}
+
+/* Tightened from 32px so the four product sections sit closer together now that
+   each no longer carries its own "Our Products" label above it. */
 .hce-section {
-  padding: 32px 0;
+  padding: 18px 0;
 }
 
 .hce-head-row {
@@ -4126,14 +4171,16 @@ body::-webkit-scrollbar {
   margin: 6px 0 0;
   font-size: clamp(28px, 3.2vw, 44px);
   font-weight: 800;
+  /* First word (Polycab / Dowells) in brand red. */
+  color: var(--brand-red);
 }
 
-/* Second word of the heading in the brand-red gradient. */
+/* The word after the first (Cables / Consumer / …) in near-black. */
 .hce-title-accent {
-  background: var(--brand-cta);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  color: #1a1a1a;
 }
 
 .hce-underline {
