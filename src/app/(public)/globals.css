@@ -37,14 +37,10 @@ body.ltr .legacy-php-content {
   font-weight: 400;
 }
 
-body.ltr .wires-desc p,
-body.ltr .about-intro-copy p,
-body.ltr .about-pair-card p,
-body.ltr .legacy-php-content p,
-body.ltr .catalogue-section .wires-desc p {
+/* Apply justification to all paragraphs in the project as requested */
+p, body.ltr p {
   text-align: justify;
   text-justify: inter-word;
-  /* Long words on a narrow column would otherwise leave big gaps. */
   hyphens: auto;
 }
 
@@ -605,10 +601,10 @@ body {
   background: rgba(255, 255, 255, 0.12);
 }
 
-.contact_us_sec .rs-contact-btn .rs-btn.black-bg {
+.contact_us_sec .rs-contact-btn .rs-btn.red-bg {
   display: inline-block;
   padding: 14px 36px;
-  background: #222;
+  background: #ef3d45;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -621,11 +617,11 @@ body {
   z-index: 1;
 }
 
-.contact_us_sec .rs-contact-btn .rs-btn.black-bg:hover {
-  background: #ef3d45;
+.contact_us_sec .rs-contact-btn .rs-btn.red-bg:hover {
+  background: #a51f24;
 }
 
-.contact_us_sec .rs-contact-btn .rs-btn.black-bg:disabled {
+.contact_us_sec .rs-contact-btn .rs-btn.red-bg:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
@@ -2058,20 +2054,36 @@ img.product-img {
    CATALOGUE SECTION — SECTION TITLE REFINEMENT
    ==================================================== */
 
-.catalogue-section .section-title h2,
+.catalogue-section .section-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
 .catalogue-section .section-title h2 {
   position: relative;
   display: inline-block;
-  padding-bottom: 16px;
+  padding-bottom: 0;
+  margin-bottom: 0;
 }
 
-.catalogue-section .section-title h2::after {
+.catalogue-section .section-title p {
+  color: #000000 !important;
+  margin: 12px auto 0;
+  font-size: 16px;
+  text-align: center;
+  max-width: 600px;
+}
+
+.catalogue-section .section-title::after {
   content: "";
   display: block;
   /* Twisted-wire underline (transparent PNG), on-brand for a wire distributor. */
   width: 148px;
   height: 16px;
-  margin: 12px auto 0;
+  margin: 18px auto 0;
   background: url('https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/v1784965401/mohit/ui/wire-underline.png') center / contain no-repeat;
 }
 
@@ -2766,7 +2778,7 @@ a.enquiry-btn:hover,
      Products link the panel overhung the right edge and the last column was
      cut off. */
   position: fixed;
-  top: 100px;
+  top: 88px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1002;
@@ -3085,7 +3097,7 @@ a.enquiry-btn:hover,
   margin: 12px 0 14px;
   max-width: 480px;
   text-align: left;
-  color: #61708f;
+  color: #000000;
   font-size: 14.5px;
   line-height: 1.6;
 }
@@ -3169,7 +3181,7 @@ a.enquiry-btn:hover,
   padding: 5px 0 5px 2px;
   font-size: 14px;
   font-weight: 500;
-  color: #4a5468;
+  color: #000000;
   line-height: 1.45;
   text-decoration: none;
   transition: color 0.15s ease, transform 0.15s ease;
@@ -3214,7 +3226,7 @@ a.enquiry-btn:hover,
 
 .pmm-g-all svg { width: 13px; height: 13px; }
 
-.pmm-crumb.is-current { color: #4a5468; }
+.pmm-crumb.is-current { color: #000000; }
 
 /* The panel sits inside .main-menu, so the nav's own link rules (white text,
    40px padding, 18px size) restyle every anchor in it. The rule to beat is
@@ -3238,7 +3250,7 @@ a.enquiry-btn:hover,
 .rs-header-area.has-theme-orange .main-menu .pmm-panel a.pmm-g-link:focus {
   padding: 5px 0 5px 2px;
   font-size: 14px;
-  color: #4a5468;
+  color: #000000;
 }
 
 .rs-header-area.has-theme-orange .main-menu .pmm-panel a.pmm-g-link:hover {
@@ -3798,7 +3810,7 @@ body::-webkit-scrollbar {
   border-radius: 50%;
   cursor: pointer;
   color: #ffffff;
-  background: linear-gradient(135deg, var(--brand-orange), var(--brand-red));
+  background: #ff5e14;
   transition: transform 0.25s ease, filter 0.25s ease;
 }
 
@@ -3840,7 +3852,7 @@ body::-webkit-scrollbar {
   border-radius: 8px;
   cursor: pointer;
   color: #ffffff;
-  background: linear-gradient(135deg, var(--brand-orange), var(--brand-red));
+  background: #ff5e14;
 }
 
 /* ── Results page ── */
@@ -4603,6 +4615,7 @@ body::-webkit-scrollbar {
    coloured shadow deepens, title tints red. */
 .about-us .about-feature {
   display: flex;
+  align-items: center;
   gap: 18px;
   padding: 17px 0;
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
@@ -4667,9 +4680,10 @@ body::-webkit-scrollbar {
 }
 
 .about-us .about-feature p {
-  color: var(--brand-navy);
+  color: #000000;
   font-size: 15.5px;
   line-height: 1.7;
+  text-align: justify;
   margin: 0;
 }
 
@@ -4766,6 +4780,7 @@ body::-webkit-scrollbar {
 
 .wcu_sec .about-feature {
   display: flex;
+  align-items: center;
   gap: 18px;
   padding: 17px 0;
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
@@ -4830,9 +4845,10 @@ body::-webkit-scrollbar {
 }
 
 .wcu_sec .about-feature p {
-  color: var(--brand-navy);
+  color: #000000;
   font-size: 15.5px;
   line-height: 1.7;
+  text-align: justify;
   margin: 0;
 }
 
@@ -5085,12 +5101,12 @@ body::-webkit-scrollbar {
 
 .about-pair-icon,
 .about-value-icon {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   width: 46px;
   height: 46px;
-  margin-bottom: 14px;
+  margin: 0 auto 14px;
   border-radius: 12px;
   background: var(--brand-cta);
   color: #ffffff;
@@ -5101,6 +5117,7 @@ body::-webkit-scrollbar {
   margin: 0 0 10px;
   font-size: 21px;
   color: var(--brand-navy);
+  text-align: center;
 }
 
 .about-pair-card p {
@@ -5166,6 +5183,7 @@ body::-webkit-scrollbar {
   font-size: 17px;
   font-weight: 700;
   color: var(--brand-navy);
+  text-align: center;
 }
 
 .about-value-card p {
@@ -5444,4 +5462,20 @@ body::-webkit-scrollbar {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ── Mobile offcanvas menu open state ──────────────────────────────────────
+   The React Header toggles `.expanded` on `.offcanvas-area` and `.active` on
+   `.offcanvas-overlay`, but the theme's open rules keyed off the plugin's own
+   classes (`.info-open` / `.overlay-open`) — which the React port never sets.
+   So the panel never slid in and the backdrop never appeared. Bridge the React
+   classes to the theme's open state (same properties `.info-open` /
+   `.overlay-open` use). */
+.offcanvas-area.expanded {
+  inset-inline-end: 0%;
+}
+
+.offcanvas-overlay.active {
+  opacity: 1;
+  visibility: visible;
 }
