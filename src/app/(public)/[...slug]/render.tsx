@@ -1,7 +1,7 @@
 import React from 'react';
 import { sanitizeHtml } from '@/lib/utils';
 import { cld } from '@/lib/cloudinary';
-import { deriveSpecs, splitDescription, type Spec } from '@/lib/product-specs';
+import { deriveSpecs, splitDescription, extractTagline, type Spec } from '@/lib/product-specs';
 import StickyProductActions from '@/components/StickyProductActions';
 import JsonLd from '@/components/JsonLd';
 import { breadcrumbJsonLd, productJsonLd } from '@/lib/json-ld';
@@ -45,6 +45,10 @@ export function renderDbProduct(dbProduct: any, productJson: any = null, legacyI
       parsedDescription = dbProduct.description.split('\n\n').filter(Boolean);
     }
   }
+
+  // A short lead line ("Electron beam technology 90M housewire") is treated as a
+  // subtitle shown beside the name, so it is pulled out of the body prose below.
+  const tagline = extractTagline(parsedDescription);
 
   // Safe features/cards parsing
   let parsedFeatures: any[] = [];
@@ -318,6 +322,9 @@ export function renderDbProduct(dbProduct: any, productJson: any = null, legacyI
                 {/* Visual size comes from the tag; aria-level keeps the outline
                     unbroken (h1 → 2 → 3) for screen readers. */}
                 <h3 aria-level={2}>{dbProduct.title}</h3>
+                {/* Short lead line surfaced as a subtitle beside the name — a
+                    paragraph (not a heading) so the h-outline stays intact. */}
+                {tagline && <p className="wires-subtitle">{tagline}</p>}
                 <div className="separator1"></div>
               </div>
 
@@ -331,7 +338,8 @@ export function renderDbProduct(dbProduct: any, productJson: any = null, legacyI
               {(() => {
                 const { blocks } = splitDescription(parsedDescription);
                 const paragraphs = blocks.filter(
-                  (block): block is Extract<typeof block, { type: 'p' }> => block.type === 'p',
+                  (block): block is Extract<typeof block, { type: 'p' }> =>
+                    block.type === 'p' && block.text !== tagline,
                 );
                 return (
                   <div className="wires-desc">

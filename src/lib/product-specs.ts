@@ -191,6 +191,28 @@ export function splitDescription(lines: string[]): {
 }
 
 /**
+ * Some catalogue descriptions lead with a short marketing tagline before the
+ * real prose — Polycab Suprema opens with "Electron beam technology 90M
+ * housewire" and only then explains it. That line reads as a product subtitle,
+ * so it is surfaced next to the name and folded into the SEO <title>.
+ *
+ * A line qualifies only when it is short, carries no terminal punctuation
+ * (taglines are labels, not sentences), isn't a "Label: value" spec row, and is
+ * followed by more description — so a single-paragraph product never loses its
+ * only text to this.
+ */
+export function extractTagline(lines: string[]): string | null {
+  const clean = (lines || []).map((l) => String(l || '').trim()).filter(Boolean);
+  if (clean.length < 2) return null;
+  const first = clean[0];
+  if (first.length > 60) return null;
+  if (/[.!?]$/.test(first)) return null;
+  if (first.split(/\s+/).length > 8) return null;
+  if (SPEC_LINE_RE.test(first)) return null;
+  return first;
+}
+
+/**
  * Builds the spec rows for a product title. Returns an empty array when the
  * title carries no recognisable designation, so callers can skip the section.
  */

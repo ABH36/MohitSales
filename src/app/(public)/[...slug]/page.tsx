@@ -8,6 +8,7 @@ import CategoryFilter from '@/components/CategoryFilter';
 import SchemaInjector from '@/components/SchemaInjector';
 import { sanitizeHtml } from '@/lib/utils';
 import { renderDbProduct, renderDbCategory, renderProductLayout } from './render';
+import { extractTagline } from '@/lib/product-specs';
 import { cld } from '@/lib/cloudinary';
 import JsonLd from '@/components/JsonLd';
 import { breadcrumbJsonLd } from '@/lib/json-ld';
@@ -137,9 +138,27 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   const SITE_SUFFIX = 'Mohit Sales Corporation Pvt. Ltd.';
   const GENERIC_DESCRIPTION = 'Authorized Polycab & Dowells Distributor';
 
+  // A short lead line in the description (e.g. "Electron beam technology 90M
+  // housewire") is folded into the <title> so the route carries the product's
+  // key selling point for search — richer, more specific titles than the bare
+  // product name alone.
+  const descLines = (() => {
+    const raw = dbProduct?.description;
+    if (!raw) return [] as string[];
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [String(parsed)];
+    } catch {
+      return String(raw).split('\n\n').filter(Boolean);
+    }
+  })();
+  const tagline = extractTagline(descLines);
+  const titleWithTagline = (base: string) =>
+    tagline ? `${base} — ${tagline} | ${SITE_SUFFIX}` : `${base} - ${SITE_SUFFIX}`;
+
   // Product-specific admin-managed SEO meta takes next priority
   if (dbProduct && (dbProduct.metaTitle || dbProduct.metaDescription || dbProduct.metaKeywords)) {
-    const title = dbProduct.metaTitle || `${dbProduct.title || product?.heading || product?.title || 'Product'} - ${SITE_SUFFIX}`;
+    const title = dbProduct.metaTitle || titleWithTagline(dbProduct.title || product?.heading || product?.title || 'Product');
     const description = dbProduct.metaDescription || productDescription || (product?.description && product.description[0]) || GENERIC_DESCRIPTION;
     return {
       title,
@@ -188,7 +207,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   // notation these names depend on — "6.35/11kV" becomes "63511kv" — so the
   // slug is only ever a last resort for pages with no product row at all.
   if (dbProduct?.title) {
-    const title = `${dbProduct.title} - ${SITE_SUFFIX}`;
+    const title = titleWithTagline(dbProduct.title);
     const description = productDescription || GENERIC_DESCRIPTION;
     const images = dbProduct.imageSrc ? [dbProduct.imageSrc] : [];
     return {

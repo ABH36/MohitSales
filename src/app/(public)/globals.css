@@ -1939,7 +1939,17 @@ img.product-img {
   color: var(--brand-navy);
   font-family: "Outfit", sans-serif;
   line-height: 1.35;
-  margin-bottom: 14px;
+  margin-bottom: 8px;
+}
+
+/* Short lead line shown as a subtitle right under the product name. */
+.wires-subtitle {
+  font-family: "Outfit", sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--brand-red);
+  margin: 0 0 12px;
 }
 
 /* The theme (custom.css) ships a `.separator1` as a tiny 14px navy square with
