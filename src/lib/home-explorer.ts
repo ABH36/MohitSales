@@ -1,5 +1,6 @@
 import prisma from '@/lib/prisma';
 import { countFromRows } from '@/lib/product-counts';
+import { menuImage } from '@/lib/menu-images';
 
 /**
  * Data for the homepage "Polycab Consumer" and "Polycab Industries" explorers —
@@ -264,6 +265,8 @@ export async function buildExplorerArms(): Promise<{
 
   const resolve = (slug: string): string => {
     if (catImage.get(slug)) return catImage.get(slug)!;
+    const menuFallback = menuImage(slug);
+    if (menuFallback) return menuFallback;
     if (productImage.get(slug)) return productImage.get(slug)!;
     const prefix = slug.endsWith('/') ? slug : slug + '/';
     for (const p of products) {

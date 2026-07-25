@@ -296,7 +296,7 @@ export default function HomeContactForm() {
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="rs-btn black-bg"
+                        className="rs-btn red-bg"
                       >
                         {isSubmitting ? 'Sending...' : 'Send Message'}
                       </button>

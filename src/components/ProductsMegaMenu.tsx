@@ -61,11 +61,23 @@ export default function ProductsMegaMenu({ tree, label = 'Products' }: Props) {
   const [activeIdx, setActiveIdx] = useState(0);
 
   const wrapRef = useRef<HTMLLIElement | null>(null);
+  const closeTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const close = useCallback(() => {
     setOpen(false);
     setActiveIdx(0);
   }, []);
+
+  const handleMouseEnter = () => {
+    if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    setOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    closeTimerRef.current = setTimeout(() => {
+      close();
+    }, 250); // 250ms is standard to allow diagonal cursor movement across gaps
+  };
 
   // Close on outside click and on Escape — a panel this size is worse than a
   // dropdown if the only way to dismiss it is to find the × again.
@@ -124,7 +136,12 @@ export default function ProductsMegaMenu({ tree, label = 'Products' }: Props) {
   };
 
   return (
-    <li className="nav-has-sub pmm-wrap" ref={wrapRef}>
+    <li 
+      className="nav-has-sub pmm-wrap" 
+      ref={wrapRef}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       <a
         href="#"
         aria-expanded={open}
