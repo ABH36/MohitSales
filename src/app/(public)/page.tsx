@@ -6,7 +6,6 @@ import { FIRST_BANNER, BANNER_TRANSFORM } from '@/lib/hero-banner';
 import { cld } from '@/lib/cloudinary';
 import IndustriesSlider from '@/components/IndustriesSlider';
 import WhyChooseUs from '@/components/WhyChooseUs';
-import TrustStrip from '@/components/TrustStrip';
 import HomeContactForm from '@/components/HomeContactForm';
 import HomeAchievements from '@/components/HomeAchievements';
 import SplitText from '@/components/SplitText';
@@ -201,10 +200,6 @@ export default async function Page() {
           </div>
         </div>
       </section>
-
-      {/* Trust strip — five badges reinforcing authorised distribution,
-          experience and reach, right below the About Us section. */}
-      <TrustStrip />
 
       {/* Polycab Cables — the seven cable types as a card grid, each linking
           straight to its listing page (no drill-down: each type holds hundreds
