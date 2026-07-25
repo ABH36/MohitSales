@@ -4235,12 +4235,29 @@ body::-webkit-scrollbar {
   color: #1a1a1a;
 }
 
-.hce-underline {
+/* Full-width twisted-wire underline that spans the WHOLE heading. The heading
+   is inline-block so it shrinks to its text; the ::after then matches that
+   width exactly (used by the homepage explorer titles + the Our Products
+   title). Left-aligned headings keep it left; centred wrappers centre it. */
+.home-title {
+  display: inline-block;
+  position: relative;
+}
+
+.home-title::after {
+  content: "";
   display: block;
-  width: 140px;
+  width: 100%;
   height: 15px;
-  margin-top: 10px;
-  background: url('/assets/images/wire-underline.png') left center / contain no-repeat;
+  margin-top: 8px;
+  background: url('/assets/images/wire-underline.png') center / 100% 100% no-repeat;
+}
+
+/* The Our Products title mirrors the multi-colour logo wordmark (colours set
+   inline by SplitText's wordColors); this only carries the weight. */
+.products-intro .home-title,
+.products-intro .home-title .word {
+  font-weight: 800 !important;
 }
 
 .hce-tabs {

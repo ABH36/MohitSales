@@ -84,11 +84,10 @@ export default function HomeCategoryExplorer({ arm, heading, flat = false }: Pro
             {/* The "Our Products" label used to sit above every section; it now
                 appears once, centred, at the top of the products area (see the
                 homepage), so each section here just carries its own heading. */}
-            <h2 className="rs-section-title hce-title">
+            <h2 className="rs-section-title hce-title home-title">
               {headFirst}{' '}
               {headRest.length > 0 && <span className="hce-title-accent">{headRest.join(' ')}</span>}
             </h2>
-            <span className="hce-underline" aria-hidden="true"></span>
           </div>
         </div>
 
