@@ -3,6 +3,7 @@ import { getSeoMetadata } from '@/lib/seo';
 ﻿import React from 'react';
 import Link from 'next/link';
 import SplitText from '@/components/SplitText';
+import BreadcrumbBanner from '@/components/BreadcrumbBanner';
 import { cld } from '@/lib/cloudinary';
 import { categoryIcon } from '@/lib/category-icons';
 import { ArrowRight } from 'lucide-react';
@@ -17,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
 const PRODUCTS = [
   { title: 'Cables By Application', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167950/mohit/our_products/polycab/polycab_cable.png', link: '/industries/cables-by-application/building-infrastructure' },
   { title: 'Cables By Standards', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167956/mohit/our_products/polycab/polycab_wires.png', link: '/industries/cables-by-standards/indian-standards' },
-  { title: 'Cables By Type', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167956/mohit/our_products/polycab/polycab_wires.png', link: '/industries/cables-by-type/lv-power-cable' },
+  { title: 'Cables By Type', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167950/mohit/our_products/polycab/polycab_cable.png', link: '/industries/cables-by-type/lv-power-cable' },
   { title: 'Switchgears', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167955/mohit/our_products/polycab/polycab_switchgears.png', link: '/switchgears' },
   { title: 'Fans', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167953/mohit/our_products/polycab/polycab_fans.png', link: '/fans' },
   { title: 'Solar', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167953/mohit/our_products/polycab/polycab_solar.png', link: '/solar' },
@@ -29,33 +30,10 @@ export default function PolycabPage() {
   return (
     <>
       <main>
-        {/* breadcrumb area start */}
-        <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
-          <div 
-            className="rs-breadcrumb-bg"
-            style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')}')` }}
-          ></div>
-          <div className="container">
-            <div className="row">
-              <div className="w-full">
-                <div className="rs-breadcrumb-content-wrapper">
-                  <div className="rs-breadcrumb-title-wrapper">
-                    <h1 className="rs-breadcrumb-title">Polycab</h1>
-                  </div>
-                  <div className="rs-breadcrumb-menu">
-                    <nav>
-                      <ul>
-                        <li><span><Link href="/">Home</Link></span></li>
-                        <li><span>Polycab</span></li>
-                      </ul>
-                    </nav>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        {/* breadcrumb area end */}
+        <BreadcrumbBanner
+          title="Polycab"
+          crumbs={[{ label: 'Home', href: '/' }, { label: 'Polycab' }]}
+        />
 
         <section className="catalogue-section">
           <div className="container">
