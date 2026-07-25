@@ -9,7 +9,7 @@ import SchemaInjector from '@/components/SchemaInjector';
 import { sanitizeHtml } from '@/lib/utils';
 import { renderDbProduct, renderDbCategory, renderProductLayout } from './render';
 import { extractTagline } from '@/lib/product-specs';
-import { cld } from '@/lib/cloudinary';
+import { breadcrumbBgStyle } from '@/lib/page-banner';
 import JsonLd from '@/components/JsonLd';
 import { breadcrumbJsonLd } from '@/lib/json-ld';
 import { SITE_URL } from '@/lib/seo';
@@ -583,6 +583,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
         }
       });
 
+      // ── Category-relevant breadcrumb banner ──
+      // Legacy pages carry a baked-in generic "products" banner in their inline
+      // style. Swap it for one that matches this page's category (cables/wires
+      // keep the wire-spool strip; fans/lighting/switchgear/etc. get their own).
+      // The theme's JS re-applies `data-background` over the inline style on
+      // load, so that attribute is removed — otherwise it would clobber the swap.
+      $('.rs-breadcrumb-bg')
+        .removeAttr('data-background')
+        .attr('style', `background-image: ${breadcrumbBgStyle(slugPath)}`);
+
       finalHtml = $.html();
 
       // Only query DB for category products if the HTML actually has card slots to fill
@@ -733,7 +743,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 to the compliant two entries: Home + this page. */}
             <JsonLd data={breadcrumbJsonLd([{ name: product.heading || product.title }], `/${slugPath}`)} />
             <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
-              <div className="rs-breadcrumb-bg" style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')}')` }}></div>
+              <div className="rs-breadcrumb-bg" style={{ backgroundImage: breadcrumbBgStyle(slugPath) }}></div>
               <div className="container">
                 <div className="row">
                   <div className="w-full">

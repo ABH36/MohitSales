@@ -2,6 +2,7 @@ import React from 'react';
 import { sanitizeHtml } from '@/lib/utils';
 import { cld } from '@/lib/cloudinary';
 import { deriveSpecs, splitDescription, extractTagline, type Spec } from '@/lib/product-specs';
+import { breadcrumbBgStyle } from '@/lib/page-banner';
 import StickyProductActions from '@/components/StickyProductActions';
 import JsonLd from '@/components/JsonLd';
 import { breadcrumbJsonLd, productJsonLd } from '@/lib/json-ld';
@@ -119,7 +120,7 @@ export function renderDbProduct(dbProduct: any, productJson: any = null, legacyI
             the single-product branch below. */}
         <JsonLd data={crumbsLd} />
         <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
-          <div className="rs-breadcrumb-bg" style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')}')` }}></div>
+          <div className="rs-breadcrumb-bg" style={{ backgroundImage: breadcrumbBgStyle(dbProduct.slug) }}></div>
           <div className="container">
             <div className="row">
               <div className="w-full">
@@ -242,7 +243,7 @@ export function renderDbProduct(dbProduct: any, productJson: any = null, legacyI
       <JsonLd data={productLd} />
       <JsonLd data={crumbsLd} />
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
-        <div className="rs-breadcrumb-bg" style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')}')` }}></div>
+        <div className="rs-breadcrumb-bg" style={{ backgroundImage: breadcrumbBgStyle(dbProduct.slug) }}></div>
         <div className="container">
           <div className="row">
             <div className="w-full">
@@ -453,7 +454,7 @@ export function renderDbCategory(cat: any) {
       <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
         <div
           className="rs-breadcrumb-bg"
-          style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167906/mohit/inner-banner/products.png')}')` }}
+          style={{ backgroundImage: breadcrumbBgStyle(cat.slug) }}
         ></div>
         <div className="container">
           <div className="row">
