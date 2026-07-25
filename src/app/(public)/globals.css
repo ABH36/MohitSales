@@ -4547,36 +4547,36 @@ body::-webkit-scrollbar {
   align-items: stretch;
 }
 
+/* No card chrome — the image floats directly on the page with a layered
+   drop-shadow (follows the artwork's real pixels/alpha) and a gentle 3D tilt
+   that straightens on hover. */
 .about-us .about-media-card {
-  background: #fff;
-  border: 1px solid #e6ebf4;
-  border-radius: 20px;
-  box-shadow: 0 2px 8px rgba(30, 46, 94, 0.05), 0 18px 45px rgba(30, 46, 94, 0.1);
+  background: transparent;
+  border: none;
+  box-shadow: none;
   position: relative;
   height: 100%;
-  min-height: 320px;
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+  min-height: 300px;
+  perspective: 1400px;
 }
 
-.about-us .about-media-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 4px 12px rgba(30, 46, 94, 0.06), 0 28px 60px rgba(30, 46, 94, 0.16);
-}
-
-/* Absolutely positioned so the image never drives the card's height — the
-   card takes the feature column's height and the image fills whatever space
-   that gives it. */
 .about-us .about-media-card img {
   position: absolute;
-  inset: 16px;
-  width: calc(100% - 32px) !important;
-  height: calc(100% - 32px);
+  inset: 0;
+  width: 100% !important;
+  height: 100%;
   object-fit: contain;
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: perspective(1400px) rotateY(-7deg) rotateX(2deg) scale(0.98);
+  filter: drop-shadow(0 22px 34px rgba(30, 46, 94, 0.3))
+    drop-shadow(0 8px 14px rgba(30, 46, 94, 0.2));
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease;
+  will-change: transform;
 }
 
 .about-us .about-media-card:hover img {
-  transform: scale(1.03);
+  transform: perspective(1400px) rotateY(0deg) rotateX(0deg) scale(1.02);
+  filter: drop-shadow(0 30px 46px rgba(30, 46, 94, 0.36))
+    drop-shadow(0 12px 20px rgba(30, 46, 94, 0.24));
 }
 
 /* Right: titled feature rows — slide right on hover, icon tile lifts and its
@@ -4696,33 +4696,36 @@ body::-webkit-scrollbar {
   align-items: stretch;
 }
 
+/* Same card-less floating 3D image as About Us (mirrored side). The collage
+   is opaque, so it reads as a tilted photo lifting off the page. */
 .wcu_sec .about-media-card {
-  background: #fff;
-  border: 1px solid #e6ebf4;
-  border-radius: 20px;
-  box-shadow: 0 2px 8px rgba(30, 46, 94, 0.05), 0 18px 45px rgba(30, 46, 94, 0.1);
+  background: transparent;
+  border: none;
+  box-shadow: none;
   position: relative;
   height: 100%;
-  min-height: 320px;
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
-}
-
-.wcu_sec .about-media-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 4px 12px rgba(30, 46, 94, 0.06), 0 28px 60px rgba(30, 46, 94, 0.16);
+  min-height: 300px;
+  perspective: 1400px;
 }
 
 .wcu_sec .about-media-card img {
   position: absolute;
-  inset: 16px;
-  width: calc(100% - 32px) !important;
-  height: calc(100% - 32px);
+  inset: 0;
+  width: 100% !important;
+  height: 100%;
   object-fit: contain;
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  border-radius: 14px;
+  transform: perspective(1400px) rotateY(7deg) rotateX(2deg) scale(0.98);
+  filter: drop-shadow(0 22px 34px rgba(30, 46, 94, 0.3))
+    drop-shadow(0 8px 14px rgba(30, 46, 94, 0.2));
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease;
+  will-change: transform;
 }
 
 .wcu_sec .about-media-card:hover img {
-  transform: scale(1.03);
+  transform: perspective(1400px) rotateY(0deg) rotateX(0deg) scale(1.02);
+  filter: drop-shadow(0 30px 46px rgba(30, 46, 94, 0.36))
+    drop-shadow(0 12px 20px rgba(30, 46, 94, 0.24));
 }
 
 .wcu_sec .about-feature {
