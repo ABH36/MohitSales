@@ -4683,6 +4683,22 @@ body::-webkit-scrollbar {
   padding-bottom: 40px !important;
 }
 
+/* ── Homepage band rhythm — every section was transparent over the same fixed
+   gradient, so the page read as one endless surface with no boundaries. The
+   content sections (About Us, Industries, Achievements) now sit on opaque white
+   bands with soft edge shadows, while the card sections between them (Products,
+   Why Choose Us) keep the gradient so their white cards still pop. The result
+   is a clear white → gradient → white → gradient → white → dark rhythm. ── */
+.image-box-section.about-us,
+.rs-portfolio-area.rs-portfolio-seven,
+.rs-counter-area {
+  background: #ffffff !important;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 -20px 34px -30px rgba(30, 46, 94, 0.22),
+    0 20px 34px -30px rgba(30, 46, 94, 0.22);
+}
+
 /* ── Why Choose Us — light band matching the other homepage sections: a
    centred heading, then a two-column body that mirrors the About Us split —
    the reasons on the LEFT and a supporting image card on the RIGHT. It reuses

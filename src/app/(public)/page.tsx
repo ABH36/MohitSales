@@ -307,17 +307,20 @@ export default async function Page() {
         <WhyChooseUs />
       </div>
 
-      {/* Get in Touch - Contact Form Section */}
+      {/* Achievements / Counter Section — social proof sits directly after the
+          value section and just before the contact CTA. */}
+      <LazyHydrate>
+        <HomeAchievements />
+      </LazyHydrate>
+
+      {/* Get in Touch - Contact Form Section (its CTA banner + footer follow
+          via the shared layout). */}
       <div className="scroll-reveal" data-delay="100">
         <LazyHydrate>
           <HomeContactForm />
         </LazyHydrate>
       </div>
 
-      {/* Achievements / Counter Section */}
-      <LazyHydrate>
-        <HomeAchievements />
-      </LazyHydrate>
       <PromoPopup />
     </main>
     </>
