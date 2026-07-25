@@ -1,13 +1,19 @@
 import React from 'react';
 import SplitText from '@/components/SplitText';
+import { cld } from '@/lib/cloudinary';
 
 /**
  * "Why Choose Us" — the trust / value-proposition section, styled to match the
  * other homepage sections (About Us / Our Products / Industries): a light
  * transparent band with a centred eyebrow + wordmark-coloured title + wire
- * underline, then three premium cards. Card styling lives under `.wcu_sec` in
- * globals.css.
- */
+ * underline, then a two-column body — the reasons on the left and a supporting
+ * image on the right (mirroring the About Us image/content split). Styling
+ * lives under `.wcu_sec` in globals.css and reuses the About Us feature look. */
+
+// Supporting collage that used to be the section's dark background — now the
+// right-hand image, matching the About Us media card.
+const WHY_CHOOSE_IMAGE =
+  'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167989/mohit/why-choose/why_choose.png';
 
 interface Reason {
   title: string;
@@ -85,17 +91,40 @@ export default function WhyChooseUs() {
           <span className="about-head-underline" aria-hidden="true"></span>
         </div>
 
-        <div className="wcu-grid">
-          {REASONS.map((r, i) => (
-            <div key={r.title} className="wcu-card scroll-reveal" data-delay={`${100 + i * 120}`}>
-              <span className="wcu-card-icon" aria-hidden="true">
-                <span className="wcu-step">{`0${i + 1}`}</span>
-                {r.icon}
-              </span>
-              <h3 className="wcu-card-title" aria-level={3}>{r.title}</h3>
-              <p className="wcu-card-text">{r.text}</p>
+        {/* Content left, image right — the mirror of the About Us split. */}
+        <div className="row g-4 g-lg-5 about-v2 wcu-v2">
+          <div className="col-lg-7 w-full">
+            <div className="about-features">
+              {REASONS.map((r, i) => (
+                <div
+                  key={r.title}
+                  className="about-feature scroll-reveal"
+                  data-direction="left"
+                  data-delay={`${100 + i * 140}`}
+                >
+                  <span className={`about-feature-icon${i === 1 ? ' is-red' : ''}`} aria-hidden="true">
+                    {r.icon}
+                  </span>
+                  <div>
+                    <h3 className="about-feature-title" aria-level={3}>{r.title}</h3>
+                    <p>{r.text}</p>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+
+          <div className="col-lg-5 w-full">
+            <div className="about-media-card scroll-reveal" data-direction="right" data-delay="0">
+              <img
+                src={cld(WHY_CHOOSE_IMAGE, 'f_auto,q_auto,w_700')}
+                alt="Why choose Mohit Sales Corporation — authorised distribution, expert support and wide availability"
+                className="img-fluid"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </section>
