@@ -81,7 +81,19 @@ export default function HomeAchievements() {
                 </svg>
                 Our Achievements
               </span>
-              <h2 className="rs-section-title rs-split-text-enable split-in-fade"><SplitText text="Milestones That Define Our Success" /></h2>
+              <h2 className="rs-section-title rs-split-text-enable split-in-fade wordmark-title" suppressHydrationWarning={true}>
+                <SplitText
+                  text="Milestones That Define Our Success"
+                  wordColors={{
+                    milestones: '#e0211a',  // red
+                    that: '#1b6fb3',        // blue
+                    define: '#f7931e',      // orange
+                    our: '#1b6fb3',         // blue
+                    success: '#e0211a',     // red
+                  }}
+                />
+              </h2>
+              <span className="about-head-underline" aria-hidden="true"></span>
             </div>
           </div>
         </div>
