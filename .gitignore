@@ -66,3 +66,14 @@ mohit_prod*.sql.gz
 *.sql
 *.sql.gz
 *.bak
+
+# ─── One-off local admin/maintenance scripts — NEVER commit ───
+# fetch_users.js dumps every user's email/role; reset_pwd.js resets the admin
+# password to a hardcoded value. These are throwaway local utilities and must
+# not leak into a shared repo.
+fetch_users.js
+reset_pwd.js
+
+# Redundant source image — wire-underline.png (the cropped version) is served
+# from Cloudinary now; this uncropped original isn't referenced anywhere.
+public/assets/images/image.png
