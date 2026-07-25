@@ -1,14 +1,11 @@
 import React from 'react';
 import SplitText from '@/components/SplitText';
-import { cld } from '@/lib/cloudinary';
 
 /**
- * "Why Choose Us" — the trust / value-proposition section. Extracted from the
- * homepage so it can sit lower in the page (after the products and social proof,
- * just before the contact CTA) where this kind of section usually lives.
- *
- * Design is the theme's dark panel with a photo collage; the enhancements here
- * (icon chips, per-item hover, numbered order) live under `.wcu_sec` in
+ * "Why Choose Us" — the trust / value-proposition section, styled to match the
+ * other homepage sections (About Us / Our Products / Industries): a light
+ * transparent band with a centred eyebrow + wordmark-coloured title + wire
+ * underline, then three premium cards. Card styling lives under `.wcu_sec` in
  * globals.css.
  */
 
@@ -64,54 +61,43 @@ const REASONS: Reason[] = [
 
 export default function WhyChooseUs() {
   return (
-    <section className="rs-why-choose-area rs-why-choose-three wcu_sec">
-      <span className="rs-why-choose-shape gsap-move down-200 start-61"></span>
-      <div
-        className="rs-why-choose-bg-thumb"
-        data-background={cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167838/mohit/bg/background.png')}
-        style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167838/mohit/bg/background.png')}')` }}
-      ></div>
+    <section className="wcu_sec">
       <div className="container">
-        <div className="row">
-          <div className="col-xl-7 col-lg-6 col-md-10">
-            <div className="rs-why-choose-content-wrapper section-space scroll-reveal" data-delay="100">
-              <div className="rs-section-title-wrapper section-title-space">
-                <span className="justify-content-start rs-section-subtitle has-stroke">
-                  Why Choose Us
-                </span>
-                <h2 className="rs-section-title rs-split-text-enable split-in-fade" suppressHydrationWarning={true}>
-                  <SplitText text="Empowering Projects, Ensuring Reliability" />
-                </h2>
-              </div>
+        <div className="rs-section-title-wrapper text-center section-title-space scroll-reveal" data-delay="0">
+          <span className="rs-section-subtitle has-theme-orange">
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="15" viewBox="0 0 11 15" fill="none">
+              <path d="M3.14286 10L0 15L8.78104e-07 0L3.14286 5V10Z" fill="#1E2E5E"></path>
+              <path fillRule="evenodd" clipRule="evenodd" d="M6.28571 10L3.14286 15L3.14286 10L4.71428 7.5L3.14286 5L3.14286 0L6.28571 5L6.28571 10ZM6.28571 10L7.85714 7.5L6.28571 5V0L11 7.5L6.28571 15V10Z" fill="#1E2E5E"></path>
+            </svg>
+            Why Choose Us
+          </span>
+          <h2 className="rs-section-title rs-split-text-enable split-in-fade wordmark-title" suppressHydrationWarning={true}>
+            <SplitText
+              text="Empowering Projects, Ensuring Reliability"
+              wordColors={{
+                empowering: '#e0211a',   // red
+                projects: '#1b6fb3',     // blue
+                ensuring: '#f7931e',     // orange
+                reliability: '#e0211a',  // red
+              }}
+            />
+          </h2>
+          <span className="about-head-underline" aria-hidden="true"></span>
+        </div>
 
-              <div className="rs-why-choose-content-inner">
-                {REASONS.map((r, i) => (
-                  <div
-                    key={r.title}
-                    className="rs-why-choose-content-item"
-                    data-wow-delay={`${0.3 + i * 0.2}s`}
-                    data-wow-duration="1s"
-                  >
-                    <div className="rs-why-choose-icon">
-                      <span className="wcu-step" aria-hidden="true">{`0${i + 1}`}</span>
-                      {r.icon}
-                    </div>
-                    <div className="rs-why-choose-content">
-                      <h6 className="rs-why-choose-title" aria-level={3}>{r.title}</h6>
-                      <p className="descrip">{r.text}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+        <div className="wcu-grid">
+          {REASONS.map((r, i) => (
+            <div key={r.title} className="wcu-card scroll-reveal" data-delay={`${100 + i * 120}`}>
+              <span className="wcu-card-icon" aria-hidden="true">
+                <span className="wcu-step">{`0${i + 1}`}</span>
+                {r.icon}
+              </span>
+              <h3 className="wcu-card-title" aria-level={3}>{r.title}</h3>
+              <p className="wcu-card-text">{r.text}</p>
             </div>
-          </div>
+          ))}
         </div>
       </div>
-      <div
-        className="rs-why-choose-btn-wrapper"
-        data-background={cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167989/mohit/why-choose/why_choose.png')}
-        style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167989/mohit/why-choose/why_choose.png')}')` }}
-      ></div>
     </section>
   );
 }

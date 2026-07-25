@@ -4683,52 +4683,70 @@ body::-webkit-scrollbar {
   padding-bottom: 40px !important;
 }
 
-/* ── Why Choose Us enhancements — the icons become bordered chips with a numbered
-   badge, and each reason lifts / turns red on hover. Icons use currentColor, so
-   the colour shift is driven from the chip. Scoped to .wcu_sec. */
-.wcu_sec .rs-why-choose-content-item {
-  transition: transform 0.3s ease;
+/* ── Why Choose Us — light band matching the other homepage sections: a
+   centred heading over three premium cards (icon chip + numbered badge, navy
+   title, muted copy), each lifting with a red bottom bar on hover. ── */
+.wcu_sec {
+  padding: 40px 0 20px;
 }
 
-.wcu_sec .rs-why-choose-content-item:hover {
-  transform: translateX(6px);
+.wcu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 8px;
 }
 
-.wcu_sec .rs-why-choose-content-item .rs-why-choose-icon {
+.wcu-card {
+  background: #fff;
+  border: 1px solid #e6ebf4;
+  border-bottom: 3px solid transparent;
+  border-radius: 16px;
+  padding: 32px 28px;
+  box-shadow: 0 2px 8px rgba(30, 46, 94, 0.05), 0 18px 45px rgba(30, 46, 94, 0.1);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease,
+    border-color 0.35s ease;
+}
+
+.wcu-card:hover {
+  transform: translateY(-6px);
+  border-bottom-color: var(--brand-red);
+  box-shadow: 0 4px 12px rgba(30, 46, 94, 0.06), 0 28px 60px rgba(30, 46, 94, 0.16);
+}
+
+.wcu-card-icon {
   position: relative;
-  width: 74px;
-  height: 74px;
-  flex-shrink: 0;
+  width: 66px;
+  height: 66px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.05);
-  transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease,
-    transform 0.3s ease, box-shadow 0.3s ease;
+  background: var(--brand-navy);
+  color: #fff;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 8px rgba(30, 46, 94, 0.14), 0 10px 22px rgba(30, 46, 94, 0.22);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease,
+    background 0.35s ease;
 }
 
-.wcu_sec .rs-why-choose-content-item .rs-why-choose-icon svg {
-  width: 38px;
+.wcu-card:hover .wcu-card-icon {
+  transform: translateY(-4px) scale(1.05);
+  background: var(--brand-red);
+  box-shadow: 0 5px 10px rgba(193, 39, 45, 0.18), 0 16px 32px rgba(193, 39, 45, 0.3);
+}
+
+.wcu-card-icon svg {
+  width: 34px;
   height: auto;
 }
 
-.wcu_sec .rs-why-choose-content-item:hover .rs-why-choose-icon {
-  color: var(--brand-red-light);
-  border-color: var(--brand-red-light);
-  background: rgba(193, 39, 45, 0.16);
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(193, 39, 45, 0.28);
-}
-
-.wcu_sec .wcu-step {
+.wcu-step {
   position: absolute;
   top: -9px;
   right: -9px;
-  width: 23px;
-  height: 23px;
+  width: 26px;
+  height: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -4736,18 +4754,36 @@ body::-webkit-scrollbar {
   background: var(--brand-cta);
   color: #fff;
   font-family: "Outfit", sans-serif;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0;
   box-shadow: 0 4px 10px rgba(193, 39, 45, 0.4);
 }
 
-.wcu_sec .rs-why-choose-title {
+.wcu-card-title {
+  font-family: "Outfit", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--brand-navy);
+  margin: 0 0 10px;
   transition: color 0.3s ease;
 }
 
-.wcu_sec .rs-why-choose-content-item:hover .rs-why-choose-title {
-  color: var(--brand-red-light);
+.wcu-card:hover .wcu-card-title {
+  color: var(--brand-red);
+}
+
+.wcu-card-text {
+  color: #61708f;
+  font-size: 15px;
+  line-height: 1.7;
+  margin: 0;
+}
+
+@media (max-width: 991px) {
+  .wcu-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
 }
 
 /* ── Contact section — solid dark blue matching the sticky header (#121a2f)
