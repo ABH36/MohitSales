@@ -5,9 +5,13 @@ import React, { useEffect, useRef, useState } from 'react';
 interface SplitTextProps {
   text: string;
   delay?: number;
+  /** Per-word colour, keyed by the word lowercased with punctuation stripped
+   *  ({ mohit: '#e0211a', sales: '#1b6fb3' }). Lets a heading mirror a
+   *  multi-colour wordmark while keeping the reveal animation. */
+  wordColors?: Record<string, string>;
 }
 
-export default function SplitText({ text, delay = 0 }: SplitTextProps) {
+export default function SplitText({ text, delay = 0, wordColors }: SplitTextProps) {
   const [isVisible, setIsVisible] = useState(false);
   const elementRef = useRef<HTMLSpanElement>(null);
 
@@ -35,10 +39,14 @@ export default function SplitText({ text, delay = 0 }: SplitTextProps) {
         const previousWords = words.slice(0, wordIdx);
         const baseIndex = previousWords.join('').length + previousWords.length;
 
+        const colorKey = word.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const wordColor = wordColors?.[colorKey];
+
         return (
           <span
             key={wordIdx}
             className="word"
+            style={wordColor ? { color: wordColor } : undefined}
           >
             {chars.map((char, charIdx) => {
               const charGlobalIdx = baseIndex + charIdx;

@@ -145,7 +145,18 @@ export default async function Page() {
               </svg>
               {aboutData.title}
             </span>
-            <h2 className="rs-section-title rs-split-text-enable split-in-fade"><SplitText text={aboutData.subtitle} /></h2>
+            <h2 className="rs-section-title rs-split-text-enable split-in-fade home-about-name">
+              <SplitText
+                text={aboutData.subtitle}
+                wordColors={{
+                  mohit: '#e0211a',        // red
+                  sales: '#1b6fb3',        // blue
+                  corporation: '#f7931e',  // orange
+                  pvt: '#1b6fb3',          // blue
+                  ltd: '#e0211a',          // red
+                }}
+              />
+            </h2>
             <span className="about-head-underline" aria-hidden="true"></span>
           </div>
 
@@ -198,6 +209,24 @@ export default async function Page() {
           hydration cost is paid only as each block nears the viewport — the
           marquee is pure CSS and card links are plain anchors, so nothing a
           visitor can reach is dead in the meantime. */}
+      {/* Single centred "Our Products" label for the whole products area,
+          styled like the About Us intro. Each section below now carries only
+          its own heading. */}
+      <section className="products-intro">
+        <div className="container">
+          <div className="rs-section-title-wrapper text-center scroll-reveal" data-delay="0">
+            <span className="rs-section-subtitle has-theme-orange">
+              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="15" viewBox="0 0 11 15" fill="none">
+                <path d="M3.14286 10L0 15L8.78104e-07 0L3.14286 5V10Z" fill="#1E2E5E"></path>
+                <path fillRule="evenodd" clipRule="evenodd" d="M6.28571 10L3.14286 15L3.14286 10L4.71428 7.5L3.14286 5L3.14286 0L6.28571 5L6.28571 10ZM6.28571 10L7.85714 7.5L6.28571 5V0L11 7.5L6.28571 15V10Z" fill="#1E2E5E"></path>
+              </svg>
+              Our Products
+            </span>
+            <span className="about-head-underline" aria-hidden="true"></span>
+          </div>
+        </div>
+      </section>
+
       {cables && (
         <LazyHydrate>
           <HomeCategoryExplorer arm={cables} heading="Polycab Cables" flat />
