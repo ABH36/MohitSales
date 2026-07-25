@@ -4250,6 +4250,13 @@ body::-webkit-scrollbar {
   font-weight: 800 !important;
 }
 
+/* Reusable wordmark-coloured heading (Industries We Serve, …): colours come
+   inline from SplitText's wordColors, this only sets the weight. */
+.wordmark-title,
+.wordmark-title .word {
+  font-weight: 800 !important;
+}
+
 .hce-tabs {
   display: flex;
   flex-wrap: wrap;

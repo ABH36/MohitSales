@@ -277,9 +277,18 @@ export default async function Page() {
                     <path d="M3.14286 10L0 15L8.78104e-07 0L3.14286 5V10Z" fill="#1E2E5E"></path>
                     <path fillRule="evenodd" clipRule="evenodd" d="M6.28571 10L3.14286 15L3.14286 10L4.71428 7.5L3.14286 5L3.14286 0L6.28571 5L6.28571 10ZM6.28571 10L7.85714 7.5L6.28571 5V0L11 7.5L6.28571 15V10Z" fill="#1E2E5E"></path>
                   </svg>
-                  Strengthening Businesses Worldwide
+                  Worldwide Businesses
                 </span>
-                <h2 className="rs-section-title rs-split-text-enable split-in-fade"><SplitText text="Industries We Serve" /></h2>
+                <h2 className="rs-section-title rs-split-text-enable split-in-fade wordmark-title">
+                  <SplitText
+                    text="Industries We Serve"
+                    wordColors={{
+                      industries: '#e0211a', // red
+                      we: '#1b6fb3',         // blue
+                      serve: '#f7931e',      // orange
+                    }}
+                  />
+                </h2>
                 <span className="about-head-underline" aria-hidden="true"></span>
               </div>
             </div>

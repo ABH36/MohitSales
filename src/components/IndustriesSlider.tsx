@@ -3,19 +3,19 @@
 import React, { useRef, useEffect } from 'react';
 import { cld } from '@/lib/cloudinary';
 
+const industries = [
+  { name: 'Construction Industry',       image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167962/mohit/our_services/construction-industry.png' },
+  { name: 'Telecommunications Industry', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167969/mohit/our_services/telecommunication-industry.png' },
+  { name: 'Commercial Industry',         image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167961/mohit/our_services/commercial-industry.png' },
+  { name: 'Power Generation',            image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167967/mohit/our_services/power-generator.png' },
+  { name: 'Oil & Gas',                   image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167964/mohit/our_services/oil-and-gas.png' },
+  { name: 'Petrochemical Industry',      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167966/mohit/our_services/petrochemical.png' },
+  { name: 'Datacenter Industry',         image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167963/mohit/our_services/data-center.png' },
+];
+
 export default function IndustriesSlider() {
   const swiperRef = useRef<HTMLDivElement>(null);
   const paginationRef = useRef<HTMLDivElement>(null);
-
-  const industries = [
-    { name: 'Construction Industry',       image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167962/mohit/our_services/construction-industry.png' },
-    { name: 'Telecommunications Industry', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167969/mohit/our_services/telecommunication-industry.png' },
-    { name: 'Commercial Industry',         image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167961/mohit/our_services/commercial-industry.png' },
-    { name: 'Power Generation',            image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167967/mohit/our_services/power-generator.png' },
-    { name: 'Oil & Gas',                   image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167964/mohit/our_services/oil-and-gas.png' },
-    { name: 'Petrochemical Industry',      image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167966/mohit/our_services/petrochemical.png' },
-    { name: 'Datacenter Industry',         image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167963/mohit/our_services/data-center.png' },
-  ];
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
