@@ -223,9 +223,8 @@ export default async function Page() {
               Our Products
             </span>
             {/* Three-word title, coloured like the About Us name (logo wordmark
-                palette): red / blue / orange. Full-width wire underline via
-                .home-title. */}
-            <h2 className="rs-section-title home-title">
+                palette): red / blue / orange. */}
+            <h2 className="rs-section-title">
               <SplitText
                 text="Complete Electrical Solutions"
                 wordColors={{
@@ -235,6 +234,7 @@ export default async function Page() {
                 }}
               />
             </h2>
+            <span className="about-head-underline" aria-hidden="true"></span>
           </div>
         </div>
       </section>
