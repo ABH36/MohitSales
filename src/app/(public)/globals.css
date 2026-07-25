@@ -5479,3 +5479,14 @@ body::-webkit-scrollbar {
   opacity: 1;
   visibility: visible;
 }
+
+/* ── FontAwesome weight guard (performance) ────────────────────────────────
+   The header hamburger <i class="fa-solid"> was inheriting font-weight:500 from
+   a broad theme rule. FontAwesome maps its style to the @font-face weight, so a
+   500 made the browser fetch the NEAREST available weights — the huge, unused
+   fa-regular-400 (410KB) and fa-light-300 (447KB) files — instead of the
+   fa-solid-900 the site actually uses. Pinning the icon classes to their real
+   weight makes only fa-solid load, cutting ~850KB of font downloads per page. */
+i.fa-solid, i.fas, .fa-solid, .fas { font-weight: 900 !important; }
+i.fa-regular, i.far, .fa-regular, .far { font-weight: 400 !important; }
+i.fa-brands, i.fab, .fa-brands, .fab { font-weight: 400 !important; }

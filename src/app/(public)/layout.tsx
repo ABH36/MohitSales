@@ -144,6 +144,9 @@ export default function RootLayout({
 
         {/* ── DNS prefetch for external domains ── */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        {/* Cloudinary serves the hero LCP image — preconnect (DNS + TCP + TLS)
+            so the preloaded hero isn't stalled waiting on connection setup. */}
+        <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
 
         {/* Global Organization / LocalBusiness + WebSite structured data is
