@@ -1942,11 +1942,21 @@ img.product-img {
   margin-bottom: 14px;
 }
 
+/* The theme (custom.css) ships a `.separator1` as a tiny 14px navy square with
+   a grey `::before` line. It loads after this file, so in the product title /
+   Key Features contexts it was winning and collapsing our wire underline to a
+   box. Override it fully here — full width, no border box, and kill the grey
+   `::before` — so every `.separator1` shows the wire, like Specifications. */
 .separator1 {
-  width: 130px;
+  width: 130px !important;
   height: 14px;
-  background: url('/assets/images/wire-underline.png') left center / contain no-repeat;
-  margin-bottom: 20px;
+  border: 0 !important;
+  background: url('https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/v1784965401/mohit/ui/wire-underline.png') left center / contain no-repeat;
+  margin: 0 0 20px !important;
+}
+
+.separator1::before {
+  display: none !important;
 }
 
 .wires-desc {
@@ -2052,7 +2062,7 @@ img.product-img {
   width: 148px;
   height: 16px;
   margin: 12px auto 0;
-  background: url('/assets/images/wire-underline.png') center / contain no-repeat;
+  background: url('https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/v1784965401/mohit/ui/wire-underline.png') center / contain no-repeat;
 }
 
 /* ====================================================
@@ -4240,7 +4250,7 @@ body::-webkit-scrollbar {
   width: 140px;
   height: 15px;
   margin-top: 10px;
-  background: url('/assets/images/wire-underline.png') left center / contain no-repeat;
+  background: url('https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/v1784965401/mohit/ui/wire-underline.png') left center / contain no-repeat;
 }
 
 /* The Our Products title mirrors the multi-colour logo wordmark (colours set
@@ -4535,7 +4545,7 @@ body::-webkit-scrollbar {
   width: 160px;
   height: 18px;
   margin: 14px auto 0;
-  background: url('/assets/images/wire-underline.png') center / contain no-repeat;
+  background: url('https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/v1784965401/mohit/ui/wire-underline.png') center / contain no-repeat;
 }
 
 /* Left: media card holding the Authorized Distributor artwork.
