@@ -43,14 +43,18 @@ export default function BannerSlider() {
     fetch('/api/public/cms/homepage/banners')
       .then(r => r.json())
       .then(data => {
-        if (data.success && data.data?.content?.banners?.length) {
+        // Treat the CMS as the source of truth whenever it returns a banners
+        // array — use exactly that list (already filtered to active slides),
+        // even if the admin trimmed it down or removed everything. The
+        // hardcoded FALLBACK is only for a site that was never configured;
+        // keying off `.length` here made deleted banners reappear as the
+        // built-in defaults.
+        if (data.success && Array.isArray(data.data?.content?.banners)) {
           const active = data.data.content.banners
             .filter((b: BannerItem) => b.isActive && b.desktopImage)
             .sort((a: BannerItem, b: BannerItem) => a.sortOrder - b.sortOrder);
-          if (active.length) {
-            setActiveIndex(0);
-            setBanners(active);
-          }
+          setActiveIndex(0);
+          setBanners(active);
         }
       })
       .catch(() => {});

@@ -157,10 +157,14 @@ export default function CmsPage() {
       if (bannerSection) {
         try {
           const parsed = JSON.parse(bannerSection.content);
-          if (parsed.banners?.length) setBanners(parsed.banners);
-          else setBanners(DEFAULT_BANNERS);
+          // Respect the saved list EXACTLY — even when it is empty. Re-seeding
+          // DEFAULT_BANNERS on an empty list made a "delete all" impossible: the
+          // defaults reappeared on every reload and got saved back, so admins
+          // could never actually remove the seeded banners.
+          setBanners(Array.isArray(parsed.banners) ? parsed.banners : DEFAULT_BANNERS);
         } catch { setBanners(DEFAULT_BANNERS); }
       } else {
+        // Never configured yet → offer the defaults as a starting template.
         setBanners(DEFAULT_BANNERS);
       }
 
