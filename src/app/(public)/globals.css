@@ -1428,16 +1428,19 @@ body {
   padding-left: 0 !important;
 }
 
-/* The curved white background for the logo */
-.rs-header-two .rs-header-left {
+/* Clean white block sized to the logo (not the old full-height curved swoosh
+   that spilled into the banner). It hugs the logo so the multi-colour mark and
+   its subtitle read crisply against the dark-navy bar. `#header-sticky` (id) so
+   it reliably beats the theme's own `.rs-header-*` rules. */
+#header-sticky .rs-header-left {
   background: #ffffff !important;
-  border-radius: 0 0 100px 0 !important;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
   display: inline-flex !important;
   align-items: center !important;
-  padding: 10px 60px 10px 20px !important;
-  margin: 0 !important;
-  align-self: stretch !important;
+  padding: 8px 22px !important;
+  margin: 10px 0 !important;
+  align-self: center !important;
 }
 
 
@@ -5497,16 +5500,6 @@ i.fa-solid, i.fas, .fa-solid, .fas { font-weight: 900 !important; }
 i.fa-regular, i.far, .fa-regular, .far { font-weight: 400 !important; }
 i.fa-brands, i.fab, .fa-brands, .fab { font-weight: 400 !important; }
 
-/* ── Header entrance: left-to-right slide (replaces the theme's down-to-up
-   fadeInDown that played when the old header re-stuck on scroll). The header is
-   now always pinned (position:sticky), so this plays once on load. ── */
-@keyframes hdrSlideInLeft {
-  from { transform: translateX(-100%); opacity: 0; }
-  to   { transform: translateX(0);     opacity: 1; }
-}
-.rs-header-two.header-slide-in {
-  animation: hdrSlideInLeft 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
 
 /* ── Homepage header + banner alignment (mobile/tablet) ────────────────────
    The header is now a solid in-flow bar, so the banner sits below it. Remove
@@ -5516,12 +5509,15 @@ i.fa-brands, i.fab, .fa-brands, .fab { font-weight: 400 !important; }
    wins over any theme rule. ── */
 @media (max-width: 991px) {
   #header-sticky { background: #121a2f !important; }
-  /* White curved logo block on mobile too (ID-scoped so it beats the theme's
-     mobile resets); keeps the logo's subtitle legible against the navy bar. */
+  /* White logo block on mobile too (ID-scoped so it beats the theme's mobile
+     resets); a clean rounded block hugging the logo so its subtitle stays
+     legible against the navy bar. */
   #header-sticky .rs-header-left {
     background: #ffffff !important;
-    border-radius: 0 0 40px 0 !important;
-    padding: 6px 26px 6px 12px !important;
+    border-radius: 10px !important;
+    padding: 6px 16px !important;
+    margin: 8px 0 !important;
+    align-self: center !important;
   }
   .banner_sec.mobile { margin-top: 0 !important; }
   .banner_sec .banner-swiper { padding-top: 0 !important; }

@@ -87,11 +87,12 @@ export default function BannerSlider() {
     if (link) window.location.href = link;
   };
 
-  // Vertical "conveyor" transition: the outgoing slide glides up and off the top
-  // while the incoming slide rises from the bottom into place — both move together,
-  // edge-to-edge, so it reads as one continuous upward scroll. Only the active and
-  // outgoing slides animate; every other slide snaps to its waiting spot below
-  // (transition: none) so nothing sweeps across the viewport out of turn.
+  // Horizontal "conveyor" transition (left → right): the incoming slide enters
+  // from the left and slides right into place while the outgoing slide glides off
+  // to the right — both move together, edge-to-edge, so it reads as one continuous
+  // left-to-right sweep. Only the active and outgoing slides animate; every other
+  // slide snaps to its waiting spot on the left (transition: none) so nothing
+  // sweeps across the viewport out of turn.
   const slideStyle = (index: number, banner: string, bgPos: string, transform: string): React.CSSProperties => {
     const isActive = index === activeIndex;
     const isPrev = index === prevIndex && prevIndex !== activeIndex;
@@ -107,7 +108,7 @@ export default function BannerSlider() {
       backgroundSize: 'cover',
       backgroundPosition: bgPos,
       backgroundRepeat: 'no-repeat',
-      transform: isActive ? 'translateY(0)' : isPrev ? 'translateY(-100%)' : 'translateY(100%)',
+      transform: isActive ? 'translateX(0)' : isPrev ? 'translateX(100%)' : 'translateX(-100%)',
       transition: isActive || isPrev ? 'transform 1.15s cubic-bezier(0.6, 0.01, 0.2, 1)' : 'none',
       zIndex: isActive || isPrev ? 2 : 1,
       cursor: bannerLinks[index] ? 'pointer' : 'default',

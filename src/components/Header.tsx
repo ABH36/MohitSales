@@ -296,7 +296,7 @@ export default function Header() {
           leaves the flow, so no content jump. */}
       <header className="header-pinned">
         <div
-          className={`rs-header-area rs-header-two ${isHomePage ? 'header-transparent' : 'bg-[#121a2f]'} has-theme-orange has-border header-new header-slide-in`}
+          className={`rs-header-area rs-header-two ${isHomePage ? 'header-transparent' : 'bg-[#121a2f]'} has-theme-orange has-border header-new`}
           id="header-sticky"
         >
           <div className="container-fluid" style={{ paddingLeft: 0, paddingRight: 0 }}>
