@@ -5522,3 +5522,48 @@ i.fa-brands, i.fab, .fa-brands, .fab { font-weight: 400 !important; }
   .banner_sec.mobile { margin-top: 0 !important; }
   .banner_sec .banner-swiper { padding-top: 0 !important; }
 }
+
+/* ── Banner pagination: bottom-centre horizontal dots ──────────────────────
+   The theme placed the slider dots as a vertical strip on the right with a
+   tall active pill. Moved to the bottom-centre as a horizontal row (like most
+   hero sliders); the active bullet becomes a wide pill. Overrides the theme's
+   right/top/column rules on desktop and mobile. ── */
+.banner_sec .swiper-pagination {
+  position: absolute !important;
+  top: auto !important;
+  bottom: 26px !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  flex-direction: row !important;
+  gap: 8px !important;
+  z-index: 10 !important;
+}
+/* Extra specificity (`.banner-swiper`) so this outranks responsive.css's
+   `.banner_sec.mobile .swiper-pagination{top:50%;transform:translateY(-50%)}`
+   which loads after this file. */
+.banner_sec.mobile .banner-swiper .swiper-pagination {
+  top: auto !important;
+  bottom: 16px !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  flex-direction: row !important;
+}
+.banner_sec .swiper-pagination-bullet {
+  transition: width 0.4s ease, background 0.4s ease, opacity 0.4s ease !important;
+}
+.banner_sec .swiper-pagination-bullet-active {
+  width: 30px !important;
+  height: 10px !important;
+}
+
+/* Desktop hero fits the screen below the (now solid, ~116px) header, so the
+   bottom-centre pagination dots are visible instead of hanging off the fold.
+   Header (~116px) + hero (100vh − 116px) = one full viewport. */
+@media (min-width: 992px) {
+  .banner_sec.desktop,
+  .banner_sec.desktop .banner-swiper {
+    height: calc(100vh - 116px) !important;
+  }
+}
