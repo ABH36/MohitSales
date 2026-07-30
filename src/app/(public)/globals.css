@@ -1548,7 +1548,7 @@ img[alt="logo"] {
 }
 
 .main-menu .multipage-menu>li>a:hover {
-  color: #ff5e14 !important;
+  color: #e0211a !important;
 }
 
 .main-menu .multipage-menu>li.menu-item-has-children>a::after {
@@ -5566,4 +5566,17 @@ i.fa-brands, i.fab, .fa-brands, .fab { font-weight: 400 !important; }
   .banner_sec.desktop .banner-swiper {
     height: calc(100vh - 116px) !important;
   }
+}
+
+/* ── Header nav buttons: red (not orange) active state + slightly larger ────
+   Hover is handled above (#e0211a). Here: the current-page/active link turns
+   red too, and the labels are bumped from 14px to 16px. `#header-sticky` (id)
+   so these beat the theme's own !important rules that load after this file. */
+#header-sticky .main-menu .multipage-menu > li > a {
+  font-size: 16px !important;
+}
+#header-sticky .main-menu ul li a.active,
+#header-sticky .main-menu ul li.active > a,
+#header-sticky.has-theme-orange .main-menu ul li a.active {
+  color: #e0211a !important;
 }
