@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import ProductsMegaMenu from '@/components/ProductsMegaMenu';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -229,7 +229,6 @@ export default function Header() {
 
   const { getSetting } = usePublicSettings();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isSticky, setIsSticky] = useState(false);
   const [openSubmenus, setOpenSubmenus] = useState<Record<string, boolean>>({});
   const [searchOpen, setSearchOpen] = useState(false);
   const searchInputRef = React.useRef<HTMLInputElement>(null);
@@ -239,16 +238,6 @@ export default function Header() {
   // category tree (which only has Polycab/Dowells roots), so the menu is a
   // fixed const rather than DB-driven state.
   const menuTree = DEFAULT_MENU_TREE;
-
-  useEffect(() => {
-    // Immediately, not after 250px: the old threshold let the header scroll
-    // away and then drop back in, which read as it vanishing and reappearing.
-    const handleScroll = () => {
-      setIsSticky(window.scrollY > 10);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   if (pathname?.startsWith('/admin')) {
     return null;
@@ -305,9 +294,9 @@ export default function Header() {
           itself (.header-pinned) — sticky on the inner div would be caged by
           this wrapper's own height and never engage. Always in view, never
           leaves the flow, so no content jump. */}
-      <header className={isHomePage ? undefined : 'header-pinned'}>
+      <header className="header-pinned">
         <div
-          className={`rs-header-area rs-header-two ${isHomePage ? 'header-transparent' : 'bg-[#121a2f]'} has-theme-orange has-border header-new ${isHomePage && isSticky ? 'rs-sticky' : ''}`}
+          className={`rs-header-area rs-header-two ${isHomePage ? 'header-transparent' : 'bg-[#121a2f]'} has-theme-orange has-border header-new header-slide-in`}
           id="header-sticky"
         >
           <div className="container-fluid" style={{ paddingLeft: 0, paddingRight: 0 }}>
