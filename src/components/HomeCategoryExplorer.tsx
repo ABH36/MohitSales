@@ -88,7 +88,6 @@ export default function HomeCategoryExplorer({ arm, heading, flat = false }: Pro
               {headFirst}{' '}
               {headRest.length > 0 && <span className="hce-title-accent">{headRest.join(' ')}</span>}
             </h2>
-            <span className="hce-underline" aria-hidden="true"></span>
           </div>
         </div>
 
