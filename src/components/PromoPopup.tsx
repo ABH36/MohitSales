@@ -242,7 +242,7 @@ export default function PromoPopup() {
           transition: color 0.2s;
         }
         .promo-dismiss-label:hover {
-          color: var(--brand-navy, #1e2e5e);
+          color: var(--brand-navy, #121a2f);
         }
       `}} />
 
@@ -276,7 +276,7 @@ export default function PromoPopup() {
               }}>
                 {getPopupTypeEmoji()}
               </div>
-              <h4 style={{ margin: '0 0 10px 0', fontSize: '26px', fontWeight: 800, color: '#1e2e5e', lineHeight: 1.2 }}>{config.title}</h4>
+              <h4 style={{ margin: '0 0 10px 0', fontSize: '26px', fontWeight: 800, color: '#121a2f', lineHeight: 1.2 }}>{config.title}</h4>
               {config.subtitle && (
                 <p style={{
                   margin: '0 0 16px 0', fontSize: '12.5px', fontWeight: 700, color: '#c1272d',
@@ -385,7 +385,7 @@ export default function PromoPopup() {
                   href={ctaHref}
                   onClick={handleCtaClick}
                   className="promo-cta-btn"
-                  style={{ background: '#fff', color: '#1e2e5e', fontWeight: 800, boxShadow: '0 6px 16px rgba(0,0,0,0.25)' }}
+                  style={{ background: '#fff', color: '#121a2f', fontWeight: 800, boxShadow: '0 6px 16px rgba(0,0,0,0.25)' }}
                 >
                   {config.buttonText || 'Discover More'}
                 </a>

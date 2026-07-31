@@ -220,7 +220,7 @@ export default async function BlogDetailsPage({ params }: BlogDetailsPageProps) 
                     <span>👤</span> About the Author
                   </h4>
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-[#1e2e5e] text-white flex items-center justify-center font-bold text-lg">
+                    <div className="w-12 h-12 rounded-full bg-[#121a2f] text-white flex items-center justify-center font-bold text-lg">
                       {authorName[0].toUpperCase()}
                     </div>
                     <div>
@@ -252,7 +252,7 @@ export default async function BlogDetailsPage({ params }: BlogDetailsPageProps) 
                               {rPost.coverImage ? (
                                 <img src={rPost.coverImage} alt="" className="w-full h-full object-cover" />
                               ) : (
-                                <div className="w-full h-full bg-[#1e2e5e] text-white text-[10px] font-bold flex items-center justify-center">
+                                <div className="w-full h-full bg-[#121a2f] text-white text-[10px] font-bold flex items-center justify-center">
                                   MSC
                                 </div>
                               )}
@@ -271,7 +271,7 @@ export default async function BlogDetailsPage({ params }: BlogDetailsPageProps) 
                 )}
 
                 {/* Back to Blog List */}
-                <div className="bg-gradient-to-br from-[#1e2e5e] to-[#2d4080] text-white rounded-xl p-6 text-center shadow-lg">
+                <div className="bg-gradient-to-br from-[#121a2f] to-[#2d4080] text-white rounded-xl p-6 text-center shadow-lg">
                   <h4 className="font-bold text-lg mb-2">Need premium wires & cables?</h4>
                   <p className="text-xs text-gray-200 mb-4 leading-relaxed">We are the authorized distributor of Polycab and Dowells, supplying Indore & beyond.</p>
                   <Link href="/contact-us" className="inline-block bg-[#c1272d] text-white font-semibold text-xs px-4 py-2 rounded uppercase tracking-wider hover:bg-[#c1272d] transition-colors duration-300">

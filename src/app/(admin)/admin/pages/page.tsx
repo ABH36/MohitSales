@@ -151,7 +151,7 @@ function PagesContent() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
           <h2 style={{ margin: 0, fontSize: 'calc(var(--admin-fs) + 5px)' }}>Edit Page: /{editingPage.slug}</h2>
           <div style={{ display: 'flex', gap: 10 }}>
-            <a href={`/${editingPage.slug}`} target="_blank" rel="noreferrer" style={{ padding: '8px 16px', background: '#eef2ff', color: '#1e2e5e', border: '1px solid #c7d2fe', borderRadius: 6, cursor: 'pointer', fontSize: 'calc(var(--admin-fs) - 1px)', fontWeight: 600, textDecoration: 'none' }}>
+            <a href={`/${editingPage.slug}`} target="_blank" rel="noreferrer" style={{ padding: '8px 16px', background: '#eef2ff', color: '#121a2f', border: '1px solid #c7d2fe', borderRadius: 6, cursor: 'pointer', fontSize: 'calc(var(--admin-fs) - 1px)', fontWeight: 600, textDecoration: 'none' }}>
               View on site ↗
             </a>
             <button onClick={() => setEditingPage(null)} style={{ padding: '8px 16px', background: '#e5e7eb', border: 'none', borderRadius: 6, cursor: 'pointer' }}>
@@ -193,7 +193,7 @@ function PagesContent() {
         </div>
 
         {!isReadOnly && (
-          <button onClick={saveChanges} disabled={saving} style={{ padding: '10px 28px', background: saving ? '#9ca3af' : '#1e2e5e', color: '#fff', border: 'none', borderRadius: 6, fontSize: 'var(--admin-fs)', fontWeight: 600, cursor: saving ? 'default' : 'pointer' }}>
+          <button onClick={saveChanges} disabled={saving} style={{ padding: '10px 28px', background: saving ? '#9ca3af' : '#121a2f', color: '#fff', border: 'none', borderRadius: 6, fontSize: 'var(--admin-fs)', fontWeight: 600, cursor: saving ? 'default' : 'pointer' }}>
             {saving ? 'Saving...' : 'Save Changes'}
           </button>
         )}
@@ -244,7 +244,7 @@ function PagesContent() {
                   </td>
                   <td style={{ padding: '10px 12px', textAlign: 'center' }}>
                     <div style={{ display: 'inline-flex', gap: 8 }}>
-                      <button onClick={() => openEditor(p)} style={{ padding: '5px 14px', background: '#1e2e5e', color: '#fff', border: 'none', borderRadius: 4, fontSize: 'calc(var(--admin-fs) - 2px)', cursor: 'pointer' }}>
+                      <button onClick={() => openEditor(p)} style={{ padding: '5px 14px', background: '#121a2f', color: '#fff', border: 'none', borderRadius: 4, fontSize: 'calc(var(--admin-fs) - 2px)', cursor: 'pointer' }}>
                         Edit
                       </button>
                       {isAdmin && (

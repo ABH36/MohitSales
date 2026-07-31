@@ -102,7 +102,7 @@ export default async function CompanyProfilePage() {
                     className="catalogue-btn px-4 py-3 text-white rounded d-inline-flex align-items-center gap-2" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    style={{ background: '#1e2e5e', textDecoration: 'none', fontWeight: 600 }}
+                    style={{ background: '#121a2f', textDecoration: 'none', fontWeight: 600 }}
                   >
                     <i className="fa-solid fa-file-pdf"></i> Download PDF Profile
                   </a>

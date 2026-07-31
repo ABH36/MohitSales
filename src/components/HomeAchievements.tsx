@@ -76,8 +76,8 @@ export default function HomeAchievements() {
             <div className="rs-section-title-wrapper text-center">
               <span className="rs-section-subtitle has-theme-orange">
                 <svg xmlns="http://www.w3.org/2000/svg" width="11" height="15" viewBox="0 0 11 15" fill="none">
-                  <path d="M3.14286 10L0 15L8.78104e-07 0L3.14286 5V10Z" fill="#1E2E5E"></path>
-                  <path fillRule="evenodd" clipRule="evenodd" d="M6.28571 10L3.14286 15L3.14286 10L4.71428 7.5L3.14286 5L3.14286 0L6.28571 5L6.28571 10ZM6.28571 10L7.85714 7.5L6.28571 5V0L11 7.5L6.28571 15V10Z" fill="#1E2E5E"></path>
+                  <path d="M3.14286 10L0 15L8.78104e-07 0L3.14286 5V10Z" fill="#121a2f"></path>
+                  <path fillRule="evenodd" clipRule="evenodd" d="M6.28571 10L3.14286 15L3.14286 10L4.71428 7.5L3.14286 5L3.14286 0L6.28571 5L6.28571 10ZM6.28571 10L7.85714 7.5L6.28571 5V0L11 7.5L6.28571 15V10Z" fill="#121a2f"></path>
                 </svg>
                 Our Achievements
               </span>

@@ -613,7 +613,7 @@ function AdminProductsPageInner() {
                             fontSize: 'calc(var(--admin-fs) - 3px)',
                             textAlign: 'center',
                             fontWeight: 600,
-                            color: '#1e2e5e',
+                            color: '#121a2f',
                             outline: 'none',
                             background: '#f8fafc',
                           }}
@@ -1079,7 +1079,7 @@ function AdminProductsPageInner() {
         .form-section-header h4 {
           font-size: calc(var(--admin-fs) - 2px);
           font-weight: 700;
-          color: #1e2e5e;
+          color: #121a2f;
           margin: 0;
           text-transform: uppercase;
           letter-spacing: 0.5px;
@@ -1137,7 +1137,7 @@ function AdminProductsPageInner() {
         }
         .feature-tab-btn.active {
           background: #edf2f7;
-          color: #1e2e5e;
+          color: #121a2f;
         }
         .feature-chips {
           display: flex;
@@ -1326,7 +1326,7 @@ function AdminProductsPageInner() {
           white-space: nowrap;
         }
         .admin-products-pager .pager-info strong {
-          color: #1e2e5e;
+          color: #121a2f;
           font-weight: 700;
         }
       `}} />

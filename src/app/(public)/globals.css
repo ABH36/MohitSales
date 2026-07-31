@@ -126,7 +126,7 @@ p, body.ltr p {
      Change a brand colour here and it updates everywhere it is used
      (all globals.css rules reference these via var()).
      ---------------------------------------------------------------- */
-  --brand-navy: #1e2e5e;        /* primary brand navy (headings, titles) */
+  --brand-navy: #121a2f;        /* primary dark navy — matches the header; used everywhere via var() */
   --brand-red: #c1272d;         /* brand red (accents, CTAs) */
   --brand-red-light: #e8434a;   /* lighter red — start of the CTA gradient */
   /* CTA fill. Buttons used to be an orange→red gradient; they are now red→red so
@@ -4716,17 +4716,17 @@ body::-webkit-scrollbar {
   color: var(--brand-red);
 }
 
-/* All three feature icon chips + headings in the dark navy header colour
-   (#121a2f) — consistent, not multi-colour. (Specificity beats the base navy
-   + the .is-red variant and the red hover on the title.) */
+/* All three feature icon chips + headings in the dark navy (var(--brand-navy),
+   matches the header) — consistent, not multi-colour. (Specificity beats the
+   base navy + the .is-red variant and the red hover on the title.) */
 .about-us .about-features .about-feature .about-feature-icon {
-  background: linear-gradient(145deg, #2a3a5c 0%, #121a2f 62%);
+  background: linear-gradient(145deg, #2a3a5c 0%, var(--brand-navy) 62%);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16),
     inset 0 -2px 6px rgba(0, 0, 0, 0.28), 0 4px 10px rgba(18, 26, 47, 0.22),
     0 14px 26px rgba(18, 26, 47, 0.3);
 }
 .about-us .about-features .about-feature .about-feature-title {
-  color: #121a2f;
+  color: var(--brand-navy);
 }
 
 .about-us .about-feature p {
@@ -5323,8 +5323,8 @@ body::-webkit-scrollbar {
   gap: 24px;
   padding: 30px 34px;
   border-radius: 16px;
-  background: linear-gradient(135deg, #1e2e5e 0%, #16224a 100%);
-  box-shadow: 0 18px 40px rgba(30, 46, 94, 0.22);
+  background: linear-gradient(135deg, var(--brand-navy) 0%, #0d1424 100%);
+  box-shadow: 0 18px 40px rgba(18, 26, 47, 0.22);
 }
 
 .about-profile-copy h3 {

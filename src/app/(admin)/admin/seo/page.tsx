@@ -503,10 +503,10 @@ function SeoPageInner() {
           <title>Mohit Sales Corporation Pvt. Ltd. - Sitemap URL Catalog</title>
           <style>
             body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 30px; color: #2d3748; }
-            h1 { color: #1e2e5e; border-bottom: 2px solid #1e2e5e; padding-bottom: 10px; margin-bottom: 5px; font-size: 24px; }
+            h1 { color: #121a2f; border-bottom: 2px solid #121a2f; padding-bottom: 10px; margin-bottom: 5px; font-size: 24px; }
             p.meta { color: #718096; font-size: 13px; margin-bottom: 25px; }
             table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
-            th { background-color: #1e2e5e; color: white; text-align: left; padding: 10px; }
+            th { background-color: #121a2f; color: white; text-align: left; padding: 10px; }
             td { padding: 10px; border-bottom: 1px solid #e2e8f0; }
             tr:nth-child(even) { background-color: #f7fafc; }
             .type { font-weight: bold; color: #4a5568; }
@@ -517,7 +517,7 @@ function SeoPageInner() {
               button { display: none; }
             }
             .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-            .print-btn { background-color: #1e2e5e; color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 5px; cursor: pointer; }
+            .print-btn { background-color: #121a2f; color: white; border: none; padding: 10px 20px; font-weight: bold; border-radius: 5px; cursor: pointer; }
           </style>
         </head>
         <body>
@@ -713,7 +713,7 @@ function SeoPageInner() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
             <h2 style={{ fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 700, color: '#1a202c' }}>Page Meta Tags</h2>
             {!isReadOnly && (
-              <button className="admin-btn" onClick={() => openMetaModal()} style={{ background: '#1e2e5e', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 6, cursor: 'pointer', fontWeight: 600 }}>
+              <button className="admin-btn" onClick={() => openMetaModal()} style={{ background: '#121a2f', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 6, cursor: 'pointer', fontWeight: 600 }}>
                 + Add Meta
               </button>
             )}
@@ -771,7 +771,7 @@ function SeoPageInner() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
             <h2 style={{ fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 700, color: '#1a202c' }}>URL Redirects</h2>
             {!isReadOnly && (
-              <button onClick={() => openRedirectModal()} style={{ background: '#1e2e5e', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 6, cursor: 'pointer', fontWeight: 600 }}>
+              <button onClick={() => openRedirectModal()} style={{ background: '#121a2f', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 6, cursor: 'pointer', fontWeight: 600 }}>
                 + Add Redirect
               </button>
             )}
@@ -829,7 +829,7 @@ function SeoPageInner() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
             <h2 style={{ fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 700, color: '#1a202c' }}>Schema Markup (JSON-LD)</h2>
             {!isReadOnly && (
-              <button onClick={() => openSchemaModal()} style={{ background: '#1e2e5e', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 6, cursor: 'pointer', fontWeight: 600 }}>
+              <button onClick={() => openSchemaModal()} style={{ background: '#121a2f', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 6, cursor: 'pointer', fontWeight: 600 }}>
                 + Add Schema
               </button>
             )}
@@ -879,7 +879,7 @@ function SeoPageInner() {
         <div>
           {/* Sitemap Generator Card */}
           <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 24, marginBottom: 24, boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-            <h3 style={{ fontSize: 'calc(var(--admin-fs) + 1px)', fontWeight: 700, color: '#1e2e5e', marginBottom: 8 }}>Sitemap Generator & XML/PDF Export</h3>
+            <h3 style={{ fontSize: 'calc(var(--admin-fs) + 1px)', fontWeight: 700, color: '#121a2f', marginBottom: 8 }}>Sitemap Generator & XML/PDF Export</h3>
             <p style={{ fontSize: 'calc(var(--admin-fs) - 2px)', color: '#718096', marginBottom: 16 }}>
               Generate complete URLs for all products, categories, blogs, and static pages. You can preview all links and download them directly as a standard XML sitemap or format it as a PDF catalog.
             </p>
@@ -888,7 +888,7 @@ function SeoPageInner() {
               <button 
                 onClick={generateSitemapUrls} 
                 disabled={generatingSitemap}
-                style={{ background: '#1e2e5e', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 'calc(var(--admin-fs) - 1px)' }}
+                style={{ background: '#121a2f', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 'calc(var(--admin-fs) - 1px)' }}
               >
                 {generatingSitemap ? 'Generating...' : '🔍 Generate sitemap URLs'}
               </button>
@@ -919,7 +919,7 @@ function SeoPageInner() {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 12 }}>
                   <div style={{ background: '#fff', padding: 12, borderRadius: 6, border: '1px solid #edf2f7', textAlign: 'center' }}>
                     <div style={{ fontSize: 'calc(var(--admin-fs) - 3px)', color: '#718096' }}>Total URLs</div>
-                    <div style={{ fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 800, color: '#1e2e5e' }}>{sitemapPreview.totalUrls}</div>
+                    <div style={{ fontSize: 'calc(var(--admin-fs) + 3px)', fontWeight: 800, color: '#121a2f' }}>{sitemapPreview.totalUrls}</div>
                   </div>
                   <div style={{ background: '#fff', padding: 12, borderRadius: 6, border: '1px solid #edf2f7', textAlign: 'center' }}>
                     <div style={{ fontSize: 'calc(var(--admin-fs) - 3px)', color: '#718096' }}>Products</div>
@@ -946,12 +946,12 @@ function SeoPageInner() {
           <div style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 24, marginBottom: 24, boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, flexWrap: 'wrap', gap: 12 }}>
               <div>
-                <h3 style={{ fontSize: 'calc(var(--admin-fs) + 1px)', fontWeight: 700, color: '#1e2e5e', marginBottom: 4 }}>Sitemap Overrides</h3>
+                <h3 style={{ fontSize: 'calc(var(--admin-fs) + 1px)', fontWeight: 700, color: '#121a2f', marginBottom: 4 }}>Sitemap Overrides</h3>
                 <p style={{ fontSize: 'calc(var(--admin-fs) - 2px)', color: '#718096', margin: 0 }}>
                   Set a custom priority / change frequency for a specific URL, or exclude it from the sitemap. These apply on top of the auto-generated links.
                 </p>
               </div>
-              <button onClick={() => openOverrideModal()} style={{ background: '#1e2e5e', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 'calc(var(--admin-fs) - 1px)', whiteSpace: 'nowrap' }}>
+              <button onClick={() => openOverrideModal()} style={{ background: '#121a2f', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 'calc(var(--admin-fs) - 1px)', whiteSpace: 'nowrap' }}>
                 + Add Override
               </button>
             </div>
@@ -975,7 +975,7 @@ function SeoPageInner() {
                   <tbody>
                     {overrides.map(o => (
                       <tr key={o.id} style={{ borderBottom: '1px solid #edf2f7' }}>
-                        <td style={{ padding: '8px 10px', fontWeight: 600, color: '#1e2e5e' }}>{o.urlPath}</td>
+                        <td style={{ padding: '8px 10px', fontWeight: 600, color: '#121a2f' }}>{o.urlPath}</td>
                         <td style={{ padding: '8px 10px' }}>{o.priority}</td>
                         <td style={{ padding: '8px 10px' }}>{o.changeFreq}</td>
                         <td style={{ padding: '8px 10px' }}>{o.isExcluded ? 'Yes' : 'No'}</td>
@@ -995,7 +995,7 @@ function SeoPageInner() {
           {sitemapPreview && (
             <div style={{ marginTop: 24, background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 20 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 12 }}>
-                <h4 style={{ fontSize: 'var(--admin-fs)', fontWeight: 700, color: '#1e2e5e', margin: 0 }}>Generated URLs List ({sitemapPreview.totalUrls} links)</h4>
+                <h4 style={{ fontSize: 'var(--admin-fs)', fontWeight: 700, color: '#121a2f', margin: 0 }}>Generated URLs List ({sitemapPreview.totalUrls} links)</h4>
                 <div style={{ position: 'relative', width: '100%', maxWidth: '300px' }}>
                   <input 
                     type="text" 
@@ -1073,7 +1073,7 @@ function SeoPageInner() {
                 <button onClick={addRobotsRule} style={{ background: '#e2e8f0', color: '#2d3748', border: 'none', padding: '8px 14px', borderRadius: 6, cursor: 'pointer', fontWeight: 600 }}>
                   + Add Rule
                 </button>
-                <button onClick={saveRobots} disabled={robotsSaving} style={{ background: '#1e2e5e', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 6, cursor: 'pointer', fontWeight: 600, opacity: robotsSaving ? 0.7 : 1 }}>
+                <button onClick={saveRobots} disabled={robotsSaving} style={{ background: '#121a2f', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: 6, cursor: 'pointer', fontWeight: 600, opacity: robotsSaving ? 0.7 : 1 }}>
                   {robotsSaving ? 'Saving...' : 'Save Rules'}
                 </button>
               </div>
@@ -1451,7 +1451,7 @@ const th: React.CSSProperties = { padding: '10px 12px', textAlign: 'left', fontW
 const td: React.CSSProperties = { padding: '12px 12px', fontSize: 'calc(var(--admin-fs) - 1px)', verticalAlign: 'middle' };
 const editBtn: React.CSSProperties = { background: '#ebf8ff', color: '#2b6cb0', border: 'none', padding: '5px 12px', borderRadius: 5, cursor: 'pointer', fontSize: 'calc(var(--admin-fs) - 2px)', fontWeight: 600 };
 const delBtn: React.CSSProperties = { background: '#fff5f5', color: '#c53030', border: 'none', padding: '5px 12px', borderRadius: 5, cursor: 'pointer', fontSize: 'calc(var(--admin-fs) - 2px)', fontWeight: 600 };
-const saveBtn: React.CSSProperties = { background: '#1e2e5e', color: '#fff', border: 'none', padding: '10px 24px', borderRadius: 6, cursor: 'pointer', fontWeight: 600, fontSize: 'calc(var(--admin-fs) - 1px)' };
+const saveBtn: React.CSSProperties = { background: '#121a2f', color: '#fff', border: 'none', padding: '10px 24px', borderRadius: 6, cursor: 'pointer', fontWeight: 600, fontSize: 'calc(var(--admin-fs) - 1px)' };
 const cancelBtn: React.CSSProperties = { background: '#e2e8f0', color: '#2d3748', border: 'none', padding: '10px 20px', borderRadius: 6, cursor: 'pointer', fontWeight: 600, fontSize: 'calc(var(--admin-fs) - 1px)' };
 const inputStyle: React.CSSProperties = { width: '100%', padding: '9px 12px', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 'calc(var(--admin-fs) - 1px)', outline: 'none', boxSizing: 'border-box', background: '#fff' };
 const labelStyle: React.CSSProperties = { display: 'block', fontSize: 'calc(var(--admin-fs) - 2px)', fontWeight: 600, color: '#4a5568', marginBottom: 5 };

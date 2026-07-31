@@ -569,7 +569,7 @@ export function renderDbCategory(cat: any) {
                 )}
                 <div className={cat.image ? "col-lg-7 col-md-6" : "col-lg-8 text-center"}>
                   <div className="bg-white rounded-[14px] shadow-[0_12px_30px_rgba(0,0,0,0.12)] border border-transparent p-5">
-                    <h3 className="text-[#1e2e5e] text-[28px] font-semibold mb-3" style={{ borderBottom: '2px solid #c1272d', paddingBottom: '8px', display: 'inline-block' }}>
+                    <h3 className="text-[#121a2f] text-[28px] font-semibold mb-3" style={{ borderBottom: '2px solid #c1272d', paddingBottom: '8px', display: 'inline-block' }}>
                       Enquire About {cat.name.trim()}
                     </h3>
                     <p className="text-[#555] text-[18px] leading-[1.6] mt-3 mb-4">
@@ -577,7 +577,7 @@ export function renderDbCategory(cat: any) {
                     </p>
                     <a
                       href={`/contact-us?product=${encodeURIComponent(cat.name.trim())}`}
-                      className="bg-gradient-to-br from-[#e8434a] to-[#c1272d] text-white rounded-[4px] px-[32px] py-[12px] font-medium text-[16px] border-none inline-flex items-center justify-center transition-all duration-300 hover:bg-[#1e2e5e] hover:-translate-y-[2px] hover:shadow-[0_4px_12px_rgba(30,46,94,0.25)]"
+                      className="bg-gradient-to-br from-[#e8434a] to-[#c1272d] text-white rounded-[4px] px-[32px] py-[12px] font-medium text-[16px] border-none inline-flex items-center justify-center transition-all duration-300 hover:bg-[#121a2f] hover:-translate-y-[2px] hover:shadow-[0_4px_12px_rgba(30,46,94,0.25)]"
                     >
                       Send Enquiry &rarr;
                     </a>

@@ -177,7 +177,7 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
         {/* Header */}
         <div className="sticky top-0 bg-white/95 backdrop-blur-md px-8 py-6 border-b border-slate-100 flex items-center justify-between z-20">
           <div>
-            <h3 id="enquiry-modal-title" className="text-2xl font-extrabold text-[#1e2e5e] flex items-center gap-3">
+            <h3 id="enquiry-modal-title" className="text-2xl font-extrabold text-[#121a2f] flex items-center gap-3">
               <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#c1272d]/10 text-xl text-[#c1272d]">
                 <svg className="w-5.5 h-5.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -215,7 +215,7 @@ export default function EnquiryModal({ productName, onClose }: EnquiryModalProps
             </div>
             <div className="relative z-10">
               <span className="block text-xs font-bold text-[#c1272d] uppercase tracking-widest">Selected Product</span>
-              <span className="block text-xl font-black text-[#1e2e5e] leading-tight mt-1">{productName}</span>
+              <span className="block text-xl font-black text-[#121a2f] leading-tight mt-1">{productName}</span>
             </div>
           </div>
 

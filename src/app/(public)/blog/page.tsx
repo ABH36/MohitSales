@@ -118,7 +118,7 @@ export default async function BlogPage({
                               className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" 
                             />
                           ) : (
-                            <div className="w-full h-full bg-gradient-to-br from-[#1e2e5e] to-[#2d4080] flex items-center justify-center text-white text-3xl font-bold opacity-90">
+                            <div className="w-full h-full bg-gradient-to-br from-[#121a2f] to-[#2d4080] flex items-center justify-center text-white text-3xl font-bold opacity-90">
                               Mohit SCPL
                             </div>
                           )}
