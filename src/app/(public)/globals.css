@@ -4074,22 +4074,19 @@ body::-webkit-scrollbar {
   padding: 14px !important;
   gap: 10px !important;
   /* Matched to .hce-card so legacy listings read as the same card family:
-     16px radius, layered shadows, and the red bottom bar on hover. */
+     16px radius, layered shadows, and a minimal smooth lift (no red bar). */
   border-radius: 16px !important;
   border: 1px solid #e6ebf4 !important;
-  border-bottom: 3px solid transparent !important;
   background: #ffffff !important;
   box-shadow: 0 2px 8px rgba(30, 46, 94, 0.04), 0 6px 22px rgba(30, 46, 94, 0.07) !important;
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.3s ease,
-              border-color 0.3s ease !important;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.35s ease !important;
   height: 100%;
 }
 
 .legacy-php-content .cables-card:hover {
-  transform: translateY(-6px);
-  border-bottom-color: var(--brand-red) !important;
-  box-shadow: 0 4px 12px rgba(30, 46, 94, 0.06), 0 20px 44px rgba(30, 46, 94, 0.15) !important;
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(30, 46, 94, 0.06), 0 16px 34px rgba(30, 46, 94, 0.11) !important;
 }
 
 .legacy-php-content .cables-card .cables-img {
@@ -4376,24 +4373,22 @@ body::-webkit-scrollbar {
   flex-direction: column;
   background: #fff;
   border: 1px solid #e6ebf4;
-  border-bottom: 3px solid transparent;
   border-radius: 16px;
   overflow: hidden;
   text-decoration: none;
   box-shadow: 0 2px 8px rgba(30, 46, 94, 0.04), 0 6px 22px rgba(30, 46, 94, 0.07);
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease,
-    border-color 0.3s ease;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
 }
 
+/* Minimal, smooth hover — a gentle lift + softer shadow (no red bottom bar). */
 .hce-card:hover {
-  transform: translateY(-6px);
-  border-bottom-color: var(--brand-red);
-  box-shadow: 0 4px 12px rgba(30, 46, 94, 0.06), 0 20px 44px rgba(30, 46, 94, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(30, 46, 94, 0.06), 0 16px 34px rgba(30, 46, 94, 0.11);
 }
 
 /* Smooth press feedback on click/tap. */
 .hce-card:active {
-  transform: translateY(-2px) scale(0.975);
+  transform: translateY(-1px) scale(0.985);
   transition-duration: 0.12s;
 }
 
