@@ -4608,9 +4608,8 @@ body::-webkit-scrollbar {
   align-items: stretch;
 }
 
-/* No card chrome — the image floats directly on the page with a layered
-   drop-shadow (follows the artwork's real pixels/alpha) and a gentle 3D tilt
-   that straightens on hover. */
+/* No card chrome — the image sits directly on the page with a soft drop-shadow.
+   The 3D tilt / hover animation was removed by request, so it stays static. */
 .about-us .about-media-card {
   background: transparent;
   border: none;
@@ -4618,7 +4617,6 @@ body::-webkit-scrollbar {
   position: relative;
   height: 100%;
   min-height: 300px;
-  perspective: 1400px;
 }
 
 .about-us .about-media-card img {
@@ -4627,17 +4625,8 @@ body::-webkit-scrollbar {
   width: 100% !important;
   height: 100%;
   object-fit: contain;
-  transform: perspective(1400px) rotateY(-7deg) rotateX(2deg) scale(0.98);
-  filter: drop-shadow(0 22px 34px rgba(30, 46, 94, 0.3))
-    drop-shadow(0 8px 14px rgba(30, 46, 94, 0.2));
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease;
-  will-change: transform;
-}
-
-.about-us .about-media-card:hover img {
-  transform: perspective(1400px) rotateY(0deg) rotateX(0deg) scale(1.02);
-  filter: drop-shadow(0 30px 46px rgba(30, 46, 94, 0.36))
-    drop-shadow(0 12px 20px rgba(30, 46, 94, 0.24));
+  filter: drop-shadow(0 16px 28px rgba(30, 46, 94, 0.2))
+    drop-shadow(0 6px 12px rgba(30, 46, 94, 0.14));
 }
 
 /* Right: titled feature rows — slide right on hover, icon tile lifts and its
@@ -4663,16 +4652,20 @@ body::-webkit-scrollbar {
 }
 
 .about-us .about-feature-icon {
-  flex: 0 0 60px;
-  width: 60px;
-  height: 60px;
-  border-radius: 14px;
-  background: var(--brand-navy);
+  flex: 0 0 62px;
+  width: 62px;
+  height: 62px;
+  border-radius: 16px;
+  /* Dimensional chip: lit top-left → deep navy, an inset top highlight and a
+     layered shadow give it a more solid, premium look than a flat fill. */
+  background: linear-gradient(145deg, #33487f 0%, var(--brand-navy) 62%);
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 3px 8px rgba(30, 46, 94, 0.14), 0 10px 22px rgba(30, 46, 94, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.22), 0 4px 10px rgba(30, 46, 94, 0.2),
+    0 14px 26px rgba(30, 46, 94, 0.26);
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
 }
 
@@ -4682,8 +4675,10 @@ body::-webkit-scrollbar {
 }
 
 .about-us .about-feature-icon.is-red {
-  background: var(--brand-red);
-  box-shadow: 0 3px 8px rgba(193, 39, 45, 0.16), 0 10px 22px rgba(193, 39, 45, 0.25);
+  background: linear-gradient(145deg, #e0413f 0%, var(--brand-red) 62%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.18), 0 4px 10px rgba(193, 39, 45, 0.2),
+    0 14px 26px rgba(193, 39, 45, 0.28);
 }
 
 .about-us .about-feature:hover .about-feature-icon.is-red {
@@ -4712,7 +4707,9 @@ body::-webkit-scrollbar {
   color: #000000;
   font-size: 15.5px;
   line-height: 1.7;
-  text-align: justify;
+  /* Left (not justify) — justify stretched the inter-word spaces and left big
+     uneven gaps, especially on the narrow mobile column. */
+  text-align: left;
   margin: 0;
 }
 
@@ -4721,6 +4718,22 @@ body::-webkit-scrollbar {
   /* Stacked layout: no feature column to match, so the card takes a fixed
      stage height for the image. */
   .about-us .about-media-card { height: 320px; min-height: 0; }
+
+  /* Icon on top, heading + text centred (per request) — the row goes from a
+     side-by-side flex to a centred column. */
+  .about-us .about-feature {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+  }
+  .about-us .about-feature p {
+    text-align: center;
+  }
+  /* No slide-on-tap on touch. */
+  .about-us .about-feature:hover {
+    transform: none;
+  }
 }
 
 /* ── Homepage section rhythm — the theme's 100px/50px paddings left big empty
