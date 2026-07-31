@@ -5601,21 +5601,24 @@ i.fa-brands, i.fab, .fa-brands, .fab { font-weight: 400 !important; }
   color: #e0211a !important;
 }
 
-/* ── "Our Products" heading: tighter vertical rhythm ───────────────────────
-   The eyebrow (OUR PRODUCTS), the big wordmark title and the wire underline
-   sat far apart. Pull them together and keep everything centred (desktop +
-   mobile). ── */
-.products-intro .rs-section-title-wrapper {
+/* ── Homepage section headings: tighter vertical rhythm ────────────────────
+   Every section that uses the eyebrow + wordmark title + wire underline
+   pattern (About Us, Our Products, Industries We Serve, Why Choose Us, Our
+   Achievements) had the three lines spaced far apart. `:has(.about-head-
+   underline)` targets exactly those wrappers, so the eyebrow → title →
+   underline are pulled together and centred (desktop + mobile) everywhere,
+   while other section titles are left untouched. ── */
+.rs-section-title-wrapper:has(.about-head-underline) {
   text-align: center;
 }
-.products-intro .rs-section-subtitle {
+.rs-section-title-wrapper:has(.about-head-underline) .rs-section-subtitle {
   margin-bottom: 4px !important;
   justify-content: center !important;
 }
-.products-intro .rs-section-title {
-  line-height: 1.08 !important;
+.rs-section-title-wrapper:has(.about-head-underline) .rs-section-title {
+  line-height: 1.12 !important;
   margin: 2px 0 0 !important;
 }
-.products-intro .about-head-underline {
+.about-head-underline {
   margin: 8px auto 0 !important;
 }
