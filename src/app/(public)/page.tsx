@@ -149,11 +149,11 @@ export default async function Page() {
               <SplitText
                 text={aboutData.subtitle}
                 wordColors={{
-                  mohit: '#e0211a',        // red
-                  sales: '#1b6fb3',        // blue
+                  mohit: '#c1272d',        // red
+                  sales: '#0055a9',        // blue
                   corporation: '#f7931e',  // orange
-                  pvt: '#1b6fb3',          // blue
-                  ltd: '#e0211a',          // red
+                  pvt: '#0055a9',          // blue
+                  ltd: '#c1272d',          // red
                 }}
               />
             </h2>
@@ -228,8 +228,8 @@ export default async function Page() {
               <SplitText
                 text="Complete Electrical Solutions"
                 wordColors={{
-                  complete: '#e0211a',    // red
-                  electrical: '#1b6fb3',  // blue
+                  complete: '#c1272d',    // red
+                  electrical: '#0055a9',  // blue
                   solutions: '#f7931e',   // orange
                 }}
               />
@@ -283,8 +283,8 @@ export default async function Page() {
                   <SplitText
                     text="Industries We Serve"
                     wordColors={{
-                      industries: '#e0211a', // red
-                      we: '#1b6fb3',         // blue
+                      industries: '#c1272d', // red
+                      we: '#0055a9',         // blue
                       serve: '#f7931e',      // orange
                     }}
                   />

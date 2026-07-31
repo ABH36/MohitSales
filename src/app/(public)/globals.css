@@ -127,8 +127,13 @@ p, body.ltr p {
      (all globals.css rules reference these via var()).
      ---------------------------------------------------------------- */
   --brand-navy: #121a2f;        /* primary dark navy — matches the header; used everywhere via var() */
-  --brand-red: #c1272d;         /* brand red (accents, CTAs) */
+  --brand-red: #c1272d;         /* brand red — sampled from the logo (accents, CTAs) */
   --brand-red-light: #e8434a;   /* lighter red — start of the CTA gradient */
+  /* The other two logo wordmark colours, sampled from the MSC logo, so the
+     multi-colour titles use the real logo palette in one place. (--brand-orange
+     below is a legacy red alias, hence the separate accent name here.) */
+  --brand-blue: #0055a9;        /* logo blue (wordmark "Sales" etc.) */
+  --brand-orange-accent: #f7931e; /* logo orange (wordmark "Corporation" etc.) */
   /* CTA fill. Buttons used to be an orange→red gradient; they are now red→red so
      nothing on the site reads as orange except the logo, which is an image.
      Everything that fills a button should use this rather than a literal colour,
@@ -420,7 +425,7 @@ body {
   left: 10px !important;
   top: 50% !important;
   transform: translateY(-50%) !important;
-  color: #ef3d45 !important;
+  color: var(--brand-red) !important;
   font-weight: 900 !important;
   font-size: 13px !important;
 }
@@ -485,7 +490,7 @@ body {
 
 .card_box a.pricelist-btn:hover,
 .card_box a.enquiry-btn:hover {
-  background: linear-gradient(135deg, #ef3d45, var(--brand-red)) !important;
+  background: linear-gradient(135deg, var(--brand-red-light), var(--brand-red)) !important;
   color: #ffffff !important;
   transform: translateY(-3px) !important;
   box-shadow: 0 8px 20px rgba(193, 39, 45, 0.25) !important;
@@ -596,7 +601,7 @@ body {
 
 .contact_us_sec .rs-contact-input input:focus,
 .contact_us_sec .rs-contact-input textarea:focus {
-  border-color: #ef3d45;
+  border-color: var(--brand-red);
   outline: none;
   background: rgba(255, 255, 255, 0.12);
 }
@@ -604,7 +609,7 @@ body {
 .contact_us_sec .rs-contact-btn .rs-btn.red-bg {
   display: inline-block;
   padding: 14px 36px;
-  background: #ef3d45;
+  background: var(--brand-red);
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -932,7 +937,7 @@ body {
   width: 38px !important;
   height: 38px !important;
   border-radius: 50% !important;
-  background-color: #ef3d45 !important;
+  background-color: var(--brand-red) !important;
   color: #ffffff !important;
   transition: background-color 0.3s ease, transform 0.3s ease !important;
   text-decoration: none !important;
@@ -1290,7 +1295,7 @@ body {
   letter-spacing: 0.3px;
   margin-bottom: 0;
   padding-bottom: 10px;
-  border-bottom: 2px solid #ff5e14;
+  border-bottom: 2px solid var(--brand-red);
   display: inline-block;
   margin-bottom: 18px;
 }
@@ -1314,7 +1319,7 @@ body {
 }
 
 .product-col ul li a:hover {
-  color: #ff5e14;
+  color: var(--brand-red);
   padding-left: 4px;
 }
 
@@ -1346,7 +1351,7 @@ body {
 
 .rs-footer-widget-address a:hover,
 .rs-footer-widget-email a:hover {
-  color: #ff5e14;
+  color: var(--brand-red);
 }
 
 /* ── Bottom footer menu ── */
@@ -1548,7 +1553,7 @@ img[alt="logo"] {
 }
 
 .main-menu .multipage-menu>li>a:hover {
-  color: #e0211a !important;
+  color: var(--brand-red) !important;
 }
 
 .main-menu .multipage-menu>li.menu-item-has-children>a::after {
@@ -3819,7 +3824,7 @@ body::-webkit-scrollbar {
   border-radius: 50%;
   cursor: pointer;
   color: #ffffff;
-  background: #e0211a;
+  background: var(--brand-red);
   transition: transform 0.25s ease, filter 0.25s ease;
 }
 
@@ -3861,7 +3866,7 @@ body::-webkit-scrollbar {
   border-radius: 8px;
   cursor: pointer;
   color: #ffffff;
-  background: #e0211a;
+  background: var(--brand-red);
 }
 
 /* ── Results page ── */
@@ -4281,12 +4286,12 @@ body::-webkit-scrollbar {
   width: 5px;
   height: 0.82em;
   border-radius: 4px;
-  background: linear-gradient(180deg, #e0211a 0%, #f7931e 100%);
+  background: linear-gradient(180deg, var(--brand-red) 0%, var(--brand-orange-accent) 100%);
 }
 
 /* Category word (Cables / Consumer / …) in a red→orange gradient. */
 .hce-title-accent {
-  background: linear-gradient(90deg, #e0211a 0%, #f7931e 100%);
+  background: linear-gradient(90deg, var(--brand-red) 0%, var(--brand-orange-accent) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -4688,7 +4693,7 @@ body::-webkit-scrollbar {
 }
 
 .about-us .about-feature-icon.is-red {
-  background: linear-gradient(145deg, #e0413f 0%, var(--brand-red) 62%);
+  background: linear-gradient(145deg, var(--brand-red-light) 0%, var(--brand-red) 62%);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25),
     inset 0 -2px 6px rgba(0, 0, 0, 0.18), 0 4px 10px rgba(193, 39, 45, 0.2),
     0 14px 26px rgba(193, 39, 45, 0.28);
@@ -5628,7 +5633,7 @@ i.fa-brands, i.fab, .fa-brands, .fab { font-weight: 400 !important; }
 }
 
 /* ── Header nav buttons: red (not orange) active state + slightly larger ────
-   Hover is handled above (#e0211a). Here: the current-page/active link turns
+   Hover is handled above (var(--brand-red)). Here: the current-page/active link turns
    red too, and the labels are bumped from 14px to 16px. `#header-sticky` (id)
    so these beat the theme's own !important rules that load after this file. */
 #header-sticky .main-menu .multipage-menu > li > a {
@@ -5637,7 +5642,7 @@ i.fa-brands, i.fab, .fa-brands, .fab { font-weight: 400 !important; }
 #header-sticky .main-menu ul li a.active,
 #header-sticky .main-menu ul li.active > a,
 #header-sticky.has-theme-orange .main-menu ul li a.active {
-  color: #e0211a !important;
+  color: var(--brand-red) !important;
 }
 
 /* ── Homepage section headings: tighter vertical rhythm ────────────────────

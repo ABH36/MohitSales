@@ -81,10 +81,10 @@ export default function WhyChooseUs() {
             <SplitText
               text="Empowering Projects, Ensuring Reliability"
               wordColors={{
-                empowering: '#e0211a',   // red
-                projects: '#1b6fb3',     // blue
+                empowering: '#c1272d',   // red
+                projects: '#0055a9',     // blue
                 ensuring: '#f7931e',     // orange
-                reliability: '#e0211a',  // red
+                reliability: '#c1272d',  // red
               }}
             />
           </h2>

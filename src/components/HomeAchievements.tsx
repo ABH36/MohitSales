@@ -85,11 +85,11 @@ export default function HomeAchievements() {
                 <SplitText
                   text="Milestones That Define Our Success"
                   wordColors={{
-                    milestones: '#e0211a',  // red
-                    that: '#1b6fb3',        // blue
+                    milestones: '#c1272d',  // red
+                    that: '#0055a9',        // blue
                     define: '#f7931e',      // orange
-                    our: '#1b6fb3',         // blue
-                    success: '#e0211a',     // red
+                    our: '#0055a9',         // blue
+                    success: '#c1272d',     // red
                   }}
                 />
               </h2>

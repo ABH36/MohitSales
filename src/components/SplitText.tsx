@@ -6,7 +6,7 @@ interface SplitTextProps {
   text: string;
   delay?: number;
   /** Per-word colour, keyed by the word lowercased with punctuation stripped
-   *  ({ mohit: '#e0211a', sales: '#1b6fb3' }). Lets a heading mirror a
+   *  ({ mohit: '#c1272d', sales: '#0055a9' }). Lets a heading mirror a
    *  multi-colour wordmark while keeping the reveal animation. */
   wordColors?: Record<string, string>;
 }
