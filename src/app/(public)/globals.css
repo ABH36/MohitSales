@@ -4716,17 +4716,17 @@ body::-webkit-scrollbar {
   color: var(--brand-red);
 }
 
-/* All three feature icon chips + headings in the LOGO/header blue (#0055a9) —
-   consistent, not multi-colour. (Specificity beats the base navy + the .is-red
-   variant and the red hover on the title.) */
+/* All three feature icon chips + headings in the dark navy header colour
+   (#121a2f) — consistent, not multi-colour. (Specificity beats the base navy
+   + the .is-red variant and the red hover on the title.) */
 .about-us .about-features .about-feature .about-feature-icon {
-  background: linear-gradient(145deg, #1f78cf 0%, #0055a9 62%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25),
-    inset 0 -2px 6px rgba(0, 0, 0, 0.16), 0 4px 10px rgba(0, 85, 169, 0.22),
-    0 14px 26px rgba(0, 85, 169, 0.28);
+  background: linear-gradient(145deg, #2a3a5c 0%, #121a2f 62%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.28), 0 4px 10px rgba(18, 26, 47, 0.22),
+    0 14px 26px rgba(18, 26, 47, 0.3);
 }
 .about-us .about-features .about-feature .about-feature-title {
-  color: #0055a9;
+  color: #121a2f;
 }
 
 .about-us .about-feature p {
