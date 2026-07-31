@@ -5622,3 +5622,14 @@ i.fa-brands, i.fab, .fa-brands, .fab { font-weight: 400 !important; }
 .about-head-underline {
   margin: 8px auto 0 !important;
 }
+
+/* ── SplitText titles: centre the words ────────────────────────────────────
+   The theme sets `.split-text-wrapper{display:flex;flex-wrap:wrap}` but no
+   justify-content, so the animated title words left-packed even inside a
+   text-align:center heading (the section titles' "second line" looked off to
+   the left). Centre them. Every SplitText on the site sits in a centred
+   heading, so this is safe globally. ── */
+.split-text-wrapper {
+  justify-content: center !important;
+  align-items: baseline !important;
+}
