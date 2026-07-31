@@ -4426,7 +4426,7 @@ body::-webkit-scrollbar {
   margin: 58px 0;
 }
 
-.hce-card:hover .hce-card-img img { transform: scale(1.06); }
+.hce-card:hover .hce-card-img img { transform: scale(1.04); }
 
 /* Body: icon badge, title, then the CTA row — on a distinct tinted footer so
    it reads as a separate zone from the white image stage, content centred. */
@@ -4441,25 +4441,11 @@ body::-webkit-scrollbar {
   border-top: 1px solid #e8edf7;
 }
 
+/* Icon badges removed per request — a cleaner footer with just the product
+   name and the highlighted CTA pill. */
 .hce-card-badge {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 3px;
-  transition: transform 0.3s ease;
+  display: none;
 }
-
-.hce-card:hover .hce-card-badge { transform: translateY(-3px); }
-
-.hce-card-badge svg { width: 22px; height: 22px; }
-
-.hce-badge-0 { background: #fdeef0; color: var(--brand-red); }
-.hce-badge-1 { background: #ecebfa; color: #5b54c9; }
-.hce-badge-2 { background: #fdf0e0; color: #d97b1f; }
-.hce-badge-3 { background: #e5f5ec; color: #1f9d55; }
 
 .hce-card-name {
   font-family: "Outfit", sans-serif;
@@ -4469,23 +4455,35 @@ body::-webkit-scrollbar {
   line-height: 1.35;
 }
 
+/* Highlighted CTA pill (View Products / Explore More / Send Enquiry). Light
+   red by default, fills solid red on hover — a clear, premium call to action. */
 .hce-card-cta {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: #fdecef;
   font-family: "Outfit", sans-serif;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 600;
   color: var(--brand-red);
+  transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.hce-card:hover .hce-card-cta {
+  background: var(--brand-red);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(193, 39, 45, 0.28);
 }
 
 .hce-card-cta svg {
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.hce-card:hover .hce-card-cta svg { transform: translateX(5px); }
+.hce-card:hover .hce-card-cta svg { transform: translateX(4px); }
 
 /* Fluid variant for cards living inside bootstrap columns (DB product grids):
    fill the column and pin the CTA to the bottom so rows stay level. */
@@ -4520,18 +4518,18 @@ body::-webkit-scrollbar {
 }
 
 @media (max-width: 767px) {
-  /* Compact cards on phones — smaller image stage, tighter footer and badge,
-     smaller type, so the cards don't look oversized. */
+  /* Compact cards on phones — smaller image stage, tighter footer, smaller
+     type and CTA pill, so the cards don't look oversized. */
   .hce-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .hce-card { border-radius: 13px; }
   .hce-card-img { padding: 12px 10px 4px; }
   .hce-card-img img { height: 108px; }
-  .hce-card-body { padding: 10px 10px 13px; gap: 5px; }
-  .hce-card-badge { width: 36px; height: 36px; margin-bottom: 1px; }
-  .hce-card-badge svg { width: 17px; height: 17px; }
+  .hce-card-body { padding: 10px 8px 13px; gap: 6px; }
   .hce-card-name { font-size: 14px; line-height: 1.3; }
-  .hce-card-cta { font-size: 12.5px; }
-  .hce-card-cta svg { width: 13px; height: 13px; }
+  /* Compact pill that fits "View Products (NNN)" on one line in the narrow
+     two-column cards. */
+  .hce-card-cta { padding: 5px 11px; font-size: 11.5px; gap: 4px; white-space: nowrap; }
+  .hce-card-cta svg { width: 12px; height: 12px; }
 
   /* Category tabs: one swipeable row instead of a six-deep pill stack that
      pushed the cards off-screen. Scrollbar hidden, edge padding bleeds to the
