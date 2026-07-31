@@ -4324,7 +4324,60 @@ body::-webkit-scrollbar {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 28px;
+  margin-bottom: 18px;
+}
+
+/* Desktop: clamp the wrapping filter pills to a single row; the "View More"
+   toggle below reveals the rest. (Mobile keeps its horizontal-scroll row, so it
+   never overflows vertically and the toggle stays hidden.) */
+@media (min-width: 768px) {
+  .hce-tabs {
+    max-height: 48px;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .hce-tabs.is-expanded {
+    max-height: 600px;
+  }
+}
+
+.hce-tab {
+  white-space: nowrap;
+}
+
+/* "View More / View Less" toggle under the filter pills. */
+.hce-tabs-toggle {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 6px;
+  margin: 2px auto 26px;
+  padding: 8px 20px;
+  border-radius: 999px;
+  border: 1px solid var(--brand-red);
+  background: #fff;
+  color: var(--brand-red);
+  font-family: "Outfit", sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.hce-tabs-toggle:hover {
+  background: var(--brand-red);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(193, 39, 45, 0.26);
+}
+
+.hce-tabs-toggle svg {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.3s ease;
+}
+
+.hce-tabs-toggle.is-open svg {
+  transform: rotate(180deg);
 }
 
 .hce-tab {

@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { cld } from '@/lib/cloudinary';
 import type { ExplorerArm, ExplorerNode } from '@/lib/home-explorer';
 import { categoryIcon } from '@/lib/category-icons';
-import { LayoutGrid, ArrowRight } from 'lucide-react';
+import { LayoutGrid, ArrowRight, ChevronDown } from 'lucide-react';
 
 /**
  * The homepage "Polycab Consumer / Industries / Dowells" explorers.
@@ -65,6 +65,22 @@ export default function HomeCategoryExplorer({ arm, heading, flat = false }: Pro
   // -1 is the default "All …" tab; otherwise the index into arm.categories.
   const [active, setActive] = useState(-1);
 
+  // Tabs are clamped to a single row on desktop; "View More" reveals the rest.
+  // `hasOverflow` (measured only while collapsed) decides whether the toggle is
+  // needed at all — on mobile the tabs scroll horizontally, so they never
+  // overflow vertically and no button appears.
+  const [tabsExpanded, setTabsExpanded] = useState(false);
+  const [hasOverflow, setHasOverflow] = useState(false);
+  const tabsRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = tabsRef.current;
+    if (!el || tabsExpanded) return;
+    const check = () => setHasOverflow(el.scrollHeight > el.clientHeight + 4);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, [tabsExpanded, arm]);
+
   const cards: ExplorerNode[] = useMemo(() => {
     if (flat || active < 0) return arm.categories;
     const cat = arm.categories[active];
@@ -92,31 +108,50 @@ export default function HomeCategoryExplorer({ arm, heading, flat = false }: Pro
         </div>
 
         {!flat && (
-          <div className="hce-tabs" role="tablist" aria-label={`${heading} categories`}>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={active === -1}
-              className={`hce-tab${active === -1 ? ' is-active' : ''}`}
-              onClick={() => setActive(-1)}
+          <>
+            <div
+              ref={tabsRef}
+              className={`hce-tabs${tabsExpanded ? ' is-expanded' : ''}`}
+              role="tablist"
+              aria-label={`${heading} categories`}
             >
-              <LayoutGrid aria-hidden="true" />
-              {arm.allLabel}
-            </button>
-            {arm.categories.map((cat, i) => (
               <button
-                key={cat.slug}
                 type="button"
                 role="tab"
-                aria-selected={active === i}
-                className={`hce-tab${active === i ? ' is-active' : ''}`}
-                onClick={() => setActive(i)}
+                aria-selected={active === -1}
+                className={`hce-tab${active === -1 ? ' is-active' : ''}`}
+                onClick={() => setActive(-1)}
               >
-                {categoryIcon(cat.name)}
-                {cat.name}
+                <LayoutGrid aria-hidden="true" />
+                {arm.allLabel}
               </button>
-            ))}
-          </div>
+              {arm.categories.map((cat, i) => (
+                <button
+                  key={cat.slug}
+                  type="button"
+                  role="tab"
+                  aria-selected={active === i}
+                  className={`hce-tab${active === i ? ' is-active' : ''}`}
+                  onClick={() => setActive(i)}
+                >
+                  {categoryIcon(cat.name)}
+                  {cat.name}
+                </button>
+              ))}
+            </div>
+
+            {(hasOverflow || tabsExpanded) && (
+              <button
+                type="button"
+                className={`hce-tabs-toggle${tabsExpanded ? ' is-open' : ''}`}
+                aria-expanded={tabsExpanded}
+                onClick={() => setTabsExpanded((v) => !v)}
+              >
+                {tabsExpanded ? 'View Less' : 'View More'}
+                <ChevronDown aria-hidden="true" />
+              </button>
+            )}
+          </>
         )}
 
         {flat ? (
