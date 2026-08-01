@@ -4971,7 +4971,7 @@ body::-webkit-scrollbar {
 /* ── Contact section — solid dark blue matching the sticky header (#121a2f)
    instead of the theme's near-black; the dark textures are dropped so it's clean. */
 .contact_us_sec {
-  background: linear-gradient(rgba(18, 26, 47, 0.65), rgba(18, 26, 47, 0.65)), url('/assets/images/image copy.png?v=2') no-repeat center center / cover !important;
+  background: linear-gradient(rgba(18, 26, 47, 0.65), rgba(18, 26, 47, 0.65)), url('/assets/images/section-bg.webp') no-repeat center center / cover !important;
 }
 
 .contact_us_sec .rs-contact-bg-thumb,

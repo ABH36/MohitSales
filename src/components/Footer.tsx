@@ -84,7 +84,7 @@ export default function Footer() {
         <div className="rs-footer-area rs-footer-two has-space has-theme-orange footer-new">
           <div
             className="rs-footer-bg-thumb"
-            style={{ backgroundImage: `url('/assets/images/image%20copy%202.png?v=2')` }}
+            style={{ backgroundImage: `url('/assets/images/footer-bg.webp')` }}
           ></div>
           <div className="rs-footer-top">
             <div className="container">
@@ -205,7 +205,7 @@ export default function Footer() {
                       © <span>2026</span> Mohit Sales Corporation Pvt. Ltd. Designed by
                       <a href="https://bdm.co.in/" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center' }}>
                         <img
-                          src="/assets/images/Final-logo.png"
+                          src="/assets/images/bdm-logo.webp"
                           className="bdm-footer-logo"
                           alt="BDM Cloudtech"
                           style={{ display: 'block', height: '28px', width: 'auto' }}

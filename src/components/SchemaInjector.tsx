@@ -1,7 +1,5 @@
 import prisma from '@/lib/prisma';
 
-export const revalidate = 3600;
-
 export default async function SchemaInjector({ page }: { page: string }) {
   const schemas = await prisma.schemaMarkup
     .findMany({ where: { page, isActive: true }, select: { id: true, jsonLd: true } })
