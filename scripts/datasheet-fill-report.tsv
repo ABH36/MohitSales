@@ -1,0 +1,524 @@
+=== DATASHEET FILL (DRY RUN — no DB writes) ===
+Products with missing datasheet: 499
+Mapped to a specific range brochure: 280
+Mapped to B2B all-products fallback: 219
+
+By brochure:
+   219  B2B All-Products (fallback)
+    60  Switches
+    49  LED Lighting
+    37  LT Cable
+    30  Communication & Data Cable
+    30  House Wires
+    25  HT Cable (MV)
+    12  Fans
+     9  Dowells
+     7  Professional Lighting
+     7  Switchgear
+     5  Solar Range
+     4  Rubber Cable
+     1  EHV Cable
+     1  Instrumentation Cable
+     1  Fire Survival Cable
+     1  Solar DC Cable
+     1  Green Wire
+
+Dowells	cable-terminal/copper	https://cms.polycab.com/media/4ykjk4px/dowells-brochure.pdf
+Fans	fans/air-circulator	https://cms.polycab.com/media/crhb2fx2/15mb-digital-pdf.pdf
+Fans	fans/ceiling-fans/design-series	https://cms.polycab.com/media/crhb2fx2/15mb-digital-pdf.pdf
+B2B All-Products (fallback)	home-appliances/irons	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	conduit-accessories/concealed-box	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Fans	fans/ceiling-fans/celebration-series	https://cms.polycab.com/media/crhb2fx2/15mb-digital-pdf.pdf
+B2B All-Products (fallback)	home-appliances/water-heaters/instant-water-heaters	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Fans	fans/exhaust-fans/industrial-fans	https://cms.polycab.com/media/crhb2fx2/15mb-digital-pdf.pdf
+Fans	fans/pedestal-fans	https://cms.polycab.com/media/crhb2fx2/15mb-digital-pdf.pdf
+B2B All-Products (fallback)	conduit-accessories/upvc-conduit	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Fans	fans/ceiling-fans	https://cms.polycab.com/media/crhb2fx2/15mb-digital-pdf.pdf
+Fans	fans/exhaust-fans	https://cms.polycab.com/media/crhb2fx2/15mb-digital-pdf.pdf
+B2B All-Products (fallback)	home-appliances/coolers	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	home-appliances/irons/dry-iron	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	home-appliances/irons/steam-iron	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Dowells	gland/earthing-tag	https://cms.polycab.com/media/4ykjk4px/dowells-brochure.pdf
+Dowells	gland/double-compression-gland	https://cms.polycab.com/media/4ykjk4px/dowells-brochure.pdf
+Dowells	gland/flang-type-gland	https://cms.polycab.com/media/4ykjk4px/dowells-brochure.pdf
+Dowells	gland/shrouds	https://cms.polycab.com/media/4ykjk4px/dowells-brochure.pdf
+B2B All-Products (fallback)	home-appliances/water-heaters/storage-water-heaters	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/aerospace-industry	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/automation-and-process-control/polycab-classic-110-cy-screened-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Communication & Data Cable	industries/cables-by-application/automation-and-process-control/polycab-festoon-flat-4sqmm-multicore-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/automation-and-process-control	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/building-infrastructure	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/automation-and-process-control/polycab-h07z-r-bsen-50525-3-41-450750v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+LED Lighting	lighting/downlight/pearl-led-swivel-spot-3-in-1	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+B2B All-Products (fallback)	industries/cables-by-application/cement-industry	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-6181b6182b6183b6184b6185b-bs-7211-450750v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-6181y-bs-6004-sc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-6192y6193y-bs-6004-mc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-6241b6242b6243b-bs-7211-mc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-6241y6242y6243y-bs-6004-mc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-al-xhhw-2-type-mc-al	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Communication & Data Cable	industries/cables-by-application/commercial/polycab-coaxial-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-cu-type-tctc-er-thhnthwn-2-16-awg-tray-cable	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-cu-type-tctc-er-thhnthwn-2-tray-cable	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+House Wires	industries/cables-by-application/commercial/polycab-etira-fr-1100v-ac-is-694	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+House Wires	industries/cables-by-application/commercial/polycab-etira-frlsh-1100v-ac-is-694	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+Communication & Data Cable	industries/cables-by-application/commercial/polycab-festoon-flat-075sqmm-multicore-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+Communication & Data Cable	industries/cables-by-application/commercial/polycab-festoon-flat-15sqmm-multicore-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+Communication & Data Cable	industries/cables-by-application/commercial/polycab-festoon-flat-4sqmm-multicore-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+House Wires	industries/cables-by-application/commercial/polycab-fr-lf-1100v-ac-is-694	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+House Wires	industries/cables-by-application/commercial/polycab-fr-lsh-1100v-ac-is-694	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-h03z1z1h2-fh05z1z1h2-f-bsen-50525-3-11	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-h05v2v2d3-f-bsen-50525-2-11-mc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-h05vvh2-f-bsen-50525-2-11-mc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-nmb-cable-ul-719-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/datacenters	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-thhn-cu-ul-83-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/datacenters/polycab-h05z-kh07z-k-bsen	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/datacenters/polycab-h05z-uh07z-u-bsen-50525-3-41	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/datacenters/polycab-h07z-r-bsen-50525-3-41-450750v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Communication & Data Cable	industries/cables-by-application/datacenters/polycab-rs-485-300500v-ac-armoured-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+Communication & Data Cable	industries/cables-by-application/datacenters/polycab-rs-485-300500v-ac-unarmoured-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/defence-and-armaments-industry	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/energy-and-power-grid	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/exploration-industries	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/food-and-beverages	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/healthcare	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-al-iec-60502-1-061kv-mc-35-swa	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-15-cu-iec-60502-1-061kv-mc-sfa	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-15-cu-iec-60502-1-061kv-mc-swa	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-15-cu-iec-60502-1-061kv-mc-ua	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-al-iec-60502-1-061kv-mc-2-swa	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-al-iec-60502-1-061kv-mc-3-swa	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-al-iec-60502-1-061kv-mc-35-sfa	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-al-iec-60502-1-061kv-mc-4-swa	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-cu-iec-60502-1-061kv-mc-35-sfa	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-cu-iec-60502-1-061kv-mc-35-ua	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-is-7098-i-mc-15-2xfy	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-is-7098-i-mc-15-2xwy	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+B2B All-Products (fallback)	industries/cables-by-application/it-industry	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/manufacturing-industries	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/mining-drilling-and-tunneling	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-is-7098-i-mc-25-2xy	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+B2B All-Products (fallback)	industries/cables-by-application/mass-transit-railways-and-marine/polycab-hydro-type-lsxlpo-sc-ieee-1580-061kv-or-2kv	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/mobility-infrastructure	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/mass-transit-railways-and-marine	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+LED Lighting	lighting/led-batten/high-wattage-led-batten	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+B2B All-Products (fallback)	industries/cables-by-application/metal-industry	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+HT Cable (MV)	industries/cables-by-application/mining-drilling-and-tunneling/polycab-mv-cu-is-9968-2-1933e-or-3333uekv	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/mining-drilling-and-tunneling/polycab-rr-c-mc-1100v-ac-is-9968-1	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/oil-gas-and-petrochemical	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Professional Lighting	lighting/outdoor-lights/vigaro-clear-led-gate-light	https://cms.polycab.com/media/e5qdcpje/professional-lighting-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-6181b-bs-7211-sc-450750v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/pharmaceutical-industry	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-al-type-tc-xhhw-2-cable-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+LED Lighting	lighting/rope-and-strip-lights/120-led-rope-light	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/rope-and-strip-lights/240-led-strip-light	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-cu-type-tctc-er-xhhw-2-tray-cable	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Communication & Data Cable	industries/cables-by-application/commercial/polycab-festoon-flat-05sqmm-multicore-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+LED Lighting	lighting/rope-and-strip-lights/led-strip-light-driver	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+Communication & Data Cable	industries/cables-by-application/commercial/polycab-festoon-flat-25sqmm-multicore-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+LED Lighting	lighting/led-cob/gliss-cob-surface-spot-light-rd-white-hsg-and-gm-refltr	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/led-cob/gliss-cob-surface-spot-light-rd-black-hsg-and-rg-refltr	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-h03v2v2-fandh03v2v2h2-f-bsen-50525-2-11-mc-300300v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+House Wires	industries/cables-by-application/commercial/polycab-hr-fr-lsh-lf-green-wire-1100v-ac-is-694	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+LED Lighting	lighting/led-cob/gliss-cob-surface-track-light-white-hsg	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/led-cob/gliss-cob-track-light-black-hsg	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/led-cob/gliss-cob-surface-track-light-black-hsg	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+HT Cable (MV)	industries/cables-by-application/power-and-network/polycab-aerial-bunched-cable-1933kv-acabc	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+LED Lighting	lighting/led-cob/gliss-deco-cob-downlight-black-hsg-and-rg-refltr	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+HT Cable (MV)	industries/cables-by-application/power-and-network/polycab-bs-5467-mcshaped-conductor1933kv-ac	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+LED Lighting	lighting/led-cob/gliss-deco-cob-downlight-white-hsg-and-gm-refltr	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/led-cob/gliss-deco-cob-downlight-black-hsg-and-gm-refltr	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+B2B All-Products (fallback)	industries/cables-by-application/power-and-network	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-type-mc-pvc-jacketed-cu-conductor-ul-1569-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+LED Lighting	lighting/led-cob/gliss-deep-recess-cob-downlight-black-hsg-and-gm-refltr	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/led-cob/gliss-deep-recess-cob-downlight-white-hsg	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+B2B All-Products (fallback)	industries/cables-by-application/renewable-energy	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/residential/polycab-al-type-tc-xhhw-2-cable-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/residential/polycab-al-xhhw-2-ul-44-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/residential	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+House Wires	industries/cables-by-application/residential/polycab-etira-fr-1100v-ac-is-694	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+House Wires	industries/cables-by-application/residential/polycab-etira-frlsh-1100v-ac-is-694	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+House Wires	industries/cables-by-application/residential/polycab-fr-lsh-1100v-ac-is-694	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+House Wires	industries/cables-by-application/residential/polycab-hr-fr-lsh-lf-green-wire-1100v-ac-is-694	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+B2B All-Products (fallback)	industries/cables-by-application/residential/polycab-thhn-cu-ul-83-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/residential/polycab-type-mc-cu-conductor-ul-1569-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/residential/polycab-type-mc-pvc-jacketed-al-conductor-ul-1569-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/service-entrance	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/residential/polycab-ufb-cable-ul-493-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Switches	switches-accessories/etira/32a-motor-starter	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/etira/blank-plate	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-25-cu-iec-60502-1-061kv-mc-ua	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+HT Cable (MV)	industries/cables-by-standards/bs-6622	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+Switches	switches-accessories/etira/dimmer	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/etira/dnd-mmr-internal-unit	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/etira/dp-switch	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Communication & Data Cable	industries/cables-by-application/telecommunication/polycab-300500v-ac-armoured-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/sugar-industry	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Communication & Data Cable	industries/cables-by-application/telecommunication	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-cu-iec-60502-1-061kv-mc-35-swa	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-cu-iec-60502-1-061kv-mc-4-sfa	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+Switches	switches-accessories/etira/rj-11	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/etira/sp-mini-mcb	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/etira/32a-key-tag-unit	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+HT Cable (MV)	industries/cables-by-application/utility/polycab-mv-cu-bs-7835-3.8-6.6kv	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+Switches	switches-accessories/etira/colour-plate-with-chrome-collar-silvaz	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/utility	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/is-14255/polycab-aerial-bunched-cable-1100v-ac-abc	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Switches	switches-accessories/levana/card-only	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-is-7098-i-mc-15-2xy	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+B2B All-Products (fallback)	industries/cables-by-application/water-treatment-and-waste-disposal	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ansiicea-s-93-639	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ansinema-wc-74icea-s-93-639	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ansiscte-74	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/as-nzs-5000	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Switches	switches-accessories/levana/night-lamp	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+House Wires	industries/cables-by-application/metal-industry/polycab-hffr-04xzz-k04xzxz-k-mc-1100v-ac-is-17048	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+Switches	switches-accessories/levana/valencia	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/asnzs-14291	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bs-5467	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bs-6004	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bs-6231	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bs-6004/polycab-3192a3182a3183a3184a3185a-bs-6004-mc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bs-6004/polycab-6181y-bs-6004-sc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+HT Cable (MV)	industries/cables-by-standards/bs-6724	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bs-7211	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bs-7629-1	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+HT Cable (MV)	industries/cables-by-standards/bs-7835	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bs-7846	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bs-7870-4-10	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Switches	switches-accessories/accessories/3-pin-4-plus1-1-5-mtr	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bs-7870-4-20	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bs-8592	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bs-en-50525-2-51	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bsen-50288-7	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bsen-50525-2-11	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Switches	switches-accessories/accessories/angle-holder	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bsen-50525-2-11/polycab-h03v2v2-fandh03v2v2h2-f-bsen-50525-2-11-mc-300300v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bsen-50525-2-21	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bsen-50525-2-11/polycab-h03vvh2-f-bsen-50525-2-11-mc-300300v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bsen-50525-2-11/polycab-h05v2v2-fandh05v2v2h2-f-bsen-50525-2-11-mc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bsen-50525-2-11/polycab-h05v2v2d3-f-bsen-50525-2-11-mc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bsen-50525-2-11/polycab-h05vvh2-f-bsen-50525-2-11-mc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bsen-50525-2-31	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bsen-50525-2-41	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bsen-50525-2-81	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bsen-50525-3-11	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bsen-50525-3-41	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bsen-50618	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/icea-s-108-720	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/icea-s-93-639	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/icea-s-97-682	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Switches	switches-accessories/accessories/electronic-ding-dong	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/iec-60092-353	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/iec-60092-354	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Switches	switches-accessories/accessories/jumbo-ceiling-rose-3-terminal	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/iec-60092-376	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/iec-60227-7	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Switches	switches-accessories/accessories/modular-angle-holder	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/accessories/one-universal-plus-twin-usb	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/accessories/modular-ceiling-rose	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/oil-gas-and-petrochemical/polycab-hydro-type-lsxlpo-sc-ieee-1580-061kv-or-2kv	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Switches	switches-accessories/accessories/one-universal-plus-two-2pin-with-surge-protection	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+LT Cable	industries/cables-by-standards/iec-60502-1	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/iec-60502-2	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ul-4703	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/iec-60840	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ieee-1580	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/indian-standards	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/international-standards	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/is-14255	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+HT Cable (MV)	industries/cables-by-standards/is-14255/polycab-aerial-bunched-cable-1933kv-acabc	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+House Wires	wires/lf-fr-180m-wires	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+House Wires	industries/cables-by-standards/is-17048/polycab-hffr-04xzz-k04xzxz-k-mc-1100v-ac-is-17048	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/is-17048	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+House Wires	industries/cables-by-standards/is-694/polycab-etira-frlsh-1100v-ac-is-694	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+House Wires	industries/cables-by-standards/is-694	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+LED Lighting	lighting/led-bulb/aelius-multi-cct-led-deco-lamp	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/is-7098-i	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+LT Cable	industries/cables-by-standards/is-7098-i/polycab-lv-is-7098-i-mc-15-2xfy	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+LT Cable	industries/cables-by-standards/is-7098-i/polycab-lv-is-7098-i-mc-25-2xwy	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+LED Lighting	lighting/led-bulb/nxt-g-led-bulb	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ul-44	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/is-7098-ii	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/is-9857	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+HT Cable (MV)	industries/cables-by-standards/is-9968-2/polycab-mv-cu-is-9968-2-1933e-or-3333uekv	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/is-9968-1	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/is-9968-2	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+HT Cable (MV)	industries/cables-by-standards/polycab-standard/polycab-aerial-bunched-cable-1933kv-ac-abc	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+HT Cable (MV)	industries/cables-by-standards/polycab-standard/polycab-aerial-bunched-cable-63511kv-ac-abc	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/polycab-standard-inter	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/polycab-standard	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Communication & Data Cable	industries/cables-by-standards/rs-485	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+HT Cable (MV)	industries/cables-by-standards/bs-5467/polycab-bs-5467-mcshaped-conductor1933kv-ac	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ul-1072	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ul-1277	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ul-1277/polycab-al-type-tc-xhhw-2-cable-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ul-1569	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ul-1596	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ul-2250	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+LED Lighting	lighting/downlight/scintillate-mini-integral-downlight	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ul-44/polycab-cu-xhhw-2-ul-44-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ul-493	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ul-62	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ul-719	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ul-83	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ul-854	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Communication & Data Cable	industries/cables-by-type/communication-and-data-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+Communication & Data Cable	industries/cables-by-type/communication-and-data-cable/polycab-rs-485-300500v-ac-unarmoured-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+EHV Cable	industries/cables-by-type/ehv-power-cable	https://cms.polycab.com/media/tdidggtl/polycab-ehv-brochure.pdf
+Instrumentation Cable	industries/cables-by-type/instrumentation-cable	https://cms.polycab.com/media/v0hf0z4m/instrumentation-cable_catalogue_innerpage_v9_ord-10763-final-c2c.pdf
+HT Cable (MV)	industries/cables-by-application/power-and-network/polycab-aerial-bunched-cable-63511kv-ac-abc	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+LT Cable	industries/cables-by-type/lv-power-cable	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+HT Cable (MV)	industries/cables-by-type/mv-power-cable/polycab-bs-5467-mcshaped-conductor1933kv-ac	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+HT Cable (MV)	industries/cables-by-type/mv-power-cable/polycab-bs-6724-mc-swa-lszhshaped-conductor1933kv-ac	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+LED Lighting	lighting/led-batten/neo-slim-batten	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+Professional Lighting	lighting/outdoor-lights/vigaro-gate-light-fixture-without-bulb	https://cms.polycab.com/media/e5qdcpje/professional-lighting-catalogue.pdf
+Communication & Data Cable	industries/cables-by-type/communication-and-data-cable/polycab-rs-485-300500v-ac-armoured-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+LED Lighting	lighting/rope-and-strip-lights/120-led-strip-light	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+HT Cable (MV)	industries/cables-by-type/mv-power-cable	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/aerial-bunched-cable	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+LED Lighting	lighting/led-cob/gliss-cob-surface-spot-light-rd-black-hsg-and-gm-refltr	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/led-cob/gliss-cob-surface-spot-light-rd-white-hsg-and-rg-refltr	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+House Wires	industries/cables-by-type/others/building-wires/polycab-etira-frlsh-1100v-ac-is-694	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+House Wires	industries/cables-by-type/others/building-wires	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+LED Lighting	lighting/led-cob/gliss-deco-cob-downlight-white-hsg-and-rg-refltr	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LT Cable	industries/cables-by-type/others/control-cable/polycab-lv-is-7098-i-mc-15-2xfy	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+House Wires	industries/cables-by-application/residential/polycab-02ayy-2-core-1100v-is-694-flat-cable	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/control-cable	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/defence	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/residential/polycab-al-type-tc-thhnthwn-2-cable-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/domestic-appliance-and-lighting-cable/polycab-6192y6193y-bs-6004-mc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/domestic-appliance-and-lighting-cable/polycab-6241y6242y6243y-bs-6004-mc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/domestic-appliance-and-lighting-cable/polycab-h03z1z1-f-bsen-50525-3-11-300300v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/domestic-appliance-and-lighting-cable/polycab-h05v-uh05v-rh05v-k-bsen-50525-2-31-sc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/residential/polycab-cu-xhhw-2-ul-44-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/domestic-appliance-and-lighting-cable	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/domestic-appliance-and-lighting-cable/polycab-h05vvh2-f-bsen-50525-2-11-mc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/domestic-appliance-and-lighting-cable/polycab-type-mc-al-conductor-ul-1569-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+House Wires	industries/cables-by-application/residential/polycab-fr-lf-1100v-ac-is-694	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+Switches	switches-accessories/etira/buzzer	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Fire Survival Cable	industries/cables-by-type/others/fire-protection-cable	https://cms.polycab.com/media/k5lfvqld/fire-survival-cable-brochure-artwork_2.pdf
+Switches	switches-accessories/etira/dp-mini-mcb	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/high-temperature-cable	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/residential/polycab-nmb-cable-ul-719-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/industrial-cable/polycab-6181y-bs-6004-sc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/industrial-cable/polycab-6192y6193y-bs-6004-mc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/residential/polycab-type-mc-pvc-jacketed-cu-conductor-ul-1569-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/industrial-cable/polycab-al-xhhw-2-ul-44-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Switches	switches-accessories/etira/tv-socket	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/industrial-cable/polycab-cu-type-tctc-er-xhhw-2-tray-cable	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/industrial-cable/polycab-cu-xhhw-2-ul-44-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Communication & Data Cable	industries/cables-by-type/others/industrial-cable/polycab-festoon-flat-05sqmm-multicore-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+Communication & Data Cable	industries/cables-by-type/others/industrial-cable/polycab-festoon-flat-075sqmm-multicore-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+Communication & Data Cable	industries/cables-by-type/others/industrial-cable/polycab-festoon-flat-1sqmm-multicore-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+Switches	switches-accessories/etira/usb-charger	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+House Wires	industries/cables-by-application/sugar-industry/polycab-hffr-04xzz-k04xzxz-k-mc-1100v-ac-is-17048	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+Switches	switches-accessories/etira/standard-plate-stylaz	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/industrial-cable/polycab-thhn-cu-ul-83-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/industrial-cable	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Switches	switches-accessories/levana/caprina	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/industrial-cable/polycab-type-mc-pvc-jacketed-al-conductor-ul-1569-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+HT Cable (MV)	industries/cables-by-standards/bs-6724/polycab-bs-6724-mc-swa-lszhshaped-conductor1933kv-ac	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/marine-and-offshoreonshore-cable	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Rubber Cable	industries/cables-by-type/others/rubber-cable/polycab-mv-cu-is-9968-2-1933e-or-3333uekv	https://cms.polycab.com/media/44sptk1w/final_rubber-cable_catalogue.pdf
+Switches	switches-accessories/levana/shrink-sleeve	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Rubber Cable	industries/cables-by-type/others/rubber-cable/polycab-rr-c-mc-1100v-ac-is-9968-1	https://cms.polycab.com/media/44sptk1w/final_rubber-cable_catalogue.pdf
+Rubber Cable	industries/cables-by-type/others/rubber-cable	https://cms.polycab.com/media/44sptk1w/final_rubber-cable_catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/special-cable	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Switches	switches-accessories/plastic-modular-boxes/surface-mounted	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+B2B All-Products (fallback)	polycab/cables-by-application	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	polycab/cables-by-standards	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/renewable-energy	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	polycab/cables-by-type	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Solar Range	solar/solar-grid-tie-inverter	https://cms.polycab.com/media/km3f5gvq/polycab-solar-range-catalogue-8.pdf
+Solar Range	solar/solar-grid-tie-inverter/single-phase	https://cms.polycab.com/media/km3f5gvq/polycab-solar-range-catalogue-8.pdf
+Switchgear	switchgears/mcb	https://cms.polycab.com/media/o1wan13m/switchgear-technical-catalogue-web-version.pdf
+Dowells	dowells/crimping-tool/foot-hydrolic-crimping-tool	https://cms.polycab.com/media/4ykjk4px/dowells-brochure.pdf
+Switchgear	switchgears/accl	https://cms.polycab.com/media/o1wan13m/switchgear-technical-catalogue-web-version.pdf
+Dowells	dowells/crimping-tool/hand-hydrolic-crimping-tool	https://cms.polycab.com/media/4ykjk4px/dowells-brochure.pdf
+Switchgear	switchgears/isolator	https://cms.polycab.com/media/o1wan13m/switchgear-technical-catalogue-web-version.pdf
+Switchgear	switchgears/rcbo	https://cms.polycab.com/media/o1wan13m/switchgear-technical-catalogue-web-version.pdf
+Switchgear	switchgears/rccb	https://cms.polycab.com/media/o1wan13m/switchgear-technical-catalogue-web-version.pdf
+Switches	switches-accessories/accessories/3-pin-twin-usb-4-plus1-3-mtr	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Communication & Data Cable	industries/cables-by-application/telecommunication/polycab-300500v-ac-unarmoured-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+Communication & Data Cable	industries/cables-by-application/telecommunication/polycab-coaxial-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+Switches	switches-accessories/accessories/ceiling-rose-2-terminal	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/accessories/ding-dong	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/accessories/modular-batten-holder	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-al-type-tc-thhnthwn-2-cable-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-al-xhhw-2-ul-44-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-cu-xhhw-2-ul-44-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Communication & Data Cable	industries/cables-by-application/commercial/polycab-festoon-flat-1sqmm-multicore-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+House Wires	wires/polycab-suprema	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-h03z1z1-f-bsen-50525-3-11-300300v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-h05v2v2-fandh05v2v2h2-f-bsen-50525-2-11-mc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-type-mc-al-conductor-ul-1569-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-type-mc-pvc-jacketed-al	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+House Wires	wires/polycab-primma	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-25-cu-iec-60502-1-061kv-mc-swa	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-al-iec-60502-1-061kv-mc-4-sfa	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-cu-iec-60502-1-061kv-mc-2-swa	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+Communication & Data Cable	industries/cables-by-standards/is-694/polycab-festoon-flat-4sqmm-multicore-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+LED Lighting	lighting/led-bulb/aelius-dimmable-emergency-led-bulb	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-is-7098-i-mc-25-2xfy	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-is-7098-i-mc-25-2xwy	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+LED Lighting	lighting/led-bulb/aelius-led-deco-lamp	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/led-bulb/aelius-nxt-g-led-bulb	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/led-bulb/aelius-nxt-g-led-t-lamp	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/downlight/pearl-cob-swivel-led-downlight	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/downlight/pearl-led-nxt-g-spot	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/downlight/pearl-led-swivel-spot	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+HT Cable (MV)	industries/cables-by-application/power-and-network/polycab-aerial-bunched-cable-1933kv-ac-abc	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+LED Lighting	lighting/downlight/scintillate-3-in-1-rbp-mini-integral-led-downlight	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+B2B All-Products (fallback)	industries/cables-by-application/renewable-energy/polycab-classic-110-cy-screened-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+LED Lighting	lighting/downlight/scintillate-deep-integral-led-downlight	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+B2B All-Products (fallback)	industries/cables-by-application/residential/polycab-thhn-al-ul-83-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/residential/polycab-type-mc-al-conductor-ul-1569-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+LED Lighting	lighting/downlight/scintillate-integral-led-downlight	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/downlight/scintillate-led-striker	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/downlight/scintillate-slim-integral-led-downlight	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/downlight/slim-glo-led-jb-downlight	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/panel-light/polycab-3-in-1-cct-tri-color-panel-led-light	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/panel-light/polycab-deep-drawn-2-2-led-panel	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/control-cable/polycab-classic-110-cy-screened-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+LED Lighting	lighting/panel-light/polycab-scintillate-pc-3-in-1-cct-frameless-led-panel	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/panel-light/polycab-scintillate-pc-backlit-led-panel-light	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/panel-light/polycab-scintillate-pc-edgelit-led-panel	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/panel-light/polycab-scintillate-pc-frameless-led-panel	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/panel-light/polycab-scintillate-slim-aluminium-led-panel-light	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/panel-light/polycab-scintillate-slim-surface-led-panel-light	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bsen-50525-3-41/polycab-h07z-r-bsen-50525-3-41-450750v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+LED Lighting	lighting/led-batten/3-in-1-cct-led-batten	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/led-batten/neo-slim-led-batten-2ft	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+Professional Lighting	lighting/outdoor-lights/aglow-led-street-light	https://cms.polycab.com/media/e5qdcpje/professional-lighting-catalogue.pdf
+Professional Lighting	lighting/outdoor-lights/bulkhead	https://cms.polycab.com/media/e5qdcpje/professional-lighting-catalogue.pdf
+Professional Lighting	lighting/outdoor-lights/emblaze-led-street-light	https://cms.polycab.com/media/e5qdcpje/professional-lighting-catalogue.pdf
+Professional Lighting	lighting/outdoor-lights/gleer-led-flood-light	https://cms.polycab.com/media/e5qdcpje/professional-lighting-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/polycab-standard-inter/polycab-classic-110-cy-screened-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Professional Lighting	lighting/outdoor-lights/vigaro-opal-led-gate-light	https://cms.polycab.com/media/e5qdcpje/professional-lighting-catalogue.pdf
+LED Lighting	lighting/rope-and-strip-lights/320-led-zuro-cob-strip-light	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+LED Lighting	lighting/led-cob/gliss-cob-track-light-white-hsg	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ul-493/polycab-ufb-cable-ul-493-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ul-83/polycab-thhn-al-ul-83-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+LED Lighting	lighting/led-cob/gliss-deep-recess-cob-downlight-black-hsg-and-rg-refltr	https://cms.polycab.com/media/vn4bv5f4/led-digital-catalogue-2026.pdf
+Switches	switches-accessories/etira/1-way-switch	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/etira/2-way-switch	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/etira/25a-motor-starter	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/etira/3-pin-socket	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/etira/bell-push	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/etira/dnd-mmr-external-unit	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/etira/fan-regulator	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/etira/foot-light	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/etira/neon-indicator	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/etira/rj-45	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/etira/twin-socket	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/domestic-appliance-and-lighting-cable/polycab-h03v2v2-fandh03v2v2h2-f-bsen-50525-2-11-mc-300300v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/domestic-appliance-and-lighting-cable/polycab-h03vvh2-f-bsen-50525-2-11-mc-300300v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/domestic-appliance-and-lighting-cable/polycab-h05v2v2d3-f-bsen-50525-2-11-mc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Switches	switches-accessories/etira/colour-plate-stylaz	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/etira/only-key-tag	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/etira/standard-plate-with-chrome-collar-silvaz	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Communication & Data Cable	industries/cables-by-type/others/industrial-cable/polycab-festoon-flat-4sqmm-multicore-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ul-83/polycab-thhn-cu-ul-83-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Switches	switches-accessories/levana/curl	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/levana/curl-plus	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/levana/key-card-electronic-switch	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bs-6004/polycab-6192y6193y-bs-6004-mc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Switches	switches-accessories/levana/key-tag-dp-switch	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/plastic-modular-boxes/concealed	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Fans	fans/ceiling-fans/tech-series	https://cms.polycab.com/media/crhb2fx2/15mb-digital-pdf.pdf
+Fans	fans/exhaust-fans/domestic-fans	https://cms.polycab.com/media/crhb2fx2/15mb-digital-pdf.pdf
+Fans	fans/wall-fans	https://cms.polycab.com/media/crhb2fx2/15mb-digital-pdf.pdf
+B2B All-Products (fallback)	home-appliances/water-heaters	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Solar Range	solar/dc-mcb	https://cms.polycab.com/media/km3f5gvq/polycab-solar-range-catalogue-8.pdf
+Solar DC Cable	solar/solar-dc-cable	https://cms.polycab.com/media/jqvffc3o/polycab_solar-pv-dc-cable_v1.pdf
+Dowells	dowells/crimping-tool/hand-manual-crimping-tool	https://cms.polycab.com/media/4ykjk4px/dowells-brochure.pdf
+Switches	switches-accessories/accessories/2-pin-4-mtr	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Fans	fans/farrata-fans	https://cms.polycab.com/media/crhb2fx2/15mb-digital-pdf.pdf
+Solar Range	solar/solar-panel	https://cms.polycab.com/media/km3f5gvq/polycab-solar-range-catalogue-8.pdf
+Dowells	cable-terminal/aluminium	https://cms.polycab.com/media/4ykjk4px/dowells-brochure.pdf
+Switches	switches-accessories/accessories/2-pin-1-5-mtr-2-usb-2-socket	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Fans	fans/table-fans	https://cms.polycab.com/media/crhb2fx2/15mb-digital-pdf.pdf
+Solar Range	solar/solar-grid-tie-inverter/three-phase	https://cms.polycab.com/media/km3f5gvq/polycab-solar-range-catalogue-8.pdf
+Switches	switches-accessories/accessories/2pin-5-mtr	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/accessories/3-pin-plug-top	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/accessories/3-pin-4-plus1-3-mtr	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/accessories/batten-holder	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/accessories/jumbo-ceiling-rose-2-terminal	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/accessories/lamp-holder	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+Switches	switches-accessories/accessories/one-universal-plus-two-2pin	https://cms.polycab.com/media/3ltjtydd/polycab-switches-catalogue.pdf
+House Wires	wires/polycab-optima-plus	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+Green Wire	wires/polycab-green-wire	https://cms.polycab.com/media/2iobnjo3/polycab-green-wire-leaflet.pdf
+Switchgear	switchgears/distribution-board	https://cms.polycab.com/media/o1wan13m/switchgear-technical-catalogue-web-version.pdf
+Switchgear	switchgears/mcb-switch	https://cms.polycab.com/media/o1wan13m/switchgear-technical-catalogue-web-version.pdf
+Communication & Data Cable	industries/cables-by-standards/ansiscte-74/polycab-coaxial-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bsen-50525-3-11/polycab-h03z1z1-f-bsen-50525-3-11-300300v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+LT Cable	industries/cables-by-standards/iec-60502-1/polycab-lv-15-cu-iec-60502-1-061kv-mc-swa	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+Communication & Data Cable	industries/cables-by-standards/is-694/polycab-festoon-flat-1sqmm-multicore-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+House Wires	industries/cables-by-standards/is-694/polycab-02ayy-2-core-1100v-is-694-flat-cable	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+Communication & Data Cable	industries/cables-by-type/others/control-cable/polycab-festoon-flat-1sqmm-multicore-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+HT Cable (MV)	industries/cables-by-standards/is-9968-2/polycab-mv-cu-is-9968-2-12722e-or-1111uekv	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+HT Cable (MV)	industries/cables-by-standards/polycab-standard-inter/polycab-aerial-bunched-cable-1933kv-ac-abc	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+Communication & Data Cable	industries/cables-by-standards/rs-485/polycab-rs-485-300500v-ac-unarmoured-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/domestic-appliance-and-lighting-cable/polycab-6181y-bs-6004-sc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ul-1277/polycab-al-type-tc-thhnthwn-2-cable-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ul-44/polycab-al-xhhw-2-ul-44-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ul-719/polycab-nmb-cable-ul-719-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/aerial-bunched-cable/polycab-aerial-bunched-cable-1100v-ac-abc	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+HT Cable (MV)	industries/cables-by-type/others/aerial-bunched-cable/polycab-aerial-bunched-cable-1933kv-acabc	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+HT Cable (MV)	industries/cables-by-type/others/aerial-bunched-cable/polycab-aerial-bunched-cable-63511kv-ac-abc	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+House Wires	industries/cables-by-type/others/building-wires/polycab-hr-fr-lsh-lf-green-wire-1100v-ac-is-694	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+Communication & Data Cable	industries/cables-by-type/others/industrial-cable/polycab-festoon-flat-25sqmm-multicore-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+LT Cable	industries/cables-by-type/others/domestic-appliance-and-lighting-cable/polycab-al-xhhw-2-type-mc-al-armoured-pvc-jacket-ul-1569-600v	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/domestic-appliance-and-lighting-cable/polycab-h05v2v2-fandh05v2v2h2-f-bsen-50525-2-11-mc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+House Wires	industries/cables-by-type/others/industrial-cable/polycab-02ayy-2-core-1100v-is-694-flat-cable	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/industrial-cable/polycab-3192a3182a3183a3184a3185a-bs-6004-mc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/industrial-cable/polycab-al-type-tc-thhnthwn-2-cable-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+LT Cable	industries/cables-by-type/others/industrial-cable/polycab-al-xhhw-2-type-mc-al-armoured-pvc-jacket-ul-1569-600v	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/industrial-cable/polycab-classic-110-cy-screened-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/industrial-cable/polycab-cu-type-tctc-er-thhnthwn-2-tray-cable	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Communication & Data Cable	industries/cables-by-type/others/industrial-cable/polycab-festoon-flat-15sqmm-multicore-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/industrial-cable/polycab-h05v-uh05v-rh05v-k-bsen-50525-2-31-sc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/industrial-cable/polycab-h07z-r-bsen-50525-3-41-450750v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+House Wires	industries/cables-by-type/others/industrial-cable/polycab-hffr-04xzz-k04xzxz-k-mc-1100v-ac-is-17048	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/industrial-cable/polycab-thhn-al-ul-83-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/industrial-cable/polycab-type-mc-al-conductor-ul-1569-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/industrial-cable/polycab-type-mc-cu-conductor-ul-1569-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/industrial-cable/polycab-type-mc-pvc-jacketed-cu-conductor-ul-1569-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/marine-and-offshoreonshore-cable/polycab-hydro-type-lsxlpo-sc-ieee-1580-061kv-or-2kv	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/marine-and-offshoreonshore-cable/polycab-rr-c-mc-1100v-ac-is-9968-1	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Rubber Cable	industries/cables-by-type/others/rubber-cable/polycab-mv-cu-is-9968-2-12722e-or-1111uekv	https://cms.polycab.com/media/44sptk1w/final_rubber-cable_catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/automation-and-process-control/polycab-h05v-uh05v-rh05v-k-bsen-50525-2-31-sc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+House Wires	industries/cables-by-application/cement-industry/polycab-hffr-04xzz-k04xzxz-k-mc-1100v-ac-is-17048	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+House Wires	industries/cables-by-application/commercial/polycab-02ayy-2-core-1100v-is-694-flat-cable	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-3192a3182a3183a3184a3185a-bs-6004-mc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+LT Cable	industries/cables-by-application/commercial/polycab-cu-xhhw-2-type-mc-steel-armoured-pvc-jacket-ul-1569-600v	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-h03vvh2-f-bsen-50525-2-11-mc-300300v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-thhn-al-ul-83-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/commercial/polycab-type-mc-cu-conductor-ul-1569-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+House Wires	industries/cables-by-application/healthcare/polycab-etira-frlsh-1100v-ac-is-694	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-25-cu-iec-60502-1-061kv-mc-sfa	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+LT Cable	industries/cables-by-application/it-industry/polycab-lv-cu-iec-60502-1-061kv-mc-4-swa	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+HT Cable (MV)	industries/cables-by-application/mining-drilling-and-tunneling/polycab-mv-cu-is-9968-2-12722e-or-1111uekv	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-application/power-and-network/polycab-aerial-bunched-cable-1100v-ac-abc	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+HT Cable (MV)	industries/cables-by-application/power-and-network/polycab-bs-6724-mc-swa-lszhshaped-conductor1933kv-ac	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+LT Cable	industries/cables-by-application/residential/polycab-al-xhhw-2-type-mc-al-armoured-pvc-jacket-ul-1569-600v	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+B2B All-Products (fallback)	industries/cables-by-application/residential/polycab-cu-xhhw-2-type-mc-steel	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bs-6004/polycab-6241y6242y6243y-bs-6004-mc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+House Wires	industries/cables-by-standards/is-694/polycab-fr-lf-1100v-ac-is-694	https://cms.polycab.com/media/q33mxdlf/house-wires-catalogue-with-suprema-march-25.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/bsen-50525-2-31/polycab-h05v-uh05v-rh05v-k-bsen-50525-2-31-sc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/ieee-1580/polycab-hydro-type-lsxlpo-sc-ieee-1580-061kv-or-2kv	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/is-9968-1/polycab-rr-c-mc-1100v-ac-is-9968-1	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-standards/polycab-standard/polycab-classic-110-cy-screened-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+Communication & Data Cable	industries/cables-by-standards/rs-485/polycab-rs-485-300500v-ac-armoured-cable	https://cms.polycab.com/media/1nvdf0tf/approved_communicaton-cable-catlogue.pdf
+LT Cable	industries/cables-by-standards/ul-1569/polycab-cu-xhhw-2-type-mc-steel-armoured-pvc-jacket-ul-1569-600v	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+HT Cable (MV)	industries/cables-by-type/others/aerial-bunched-cable/polycab-aerial-bunched-cable-1933kv-ac-abc	https://cms.polycab.com/media/2bgh00kf/ht-cable-catalogue.pdf
+LT Cable	industries/cables-by-type/others/control-cable/polycab-lv-is-7098-i-mc-25-2xwy	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/domestic-appliance-and-lighting-cable/polycab-3192a3182a3183a3184a3185a-bs-6004-mc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+LT Cable	industries/cables-by-type/others/domestic-appliance-and-lighting-cable/polycab-cu-xhhw-2-type-mc-steel-armoured-pvc-jacket-ul-1569-600v	https://cms.polycab.com/media/kb1l12kq/lt-catalogue-ord_17720_v2.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/industrial-cable/polycab-6241y6242y6243y-bs-6004-mc-300500v-ac	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/industrial-cable/polycab-al-type-tc-xhhw-2-cable-600v	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
+B2B All-Products (fallback)	industries/cables-by-type/others/industrial-cable/polycab-rr-c-mc-1100v-ac-is-9968-1	https://cms.polycab.com/media/2hlozcdj/b2b-all-products-catalogue.pdf
