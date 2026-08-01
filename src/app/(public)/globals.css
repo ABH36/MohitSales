@@ -4394,12 +4394,18 @@ body::-webkit-scrollbar {
    never overflows vertically and the toggle stays hidden.) */
 @media (min-width: 768px) {
   .hce-tabs {
-    max-height: 64px;
+    /* Clip cleanly inside the inter-row gap so no sliver of the second row
+       peeks out below row one. With box-sizing:border-box the visible content
+       is (max-height − 8px top padding); row one is ~44px and row two starts
+       at ~54px, so 58px shows all of row one and fully hides row two. */
+    max-height: 58px;
     overflow: hidden;
-    transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: max-height 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   }
+  /* Expanded cap is kept close to real content (≈2–3 rows) so the collapse
+     doesn't sit still then snap — the old 600px made the transition jump. */
   .hce-tabs.is-expanded {
-    max-height: 600px;
+    max-height: 300px;
   }
 }
 

@@ -75,7 +75,9 @@ export default function HomeCategoryExplorer({ arm, heading, flat = false }: Pro
   useEffect(() => {
     const el = tabsRef.current;
     if (!el || tabsExpanded) return;
-    const check = () => setHasOverflow(el.scrollHeight > el.clientHeight + 4);
+    // A single row on desktop is ~64px tall. If scrollHeight is larger, we have overflow.
+    // We avoid clientHeight because it's unreliable during the CSS max-height transition.
+    const check = () => setHasOverflow(el.scrollHeight > 75);
     check();
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
