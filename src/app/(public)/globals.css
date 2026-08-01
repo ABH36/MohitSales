@@ -251,10 +251,11 @@ body {
   border: 1px solid transparent;
 }
 
+/* The .product-card here is the inner content row of a .card_box details
+   panel (never a standalone clickable card), so it stays still — the panel
+   itself carries the single, soft hover emphasis. No lift. */
 .product-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 16px 40px rgba(30, 46, 94, 0.15);
-  border-color: var(--brand-navy);
+  box-shadow: none;
 }
 
 .product-card img {
@@ -535,15 +536,19 @@ body {
 
 .contact_us_sec .contact-map iframe {
   width: 100%;
-  height: 580px;
+  height: 500px; /* Reduced from 580px */
   border-radius: 12px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
 }
 
 .contact_us_sec .rs-contact-form {
-  background: var(--brand-navy);
+  background: rgba(18, 26, 47, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
   border-radius: 16px;
-  padding: 40px 40px;
+  padding: 30px 40px; /* Reduced top/bottom padding to decrease height */
   position: relative;
   overflow: hidden;
 }
@@ -564,7 +569,7 @@ body {
   font-size: 32px;
   font-weight: 700;
   color: #fff;
-  margin-bottom: 10px;
+  margin-bottom: 5px; /* Reduced margin */
   font-family: "Outfit", sans-serif;
   position: relative;
   z-index: 1;
@@ -572,7 +577,7 @@ body {
 
 .contact_us_sec .rs-contact-form .descrip {
   color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 30px;
+  margin-bottom: 20px; /* Reduced margin */
   font-size: 15px;
   line-height: 24px;
   position: relative;
@@ -1060,26 +1065,27 @@ body {
    ==================================================== */
 .rs-cta-area.rs-cta-two {
   background: transparent !important;
-  padding: 0;
+  padding: 0 !important;
+  margin: 0 !important; /* Reset any margins */
+  height: 0 !important; /* Take up NO vertical space so Enquiry and Footer touch perfectly */
   position: relative;
   z-index: 10;
-  margin-bottom: 0;
+  display: block; /* Normal block so container centers */
 }
 
-/* Remove container constraint so strip is full width */
+/* Shift the container 50% up so it perfectly straddles the boundary */
 .rs-cta-area.rs-cta-two .container {
-  max-width: 100% !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+  transform: translateY(-50%);
 }
 
 .rs-cta-wrapper.footer {
   background: #121a2f !important;
   padding: 22px 48px;
-  border-radius: 0;
+  border-radius: 12px; /* Added rounded corners since it's no longer edge-to-edge */
   position: relative;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  width: 100%;
 }
 
 .rs-cta-wrapper.footer .rs-cta-bg-thumb {
@@ -1228,25 +1234,73 @@ body {
   color: #e2e8f0;
   font-family: "Outfit", sans-serif;
   position: relative;
-  padding-top: 0;
+  padding-top: 0 !important;
+  margin-top: 0 !important; /* Ensure no white space above footer */
 }
 
 /* Footer top content area padding — matches PHP rs-footer-two .rs-footer-top */
 .rs-footer-area .rs-footer-top {
-  padding: 36px 0 40px;
+  padding: 130px 0 40px !important; /* Huge gap below the overlapping CTA strip to prevent hiding content */
+}
+
+/* ── Mobile Responsive Adjustments for CTA and Footer ── */
+@media (max-width: 991px) {
+  /* We removed CTA negative margins since it now has height: 0 and translateY */
+  .rs-footer-area .rs-footer-top {
+    padding: 140px 0 40px !important; /* More room as strip might get taller on tablet */
+  }
+  /* Align Polycab and Dowells side-by-side on mobile/tablet without overflowing */
+  .product-columns {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+  .product-col {
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+  .product-col:last-child {
+    text-align: right !important;
+  }
+}
+
+@media (max-width: 600px) {
+  /* We removed CTA negative margins since it now has height: 0 and translateY */
+  .rs-footer-area .rs-footer-top {
+    padding: 170px 0 40px !important; /* Extra room for stacked CTA strip on mobile to prevent hiding logo */
+  }
+  /* Center logo in footer */
+  .rs-footer-area .rs-footer-widget-logo img {
+    max-width: 220px;
+    margin: 0 auto 24px auto !important;
+  }
+  /* Center CTA content */
+  .rs-cta-wrapper.footer .rs-cta-content-wrapper {
+    justify-content: center !important;
+    text-align: center !important;
+  }
+  .rs-cta-wrapper.footer .rs-cta-title {
+    text-align: center !important;
+    width: 100%;
+  }
+  .rs-cta-wrapper.footer .contact-btn {
+    margin: 0 auto;
+  }
 }
 
 .rs-footer-bg-thumb {
   opacity: 1 !important;
-  /* Fully show the background image */
-  filter: brightness(1.6) !important;
-  /* Make it brighter */
   background-color: #0c0f12 !important;
+  background-position: center !important;
+  background-size: cover !important;
 }
 
-/* Make overlay less dark so the highway light trails are visible */
+/* Make overlay perfectly dark for the new bright cityscape image */
 .rs-footer-two .rs-footer-bg-thumb::before {
-  opacity: 0.3 !important;
+  opacity: 0.82 !important;
+  background: #0c0f12 !important;
 }
 
 /* ── Footer logo ── */
@@ -1642,16 +1696,18 @@ img[alt="logo"] {
   background: #ffffff !important;
   border-radius: 16px !important;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06) !important;
-  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s cubic-bezier(0.25, 1, 0.5, 1) !important;
+  transition: box-shadow 0.45s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.45s cubic-bezier(0.25, 1, 0.5, 1) !important;
   border: 1px solid rgba(0, 0, 0, 0.03) !important;
   overflow: hidden !important;
   position: relative !important;
 }
 
+/* One calm, smooth emphasis on hover — the shadow deepens a touch, no jump.
+   (The old whole-panel translateY lift compounded with the inner card's own
+   lift and read as jerky on a large details panel.) */
 .card_box:hover {
-  transform: translateY(-8px) !important;
-  box-shadow: 0 18px 45px rgba(193, 39, 45, 0.12) !important;
-  border-color: rgba(193, 39, 45, 0.15) !important;
+  box-shadow: 0 20px 48px rgba(30, 46, 94, 0.10) !important;
+  border-color: rgba(30, 46, 94, 0.07) !important;
 }
 
 @layer components {
@@ -4324,7 +4380,13 @@ body::-webkit-scrollbar {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  margin-top: -8px;
+  margin-left: -4px;
+  margin-right: -4px;
   margin-bottom: 18px;
+  padding: 8px 4px;
+  position: relative;
+  z-index: 10;
 }
 
 /* Desktop: clamp the wrapping filter pills to a single row; the "View More"
@@ -4332,7 +4394,7 @@ body::-webkit-scrollbar {
    never overflows vertically and the toggle stays hidden.) */
 @media (min-width: 768px) {
   .hce-tabs {
-    max-height: 48px;
+    max-height: 64px;
     overflow: hidden;
     transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   }
@@ -4362,6 +4424,8 @@ body::-webkit-scrollbar {
   font-weight: 600;
   cursor: pointer;
   transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+  position: relative;
+  z-index: 10;
 }
 
 .hce-tabs-toggle:hover {
@@ -4664,7 +4728,7 @@ body::-webkit-scrollbar {
   width: 160px;
   height: 18px;
   margin: 14px auto 0;
-  background: url('https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/v1784965401/mohit/ui/wire-underline.png') center / contain no-repeat;
+  object-fit: contain;
 }
 
 /* Left: media card holding the Authorized Distributor artwork.
@@ -4801,46 +4865,52 @@ body::-webkit-scrollbar {
   .about-head { margin-bottom: 24px; }
   /* Stacked layout: no feature column to match, so the card takes a fixed
      stage height for the image. */
-  .about-us .about-media-card { height: 320px; min-height: 0; }
+  .about-us .about-media-card,
+  .wcu_sec .about-media-card { height: 320px; min-height: 0; }
 
   /* Icon on top, heading + text centred (per request) — the row goes from a
      side-by-side flex to a centred column. */
-  .about-us .about-feature {
+  .about-us .about-feature,
+  .wcu_sec .about-feature {
     flex-direction: column;
     align-items: center;
     text-align: center;
     gap: 12px;
   }
-  .about-us .about-feature p {
+  .about-us .about-feature p,
+  .wcu_sec .about-feature p {
     text-align: center;
   }
   /* No slide-on-tap on touch. */
-  .about-us .about-feature:hover {
+  .about-us .about-feature:hover,
+  .wcu_sec .about-feature:hover {
     transform: none;
   }
 }
 
-/* ── Homepage section rhythm — the theme's 100px/50px paddings left big empty
-   bands between sections; tightened so the page flows without dead space. */
-.image-box-section.about-us {
-  padding-top: 56px !important;
-  padding-bottom: 10px !important;
+/* ── Homepage section rhythm — standardized perfect gap and height. ── */
+.image-box-section.about-us,
+.rs-portfolio-area.rs-portfolio-seven,
+.rs-contact-area.contact_us_sec,
+.rs-counter-area,
+.wcu_sec,
+.hce-section {
+  padding-top: 80px !important;
+  padding-bottom: 80px !important;
+  margin-top: 0 !important;
   margin-bottom: 0 !important;
 }
 
-.rs-portfolio-area.rs-portfolio-seven {
-  padding-top: 36px !important;
-  padding-bottom: 36px !important;
-}
-
-.rs-contact-area.contact_us_sec {
-  padding-top: 44px !important;
-  padding-bottom: 44px !important;
-}
-
-.rs-counter-area {
-  padding-top: 40px !important;
-  padding-bottom: 40px !important;
+@media (max-width: 991px) {
+  .image-box-section.about-us,
+  .rs-portfolio-area.rs-portfolio-seven,
+  .rs-contact-area.contact_us_sec,
+  .rs-counter-area,
+  .wcu_sec,
+  .hce-section {
+    padding-top: 50px !important;
+    padding-bottom: 50px !important;
+  }
 }
 
 /* ── Homepage band rhythm — every section was transparent over the same fixed
@@ -4859,133 +4929,34 @@ body::-webkit-scrollbar {
     0 20px 34px -30px rgba(30, 46, 94, 0.22);
 }
 
+/* ── Achievements Counter — solid dark blue numbers and titles instead of outlines ── */
+.rs-counter-area .rs-counter-number,
+.rs-counter-area .prefix {
+  color: var(--brand-navy) !important;
+  -webkit-text-fill-color: var(--brand-navy) !important;
+  -webkit-text-stroke: 0 !important;
+}
+.rs-counter-area .rs-counter-title {
+  color: var(--brand-navy) !important;
+  font-weight: 500;
+}
+
 /* ── Why Choose Us — light band matching the other homepage sections: a
    centred heading, then a two-column body that mirrors the About Us split —
    the reasons on the LEFT and a supporting image card on the RIGHT. It reuses
    the About Us .about-feature / .about-media-card look, so the rules below are
    the same styling re-scoped to .wcu_sec. ── */
-.wcu_sec {
-  padding: 40px 0 20px;
-}
+/* padding moved to unified section rhythm block above */
 
 .wcu_sec .about-v2 {
   align-items: stretch;
 }
 
-/* Same card-less floating 3D image as About Us (mirrored side). The collage
-   is opaque, so it reads as a tilted photo lifting off the page. */
-.wcu_sec .about-media-card {
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  position: relative;
-  height: 100%;
-  min-height: 300px;
-  perspective: 1400px;
-}
-
-.wcu_sec .about-media-card img {
-  position: absolute;
-  inset: 0;
-  width: 100% !important;
-  height: 100%;
-  object-fit: contain;
-  border-radius: 14px;
-  transform: perspective(1400px) rotateY(7deg) rotateX(2deg) scale(0.98);
-  filter: drop-shadow(0 22px 34px rgba(30, 46, 94, 0.3))
-    drop-shadow(0 8px 14px rgba(30, 46, 94, 0.2));
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease;
-  will-change: transform;
-}
-
-.wcu_sec .about-media-card:hover img {
-  transform: perspective(1400px) rotateY(0deg) rotateX(0deg) scale(1.02);
-  filter: drop-shadow(0 30px 46px rgba(30, 46, 94, 0.36))
-    drop-shadow(0 12px 20px rgba(30, 46, 94, 0.24));
-}
-
-.wcu_sec .about-feature {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 17px 0;
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.wcu_sec .about-feature:hover {
-  transform: translateX(6px);
-}
-
-.wcu_sec .about-feature:first-child {
-  padding-top: 4px;
-}
-
-.wcu_sec .about-feature + .about-feature {
-  border-top: 1px solid #e8edf6;
-}
-
-.wcu_sec .about-feature-icon {
-  flex: 0 0 60px;
-  width: 60px;
-  height: 60px;
-  border-radius: 14px;
-  background: var(--brand-navy);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 3px 8px rgba(30, 46, 94, 0.14), 0 10px 22px rgba(30, 46, 94, 0.22);
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
-}
-
-.wcu_sec .about-feature:hover .about-feature-icon {
-  transform: translateY(-4px) scale(1.05);
-  box-shadow: 0 5px 10px rgba(30, 46, 94, 0.16), 0 16px 32px rgba(30, 46, 94, 0.3);
-}
-
-.wcu_sec .about-feature-icon.is-red {
-  background: var(--brand-red);
-  box-shadow: 0 3px 8px rgba(193, 39, 45, 0.16), 0 10px 22px rgba(193, 39, 45, 0.25);
-}
-
-.wcu_sec .about-feature:hover .about-feature-icon.is-red {
-  box-shadow: 0 5px 10px rgba(193, 39, 45, 0.18), 0 16px 32px rgba(193, 39, 45, 0.34);
-}
-
-.wcu_sec .about-feature-icon svg {
-  width: 26px;
-  height: 26px;
-}
-
-.wcu_sec .about-feature-title {
-  font-family: "Outfit", sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--brand-navy);
-  margin: 0 0 6px;
-  transition: color 0.3s ease;
-}
-
-.wcu_sec .about-feature:hover .about-feature-title {
-  color: var(--brand-red);
-}
-
-.wcu_sec .about-feature p {
-  color: #000000;
-  font-size: 15.5px;
-  line-height: 1.7;
-  text-align: justify;
-  margin: 0;
-}
-
-@media (max-width: 991px) {
-  .wcu_sec .about-media-card { height: 320px; min-height: 0; }
-}
 
 /* ── Contact section — solid dark blue matching the sticky header (#121a2f)
    instead of the theme's near-black; the dark textures are dropped so it's clean. */
 .contact_us_sec {
-  background-color: #121a2f !important;
+  background: linear-gradient(rgba(18, 26, 47, 0.65), rgba(18, 26, 47, 0.65)), url('/assets/images/image copy.png?v=2') no-repeat center center / cover !important;
 }
 
 .contact_us_sec .rs-contact-bg-thumb,
@@ -5630,11 +5601,14 @@ i.fa-brands, i.fab, .fa-brands, .fab { font-weight: 400 !important; }
      resets); a clean rounded block hugging the logo so its subtitle stays
      legible against the navy bar. */
   #header-sticky .rs-header-left {
+    align-self: center !important;
+  }
+  #header-sticky .rs-header-left .rs-header-logo {
     background: #ffffff !important;
     border-radius: 10px !important;
     padding: 6px 16px !important;
     margin: 8px 0 !important;
-    align-self: center !important;
+    width: max-content !important;
   }
   .banner_sec.mobile { margin-top: 0 !important; }
   .banner_sec .banner-swiper { padding-top: 0 !important; }
