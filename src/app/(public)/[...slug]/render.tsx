@@ -8,6 +8,7 @@ import JsonLd from '@/components/JsonLd';
 import { breadcrumbJsonLd, productJsonLd } from '@/lib/json-ld';
 import { categoryIcon } from '@/lib/category-icons';
 import { humanizeSegment } from '@/lib/landing';
+import LandingCardGrid from '@/components/LandingCardGrid';
 import { ArrowRight } from 'lucide-react';
 
 /**
@@ -790,8 +791,6 @@ export function renderHubLanding(
     name: humanizeSegment(segments.slice(0, i + 1).join('/')),
     slug: segments.slice(0, i + 1).join('/'),
   }));
-  const FALLBACK =
-    'https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/logo/msc_logo_without_bg.png';
   const sorted = [...children].sort((a, b) =>
     humanizeSegment(a.slug).localeCompare(humanizeSegment(b.slug)),
   );
@@ -832,27 +831,15 @@ export function renderHubLanding(
           <div className="section-title text-center mb-5">
             <h2>Product Lines</h2>
           </div>
-          <div className="hce-grid mt-4 mb-5">
-            {sorted.map((child, idx) => {
-              const name = humanizeSegment(child.slug);
-              return (
-                <a key={child.slug} href={`/${child.slug}`} className="hce-card">
-                  <span className={`hce-card-img hce-tint-${idx % 4}`}>
-                    <img src={child.image ? cld(child.image) : cld(FALLBACK)} alt={name} loading="lazy" />
-                  </span>
-                  <span className="hce-card-body">
-                    <span className={`hce-card-badge hce-badge-${idx % 4}`} aria-hidden="true">
-                      {categoryIcon(name)}
-                    </span>
-                    <span className="hce-card-name">{name}</span>
-                    <span className="hce-card-cta">
-                      View Products{child.count ? ` (${child.count})` : ''} <ArrowRight aria-hidden="true" />
-                    </span>
-                  </span>
-                </a>
-              );
-            })}
-          </div>
+          <LandingCardGrid
+            className="mt-4 mb-5"
+            cards={sorted.map((child) => ({
+              title: humanizeSegment(child.slug),
+              image: child.image,
+              link: `/${child.slug}`,
+              cta: `View Products${child.count ? ` (${child.count})` : ''}`,
+            }))}
+          />
         </div>
       </section>
     </main>
