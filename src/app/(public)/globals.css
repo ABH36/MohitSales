@@ -5004,6 +5004,23 @@ body::-webkit-scrollbar {
   line-height: 1;
 }
 
+/* Product/category breadcrumb banner on mobile. The wide desktop hero strip
+   (1920×390, background-size:cover) over-zoomed on a narrow, tall viewport:
+   at ~374px tall, cover showed only the left ~21% of the strip — the hero's
+   baked-in wordmark text — and cropped the product imagery out entirely.
+   Shortening the banner cuts the vertical zoom hard (a ~180px banner reveals
+   ~45% of the strip instead of 21%) and centring lands on the product montage;
+   the left-to-right wash still keeps the title + breadcrumb crisp. */
+@media (max-width: 767px) {
+  .rs-breadcrumb-area.rs-breadcrumb-one {
+    padding-top: 46px !important;
+    padding-bottom: 34px !important;
+  }
+  .rs-breadcrumb-area.rs-breadcrumb-one .rs-breadcrumb-bg {
+    background-position: center center !important;
+  }
+}
+
 /* Contact-us location map — rounded, shadowed, sits on the page gradient. */
 .contact-page-map {
   border-radius: 16px;
