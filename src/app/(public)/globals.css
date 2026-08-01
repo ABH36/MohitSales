@@ -1497,6 +1497,13 @@ body {
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12) !important;
   display: inline-flex !important;
   align-items: center !important;
+  justify-content: center !important;
+  /* Hug the logo. A legacy "curved card" rule forces width:clamp(230-400px)
+     + justify-content:flex-start on .rs-header-left, which left ~86px of empty
+     white to the right of the mark. fit-content shrink-wraps the block to the
+     logo + padding; the id selector's specificity beats that width rule. */
+  width: fit-content !important;
+  height: auto !important;
   padding: 8px 22px !important;
   margin: 10px 0 !important;
   align-self: center !important;
