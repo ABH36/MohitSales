@@ -154,12 +154,14 @@ p, body.ltr p {
   --brand-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* card elevation */
 }
 
-/* ── Public page canvas — light red↔blue gradient (replaces the plain white
-   background), centralized in one place. Sections/cards sit on top; opaque
-   white cards pop against it just like the admin panel. Fixed so it stays
-   put while the page scrolls. ── */
+/* ── Public page canvas — a cool, professional blue-grey wash, centralized in
+   one place. It echoes the navy/blue brand (the old pink↔blue read too warm
+   for an electrical brand) and, being a touch deeper than the white cards,
+   gives every card and panel a clean, clear edge so content reads crisply.
+   Sections are transparent and reveal it; opaque white cards pop against it.
+   Fixed so it stays put while the page scrolls. ── */
 body {
-  background: linear-gradient(125deg, #fbdede 0%, #f1ecf1 42%, #dde8fb 100%) fixed !important;
+  background: linear-gradient(160deg, #e8eef7 0%, #f1f4fa 48%, #dfe7f4 100%) fixed !important;
   /* Clip transient horizontal overflow from scroll-reveal slide-ins (elements
      animate in from ±40px) and the auto-scroll marquee, so no width ever shows a
      horizontal scrollbar. Vertical scroll is unaffected; wide content (tables,
