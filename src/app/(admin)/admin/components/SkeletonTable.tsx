@@ -49,16 +49,3 @@ export function SkeletonCards({ count = 6 }: { count?: number }) {
     </div>
   );
 }
-
-export function SkeletonStats({ count = 4 }: { count?: number }) {
-  return (
-    <div style={{ display: 'grid', gridTemplateColumns: `repeat(${count}, 1fr)`, gap: '16px', marginBottom: '24px' }}>
-      {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="admin-table-wrapper" style={{ padding: '20px', overflow: 'hidden' }}>
-          <div className="skeleton-box" style={{ width: '50%', height: '28px', marginBottom: '8px' }} />
-          <div className="skeleton-box" style={{ width: '70%', height: '14px' }} />
-        </div>
-      ))}
-    </div>
-  );
-}

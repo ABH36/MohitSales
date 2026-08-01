@@ -880,8 +880,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
 // ── DB Product Detail Page ────────────────────────────────────────────
 export async function generateStaticParams() {
-  console.log('[generateStaticParams] Fetching database contents for pre-rendering...');
-
   try {
     // 1. Fetch all active products
     const products = await prisma.product.findMany({
@@ -1002,7 +1000,6 @@ export async function generateStaticParams() {
       slug: slug.split('/').filter(Boolean)
     }));
 
-    console.log(`[generateStaticParams] Generated ${paramsList.length} slugs for pre-rendering.`);
     return paramsList;
   } catch (error) {
     console.error('[generateStaticParams] Database connection failed (expected during docker build):', error);

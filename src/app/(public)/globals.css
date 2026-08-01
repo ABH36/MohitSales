@@ -1081,7 +1081,7 @@ body {
 }
 
 .rs-cta-wrapper.footer {
-  background: #121a2f !important;
+  background: var(--brand-navy) !important;
   padding: 22px 48px;
   border-radius: 12px; /* Added rounded corners since it's no longer edge-to-edge */
   position: relative;
@@ -1481,7 +1481,7 @@ body {
   position: relative;
   width: 100%;
   z-index: 999;
-  background: #121a2f !important;
+  background: var(--brand-navy) !important;
   border-bottom: none !important;
 }
 
@@ -1563,7 +1563,7 @@ img[alt="logo"] {
      below it and body text never slides visibly under the bar. */
   .rs-header-two {
     padding: 0 !important;
-    background: #121a2f !important;
+    background: var(--brand-navy) !important;
     border-bottom: none !important;
   }
 
@@ -1576,7 +1576,7 @@ img[alt="logo"] {
   .rs-header-two.rs-sticky {
     /* Fully opaque, not the theme's 0.98 — at that alpha the body text passing
        underneath stays legible through the bar. */
-    background: #121a2f !important;
+    background: var(--brand-navy) !important;
   }
 
   .rs-header-two .rs-header-inner {
@@ -3378,7 +3378,7 @@ a.enquiry-btn:hover,
    fully opaque so page text cannot show through as it scrolls under.
    ═══════════════════════════════════════════════ */
 .rs-header-area.rs-header-two.has-theme-orange.rs-sticky {
-  background: #121a2f;
+  background: var(--brand-navy);
 }
 
 /* The theme's fadeInDown made the pinned header drop in from above — with the
@@ -3393,7 +3393,7 @@ a.enquiry-btn:hover,
    !important so the pinned state actually wins, with the solid navy fill. */
 .rs-header-area.header-transparent.rs-sticky {
   position: fixed !important;
-  background: #121a2f !important;
+  background: var(--brand-navy) !important;
 }
 
 /* Inner pages: the <header> wrapper stays put with position:sticky — it never
@@ -3665,7 +3665,7 @@ header .rs-header-area.rs-header-two .rs-header-left .rs-header-logo img[alt="lo
   }
 
   header .rs-header-area.rs-header-two.header-transparent .rs-header-hamburger i {
-    color: #121a2f !important;
+    color: var(--brand-navy) !important;
   }
 
   /* Interior pages (solid dark header) — same flat treatment: drop
@@ -3849,7 +3849,7 @@ body::-webkit-scrollbar {
   background: transparent;
   border: none;
   outline: none;
-  color: #121a2f;
+  color: var(--brand-navy);
   font-family: 'Outfit', sans-serif;
   font-size: 14px;
   /* Zero-width and unclickable while collapsed, so it cannot steal the click
@@ -3915,7 +3915,7 @@ body::-webkit-scrollbar {
   outline: none;
   font-family: 'Outfit', sans-serif;
   font-size: 15px;
-  color: #121a2f;
+  color: var(--brand-navy);
 }
 
 .mobile-search-input::placeholder { color: #94a3b8; }
@@ -3951,7 +3951,7 @@ body::-webkit-scrollbar {
   border-radius: 10px;
   font-family: 'Outfit', sans-serif;
   font-size: 16px;
-  color: #121a2f;
+  color: var(--brand-navy);
   background: #ffffff;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -4065,7 +4065,7 @@ body::-webkit-scrollbar {
   border-radius: 9px;
   font-family: 'Outfit', sans-serif;
   font-size: 15px;
-  color: #121a2f;
+  color: var(--brand-navy);
   background: #ffffff;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -4091,7 +4091,7 @@ body::-webkit-scrollbar {
   background: #ffffff;
   font-family: 'Outfit', sans-serif;
   font-size: 15px;
-  color: #121a2f;
+  color: var(--brand-navy);
   cursor: pointer;
   outline: none;
   max-width: 220px;
@@ -5628,7 +5628,7 @@ i.fa-brands, i.fab, .fa-brands, .fab { font-weight: 400 !important; }
    the white curved logo block. `#header-sticky` (id) guarantees the bar colour
    wins over any theme rule. ── */
 @media (max-width: 991px) {
-  #header-sticky { background: #121a2f !important; }
+  #header-sticky { background: var(--brand-navy) !important; }
   /* White logo block on mobile too (ID-scoped so it beats the theme's mobile
      resets); a clean rounded block hugging the logo so its subtitle stays
      legible against the navy bar. */
