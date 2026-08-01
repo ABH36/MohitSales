@@ -255,8 +255,12 @@ async function getPageContent(
     if (!pageContent || !pageContent.isActive) return null;
     return { html: pageContent.htmlContent, heading: pageContent.heading };
   } catch (e) {
-    console.error('[getPageContent] Error:', e);
-    return null;
+    // A thrown error here is a TRANSIENT DB failure, not a missing page. Let it
+    // propagate (the caller turns it into a 500, which ISR does not cache) so we
+    // never serve a cacheable 404 for a page that actually exists. A genuine
+    // "no such page" returns null above without throwing.
+    console.error('[getPageContent] DB error:', e);
+    throw e;
   }
 }
 
@@ -266,12 +270,20 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   // Runtime is always DB-driven (build-cache removed). Redirect checks are
   // handled upstream by middleware (/api/public/redirect).
+  // Transient DB failures must never look like "page not found": if a read
+  // throws, we flag it and (should we otherwise reach the 404) throw instead of
+  // calling notFound(), because ISR caches a 404 for the whole revalidate window
+  // but does not cache a 500 — so a blip self-heals on the next request rather
+  // than pinning a valid page to "Page Not Found" for an hour.
+  let dbErrored = false;
+
   const [dbProductEarlyRaw, product, dbCategoryEarly] = await Promise.all([
     prisma.product.findUnique({
       where: { slug: slugPath },
       include: { category: { include: { parent: { include: { parent: { include: { parent: true } } } } } } }
     }).catch((e) => {
       console.error('[slug:dbProductEarly] Error fetching product early:', e);
+      dbErrored = true;
       return null;
     }),
     getProductData(slugPath),
@@ -279,12 +291,21 @@ export default async function ProductPage({ params }: ProductPageProps) {
       where: { slug: slugPath }
     }).catch((e) => {
       console.error('[slug:dbCategoryEarly] Error fetching category early:', e);
+      dbErrored = true;
       return null;
     })
   ]);
 
   const dbProductEarly = (dbCategoryEarly || (dbProductEarlyRaw && (!dbProductEarlyRaw.isActive || dbProductEarlyRaw.stock <= 0))) ? null : dbProductEarlyRaw;
-  const legacyPage = await getPageContent(slugPath);
+  // getPageContent throws on a transient DB error (vs. returning null for a
+  // genuinely absent page); catch it into the same flag so we don't 404.
+  let legacyPage: { html: string; heading: string | null } | null = null;
+  try {
+    legacyPage = await getPageContent(slugPath);
+  } catch (e) {
+    console.error('[slug:getPageContent] DB error:', e);
+    dbErrored = true;
+  }
   const legacyHtml = legacyPage?.html ?? null;
 
   const hasLegacyCards = legacyHtml && (
@@ -826,6 +847,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
   // ══════════════════════════════════════════════════════════════════════
   // PRIORITY 6: 404
   // ══════════════════════════════════════════════════════════════════════
+  // Only reach here having found nothing. If a DB read threw along the way, the
+  // "nothing" is untrustworthy — throw a 500 (uncached, retries next request)
+  // instead of caching a 404 on what may be a perfectly valid page.
+  if (dbErrored) {
+    throw new Error(`Transient DB error while resolving /${slugPath}; refusing to cache a 404.`);
+  }
   notFound();
 }
 
