@@ -773,4 +773,97 @@ export function renderProductLayout(isMultiProduct: boolean, product: any, clean
   }
 }
 
+/** "cables-by-application" -> "Cables By Application". Acronyms in known
+ *  segments are upper-cased so e.g. "it-industry" reads "IT Industry". */
+function humanizeSegment(slug: string): string {
+  const seg = (slug.split('/').pop() || slug).replace(/-/g, ' ');
+  const ACR = new Set(['it', 'ehv', 'lv', 'mv', 'hv', 'ac', 'dc', 'pvc', 'xlpe', 'led', 'rccb', 'rcbo', 'mcb', 'accl', 'upvc']);
+  return seg.replace(/\b[\w']+/g, (w) => (ACR.has(w.toLowerCase()) ? w.toUpperCase() : w.charAt(0).toUpperCase() + w.slice(1)));
+}
+
+/**
+ * Landing page for a "hub" slug that has no row of its own but does have
+ * children — the parent category pages (e.g. /industries/cables-by-application)
+ * that the migration never created. Rather than 404, it lists the immediate
+ * children as a card grid, mirroring renderDbCategory's sub-category view.
+ */
+export function renderHubLanding(
+  slugPath: string,
+  children: { slug: string; image: string | null; count: number }[],
+) {
+  const segments = slugPath.split('/');
+  const title = humanizeSegment(slugPath);
+  const crumbs = segments.slice(0, -1).map((_, i) => ({
+    name: humanizeSegment(segments.slice(0, i + 1).join('/')),
+    slug: segments.slice(0, i + 1).join('/'),
+  }));
+  const FALLBACK =
+    'https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/mohit/logo/msc_logo_without_bg.png';
+  const sorted = [...children].sort((a, b) =>
+    humanizeSegment(a.slug).localeCompare(humanizeSegment(b.slug)),
+  );
+  const crumbsLd = breadcrumbJsonLd(
+    [...crumbs.map((c) => ({ name: c.name, path: `/${c.slug}` })), { name: title }],
+    `/${slugPath}`,
+  );
+
+  return (
+    <main>
+      <JsonLd data={crumbsLd} />
+      <section className="rs-breadcrumb-area rs-breadcrumb-one p-relative">
+        <div className="rs-breadcrumb-bg" style={{ backgroundImage: breadcrumbBgStyle(slugPath) }}></div>
+        <div className="container">
+          <div className="row">
+            <div className="w-full">
+              <div className="rs-breadcrumb-content-wrapper">
+                <div className="rs-breadcrumb-title-wrapper">
+                  <h1 className="rs-breadcrumb-title">{title}</h1>
+                </div>
+                <div className="rs-breadcrumb-menu">
+                  <nav><ul>
+                    <li><span><a href="/">Home</a></span></li>
+                    {crumbs.map((c, idx) => (
+                      <li key={idx}><span><a href={`/${c.slug}`}>{c.name}</a></span></li>
+                    ))}
+                    <li><span>{title}</span></li>
+                  </ul></nav>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="catalogue-section">
+        <div className="container">
+          <div className="section-title text-center mb-5">
+            <h2>Product Lines</h2>
+          </div>
+          <div className="hce-grid mt-4 mb-5">
+            {sorted.map((child, idx) => {
+              const name = humanizeSegment(child.slug);
+              return (
+                <a key={child.slug} href={`/${child.slug}`} className="hce-card">
+                  <span className={`hce-card-img hce-tint-${idx % 4}`}>
+                    <img src={child.image ? cld(child.image) : cld(FALLBACK)} alt={name} loading="lazy" />
+                  </span>
+                  <span className="hce-card-body">
+                    <span className={`hce-card-badge hce-badge-${idx % 4}`} aria-hidden="true">
+                      {categoryIcon(name)}
+                    </span>
+                    <span className="hce-card-name">{name}</span>
+                    <span className="hce-card-cta">
+                      View Products{child.count ? ` (${child.count})` : ''} <ArrowRight aria-hidden="true" />
+                    </span>
+                  </span>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
+
 // ── Build-time Static Parameter Generation & Caching ──────────────────

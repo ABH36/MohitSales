@@ -7,7 +7,7 @@ import ProductPageWrapper from '@/components/ProductPageWrapper';
 import CategoryFilter from '@/components/CategoryFilter';
 import SchemaInjector from '@/components/SchemaInjector';
 import { sanitizeHtml } from '@/lib/utils';
-import { renderDbProduct, renderDbCategory, renderProductLayout } from './render';
+import { renderDbProduct, renderDbCategory, renderProductLayout, renderHubLanding } from './render';
 import { extractTagline } from '@/lib/product-specs';
 import { breadcrumbBgStyle } from '@/lib/page-banner';
 import JsonLd from '@/components/JsonLd';
@@ -262,6 +262,50 @@ async function getPageContent(
     console.error('[getPageContent] DB error:', e);
     throw e;
   }
+}
+
+/**
+ * Immediate children of a "hub" slug that has no row of its own. The parent
+ * category pages (e.g. /industries/cables-by-application) were never migrated,
+ * but their descendants exist as products/pageContent — so we synthesise the
+ * hub from them: one card per immediate child, carrying a representative image
+ * and the count of products beneath it. Returns [] when the slug is a genuine
+ * leaf (no descendants) so the caller still 404s.
+ */
+async function getHubChildren(
+  slugPath: string,
+): Promise<{ slug: string; image: string | null; count: number }[]> {
+  const prefix = slugPath + '/';
+  const depth = slugPath.split('/').length;
+  const immediate = (s: string) => s.split('/').slice(0, depth + 1).join('/');
+
+  const [prods, pcs] = await Promise.all([
+    prisma.product.findMany({
+      where: { slug: { startsWith: prefix }, isActive: true, stock: { gt: 0 } },
+      select: { slug: true, imageSrc: true },
+      orderBy: { sortOrder: 'asc' },
+    }),
+    prisma.pageContent.findMany({
+      where: { slug: { startsWith: prefix }, isActive: true },
+      select: { slug: true },
+    }),
+  ]);
+
+  const map = new Map<string, { slug: string; image: string | null; count: number }>();
+  for (const pr of prods) {
+    const child = immediate(pr.slug);
+    if (child === slugPath) continue; // safety: never point at self
+    const e = map.get(child) || { slug: child, image: null, count: 0 };
+    e.count++;
+    if (!e.image && pr.imageSrc) e.image = pr.imageSrc;
+    map.set(child, e);
+  }
+  for (const pc of pcs) {
+    const child = immediate(pc.slug);
+    if (child === slugPath || map.has(child)) continue;
+    map.set(child, { slug: child, image: null, count: 0 });
+  }
+  return [...map.values()];
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
@@ -840,6 +884,27 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <ProductPageWrapper>
         <SchemaInjector page={`/${slugPath}`} />
         {renderDbCategory(dbCategory)}
+      </ProductPageWrapper>
+    );
+  }
+
+  // ══════════════════════════════════════════════════════════════════════
+  // PRIORITY 5.5: Hub landing — no row of its own, but it has children.
+  // Parent "hub" pages (e.g. /industries/cables-by-application) were never
+  // migrated as their own product/category/pageContent row, yet their
+  // descendants exist. Render a card grid of the immediate children instead of
+  // 404-ing on a page that clearly should exist.
+  // ══════════════════════════════════════════════════════════════════════
+  const hubChildren = await getHubChildren(slugPath).catch((e) => {
+    console.error('[slug:getHubChildren] DB error:', e);
+    dbErrored = true;
+    return [] as { slug: string; image: string | null; count: number }[];
+  });
+  if (hubChildren.length > 0) {
+    return (
+      <ProductPageWrapper>
+        <SchemaInjector page={`/${slugPath}`} />
+        {renderHubLanding(slugPath, hubChildren)}
       </ProductPageWrapper>
     );
   }
