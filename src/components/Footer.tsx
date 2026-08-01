@@ -84,7 +84,7 @@ export default function Footer() {
         <div className="rs-footer-area rs-footer-two has-space has-theme-orange footer-new">
           <div
             className="rs-footer-bg-thumb"
-            style={{ backgroundImage: `url('${cld('https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167842/mohit/bg/footer-bg.webp')}')` }}
+            style={{ backgroundImage: `url('/assets/images/image%20copy%202.png?v=2')` }}
           ></div>
           <div className="rs-footer-top">
             <div className="container">
@@ -201,14 +201,14 @@ export default function Footer() {
               <div className="row justify-content-center">
                 <div className="w-full">
                   <div className="rs-footer-copyright has-theme-orange text-center">
-                    <p>
-                      © <span>2026</span> Mohit Sales Corporation Pvt. Ltd. Designed by{' '}
-                      <a href="https://www.bdminfotech.com/" target="_blank" rel="noopener noreferrer">
+                    <p className="d-flex justify-content-center align-items-center flex-wrap" style={{ margin: 0, gap: '6px' }}>
+                      © <span>2026</span> Mohit Sales Corporation Pvt. Ltd. Designed by
+                      <a href="https://bdm.co.in/" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center' }}>
                         <img
-                          src={cld("https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167907/mohit/logo/bdm_footer.png")}
-                          className="bdm-footer-logo inline-block align-middle ml-1"
+                          src="/assets/images/Final-logo.png"
+                          className="bdm-footer-logo"
                           alt="BDM Cloudtech"
-                          style={{ display: 'inline-block', verticalAlign: 'middle', height: '28px', width: 'auto' }}
+                          style={{ display: 'block', height: '28px', width: 'auto' }}
                         />
                       </a>
                     </p>

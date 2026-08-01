@@ -93,7 +93,7 @@ export default function HomeAchievements() {
                   }}
                 />
               </h2>
-              <span className="about-head-underline" aria-hidden="true"></span>
+              <img src="https://res.cloudinary.com/da2dmtm9b/image/upload/f_auto,q_auto/v1784965401/mohit/ui/wire-underline.png" alt="" className="about-head-underline" aria-hidden="true" loading="lazy" />
             </div>
           </div>
         </div>
