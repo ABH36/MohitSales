@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { getSeoMetadata } from '@/lib/seo';
-import CategoryLandingGrid, { type LandingItem } from '@/components/CategoryLandingGrid';
+import CategoryLandingGrid from '@/components/CategoryLandingGrid';
+import { getLandingItems } from '@/lib/landing';
 
 export async function generateMetadata(): Promise<Metadata> {
   return getSeoMetadata('/gland', {
@@ -22,20 +23,13 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-const PRODUCTS: LandingItem[] = [
-  { title: 'Single Compression Gland', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167936/mohit/our_products/gland/1.jpg', link: '/gland/single-compression-gland' },
-  { title: 'Double Compression Gland', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167937/mohit/our_products/gland/2.jpg', link: '/gland/double-compression-gland' },
-  { title: 'Flang Type Gland', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783166512/mohit/our_products/gland/3.jpg', link: '/gland/flang-type-gland' },
-  { title: 'Shrouds', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783166513/mohit/our_products/gland/4.jpg', link: '/gland/shrouds' },
-  { title: 'Earthing Tag', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783166511/mohit/our_products/gland/5.jpg', link: '/gland/earthing-tag' },
-];
-
-export default function GlandPage() {
+export default async function GlandPage() {
+  const items = await getLandingItems('gland');
   return (
     <CategoryLandingGrid
       title="Gland"
       breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Dowells', href: '/dowells' }, { label: 'Gland' }]}
-      items={PRODUCTS}
+      items={items}
     />
   );
 }

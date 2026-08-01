@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { getSeoMetadata } from '@/lib/seo';
-import CategoryLandingGrid, { type LandingItem } from '@/components/CategoryLandingGrid';
+import CategoryLandingGrid from '@/components/CategoryLandingGrid';
+import { getLandingItems } from '@/lib/landing';
 
 export async function generateMetadata(): Promise<Metadata> {
   return getSeoMetadata('/solar', {
@@ -22,19 +23,13 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-const PRODUCTS: LandingItem[] = [
-  { title: 'Solar Grid Tie Inverter', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167960/mohit/our_products/solar/solar-grid-tie-inverter.png', link: '/solar/solar-grid-tie-inverter' },
-  { title: 'DC MCB', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783166551/mohit/our_products/solar/DC-MCB-2.png', link: '/solar/dc-mcb' },
-  { title: 'Solar DC Cable', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783166523/mohit/our_products/solar/solar-dc-cable.png', link: '/solar/solar-dc-cable' },
-  { title: 'Solar Panel', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783166527/mohit/our_products/solar/Mono_Crystalline.png', link: '/solar/solar-panel' },
-];
-
-export default function SolarPage() {
+export default async function SolarPage() {
+  const items = await getLandingItems('solar');
   return (
     <CategoryLandingGrid
       title="Solar"
       breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Polycab', href: '/polycab' }, { label: 'Solar' }]}
-      items={PRODUCTS}
+      items={items}
     />
   );
 }

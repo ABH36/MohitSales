@@ -7,6 +7,7 @@ import StickyProductActions from '@/components/StickyProductActions';
 import JsonLd from '@/components/JsonLd';
 import { breadcrumbJsonLd, productJsonLd } from '@/lib/json-ld';
 import { categoryIcon } from '@/lib/category-icons';
+import { humanizeSegment } from '@/lib/landing';
 import { ArrowRight } from 'lucide-react';
 
 /**
@@ -771,14 +772,6 @@ export function renderProductLayout(isMultiProduct: boolean, product: any, clean
       </section>
     );
   }
-}
-
-/** "cables-by-application" -> "Cables By Application". Acronyms in known
- *  segments are upper-cased so e.g. "it-industry" reads "IT Industry". */
-function humanizeSegment(slug: string): string {
-  const seg = (slug.split('/').pop() || slug).replace(/-/g, ' ');
-  const ACR = new Set(['it', 'ehv', 'lv', 'mv', 'hv', 'ac', 'dc', 'pvc', 'xlpe', 'led', 'rccb', 'rcbo', 'mcb', 'accl', 'upvc']);
-  return seg.replace(/\b[\w']+/g, (w) => (ACR.has(w.toLowerCase()) ? w.toUpperCase() : w.charAt(0).toUpperCase() + w.slice(1)));
 }
 
 /**

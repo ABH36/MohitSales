@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { getSeoMetadata } from '@/lib/seo';
-import CategoryLandingGrid, { type LandingItem } from '@/components/CategoryLandingGrid';
+import CategoryLandingGrid from '@/components/CategoryLandingGrid';
+import { getLandingItems } from '@/lib/landing';
 
 export async function generateMetadata(): Promise<Metadata> {
   return getSeoMetadata('/home-appliances', {
@@ -22,18 +23,13 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-const PRODUCTS: LandingItem[] = [
-  { title: 'Water Heaters', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783166522/mohit/our_products/home_appliances/1.png', link: '/home-appliances/water-heaters' },
-  { title: 'Irons', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167944/mohit/our_products/home_appliances/2.png', link: '/home-appliances/irons' },
-  { title: 'Coolers', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167945/mohit/our_products/home_appliances/3.png', link: '/home-appliances/coolers' },
-];
-
-export default function HomeAppliancesPage() {
+export default async function HomeAppliancesPage() {
+  const items = await getLandingItems('home-appliances');
   return (
     <CategoryLandingGrid
       title="Home Appliances"
       breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Polycab', href: '/polycab' }, { label: 'Home Appliances' }]}
-      items={PRODUCTS}
+      items={items}
     />
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { getSeoMetadata } from '@/lib/seo';
-import CategoryLandingGrid, { type LandingItem } from '@/components/CategoryLandingGrid';
+import CategoryLandingGrid from '@/components/CategoryLandingGrid';
+import { getLandingItems } from '@/lib/landing';
 
 export async function generateMetadata(): Promise<Metadata> {
   return getSeoMetadata('/conduit-accessories', {
@@ -22,17 +23,13 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-const PRODUCTS: LandingItem[] = [
-  { title: 'UPVC Conduit', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167913/mohit/our_products/conduit_accessories/CONDUITS.png', link: '/conduit-accessories/upvc-conduit' },
-  { title: 'Concealed Box', image: 'https://res.cloudinary.com/da2dmtm9b/image/upload/v1783167914/mohit/our_products/conduit_accessories/Concealed-Box.png', link: '/conduit-accessories/concealed-box' },
-];
-
-export default function ConduitAccessoriesPage() {
+export default async function ConduitAccessoriesPage() {
+  const items = await getLandingItems('conduit-accessories');
   return (
     <CategoryLandingGrid
       title="Conduit & Accessories"
       breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Polycab', href: '/polycab' }, { label: 'Conduit & Accessories' }]}
-      items={PRODUCTS}
+      items={items}
     />
   );
 }
