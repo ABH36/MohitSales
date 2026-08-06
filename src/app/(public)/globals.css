@@ -1202,17 +1202,39 @@ body {
   transform: translateX(-70px);
 }
 
-/* CTA Strip: wrap on small screens */
-@media (max-width: 600px) {
+/* CTA Strip: mobile layout fix to prevent overlap */
+@media (max-width: 767px) {
+  .rs-cta-area.rs-cta-two {
+    /* Keep desktop behavior (height: 0) but add margin-top so it doesn't overlap in-page buttons */
+    margin-top: 75px !important;
+    height: 0 !important;
+    padding-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+  .rs-cta-area.rs-cta-two .container {
+    transform: translateY(-50%) !important;
+  }
   .rs-cta-wrapper.footer {
-    padding: 16px 22px;
+    padding: 16px 20px;
+    z-index: 11;
   }
   .rs-cta-wrapper.footer .rs-cta-content-wrapper {
-    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
     gap: 12px;
   }
   .rs-cta-wrapper.footer .rs-cta-title {
-    font-size: 18px;
+    font-size: 17px;
+    text-align: center;
+  }
+  .rs-cta-wrapper.footer .contact-btn {
+    align-self: center;
+  }
+  
+  /* Minimize empty space at the top of the footer while leaving room for the straddling CTA */
+  .rs-footer-two.has-space {
+    padding-top: 75px !important;
   }
 }
 
@@ -5735,4 +5757,40 @@ i.fa-brands, i.fab, .fa-brands, .fab { font-weight: 400 !important; }
 .split-text-wrapper {
   justify-content: center !important;
   align-items: baseline !important;
+}
+
+/* ── Offcanvas sidebar z-index fix ──────────────────────────────────────────
+   The offcanvas drawer (.fix / .offcanvas-area) is position:fixed from
+   main.css. On mobile the header gets position:relative (normal flow) but its
+   z-index is 5. The offcanvas must sit ABOVE the header so the logo + close
+   button at the top of the drawer are not clipped by the header bar.
+   9999 matches the theme's own tooltip / modal layer and is safe globally. ── */
+.fix,
+.offcanvas-area {
+  z-index: 9999 !important;
+}
+
+/* ── CTA strip (footer top) — mobile padding trim ───────────────────────────
+   main.css sets ~80-100px vertical padding on .rs-cta-wrapper. On mobile this
+   makes the "For bulk enquiries…" dark strip look unnecessarily thick. Trim to
+   a tight band that still breathes but doesn't dominate. ── */
+@media (max-width: 991px) {
+  .rs-cta-area .rs-cta-wrapper {
+    padding-top: 28px !important;
+    padding-bottom: 28px !important;
+  }
+  .rs-cta-area .rs-cta-content-wrapper {
+    gap: 16px !important;
+  }
+  .rs-cta-area .rs-cta-title {
+    font-size: 17px !important;
+    line-height: 1.45 !important;
+    margin-bottom: 0 !important;
+  }
+}
+@media (max-width: 576px) {
+  .rs-cta-area .rs-cta-wrapper {
+    padding-top: 24px !important;
+    padding-bottom: 24px !important;
+  }
 }

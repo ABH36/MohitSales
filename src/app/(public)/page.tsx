@@ -165,7 +165,7 @@ export default async function Page() {
           {/* 5/7 split: the media column hugs the (square-ish) graphic so the
               card doesn't carry wide white margins beside it. */}
           <div className="row g-4 g-lg-5 about-v2">
-            <div className="col-lg-5 w-full">
+            <div className="col-lg-5">
               <div className="about-media-card scroll-reveal" data-direction="left" data-delay="0">
                 <img
                   src={aboutData.imageUrl}
@@ -177,7 +177,7 @@ export default async function Page() {
               </div>
             </div>
 
-            <div className="col-lg-7 w-full">
+            <div className="col-lg-7">
               <div className="about-features">
                 {aboutFeatures.map((f, i) => (
                   <div
