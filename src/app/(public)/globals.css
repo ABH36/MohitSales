@@ -2375,6 +2375,18 @@ img.product-img {
   display: block !important;
 }
 
+/* Clip the hero slider from the very first frame. The slides are absolutely
+   positioned and shifted with translateX(±100%), so they rely on an
+   overflow:hidden ancestor to stay inside the viewport. That clip lives in the
+   theme's Swiper CSS (custom.css / swiper.min.css) — external stylesheets — so
+   until those apply (or a scroll forces a reflow) the off-screen slides add
+   ~2× viewport of horizontal overflow at the top on initial load. globals.css
+   is inlined, so putting the clip here guarantees it before any external CSS. */
+.banner_sec .banner-swiper,
+.banner_sec .swiper-wrapper {
+  overflow: hidden !important;
+}
+
 @media (max-width: 991px) {
   .banner_sec.desktop {
     display: none !important;
