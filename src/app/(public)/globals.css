@@ -160,6 +160,16 @@ p, body.ltr p {
    gives every card and panel a clean, clear edge so content reads crisply.
    Sections are transparent and reveal it; opaque white cards pop against it.
    Fixed so it stays put while the page scrolls. ── */
+/* No sideways rubber-band. The banner has no swipe handler and the page has no
+   horizontal scroll, so a left/right drag used to trigger the browser's
+   horizontal overscroll and bounce the viewport — revealing empty space on the
+   right (the mobile menu drawer is position:fixed at right:-425px, which
+   body's overflow-x can't clip because fixed elements are viewport-relative).
+   Disabling horizontal overscroll on the scroll container stops that. */
+html {
+  overscroll-behavior-x: none;
+}
+
 body {
   background: linear-gradient(160deg, #e8eef7 0%, #f1f4fa 48%, #dfe7f4 100%) fixed !important;
   /* Clip transient horizontal overflow from scroll-reveal slide-ins (elements
@@ -169,6 +179,7 @@ body {
      `clip`, not `hidden`: hidden makes body a scroll container, which silently
      disables position:sticky on the header. */
   overflow-x: clip;
+  overscroll-behavior-x: none;
 }
 
 /* The company name under "About Us" mirrors the multi-colour logo wordmark
