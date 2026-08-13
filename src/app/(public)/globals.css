@@ -5633,8 +5633,19 @@ body::-webkit-scrollbar {
    So the panel never slid in and the backdrop never appeared. Bridge the React
    classes to the theme's open state (same properties `.info-open` /
    `.overlay-open` use). */
+/* Hide/show the drawer with a transform instead of a physical offset. The theme
+   parks the closed, full-width, position:fixed drawer at `inset-inline-end:-100%`
+   — that puts its box a full viewport-width off to the right, which on mobile
+   ADDS to the page's scrollable width (a swipe then scrolls into that empty
+   band, showing the page background on the right). A transform is visual only
+   and never creates scrollable width, so the drawer stays truly off-screen. */
+.offcanvas-area {
+  inset-inline-end: 0 !important;
+  transform: translateX(100%);
+}
 .offcanvas-area.expanded {
-  inset-inline-end: 0%;
+  inset-inline-end: 0 !important;
+  transform: translateX(0);
 }
 
 .offcanvas-overlay.active {
