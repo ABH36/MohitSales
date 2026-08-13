@@ -2382,10 +2382,13 @@ img.product-img {
    until those apply (or a scroll forces a reflow) the off-screen slides add
    ~2× viewport of horizontal overflow at the top on initial load. globals.css
    is inlined, so putting the clip here guarantees it before any external CSS. */
+.banner_sec,
 .banner_sec .banner-swiper,
 .banner_sec .swiper-wrapper {
   overflow: hidden !important;
+  max-width: 100vw;
 }
+
 
 @media (max-width: 991px) {
   .banner_sec.desktop {
