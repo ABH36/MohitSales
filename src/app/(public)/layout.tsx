@@ -208,8 +208,10 @@ export default function RootLayout({
           <NonCriticalCSS />
           <ScrollReveal />
           <Header />
-          {children}
-          <Footer />
+          <div style={{ overflowX: 'hidden', width: '100%' }}>
+            {children}
+            <Footer />
+          </div>
           <StickySocialMedia />
         </PublicSettingsProvider>
       </body>
